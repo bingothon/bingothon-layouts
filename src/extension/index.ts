@@ -8,10 +8,11 @@ export = (nodecg: NodeCG): void => {
   nodecgApiContext.set(nodecg);
   nodecg.log.info('Extension code working!');
   const { bundleConfig } = nodecg;
-  require('./bingosync');
-  require('./bingoColors');
-  require('./oriBingoBoard');
-  require('./explorationBingo');
+  //require('./bingosync');
+  //require('./bingoColors');
+  //require('./oriBingoBoard');
+  //require('./explorationBingo');
+  require('./tiltify');
   if (nodecg.bundleConfig.discord) {
     if (!nodecg.bundleConfig.discord.test) {
       require('./discord');
@@ -42,7 +43,7 @@ export = (nodecg: NodeCG): void => {
     }
   }
   require('./twitch-chat-bot');
-  require('./gdq-donationtracker');
+  //require('./gdq-donationtracker');
   require('./streams');
   require('./util/obs');
   require('./obsremotecontrol');

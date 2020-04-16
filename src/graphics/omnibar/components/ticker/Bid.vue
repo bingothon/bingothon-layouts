@@ -11,7 +11,6 @@
       <span v-else>
         Upcoming Bid War:
       </span>
-      {{ bid.game }}
     </div>
     <div
       ref="Line2"

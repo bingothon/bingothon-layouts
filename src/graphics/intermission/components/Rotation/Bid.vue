@@ -12,9 +12,6 @@
       </span>
 		</div>
 		<div class="Body">
-			<div class="RunName">
-				{{ bid.game }} - {{ bid.category }}
-			</div>
 			<div class="BidName">
 				{{ bid.bid }}
 			</div>
