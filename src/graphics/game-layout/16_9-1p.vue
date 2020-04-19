@@ -68,10 +68,12 @@
 }
 
   #pi1 {
+
     position: absolute;
-    top: 966px;
-    left: 1461px;
-    width: 382px;
+    top: 903px;
+    left: 1326px;
+    width: 374px;
+
 }
 
   #game {
@@ -168,7 +170,7 @@
 
 }
 
-.EstimateBox[data-v-daeba4] {
+.EstimateBox {
 
     font-size: 40px;
     position: absolute;
@@ -178,7 +180,7 @@
 
 }
 
-.TimerBox[data-v-daeba4] {
+.TimerBox {
 
     font-weight: 500;
     font-size: 74px;
