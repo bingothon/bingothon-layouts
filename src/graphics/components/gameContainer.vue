@@ -31,18 +31,17 @@ export default class TestGameContainer extends Vue {
 
 <style>
 .GameContainer {
-    align-content: center;
-    align-items: center;
+    
+    align-items: baseline;
     flex-direction: column;
 }
 
 .GameContainer > .GameName {
     font-weight: 500;
-    font-size: 30px;
-    align-content: center;
-    align-items: center;
+    font-size: 24px;
+    align-content: baseline;
+    align-items: baseline;
     color: white;
-    text-align: center;
     margin: 5px;
 }
 
