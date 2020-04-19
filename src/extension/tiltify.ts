@@ -70,6 +70,8 @@ var requestOptions: RequestPromise.RequestPromiseOptions = {
 const donationTotalReplicant = nodecg.Replicant <DonationTotal>('donationTotal');
 const openBidsReplicant = nodecg.Replicant<TrackerOpenBids>('trackerOpenBids');
 const donationsReplicant = nodecg.Replicant <TrackerDonations>('trackerDonations');
+// reset prizes cause there aren't any
+nodecg.Replicant<TrackerPrizes>('trackerPrizes').value = [];
 
 // for testing
 const enableTiltifyTestDonations = nodecg.bundleConfig.tiltify.enableFakeDonations;
@@ -91,7 +93,7 @@ if (nodecg.bundleConfig && nodecg.bundleConfig.tiltify && nodecg.bundleConfig.ti
 			sentence += testWords[Math.floor(Math.random()*testWords.length)];
 			return sentence;
 		}
-		nodecg.log.info('Tiltify enable in test mode, only fake donations');
+		log.info('Tiltify enable in test mode, only fake donations');
 		var pollId = 0;
 		var pollOptionId = 0;
 		var challengeId = 0;
@@ -177,24 +179,24 @@ if (nodecg.bundleConfig && nodecg.bundleConfig.tiltify && nodecg.bundleConfig.ti
 		sendFakeDonation();
 	} else {
 		if (!nodecg.bundleConfig.tiltify.token)
-			nodecg.log.warn('Tiltify support is enabled but no API access token is set.');
+			log.warn('Tiltify support is enabled but no API access token is set.');
 		if (!nodecg.bundleConfig.tiltify.campaign)
-			nodecg.log.warn('Tiltify support is enabled but no campaign ID is set.');
+			log.warn('Tiltify support is enabled but no campaign ID is set.');
 		
 		if (nodecg.bundleConfig.tiltify.token && nodecg.bundleConfig.tiltify.campaign) {
 			requestOptions.headers = {'Authorization': 'Bearer '+nodecg.bundleConfig.tiltify.token};
 			
-			nodecg.log.info('Tiltify integration is enabled.');
+			log.info('Tiltify integration is enabled.');
 
 			// Do the initial request, which also checks if the key is valid.
 			client.get('https://tiltify.com/api/v3/campaigns/'+nodecg.bundleConfig.tiltify.campaign, requestOptions, (err, resp) => {
 				if (resp.statusCode === 403) {
-					nodecg.log.warn('Your Tiltify API access token is not valid.');
+					log.warn('Your Tiltify API access token is not valid.');
 					return;
 				}
 
 				if (resp.statusCode === 404) {
-					nodecg.log.warn('The Tiltify campaign with the specified ID cannot be found.');
+					log.warn('The Tiltify campaign with the specified ID cannot be found.');
 					return;
 				}
 				
@@ -230,17 +232,17 @@ function _processPusherCampain(data: any) {
  * Either pollOptionId, rewardId, challengeId or none of them are present, linking to the specified resource
  */
 function _processRawDonation(donation: Donation) {
-	nodecg.log.info("predonations:"+JSON.stringify(donation));
+	log.info("predonations:"+JSON.stringify(donation));
 	// only process completed donations
 	if (donation && donation.completedAt) {
-		nodecg.log.info("donation: "+JSON.stringify(donation));
+		log.info("donation: "+JSON.stringify(donation));
 		nodecg.sendMessage('newDonation', donation);
 		doUpdate();
 	}
 }
 
 function doUpdate() {
-	nodecg.log.info('Updating tiltify stuff...');
+	log.info('Updating tiltify stuff...');
 	reqCampain();
 	refreshBids();
 	reqDonations();
@@ -255,16 +257,17 @@ function reqCampain() {
 		if (!err && resp.statusCode === 200)
 			_processRawCampain(resp.body.data);
 		else
-			nodecg.log.error(err);
+			log.error(err);
 	});
 }
 
 function _processRawCampain(data: any) {
-	//nodecg.log.info("campaign: "+JSON.stringify(data));
+	// log.info("campaign: "+JSON.stringify(data));
 	// Update the donation total replicant if it has actually changed.
-	if (data && data.amountRaised && donationTotalReplicant.value != data.amountRaised)
+	if (data && data.amountRaised !== undefined && donationTotalReplicant.value != data.amountRaised) {
 		donationTotalReplicant.value = data.amountRaised;
-		nodecg.log.info("Updating total to "+donationTotalReplicant.value);
+		log.info("Updating total to "+donationTotalReplicant.value);
+	}
 }
 
 function reqDonations() {
@@ -276,12 +279,12 @@ function reqDonations() {
 		if (!err && resp.statusCode === 200)
 			_processRawDonations(resp.body.data);
 		else
-			nodecg.log.error(err);
+			log.error(err);
 	});
 }
 
 function _processRawDonations(data: Donation[]) {
-	nodecg.log.info("donations: "+JSON.stringify(data));
+	log.info("donations: "+JSON.stringify(data));
 	const transformedDonations = data.map((d: Donation):TrackerDonation => {
 		return {
 			amount: d.amount,
