@@ -102,7 +102,7 @@
 
 #donation-total {
     position: absolute;
-    top: 900px;
+    top: 940px;
     left: 0px;
     color: #fff;
     font-size: 42px;
@@ -138,7 +138,57 @@
     background: url("../../../static/speedyfists.png");
     background-size: 300px;
     background-repeat: no-repeat;
-    opacity: 0.2;
+    opacity: 0.0;
+}
+
+.GameContainer > .GameName {
+
+    font-weight: 500;
+    font-size: 42px;
+    align-content: baseline;
+    align-items: baseline;
+    color: white;
+    margin: 5px;
+    position: absolute;
+    top: -41px;
+    width: 1003px;
+    left: -114px;
+
+}
+
+.GameContainer > .GameExtra {
+
+    font-size: 40px;
+    font-weight: thin;
+    align-content: center;
+    color: #0080AF;
+    text-align: center;
+    top: 41px;
+    position: absolute;
+
+}
+
+.EstimateBox[data-v-daeba4] {
+
+    font-size: 40px;
+    position: absolute;
+    color: #0080AF;
+    top: -27px;
+    left: 48px;
+
+}
+
+.TimerBox[data-v-daeba4] {
+
+    font-weight: 500;
+    font-size: 74px;
+    transition: 1s;
+    align-content: center;
+    text-align: center;
+    position: absolute;
+    left: 470px;
+    top: -31px;
+
 }
 
 </style>

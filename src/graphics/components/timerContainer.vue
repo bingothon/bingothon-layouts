@@ -7,7 +7,7 @@
     <div
       class="EstimateBox FlexContainer"
     >
-      Est: {{estimate}}
+      {{estimate}}
     </div>
     <div
       class="TimerBox RunInfoBox FlexContainer"
