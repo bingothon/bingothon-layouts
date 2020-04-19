@@ -99,9 +99,13 @@ export default class Ticker extends Vue {
     }
 
     showLatestDonation(): TickerMessage {
-      const msg = this.donation(this.latestDonations[this.lastDonationIndex]);
-      this.lastDonationIndex = (this.lastDonationIndex + 1) % this.latestDonations.length;
-      return msg;
+      if (this.latestDonations.length > 0) {
+        const msg = this.donation(this.latestDonations[this.lastDonationIndex]);
+        this.lastDonationIndex = (this.lastDonationIndex + 1) % this.latestDonations.length;
+        return msg;
+      } else {
+        return this.noalert();
+      }
     }
 
     donation(donation: TrackerDonation): TickerMessage {
@@ -118,6 +122,15 @@ export default class Ticker extends Vue {
                 line2Text,
             },
         };
+    }
+
+    noalert(): TickerMessage {
+      return {
+        name: GenericMessage.name,
+        data: {
+          time: 0,
+        }
+      }
     }
 
     formatUSD(amount: number): string {
