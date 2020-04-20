@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="GameName FlexContainer">{{gameName}}</div>
+        <div class="GameCategory FlexContainer">{{gameCategory}}</div>
     </div>
 </template>
 
@@ -9,9 +9,10 @@ import { Vue, Component } from "vue-property-decorator";
 import { store } from '../../browser-util/state';
 
 @Component({})
-export default class TestGameContainer extends Vue {
-    get gameName(): string {
-        return store.state.runDataActiveRun.game;
+export default class GameCategoryContainer extends Vue {
+   
+    get gameCategory(): string {
+        return store.state.runDataActiveRun.category;
     }
 }
 </script>

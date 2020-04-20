@@ -242,7 +242,7 @@ export default class PlayerInfo extends Vue {
   }
 
   .PlayerInfoBox > .CurrentIcon {
-    height: 100%;
+    height: 75%;
     text-align: left;
     position: relative;
   }
@@ -257,7 +257,7 @@ export default class PlayerInfo extends Vue {
     flex-grow: 1;
     flex-shrink: 0;
     height: 100%;
-    margin-left: 10px;
+    margin-left: 5px;
     margin-right: 10px;
     justify-content: flex-start;
     position: relative;

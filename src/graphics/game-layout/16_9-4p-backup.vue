@@ -1,16 +1,20 @@
 <template>
 	<div>
-    <div id="fillul" class="flexContainer"></div>
-    <div id="filld" class="flexContainer"></div>
-    <div id="fillur" class="flexContainer"></div>
+    <div id="fillmiddle" class="flexContainer"></div>
+		<twitch-player id="stream1" streamIndex="0"></twitch-player>
+		<twitch-player id="stream2" streamIndex="1"></twitch-player>
+		<twitch-player id="stream3" streamIndex="2"></twitch-player>
+		<twitch-player id="stream4" streamIndex="3"></twitch-player>
     <div id="fillbar" class="flexContainer"></div>
     <div id="fillvoice" class="flexContainer"></div>
     <player-info id="pi1" playerIndex="0" height=45px></player-info>
     <player-info id="pi2" playerIndex="1" height=45px></player-info>
     <player-info id="pi3" playerIndex="2" height=45px></player-info>
+    <player-info id="pi4" playerIndex="3" height=45px></player-info>
 		<test-game-container id="game"></test-game-container>
     <test-timer-container id="timer"></test-timer-container>
-    <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
+    <bingo-board id="Bingo-board" fontSize="20px"></bingo-board>
+    <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px"/>
 	</div>
 </template>
 
@@ -25,7 +29,9 @@
   import PlayerInfo from "../components/playerInfo.vue";
   import TeamInfo from "../components/teamInfo.vue";
   import PlayerTeamContainer from "../components/playerTeamContainer.vue";
+  import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
   import { RunDataPlayer, RunDataTeam } from "../../../speedcontrol-types";
+  import TwitchPlayer from "../components/twitchPlayer.vue";
 
 	@Component({
 		components: {
@@ -35,6 +41,8 @@
       TeamInfo,
       PlayerTeamContainer,
       TestTimerContainer,
+      DiscordVoiceDisplay,
+      TwitchPlayer,
 		}
 	})
 
@@ -46,30 +54,39 @@
 </script>
 
 <style scoped>
-  #fillul {
+  #stream1 {
     position: absolute;
-    top: 0px;
+    top: 60px;
     left: 0px;
-    width: 889px;
-    height: 500px;
+    width: 782px;
+    height: 440px;
     background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
-  #filld {
+  #stream2 {
+    position: absolute;
+    top: 60px;
+    left: 1138px;
+    width: 782px;
+    height: 440px;
+    background-image: url("../../../static/middle-info-background.png");
+    border: 2px var(--container-border-color) solid;
+  }
+  #stream3 {
     position: absolute;
     top: 500px;
-    left: 516px;
-    width: 960px;
-    height: 500px;
+    left: 0px;
+    width: 782px;
+    height: 440px;
     background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
-  #fillur {
+  #stream4 {
     position: absolute;
-    top: 0px;
-    left: 1031px;
-    width: 889px;
-    height: 500px;
+    top: 500px;
+    left: 1138px;
+    width: 782px;
+    height: 440px;
     background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
@@ -82,60 +99,76 @@
     background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
-  /*#fillvoice {
+  #discord-voice {
     position: absolute;
-    top: 750px;
+    top: 350px;
     left: 782px;
     width: 356px;
-    height: 250px;
+    height: 150px;
     background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
-  }*/
+  }
+  #fillmiddle {
+    background-image: url("../../../static/middle-info-background.png");
+    position: absolute;
+    top: 0px;
+    left: 782px;
+    width: 356px;
+    border: 2px var(--container-border-color) solid;
+    height: 1080px;
+  }
   #pi1 {
     position: absolute;
-    top: 500px;
+    top: 0px;
     left: 0px;
     border: 2px var(--container-border-color) solid;
-    width: 501px;
+    width: 769px;
   }
   #pi2 {
     position: absolute;
-    top: 500px;
-    left: 1404px;
+    top: 0px;
+    left: 1138px;
     border: 2px var(--container-border-color) solid;
-    width: 501px;
+    width: 769px;
   }
   #pi3 {
     position: absolute;
     top: 940px;
     left: 0px;
     border: 2px var(--container-border-color) solid;
-    width: 501px;
+    width: 769px;
+  }
+  #pi4 {
+    position: absolute;
+    top: 940px;
+    left: 1138px;
+    border: 2px var(--container-border-color) solid;
+    width: 769px;
   }
   #Bingo-board {
     position: absolute;
-    top: 560px;
-    left: 1404px;
+    top: 500px;
+    left: 782px;
     border: 2px var(--container-border-color) solid;
-    width: 516px;
-    height: 440px;
+    width:356px;
+    height:500px;
   }
   #game {
     background-image: url("../../../static/middle-info-background.png");
     position: absolute;
     top: 0px;
-    left: 889px;
-    width: 142px;
+    left: 782px;
+    width: 356px;
     border: 2px var(--container-border-color) solid;
-    height: 500px;
+    height: 175px;
   }
   #timer{
     position: absolute;
-    top: 560px;
-    left: 0px;
+    top: 175px;
+    left: 782px;
     background-image: url("../../../static/middle-info-background.png");
-    width: 516px;
+    width: 356px;
     border: 2px var(--container-border-color) solid;
-    height: 380px;
+    height: 175px;
   }
 </style>

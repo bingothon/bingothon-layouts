@@ -1,41 +1,45 @@
 <template>
 	<div>
-    <div id="fillmiddle" class="flexContainer"></div>
-		<twitch-player id="stream1" streamIndex="0"></twitch-player>
-		<twitch-player id="stream2" streamIndex="1"></twitch-player>
-		<twitch-player id="stream3" streamIndex="2"></twitch-player>
-		<twitch-player id="stream4" streamIndex="3"></twitch-player>
-    <div id="fillbar" class="flexContainer"></div>
-    <div id="fillvoice" class="flexContainer"></div>
+    <div id="base_layout"></div>
     <player-info id="pi1" playerIndex="0" height=45px></player-info>
     <player-info id="pi2" playerIndex="1" height=45px></player-info>
     <player-info id="pi3" playerIndex="2" height=45px></player-info>
     <player-info id="pi4" playerIndex="3" height=45px></player-info>
 		<test-game-container id="game"></test-game-container>
     <test-timer-container id="timer"></test-timer-container>
-    <bingo-board id="Bingo-board" fontSize="20px"></bingo-board>
-    <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px"/>
+    <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px"></discord-voice-display>
+    <twitch-player id="stream1" streamIndex="0"></twitch-player>
+		<twitch-player id="stream2" streamIndex="1"></twitch-player>
+		<twitch-player id="stream3" streamIndex="2"></twitch-player>
+    <twitch-player id="stream4" streamIndex="3"></twitch-player>
+    <ticker id="ticker"></ticker>
+    <donation-total id="donation-total"></donation-total>
+    <estimate-container id="estimate-container"></estimate-container>
+    <game-category-container id="game-category-container"></game-category-container>
+    <div id="direct_relief_logo"></div>
+    <div id="speedyfists_logo"></div>
 	</div>
 </template>
 
 <script lang="ts">
 	import { Component, Vue, Watch, Prop } from "vue-property-decorator";
 	import { nodecg, NodeCG } from "../../browser-util/nodecg";
-	import { Bingoboard, BingosyncSocket, BingoboardMeta } from "../../../schemas";
 	import { store, getReplicant } from "../../browser-util/state";
   import TestTimerContainer from "../components/timerContainer.vue";
 	import TestGameContainer from "../components/gameContainer.vue";
-  import BingoBoard from "../components/bingoboard.vue";
   import PlayerInfo from "../components/playerInfo.vue";
   import TeamInfo from "../components/teamInfo.vue";
   import PlayerTeamContainer from "../components/playerTeamContainer.vue";
   import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
-  import { RunDataPlayer, RunDataTeam } from "../../../speedcontrol-types";
   import TwitchPlayer from "../components/twitchPlayer.vue";
+  import DonationTotal from "../omnibar/components/DonationTotal.vue";
+  import Ticker from "../omnibar/components/Ticker.vue";
+  import EstimateContainer from "../components/estimateContainer.vue";
+  import GameCategoryContainer from "../components/gameCategoryContainer.vue";
+  import { RunDataPlayer, RunDataTeam } from "../../../speedcontrol-types";
 
 	@Component({
 		components: {
-			BingoBoard,
       TestGameContainer,
       PlayerInfo,
       TeamInfo,
@@ -43,6 +47,10 @@
       TestTimerContainer,
       DiscordVoiceDisplay,
       TwitchPlayer,
+      DonationTotal,
+      Ticker,
+      EstimateContainer,
+      GameCategoryContainer
 		}
 	})
 
@@ -54,121 +62,177 @@
 </script>
 
 <style scoped>
-  #stream1 {
+  #base_layout {
     position: absolute;
-    top: 60px;
-    left: 0px;
-    width: 782px;
-    height: 440px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
-  #stream2 {
-    position: absolute;
-    top: 60px;
-    left: 1138px;
-    width: 782px;
-    height: 440px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
-  #stream3 {
-    position: absolute;
-    top: 500px;
-    left: 0px;
-    width: 782px;
-    height: 440px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
-  #stream4 {
-    position: absolute;
-    top: 500px;
-    left: 1138px;
-    width: 782px;
-    height: 440px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
-  #fillbar {
-    position: absolute;
-    top: 1000px;
-    left: 0px;
+    background: url("../../../static/16_9_4p-speedyfists.png");
+    top:0px;
+    left:0px;
     width: 1920px;
-    height: 80px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
-  #discord-voice {
-    position: absolute;
-    top: 350px;
-    left: 782px;
-    width: 356px;
-    height: 150px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
-  #fillmiddle {
-    background-image: url("../../../static/middle-info-background.png");
-    position: absolute;
-    top: 0px;
-    left: 782px;
-    width: 356px;
-    border: 2px var(--container-border-color) solid;
     height: 1080px;
   }
+
+  #discord-voice {
+    position: absolute;
+    top: 0px;
+    left: 724px;
+    width: 471px;
+    height: 110px;
+}
+
   #pi1 {
+
     position: absolute;
-    top: 0px;
-    left: 0px;
-    border: 2px var(--container-border-color) solid;
-    width: 769px;
-  }
+    top: 490px;
+    left: 722px;
+    width: 220px;
+
+}
   #pi2 {
+
     position: absolute;
-    top: 0px;
-    left: 1138px;
-    border: 2px var(--container-border-color) solid;
-    width: 769px;
-  }
-  #pi3 {
+    top: 485px;
+    left: 959px;
+    width: 244px;
+
+}}
+#pi3 {
+
     position: absolute;
-    top: 940px;
-    left: 0px;
-    border: 2px var(--container-border-color) solid;
-    width: 769px;
-  }
+    top: 542px;
+    left: 722px;
+    width: 220px;
+
+}
   #pi4 {
+
     position: absolute;
-    top: 940px;
-    left: 1138px;
-    border: 2px var(--container-border-color) solid;
-    width: 769px;
-  }
-  #Bingo-board {
-    position: absolute;
-    top: 500px;
-    left: 782px;
-    border: 2px var(--container-border-color) solid;
-    width:356px;
-    height:500px;
-  }
+    top: 542px;
+    left: 959px;
+    width: 220px;
+
+}
+
   #game {
-    background-image: url("../../../static/middle-info-background.png");
     position: absolute;
-    top: 0px;
-    left: 782px;
-    width: 356px;
-    border: 2px var(--container-border-color) solid;
-    height: 175px;
-  }
-  #timer{
+    top: 113px;
+    left: 724px;
+    width: 471px;
+    height: 39px;
+    font-size: 30px;
+    color: #fff;
+}
+
+  #timer {
     position: absolute;
-    top: 175px;
-    left: 782px;
-    background-image: url("../../../static/middle-info-background.png");
-    width: 356px;
-    border: 2px var(--container-border-color) solid;
-    height: 175px;
-  }
+    top: 373px;
+    left: 724px;
+    width: 471px;
+    height: 77px;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    font-size: 82px;
+}
+
+  #stream1 {
+    position: absolute;
+    top: 132px;
+    left: 0px;
+    width: 720px;
+    height: 405px;
+}
+  #stream2 {
+    position: absolute;
+    top: 132px;
+    left: 1199px;
+    width: 720px;
+    height: 405px;
+}
+#stream3 {
+    position: absolute;
+    top: 543px;
+    left: 0px;
+    width: 720px;
+    height: 405px;
+}
+  #stream4 {
+    position: absolute;
+    top: 543px;
+    left: 1199px;
+    width: 720px;
+    height: 405px;
+}
+
+#donation-total {
+    position: absolute;
+    top: 999px;
+    left: 355px;
+    color: #fff;
+    font-size: 42px;
+    width: 300px;
+    text-align: center;
+}
+
+#ticker {
+    position: absolute;
+    top: 949px;
+    left: 724px;
+    color: #fff;
+    width: 471px;
+    height: 131px;
+}
+
+#direct_relief_logo {
+    position: absolute;
+    top: 992px;
+    left: 27px;
+    width: 300px;
+    height: 61px;
+    background: url("../../../static/direct-relief.png");
+    background-size: 300px 61px;
+    background-repeat: no-repeat;
+}
+
+#speedyfists_logo {
+    position: absolute;
+    top: 805px;
+    left: 8px;
+    width: 300px;
+    height: 237px;
+    background: url("../../../static/speedyfists.png");
+    background-size: 300px;
+    background-repeat: no-repeat;
+    opacity: 0.0;
+}
+
+.EstimateBox {
+    font-size: 51px;
+    position: absolute;
+    color: #0080AF;
+    top: 433px;
+    left: 773px;
+}
+
+.TimerBox {
+    font-weight: 500;
+    font-size: 74px;
+    transition: 1s;
+    align-content: center;
+    text-align: center;
+    position: absolute;
+    left: 470px;
+    top: -31px;
+}
+
+#game-category-container {
+    top: 278px;
+    left: 724px;
+    position: absolute;
+    color: #0080AF;
+    text-align: left;
+    font-size: 23px;
+    width: 471px;
+    height: 60px;
+}
+
 </style>

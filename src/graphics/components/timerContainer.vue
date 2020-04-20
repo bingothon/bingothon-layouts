@@ -5,11 +5,6 @@
     class="TimerContainer RunInfoBox FlexContainer"
   >
     <div
-      class="EstimateBox FlexContainer"
-    >
-      {{estimate}}
-    </div>
-    <div
       class="TimerBox RunInfoBox FlexContainer"
       :class="timerStateClass"
       v-html="time"
@@ -39,10 +34,6 @@ export default class TestTimerContainer extends Vue {
 
     destroyed() {
       this.updateDataUnwatch();
-    }
-
-    get estimate(): string {
-        return store.state.runDataActiveRun.estimate
     }
   
     updateData(timer: Timer) {
@@ -98,7 +89,6 @@ export default class TestTimerContainer extends Vue {
   }
   .TimerBox {
     font-weight: 500;
-    font-size: 44px;
     transition: 1s;
     align-content: center;
     text-align: center;
@@ -106,7 +96,6 @@ export default class TestTimerContainer extends Vue {
   /* Each character in the timer is in a span; setting width so the numbers appear monospaced. */
   .TimerBox >>> span {
     display: inline-block;
-    width: 0.6em;
     margin: 0.01em;
     text-align: center;
     font-weight: bold;
@@ -127,7 +116,4 @@ export default class TestTimerContainer extends Vue {
     color: blue;
   }
 
-  .EstimateBox {
-    font-size: 18px;
-  }
 </style>

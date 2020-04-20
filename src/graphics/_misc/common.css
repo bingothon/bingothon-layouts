@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:600&subset=cyrillic,cyrillic-ext,latin-ext,vietnamese');
+@font-face {
+    font-family: 'DBXLNightfever';
+    src: url('../../../static/font/DBXLNEW_.TTF') format('truetype');
+}
 
 :root {
     --container-background-color: #7e0d00;
@@ -10,7 +13,7 @@
 }
 
 body {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'DBXLNightfever', sans-serif;
 }
 
 .FlexContainer {

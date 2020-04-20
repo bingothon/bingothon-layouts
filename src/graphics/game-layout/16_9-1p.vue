@@ -8,6 +8,8 @@
     <twitch-player id="stream1" streamIndex="0"></twitch-player>
     <ticker id="ticker"></ticker>
     <donation-total id="donation-total"></donation-total>
+    <estimate-container id="estimate-container"></estimate-container>
+    <game-category-container id="game-category-container"></game-category-container>
     <div id="direct_relief_logo"></div>
     <div id="speedyfists_logo"></div>
 	</div>
@@ -26,6 +28,8 @@
   import TwitchPlayer from "../components/twitchPlayer.vue";
   import DonationTotal from "../omnibar/components/DonationTotal.vue";
   import Ticker from "../omnibar/components/Ticker.vue";
+  import EstimateContainer from "../components/estimateContainer.vue";
+  import GameCategoryContainer from "../components/gameCategoryContainer.vue";
   import { RunDataPlayer, RunDataTeam } from "../../../speedcontrol-types";
 
 	@Component({
@@ -38,7 +42,9 @@
       DiscordVoiceDisplay,
       TwitchPlayer,
       DonationTotal,
-      Ticker
+      Ticker,
+      EstimateContainer,
+      GameCategoryContainer
 		}
 	})
 
@@ -61,7 +67,7 @@
 
   #discord-voice {
     position: absolute;
-    top: 100px;
+    top: 214px;
     left: 0px;
     width: 310px;
     height: 391px;
@@ -78,20 +84,23 @@
 
   #game {
     position: absolute;
-    top: 978px;
-    left: 434px;
-    width: 566px;
+    top: 937px;
+    left: 320px;
+    width: 1013px;
     height: 92px;
+    font-size: 45px;
+    color: #fff;
 }
 
-  #timer{
+  #timer {
     position: absolute;
-    top: 1002px;
-    left: 1018px;
+    top: 973px;
+    left: 1590px;
     width: 233px;
     height: 77px;
     display: flex;
     align-items: last baseline;
+    font-size: 70px;
 }
 
   #stream1 {
@@ -143,45 +152,15 @@
     opacity: 0.0;
 }
 
-.GameContainer > .GameName {
-
-    font-weight: 500;
-    font-size: 42px;
-    align-content: baseline;
-    align-items: baseline;
-    color: white;
-    margin: 5px;
-    position: absolute;
-    top: -41px;
-    width: 1003px;
-    left: -114px;
-
-}
-
-.GameContainer > .GameExtra {
-
-    font-size: 40px;
-    font-weight: thin;
-    align-content: center;
-    color: #0080AF;
-    text-align: center;
-    top: 41px;
-    position: absolute;
-
-}
-
 .EstimateBox {
-
     font-size: 40px;
     position: absolute;
     color: #0080AF;
     top: -27px;
     left: 48px;
-
 }
 
 .TimerBox {
-
     font-weight: 500;
     font-size: 74px;
     transition: 1s;
@@ -190,7 +169,23 @@
     position: absolute;
     left: 470px;
     top: -31px;
+}
 
+.EstimateBox {
+    font-size: 40px;
+    position: absolute;
+    color: #0080AF;
+    top: 1024px;
+    left: 1063px;
+}
+
+#game-category-container{
+    top: 1026px;
+    left: 428px;
+    position: absolute;
+    color: #0080AF;
+    text-align: left;
+    font-size: 24px;
 }
 
 </style>
