@@ -91,14 +91,14 @@ if (bundleConfig.twitch && bundleConfig.twitch.enable && bundleConfig.twitch.cha
         let players: RunDataPlayer[] = [];
         // eslint-disable-next-line
         runDataActiveRunRep.value.teams.forEach(t => players = players.concat(t.players));
-        const runersStr = players.map((p, idx): string => `Player ${idx + 1}: ${p.name} ( twitch.tv/${p.social.twitch} )`).join('. ');
+        const runersStr = players.map((p, idx): string => `${p.name} ( twitch.tv/${p.social.twitch} )`).join('. ');
         if (runersStr) {
           client.say(channel, `Follow the runners! ${runersStr}`)
             .catch((e): void => log.error('', e));
         }
         return;
       }
-      if (userCommandName === 'bingo') {
+      /* if (userCommandName === 'bingo') {
         // check cooldown to not spam chat
         if (now - cooldowns.bingo.lastUsed < cooldowns.bingo.cooldown) {
           return;
@@ -118,7 +118,7 @@ if (bundleConfig.twitch && bundleConfig.twitch.enable && bundleConfig.twitch.cha
             }
           }
         }
-      }
+      }*/
       /* also custom chatbot stuff not used
           if (chatCommandsRep.value.hasOwnProperty(userCommandName)) {
               var userCommand = chatCommandsRep.value[userCommandName];
