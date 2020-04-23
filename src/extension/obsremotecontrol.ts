@@ -199,14 +199,20 @@ waitTillConnected().then((): void => {
     if (newVal === -1) {
       return;
     }
-    updateDiscordDelays(streamsReplicant.value[newVal].delay, discordDelayInfoRep.value);
+    const stream = streamsReplicant.value[newVal];
+    if (stream !== undefined) {
+      updateDiscordDelays(stream.delay, discordDelayInfoRep.value);
+    }
   });
 
   streamsReplicant.on('change', (newVal): void => {
     if (soundOnTwitchStream.value === -1) {
       return;
     }
-    updateDiscordDelays(newVal[soundOnTwitchStream.value].delay, discordDelayInfoRep.value);
+    const stream = newVal[soundOnTwitchStream.value];
+    if (stream !== undefined) {
+      updateDiscordDelays(stream.delay, discordDelayInfoRep.value);
+    }
   });
 
   function handleScreenStreamModeChange(streamMode: ObsStreamMode, nextSceneName: string): void {
