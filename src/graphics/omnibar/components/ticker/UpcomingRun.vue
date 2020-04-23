@@ -56,7 +56,7 @@ export default class UpcomingRun extends Vue{
         const randNum = Math.floor(Math.random() * nextRunsCache.length);
         this.run = clone(nextRunsCache[randNum]);
         if (this.run.scheduledS < (Date.now() / 1000)) {
-            this.when = "Soon™";
+            this.when = "Soon";
         } else {
             this.when = moment.unix(this.run.scheduledS).fromNow();
         }
