@@ -262,7 +262,7 @@ function reqCampain() {
 			if (val.data) {
 				_processRawCampain(val.data);
 			}
-		}).error(err => {
+		}).catch(err => {
 			log.error('error requesting campaign: ',err);
 		});
 }
@@ -286,7 +286,7 @@ function reqDonations() {
 			if (val.data) {
 				_processRawDonations(val.data);
 			}
-		}).error(err => {
+		}).catch(err => {
 			log.error('error getting donations: ',err);
 		});
 }
@@ -345,10 +345,10 @@ function refreshBids() {
 						log.debug('new bids:'+JSON.stringify(openBids));
 						openBidsReplicant.value = openBids;
 					}
-				}).error(e => {
+				}).catch(e => {
 					log.error('Error refreshing challenges!',e);
 				})
-		}).error(e => {
+		}).catch(e => {
 			log.error('Error refreshing polls!',e);
 		})
 	
