@@ -18,7 +18,7 @@
         ref="twitchPlayer"
         class="TwitchPlayer"
         :style="{'left':`${containerLeft}px`,'top':`${containerTop}px`}"
-      />
+      ></div>
     </div>
     <div class="ResizeOptions">
       <span>Left:</span><input
