@@ -99,6 +99,7 @@ export default class TestTimerContainer extends Vue {
     margin: 0.01em;
     text-align: center;
     font-weight: bold;
+    width: 0.8em;
   }
   .TimerBox >>> span:nth-of-type(3), .TimerBox >>> span:nth-of-type(6) {
     width: 0.22em;
