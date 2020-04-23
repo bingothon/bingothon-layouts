@@ -1,19 +1,18 @@
 <template>
 	<div>
     <div id="base_layout"></div>
-    <player-info id="pi1" playerIndex="0" height=45px hideSoundIcon="true"></player-info>
-    <player-info id="pi2" playerIndex="1" height=45px></player-info>
+    <player-info id="pi1" playerIndex="0" height=50px></player-info>
+    <player-info id="pi2" playerIndex="1" height=50px></player-info>
 		<test-game-container id="game"></test-game-container>
     <test-timer-container id="timer"></test-timer-container>
     <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px"></discord-voice-display>
     <twitch-player id="stream1" streamIndex="0"></twitch-player>
-    <twitch-player id="stream2" streamIndex="1"></twitch-player>
+		<twitch-player id="stream2" streamIndex="1"></twitch-player>
     <ticker id="ticker"></ticker>
     <donation-total id="donation-total"></donation-total>
     <estimate-container id="estimate-container"></estimate-container>
     <game-category-container id="game-category-container"></game-category-container>
     <div id="direct_relief_logo"></div>
-    <div id="speedyfists_logo"></div>
 	</div>
 </template>
 
@@ -69,71 +68,65 @@
 
   #discord-voice {
     position: absolute;
-    top: 100px;
+    top: 0px;
     left: 0px;
-    width: 310px;
-    height: 391px;
+    width: 1920px;
+    height: 176px;
 }
 
   #pi1 {
-
     position: absolute;
-    top: 903px;
-    left: 1326px;
-    width: 374px;
-
+    top: 717px;
+    left: -16px;
+    width: 983px;
 }
-
-#pi2 {
+  #pi2 {
     position: absolute;
-    top: 540px;
-    left: 1280px;
-    width: 625px;
-  }
+    top: 717px;
+    left: 944px;
+    width: 983px;
+}
 
   #game {
     position: absolute;
-    top: 937px;
-    left: 320px;
-    width: 1013px;
-    height: 92px;
+    top: 935px;
+    left: 113px;
+    width: 794px;
+    height: 87px;
     font-size: 45px;
     color: #fff;
 }
 
   #timer {
     position: absolute;
-    top: 973px;
-    left: 1590px;
+    top: 962px;
+    left: 1295px;
     width: 233px;
     height: 77px;
     display: flex;
     align-items: last baseline;
-    font-size: 70px;
+    font-size: 82px;
 }
 
   #stream1 {
     position: absolute;
-    top: 0px;
-    left: 320px;
-    width: 1599px;
-    height: 899px;
-}
-
-#stream2 {
-    position: absolute;
-    top: 0px;
-    left: 960px;
-    width: 960px;
+    top: 180px;
+    left: 0px;
+    width: 959px;
     height: 540px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
+}
+  #stream2 {
+    position: absolute;
+    top: 180px;
+    left: 961px;
+    width: 959px;
+    height: 540px;
+}
 
 #donation-total {
     position: absolute;
-    top: 940px;
-    left: 0px;
+    top: 815px;
+    left: 361px;
     color: #fff;
     font-size: 42px;
     width: 300px;
@@ -142,16 +135,16 @@
 
 #ticker {
     position: absolute;
-    top: 540px;
-    left: 0px;
+    top: 813px;
+    left: 960px;
     color: #fff;
-    width: 316px;
+    width: 1080px;
 }
 
 #direct_relief_logo {
     position: absolute;
-    top: 1010px;
-    left: 8px;
+    top: 810px;
+    left: 24px;
     width: 300px;
     height: 61px;
     background: url("../../../static/direct-relief.png");
@@ -159,24 +152,12 @@
     background-repeat: no-repeat;
 }
 
-#speedyfists_logo {
-    position: absolute;
-    top: 805px;
-    left: 8px;
-    width: 300px;
-    height: 237px;
-    background: url("../../../static/speedyfists.png");
-    background-size: 300px;
-    background-repeat: no-repeat;
-    opacity: 0.0;
-}
-
 .EstimateBox {
-    font-size: 40px;
+    font-size: 36px;
     position: absolute;
     color: #0080AF;
-    top: -27px;
-    left: 48px;
+    top: 1031px;
+    left: 1077px;
 }
 
 .TimerBox {
@@ -190,21 +171,15 @@
     top: -31px;
 }
 
-.EstimateBox {
-    font-size: 40px;
-    position: absolute;
-    color: #0080AF;
+#game-category-container {
     top: 1024px;
-    left: 1063px;
-}
-
-#game-category-container{
-    top: 1026px;
-    left: 428px;
+    left: 113px;
     position: absolute;
     color: #0080AF;
     text-align: left;
-    font-size: 45px;
+    font-size: 31px;
+    width: 795px;
+    height: 60px;
 }
 
 </style>

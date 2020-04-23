@@ -1,45 +1,45 @@
 <template>
 	<div>
-    <div id="fillleft" class="flexContainer"></div>
-    <div id="fillright" class="flexContainer"></div>
-		<twitch-player id="stream1" streamIndex="0"></twitch-player>
-		<twitch-player id="stream2" streamIndex="1"></twitch-player>
-		<twitch-player id="stream3" streamIndex="2"></twitch-player>
-		<twitch-player id="stream4" streamIndex="3"></twitch-player>
-    <div id="fillbar" class="flexContainer"></div>
-    <div id="fillvoice" class="flexContainer"></div>
-		<div id="fillupperplayers"></div>
-		<player-info id="pi1" playerIndex="0" height=45px></player-info>
-		<player-info id="pi2" playerIndex="1" height=45px></player-info>
-		<div id="filllowerplayers"></div>
-		<player-info id="pi3" playerIndex="2" height=45px></player-info>
-		<player-info id="pi4" playerIndex="3" height=45px></player-info>
+    <div id="base_layout"></div>
+    <player-info id="pi1" playerIndex="0" height=45px></player-info>
+    <player-info id="pi2" playerIndex="1" height=45px></player-info>
+    <player-info id="pi3" playerIndex="2" height=45px></player-info>
+    <player-info id="pi4" playerIndex="3" height=45px></player-info>
 		<test-game-container id="game"></test-game-container>
     <test-timer-container id="timer"></test-timer-container>
-    <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
-
-    <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="125px"></discord-voice-display>
+    <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px"></discord-voice-display>
+    <twitch-player id="stream1" streamIndex="0"></twitch-player>
+		<twitch-player id="stream2" streamIndex="1"></twitch-player>
+		<twitch-player id="stream3" streamIndex="2"></twitch-player>
+    <twitch-player id="stream4" streamIndex="3"></twitch-player>
+    <ticker id="ticker"></ticker>
+    <donation-total id="donation-total"></donation-total>
+    <estimate-container id="estimate-container"></estimate-container>
+    <game-category-container id="game-category-container"></game-category-container>
+    <div id="direct_relief_logo"></div>
+    <div id="speedyfists_logo"></div>
 	</div>
 </template>
 
 <script lang="ts">
 	import { Component, Vue, Watch, Prop } from "vue-property-decorator";
 	import { nodecg, NodeCG } from "../../browser-util/nodecg";
-	import { Bingoboard, BingosyncSocket, BingoboardMeta } from "../../../schemas";
 	import { store, getReplicant } from "../../browser-util/state";
   import TestTimerContainer from "../components/timerContainer.vue";
 	import TestGameContainer from "../components/gameContainer.vue";
-  import BingoBoard from "../components/bingoboard.vue";
   import PlayerInfo from "../components/playerInfo.vue";
   import TeamInfo from "../components/teamInfo.vue";
   import PlayerTeamContainer from "../components/playerTeamContainer.vue";
   import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
   import TwitchPlayer from "../components/twitchPlayer.vue";
+  import DonationTotal from "../omnibar/components/DonationTotal.vue";
+  import Ticker from "../omnibar/components/Ticker.vue";
+  import EstimateContainer from "../components/estimateContainer.vue";
+  import GameCategoryContainer from "../components/gameCategoryContainer.vue";
   import { RunDataPlayer, RunDataTeam } from "../../../speedcontrol-types";
 
 	@Component({
 		components: {
-			BingoBoard,
       TestGameContainer,
       PlayerInfo,
       TeamInfo,
@@ -47,184 +47,184 @@
       TestTimerContainer,
       DiscordVoiceDisplay,
       TwitchPlayer,
+      DonationTotal,
+      Ticker,
+      EstimateContainer,
+      GameCategoryContainer
 		}
 	})
 
 	export default class GameLayout extends Vue {
-
+    get teams(): RunDataTeam[] {
+      return store.state.runDataActiveRun.teams;
+    }
 	}
 </script>
 
 <style scoped>
-  #stream1 {
+  #base_layout {
     position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 667px;
-    height: 500px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
-  #stream2 {
-    position: absolute;
-    top: 0px;
-    left: 1253px;
-    width: 667px;
-    height: 499px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
-  #stream3 {
-    position: absolute;
-    top: 500px;
-    left: 0px;
-    width: 667px;
-    height: 500px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
-  #stream4 {
-    position: absolute;
-    top: 500px;
-    left: 1253px;
-    width: 667px;
-    height: 499px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
-  #fillbar {
-    position: absolute;
-    top: 1000px;
-    left: 0px;
+    background: url("../../../static/4_3_4p-speedyfists.png");
+    top:0px;
+    left:0px;
     width: 1920px;
-    height: 80px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
-  #discord-voice {
-    position: absolute;
-	top: 125px;
-	left: 1056px;
-	width: 194px;
-	height: 332px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
-  #InfoStorageBox1 {
-    position: absolute;
-    left: 626px;
-    top: 0px;
-    width: 668px;
-    height: 308px;
-  }
-  .PlayerContainer {
-    width: 580px;
-  }
-  .PlayerContainer >>> .PlayerInfoBox {
-    height: 40px;
-    font-size: 25px;
-  }
-  #PlayerContainer1, #PlayerContainer3 {
-    margin-right: 88px;
-  }
-  #PlayerContainer2, #PlayerContainer4 {
-    margin-top: 3px;
-    margin-left: 88px;
-  }
-  #InfoStorageBox2 {
-    position: absolute;
-    left: 626px;
-    top: 633px;
-    width: 668px;
-    height: 307px;
-  }
-  #pi1 {
-    position: absolute;
-    top: 0px;
-    left: 670px;
-    border: 2px var(--container-border-color) solid;
-    width: 530px;
+    height: 1080px;
   }
 
+  #discord-voice {
+    position: absolute;
+    top: 0px;
+    left: 724px;
+    width: 471px;
+    height: 110px;
+}
+
+  #pi1 {
+    position: absolute;
+    top: 485px;
+    left: 707px;
+    width: 259px;
+  }
   #pi2 {
-	  position: absolute;
-	  top: 63px;
-	  left: 705px;
-	  border: 2px var(--container-border-color) solid;
-	  width: 530px;
+    position: absolute;
+    top: 485px;
+    left: 944px;
+    width: 259px;
   }
   #pi3 {
     position: absolute;
-    top: 875px;
-    left: 670px;
-    border: 2px var(--container-border-color) solid;
-    width: 530px;
+    top: 536px;
+    left: 707px;
+    width: 259px;
   }
-
   #pi4 {
-	  position: absolute;
-	  top: 938px;
-	  left: 705px;
-	  border: 2px var(--container-border-color) solid;
-	  width: 530px;
-  }
-  #Bingo-board {
     position: absolute;
-    top: 460px;
-    left: 667px;
-    border: 2px var(--container-border-color) solid;
-    width:584px;
-    height:412px;
-  }
-  #game {
-    background-image: url("../../../static/middle-info-background.png");
-    position: absolute;
-    top: 125px;
-    left: 667px;
-    width: 386px;
-    border: 2px var(--container-border-color) solid;
-    height: 165px;
-  }
-  #fillleft {
-    position: absolute;
-    top: 0px;
-    height: 1080px;
-    left: 0px;
-    width: 660px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
-  #fillright {
-    position: absolute;
-    top: 0px;
-    height: 1080px;
-    left: 1260px;
-    width: 660px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
-  #timer{
-    position: absolute;
-    top: 293px;
-    left: 667px;
-    background-image: url("../../../static/middle-info-background.png");
-    width: 386px;
-    border: 2px var(--container-border-color) solid;
-    height: 165px;
-  }
-  #fillupperplayers, #filllowerplayers {
-	  background-image: linear-gradient(var(--alternative-main-color), var(--darker-main-color));
-	  left: 672px;
-	  height: 130px;
-	  width: 581px;
-	  position: absolute;
+    top: 536px;
+    left: 944px;
+    width: 259px;
   }
 
-  #fillupperplayers {
-	  top: 0px;
-  }
-  #filllowerplayers {
-	  top: 870px;
-  }
+  #game {
+    position: absolute;
+    top: 113px;
+    left: 724px;
+    width: 471px;
+    height: 39px;
+    font-size: 30px;
+    color: #fff;
+}
+
+  #timer {
+    position: absolute;
+    top: 381px;
+    left: 724px;
+    width: 471px;
+    height: 77px;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    font-size: 69px;
+}
+
+#stream1 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 720px;
+    height: 540px;
+}
+#stream2 {
+    position: absolute;
+    top: 0px;
+    left: 1199px;
+    width: 720px;
+    height: 540px;
+}
+#stream3 {
+    position: absolute;
+    top: 540px;
+    left: 0px;
+    width: 720px;
+    height: 540px;
+}
+#stream4 {
+    position: absolute;
+    top: 540px;
+    left: 1199px;
+    width: 720px;
+    height: 540px;
+}
+
+#donation-total {
+    position: absolute;
+    top: 940px;
+    left: 1071px;
+    color: #fff;
+    font-size: 42px;
+    width: 124px;
+    text-align: center;
+}
+
+#ticker {
+    position: absolute;
+    top: 987px;
+    left: 724px;
+    color: #fff;
+    width: 471px;
+    height: 97px;
+}
+
+#direct_relief_logo {
+    position: absolute;
+    top: 928px;
+    left: 776px;
+    width: 300px;
+    height: 61px;
+    background: url("../../../static/direct-relief.png");
+    background-size: 300px 61px;
+    background-repeat: no-repeat;
+}
+
+#speedyfists_logo {
+    position: absolute;
+    top: 805px;
+    left: 8px;
+    width: 300px;
+    height: 237px;
+    background: url("../../../static/speedyfists.png");
+    background-size: 300px;
+    background-repeat: no-repeat;
+    opacity: 0.0;
+}
+
+.EstimateBox{
+    font-size: 36px;
+    position: absolute;
+    color: #0080AF;
+    top: 445px;
+    left: 773px;
+}
+
+.TimerBox {
+    font-weight: 500;
+    font-size: 74px;
+    transition: 1s;
+    align-content: center;
+    text-align: center;
+    position: absolute;
+    left: 470px;
+    top: -31px;
+}
+
+#game-category-container {
+    top: 278px;
+    left: 724px;
+    position: absolute;
+    color: #0080AF;
+    text-align: left;
+    font-size: 23px;
+    width: 471px;
+    height: 60px;
+}
 
 </style>

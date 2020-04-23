@@ -337,4 +337,12 @@ export default class PlayerInfo extends Vue {
   .PlayerInfoBox > .BingoColor.bingo-yellow {
     background-image: linear-gradient(#d8d014, #c1ba0b);
   }
+  
+  .Sound{
+    position: absolute;
+    right: 83px;
+    top: 11px;
+  }
+
+  
 </style>

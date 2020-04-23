@@ -1,6 +1,6 @@
 <template>
     <div id="TextContainer">
-        <div id="FittedTextContent" :style="{transform, top}">{{text}}</div>
+        <div id="FittedTextContent" :style="{transform, top, left}">{{text}}</div>
     </div>
 </template>
 
@@ -20,6 +20,7 @@ export default class TextFit extends Vue {
     align: ("left" | "right" | "center");
     transform: string = "scaleX(1)";
     top: string = "0";
+    left: string = "0";
 
     mounted() {
         const font = window.getComputedStyle(this.$el.querySelector('#FittedTextContent')).font;
@@ -44,7 +45,7 @@ export default class TextFit extends Vue {
             const fittedContent = container.querySelector('#FittedTextContent');
             var scaleX = container.scrollWidth / fittedContent.scrollWidth;
             // console.log(container);
-            // console.log(`${container.scrollWidth}:${fittedContent.scrollWidth}`);
+            
             // limit max scale to 1
             scaleX = Math.min(1,scaleX);
             // center if overflow

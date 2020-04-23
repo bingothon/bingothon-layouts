@@ -80,37 +80,29 @@
 }
 
   #pi1 {
-
-    position: absolute;
-    top: 490px;
-    left: 722px;
-    width: 220px;
-
-}
-  #pi2 {
-
     position: absolute;
     top: 485px;
-    left: 959px;
-    width: 244px;
-
-}}
-#pi3 {
-
+    left: 707px;
+    width: 259px;
+  }
+  #pi2 {
     position: absolute;
-    top: 542px;
-    left: 722px;
-    width: 220px;
-
-}
+    top: 485px;
+    left: 944px;
+    width: 259px;
+  }
+  #pi3 {
+    position: absolute;
+    top: 536px;
+    left: 707px;
+    width: 259px;
+  }
   #pi4 {
-
     position: absolute;
-    top: 542px;
-    left: 959px;
-    width: 220px;
-
-}
+    top: 536px;
+    left: 944px;
+    width: 259px;
+  }
 
   #game {
     position: absolute;
@@ -124,24 +116,24 @@
 
   #timer {
     position: absolute;
-    top: 373px;
+    top: 381px;
     left: 724px;
     width: 471px;
     height: 77px;
     display: flex;
     align-items: center;
     align-content: center;
-    font-size: 82px;
+    font-size: 69px;
 }
 
-  #stream1 {
+#stream1 {
     position: absolute;
     top: 132px;
     left: 0px;
     width: 720px;
     height: 405px;
 }
-  #stream2 {
+#stream2 {
     position: absolute;
     top: 132px;
     left: 1199px;
@@ -155,7 +147,7 @@
     width: 720px;
     height: 405px;
 }
-  #stream4 {
+#stream4 {
     position: absolute;
     top: 543px;
     left: 1199px;
@@ -205,11 +197,11 @@
     opacity: 0.0;
 }
 
-.EstimateBox {
-    font-size: 51px;
+.EstimateBox{
+    font-size: 36px;
     position: absolute;
     color: #0080AF;
-    top: 433px;
+    top: 445px;
     left: 773px;
 }
 
