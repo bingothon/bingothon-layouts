@@ -77,7 +77,7 @@
     position: absolute;
     top: 310px;
     left: -14px;
-    width: 498px;
+    width: 483px;
 }
 
   #game {
@@ -86,7 +86,7 @@
     left: 0px;
     width: 476px;
     height: 92px;
-    font-size: 31px;
+    font-size: 45px;
     color: #fff;
 }
 
@@ -121,7 +121,7 @@
 
 #ticker {
     position: absolute;
-    top: 930px;
+    top: 890px;
     left: -8px;
     color: #fff;
     width: 484px;

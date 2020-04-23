@@ -1,10 +1,10 @@
 <template>
 	<div>
     <div id="base_layout"></div>
-    <player-info id="pi1" playerIndex="0" height=45px></player-info>
-    <player-info id="pi2" playerIndex="1" height=45px></player-info>
-    <player-info id="pi3" playerIndex="2" height=45px></player-info>
-    <player-info id="pi4" playerIndex="3" height=45px></player-info>
+    <player-info id="pi1" playerIndex="0" height=30px></player-info>
+    <player-info id="pi2" playerIndex="1" height=30px></player-info>
+    <player-info id="pi3" playerIndex="2" height=30px></player-info>
+    <player-info id="pi4" playerIndex="3" height=30px></player-info>
 		<test-game-container id="game"></test-game-container>
     <test-timer-container id="timer"></test-timer-container>
     <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px"></discord-voice-display>
@@ -81,27 +81,27 @@
 
   #pi1 {
     position: absolute;
-    top: 485px;
+    top: 493px;
     left: 707px;
-    width: 259px;
+    width: 242px;
   }
   #pi2 {
     position: absolute;
-    top: 485px;
+    top: 493px;
     left: 944px;
-    width: 259px;
+    width: 242px;
   }
   #pi3 {
     position: absolute;
-    top: 536px;
-    left: 707px;
-    width: 259px;
+    top: 543px;
+    left: 944px;
+    width: 242px;
   }
   #pi4 {
     position: absolute;
-    top: 536px;
-    left: 944px;
-    width: 259px;
+    top: 543px;
+    left: 707px;
+    width: 242px;
   }
 
   #game {

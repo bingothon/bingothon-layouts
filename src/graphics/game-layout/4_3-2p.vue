@@ -78,13 +78,13 @@
     position: absolute;
     top: 717px;
     left: -16px;
-    width: 983px;
+    width: 968px;
 }
   #pi2 {
     position: absolute;
     top: 717px;
     left: 944px;
-    width: 983px;
+    width: 968px;
 }
 
   #game {
@@ -156,7 +156,7 @@
     font-size: 36px;
     position: absolute;
     color: #0080AF;
-    top: 1031px;
+    top: 1037px;
     left: 1077px;
 }
 
