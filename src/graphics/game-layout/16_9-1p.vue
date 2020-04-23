@@ -78,7 +78,7 @@
     position: absolute;
     top: 903px;
     left: 1326px;
-    width: 374px;
+    width: 579px;
 
 }
 
@@ -175,12 +175,12 @@
     font-size: 40px;
     position: absolute;
     color: #0080AF;
-    top: 1024px;
+    top: 1036px;
     left: 1063px;
 }
 
 #game-category-container{
-    top: 1026px;
+    top: 1044px;
     left: 428px;
     position: absolute;
     color: #0080AF;

@@ -25,9 +25,14 @@
         </text-fit>
       </transition>
     </div>
+    <div v-if="showSound"
+      class="Sound"
+    >
+      <img :src="'/bundles/bingothon-layouts/static/music-note.png'">
+    </div>
     <div v-if="!!player.country"
       class="Flag FlexContainer"
-      :style="{'width' : `calc(${height} * 1.9)`}"
+      :style="{'width' : `calc(${height} * 1.7)`}"
     >
       <transition name="fade">
         <img
@@ -36,11 +41,6 @@
           :src="getPlayerFlag(player.country)"
         >
       </transition>
-    </div>
-    <div v-if="showSound"
-      class="Sound"
-    >
-      <img :src="'/bundles/bingothon-layouts/static/music-note.png'">
     </div>
     <div
       v-if="bingoColorShown === true"
@@ -271,7 +271,6 @@ export default class PlayerInfo extends Vue {
     height: 100%;
     justify-content: flex-end;
     position: relative;
-    margin-right: 15px;
   }
 
   .PlayerInfoBox.ReverseOrder > .Flag {
@@ -291,10 +290,6 @@ export default class PlayerInfo extends Vue {
     font-size: 40px;
     border-radius: 10%;
     border: 1px white solid;
-  }
-
-  .PlayerInfoBox > .Sound > img {
-    width: 30px;
   }
 
   /* Bingosync styled gradients */
@@ -338,10 +333,15 @@ export default class PlayerInfo extends Vue {
     background-image: linear-gradient(#d8d014, #c1ba0b);
   }
   
-  .Sound{
-    position: absolute;
+  .PlayerInfoBox > .Sound {
+    /*position: absolute;
     right: 83px;
-    top: 11px;
+    top: 11px;*/
+    height: 80%;
+  }
+
+  .PlayerInfoBox > .Sound > img {
+    height: 100%;
   }
 
   
