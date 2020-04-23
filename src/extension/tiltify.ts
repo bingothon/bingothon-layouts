@@ -190,17 +190,21 @@ if (nodecg.bundleConfig && nodecg.bundleConfig.tiltify && nodecg.bundleConfig.ti
 
 			// Do the initial request, which also checks if the key is valid.
 			client.get('https://tiltify.com/api/v3/campaigns/'+nodecg.bundleConfig.tiltify.campaign, requestOptions, (err, resp) => {
-				if (resp.statusCode === 403) {
-					log.warn('Your Tiltify API access token is not valid.');
-					return;
-				}
+				if (err) {
+					log.error('Could not get initial tiltify campaign: ',err);
+				} else {
+					if (resp.statusCode === 403) {
+						log.warn('Your Tiltify API access token is not valid.');
+						return;
+					}
 
-				if (resp.statusCode === 404) {
-					log.warn('The Tiltify campaign with the specified ID cannot be found.');
-					return;
+					if (resp.statusCode === 404) {
+						log.warn('The Tiltify campaign with the specified ID cannot be found.');
+						return;
+					}
+					
+					_processRawCampain(resp.body.data);
 				}
-				
-				_processRawCampain(resp.body.data);
 				//setUpPusher();
 				doUpdate();
 				nodecg.listenFor('refreshTiltify', doUpdate);
@@ -253,12 +257,14 @@ function reqCampain() {
 		_processRawCampain(testCampaign);
 		return;
 	}
-	client.get('https://tiltify.com/api/v3/campaigns/'+nodecg.bundleConfig.tiltify.campaign, requestOptions, (err, resp) => {
-		if (!err && resp.statusCode === 200)
-			_processRawCampain(resp.body.data);
-		else
-			log.error(err);
-	});
+	client.get('https://tiltify.com/api/v3/campaigns/'+nodecg.bundleConfig.tiltify.campaign, requestOptions)
+		.then(val => {
+			if (val.data) {
+				_processRawCampain(val.data);
+			}
+		}).error(err => {
+			log.error('error requesting campaign: ',err);
+		});
 }
 
 function _processRawCampain(data: any) {
@@ -275,12 +281,14 @@ function reqDonations() {
 		_processRawDonations(testDonations);
 		return;
 	}
-	client.get('https://tiltify.com/api/v3/campaigns/'+nodecg.bundleConfig.tiltify.campaign+"/donations", requestOptions, (err, resp) => {
-		if (!err && resp.statusCode === 200)
-			_processRawDonations(resp.body.data);
-		else
-			log.error(err);
-	});
+	client.get('https://tiltify.com/api/v3/campaigns/'+nodecg.bundleConfig.tiltify.campaign+"/donations", requestOptions)
+		.then(val => {
+			if (val.data) {
+				_processRawDonations(val.data);
+			}
+		}).error(err => {
+			log.error('error getting donations: ',err);
+		});
 }
 
 function _processRawDonations(data: Donation[]) {
