@@ -38,6 +38,7 @@ streamsReplicant.once('change', (): void => {
     // don't reset on server restart
     if (!newVal || !old) return;
 
+    if (newVal.id === old.id) return;
     // set the initial cropping based on the aspect ratio marked in the schedule
     let cropping = {
       widthPercent: 100, heightPercent: 100, topPercent: 0, leftPercent: 0,

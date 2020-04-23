@@ -21,6 +21,8 @@ boardMetaRep.once('change', (): void => {
   runDataActiveRunRep.on('change', (newValue, old): void => {
     // bail on server restart
     if (!newValue || !old) return;
+    // bail if this is still the old run
+    if (newValue.id === old.id) return;
     // Hide board when new run starts
     boardMetaRep.value.boardHidden = true;
 
