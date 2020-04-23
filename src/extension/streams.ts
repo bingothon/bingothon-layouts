@@ -38,7 +38,6 @@ streamsReplicant.once('change', (): void => {
     // don't reset on server restart
     if (!newVal || !old) return;
 
-    if (newVal.id === old.id) return;
     // set the initial cropping based on the aspect ratio marked in the schedule
     let cropping = {
       widthPercent: 100, heightPercent: 100, topPercent: 0, leftPercent: 0,
@@ -78,6 +77,7 @@ streamsReplicant.once('change', (): void => {
           if (!oldStream || player.social.twitch !== oldStream.channel) {
             current.channel = player.social.twitch;
           } else {
+            nodecg.log.info('not setting new stream cause old channel name');
             current = oldStream;
           }
         }
