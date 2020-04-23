@@ -38,6 +38,9 @@ export = (nodecg: NodeCG): void => {
           {
             id: '3', name: 'POGGERS', avatar: defaultAvatar, isSpeaking: false,
           },
+          {
+            id: '4', name: 'asdfasdf', avatar: defaultAvatar, isSpeaking: false,
+          },
         ],
       };
     }

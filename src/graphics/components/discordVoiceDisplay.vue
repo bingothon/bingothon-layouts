@@ -44,9 +44,15 @@ export default class DiscordVoiceDisplay extends Vue {
     nameWidth: string;
     @Prop({default: "blue"})
     voiceHighlightColor: string;
+    @Prop({default: 4})
+    maxUserCount: number;
 
     get voiceActivityMembers(): VoiceActivityMember[] {
-        return store.state.voiceActivity.members;
+        const members = store.state.voiceActivity.members;
+        if (members.length > this.maxUserCount) {
+            return members.slice(0, this.maxUserCount);
+        }
+        return members;
     }
 
     get micIcon() {
