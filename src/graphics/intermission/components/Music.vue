@@ -72,7 +72,7 @@
 		justify-content: center;
 		align-items: center;
 		height: 100%;
-		width: 450px;
+		width: 320px;
 	}
 	.MCat {
 		box-sizing: border-box;
