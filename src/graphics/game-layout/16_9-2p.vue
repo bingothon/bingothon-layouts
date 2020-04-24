@@ -100,11 +100,11 @@
   #timer {
     position: absolute;
     top: 962px;
-    left: 1295px;
-    width: 233px;
+    left: 1021px;
+    width: 583px;
     height: 77px;
     display: flex;
-    align-items: last baseline;
+    align-items: center;
     font-size: 82px;
 }
 

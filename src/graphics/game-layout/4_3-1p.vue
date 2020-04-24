@@ -93,11 +93,11 @@
   #timer {
     position: absolute;
     top: 414px;
-    left: 182px;
-    width: 233px;
+    left: 0px;
+    width: 476px;
     height: 77px;
     display: flex;
-    align-items: last baseline;
+    align-items: center;
     font-size: 70px;
 }
 

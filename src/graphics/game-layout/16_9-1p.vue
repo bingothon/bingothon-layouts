@@ -95,11 +95,11 @@
   #timer {
     position: absolute;
     top: 973px;
-    left: 1590px;
-    width: 233px;
+    left: 1337px;
+    width: 583px;
     height: 77px;
     display: flex;
-    align-items: last baseline;
+    align-items: center;
     font-size: 70px;
 }
 

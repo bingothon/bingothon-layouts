@@ -108,11 +108,11 @@
   #timer {
     position: absolute;
     top: 833px;
-    left: 332px;
-    width: 233px;
+    left: 0px;
+    width: 720px;
     height: 77px;
     display: flex;
-    align-items: last baseline;
+    align-items: center;
     font-size: 82px;
 }
 
