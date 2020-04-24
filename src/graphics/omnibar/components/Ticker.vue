@@ -53,7 +53,7 @@ export default class Ticker extends Vue {
         this.staticMessages = [
             this.genericMessage('This is Speedyfists 2020, enjoy your stay!'),
             this.genericMessage('#Speedyfists 2020 benefits Direct Relief!'),
-            this.genericMessage('Donate @ https://tiltify.com/@speedyfists/speedyfists-round-4'),
+            this.genericMessage('Use !donate to donate!'),
         ];
         store.watch(state => state.trackerDonations, newVal => {
           this.latestDonations = newVal.slice(0,4);

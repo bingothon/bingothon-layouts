@@ -119,9 +119,9 @@ export default class UpcomingRun extends Vue{
     align-items: flex-start;
   }
   .Line1 {
-    font-size: 25px;
+    font-size: 23px;
   }
   .Line2 {
-    font-size: 22px;
+    font-size: 20px;
   }
 </style>
