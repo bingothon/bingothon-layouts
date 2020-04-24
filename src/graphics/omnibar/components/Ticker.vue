@@ -51,10 +51,9 @@ export default class Ticker extends Vue {
 
     mounted() {
         this.staticMessages = [
-            this.genericMessage('This is Bingothon Winter 2019, enjoy your stay!'),
-            this.genericMessage('#Bingothon Winter 2019 benefits Pure Earth!'),
-            this.genericMessage('Donate @ donate.bingothon.com'),
-            this.genericMessage("Can't get enough of Bingothon? Join the Bingothon Discord at discord.bingothon.com"),
+            this.genericMessage('This is Speedyfists 2020, enjoy your stay!'),
+            this.genericMessage('#Speedyfists 2020 benefits Direct Relief!'),
+            this.genericMessage('Donate @ https://tiltify.com/@speedyfists/speedyfists-round-4'),
         ];
         store.watch(state => state.trackerDonations, newVal => {
           this.latestDonations = newVal.slice(0,4);
@@ -81,7 +80,7 @@ export default class Ticker extends Vue {
             case 3: currentComponent = this.showLatestDonation(); break;
             default: currentComponent = this.staticMessages[Math.floor(Math.random() * this.staticMessages.length)]; break;
         }
-        this.currentState = (this.currentState + 1) % 4;
+        this.currentState = (this.currentState + 1) % 5;
         this.currentComponent = currentComponent;
         this.timestamp = Date.now();
     }
