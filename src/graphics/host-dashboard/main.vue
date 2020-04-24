@@ -85,10 +85,6 @@
 			</div>
 		</div>
 		<div id="column3" class="column">
-            <div>
-                Paste the entire image Url here: <input v-model="pictureDuringIntermissionUrl">
-                <button @click="clearPicture">Clear picture</button>
-            </div>
 			<div id="donationTotalHeader">Donation Total:</div>
 			<div id="donationTotal">{{donationTotal}}</div>
 			<br>
@@ -114,11 +110,6 @@
 				</div>
 			</div>
 		</div>
-		<div id="column4" class="column">
-			<div id="HostingBingo">
-				<bingo-board class="BingoBoard" id="Bingo-board" bingoboardRep="hostingBingoboard" :alwaysShown="true" fontSize="25px"></bingo-board>
-			</div>
-		</div>
 	</div>
 	</div>
 </template>
@@ -130,12 +121,12 @@
     import moment from 'moment';
     import fs = require('fs');
     import {RunData} from "../../../speedcontrol-types";
-    import BingoBoard from "../components/bingoboard";
+    //import BingoBoard from "../components/bingoboard";
 import { HostsSpeakingDuringIntermission, ShowPictureDuringIntermission } from "../../../schemas";
 
     @Component({
 		components: {
-			BingoBoard
+			//BingoBoard
 		}
 	})
 
