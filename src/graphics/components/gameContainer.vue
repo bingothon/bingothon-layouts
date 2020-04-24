@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="GameName FlexContainer"><text-fit :text="gameName" align="center"></text-fit></div>
+        <div class="GameName FlexContainer">{{gameName}}</div>
     </div>
 </template>
 
@@ -27,6 +27,7 @@ export default class TestGameContainer extends Vue {
 .GameName {
     width: 100%;
     height: 100%;
+    text-align: center;
 }
 /*#est {
     font-size: 20px;

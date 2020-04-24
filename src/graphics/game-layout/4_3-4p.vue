@@ -109,7 +109,7 @@
     top: 113px;
     left: 724px;
     width: 471px;
-    height: 39px;
+    height: 121px;
     font-size: 30px;
     color: #fff;
 }

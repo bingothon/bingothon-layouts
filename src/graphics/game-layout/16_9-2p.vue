@@ -89,10 +89,10 @@
 
   #game {
     position: absolute;
-    top: 935px;
+    top: 911px;
     left: 113px;
     width: 794px;
-    height: 87px;
+    height: 105px;
     font-size: 45px;
     color: #fff;
 }

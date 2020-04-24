@@ -82,10 +82,10 @@
 
   #game {
     position: absolute;
-    top: 100px;
+    top: 12px;
     left: 0px;
     width: 476px;
-    height: 92px;
+    height: 200px;
     font-size: 45px;
     color: #fff;
 }
