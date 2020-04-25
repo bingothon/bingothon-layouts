@@ -151,7 +151,7 @@ export default class Intermission extends Vue{
   #Rotation {
 
     left: 1278px;
-    top: 296px;
+    top: 324px;
     width: 637px;
     height: 660px;
     color: white;
