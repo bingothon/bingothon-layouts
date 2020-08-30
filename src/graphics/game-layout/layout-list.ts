@@ -19,6 +19,7 @@ import Layout_16x10_2p from "./16_10-2p.vue";
 import Layout_DS_2p from "./DS-2p.vue";
 import Layout_Host_Bingo from "./host-bingo.vue";
 import Layout_Just_Dance from "./just-dance.vue";
+import Layout_4x3_2p_BigBoard from "./4_3-2p-big-board.vue";
 
 export { Layout_16x9_4p,
 	Layout_16x9_4p_CoOp,
@@ -40,4 +41,5 @@ export { Layout_16x9_4p,
 	Layout_4x3_1p,
 	Layout_Host_Bingo,
 	Layout_Just_Dance,
+	Layout_4x3_2p_BigBoard
 };

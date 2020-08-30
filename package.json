@@ -83,11 +83,11 @@
         "workspace": "Bingothon"
       },
       {
-	"name": "camnames-control",
-	"title": "Cam Names Control",
-	"file": "camnames-control.html",
-	"width": 2,
-	"workspace": "Bingothon"
+        "name": "camnames-control",
+        "title": "Cam Names Control",
+        "file": "camnames-control.html",
+        "width": 2,
+        "workspace": "Bingothon"
       },
       {
         "name": "layout-control",
@@ -149,6 +149,11 @@
         "width": 1920,
         "height": 1080
       },
+	  {
+		"file": "bingo.html",
+		"width": 500,
+		"height": 500
+	  },
       {
         "file": "omnibar.html",
         "width": 1920,
