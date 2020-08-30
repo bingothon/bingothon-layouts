@@ -2,11 +2,11 @@
 
 :root {
     --container-background-color: rgba(206, 13, 0, 0.6);
-    --container-border-color: black;
+    --container-border-color: white;
     --font-color: #fff;
-    --darker-main-color: #e94e1b;
+    --darker-main-color: #ea8c00;
     --lighter-main-color: #f39200;
-	--alternative-main-color: #d32f3e;
+	--alternative-main-color: #f39200;
 }
 
 body {

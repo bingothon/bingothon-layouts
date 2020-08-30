@@ -1,7 +1,7 @@
 <template>
     <div class="GameContainer FlexContainer">
-        <div class="GameName FlexContainer">{{gameName}}</div>
-        <div class="GameExtra FlexContainer">{{gameCategory}} | {{gameSystem}}</div>
+        <div class="GameName FlexContainer"><!--{{gameName}}--><img src="../../../static/Super_Mario_Sunshine_logo.png" id="logo"></div>
+        <div class="GameExtra FlexContainer">{{gameCategory}}</div>
     </div>
 </template>
 
@@ -47,11 +47,19 @@ export default class TestGameContainer extends Vue {
 }
 
 .GameContainer > .GameExtra {
-    font-size: 18px;
+	position: absolute;
+	top: 200px;
+    font-size: 30px;
     font-weight: thin;
     align-content: center;
-    color: grey;
+    color: #d2d2d2;
     text-align: center;
+}
+
+#logo {
+	position: absolute;
+	height: 150px;
+	top: 25px;
 }
 
 /*#est {

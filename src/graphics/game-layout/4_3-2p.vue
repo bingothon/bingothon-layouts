@@ -2,14 +2,15 @@
 	<div>
 		<twitch-player id="stream1" streamIndex="0"></twitch-player>
 		<twitch-player id="stream2" streamIndex="1"></twitch-player>
-    <div id="fillbar" class="flexContainer"></div>
     <div id="fillvoice" class="flexContainer"></div>
     <player-info id="pi1" playerIndex="0" height=45px></player-info>
     <player-info id="pi2" playerIndex="1" height=45px></player-info>
-		<test-game-container id="game"></test-game-container>
-    <test-timer-container id="timer"></test-timer-container>
+	<div id="timer-and-discord-container">
+		<test-timer-container id="timer"></test-timer-container>
+		<discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="125px" maxUserCount="4"></discord-voice-display>
+	</div>
+	<test-game-container id="game"></test-game-container>
     <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
-    <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="125px" maxUserCount="4"></discord-voice-display>
 	</div>
 </template>
 
@@ -67,62 +68,62 @@
     background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
-  #fillbar {
-    position: absolute;
-    top: 1000px;
-    left: 0px;
-    width: 1920px;
-    height: 80px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
-  }
   #discord-voice {
     position: absolute;
-    top: 780px;
-    left: 1280px;
-    width: 250px;
-    height: 220px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
+    top: 0px;
+    left: 0px;
+    width: 300px;
+    height: 300px;
   }
   #pi1 {
     position: absolute;
     top: 720px;
     left: 0px;
     border: 2px var(--container-border-color) solid;
-    width: 625px;
+    width: 715px;
   }
   #pi2 {
     position: absolute;
     top: 720px;
-    left: 1280px;
+    left: 1190px;
     border: 2px var(--container-border-color) solid;
-    width: 625px;
+    width: 715px;
   }
   #Bingo-board {
     position: absolute;
     top: 720px;
-    left: 640px;
+    left: 730px;
     border: 2px var(--container-border-color) solid;
-    width: 640px;
-    height: 280px;
+    width: 460px;
+    height: 360px;
   }
   #game {
-    background-image: url("../../../static/middle-info-background.png");
+    background-image: url("../../../static/background-sunshine.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
     position: absolute;
     top: 780px;
     left: 0px;
-    width: 640px;
+    width: 730px;
     border: 2px var(--container-border-color) solid;
-    height: 220px;
+    height: 300px;
   }
   #timer{
     position: absolute;
-    top: 780px;
-    left: 1530px;
-    background-image: url("../../../static/middle-info-background.png");
-    width: 390px;
-    border: 2px var(--container-border-color) solid;
-    height: 220px;
+    top: 0px;
+    left: 300px;
+    width: 440px;
+    height: 300px;
+  }
+  #timer-and-discord-container {
+	  position: absolute;
+	  left: 1190px;
+	  top: 780px;
+	  width: 730px;
+	  height: 300px;
+	  border: 2px var(--container-border-color) solid;
+	  background-image: url("../../../static/background-sunshine.jpg");
+	  background-size: cover;
+	  background-repeat: no-repeat;
   }
 </style>

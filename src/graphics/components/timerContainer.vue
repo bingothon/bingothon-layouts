@@ -9,11 +9,6 @@
       :class="timerStateClass"
       v-html="time"
     ></div>
-    <div
-      class="EstimateBox FlexContainer"
-    >
-      Est: {{estimate}}
-    </div>
     </div>
   <!-- eslint-enable -->
 </template>
@@ -43,7 +38,7 @@ export default class TestTimerContainer extends Vue {
     get estimate(): string {
         return store.state.runDataActiveRun.estimate
     }
-  
+
     updateData(timer: Timer) {
       this.time = this.splitStringToSpans(timer.time);
       /*switch (timer.state) {
@@ -119,7 +114,7 @@ export default class TestTimerContainer extends Vue {
   }
 
   .TimerBox.paused, .TimerBox.stopped {
-    color: gray;
+    color: #d2d2d2;
   }
 
   .TimerBox.finished {
