@@ -14,7 +14,7 @@
     > {{ errorMessage }}</span>
     <div>
       <button @click="toggleManualScoreOverride">
-        {{manualScoreOverrideText}}
+        {{ manualScoreOverrideText }}
       </button>
     </div>
     <div
@@ -35,10 +35,10 @@
       </select>
       <span v-show="isManualScoreOverride">
         <input
-          class="manual-score"
-          @change="updateManualScore"
           v-model="manualScore[i]"
+          class="manual-score"
           type="number"
+          @change="updateManualScore"
         >
       </span>
     </div>
@@ -196,9 +196,8 @@ export default class BingoControl extends Vue {
     get manualScoreOverrideText(): string {
       if (store.state.bingoboardMeta.manualScoreOverride) {
         return 'Disable Manual Score Override';
-      } else {
-        return 'Enable ManualScoreOverride';
       }
+      return 'Enable ManualScoreOverride';
     }
 
     get isManualScoreOverride(): boolean {
@@ -254,7 +253,7 @@ export default class BingoControl extends Vue {
     }
 
     get manualScore(): string[] {
-      return store.state.bingoboardMeta.manualScores.map(i => ""+i);
+      return store.state.bingoboardMeta.manualScores.map(i => `${i}`);
     }
 
     // test
@@ -277,7 +276,7 @@ export default class BingoControl extends Vue {
     updateManualScore() {
       this.manualScore.forEach((score : string, idx: number) => {
         getReplicant<BingoboardMeta>('bingoboardMeta').value.manualScores[idx] = parseInt(score, 10);
-      })
+      });
     }
 
     connectAction() {
