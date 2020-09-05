@@ -1,14 +1,16 @@
 <template>
 	<div class="Interview">
-	<img src="../../../static/logo-summer-wide.png" id="logo">
+	<!--<img src="../../../static/logo-summer-wide.png" id="logo">-->
     <div id="fillvoice" class="flexContainer"></div>
     <player-info id="pi1" playerIndex="0" height=45px></player-info>
     <player-info id="pi2" playerIndex="1" height=45px></player-info>
-		<test-game-container id="game"></test-game-container>
+	  <div id="game"	class="flexContainer">
+		<test-game-container id="gamec"></test-game-container>
+	    <img src="../../../static/Super_Mario_Sunshine_logo.png" id="logo">
+	  </div>
     <test-timer-container id="timer"></test-timer-container>
     <bingo-board id="Bingo-board" fontSize="20px"></bingo-board>
-    <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px" maxUserCount="16"></discord-voice-display>
-	<test-next-game-container id="nextGame"></test-next-game-container>
+    <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px" maxUserCount="6"></discord-voice-display>
 	</div>
 </template>
 
@@ -45,14 +47,16 @@
 		top: 0px;
 		width: 1935px;
 		height: 1090px;
-		background: linear-gradient(var(--darker-main-color), var(--lighter-main-color));
+		background-size: cover;
+		background-image: url("../../../static/background-sunshine.jpg");
+		background-repeat: no-repeat;
 	}
 	#discord-voice {
 		position: absolute;
-		top: 500px;
+		top: 650px;
 		left: 1330px;
 		width: 500px;
-		height: 400px;
+		height: 200px;
 		background-color: var(--container-background-color);
 	}
 	#logo{
@@ -64,13 +68,13 @@
 	}
 	#pi1 {
 		position: absolute;
-		top: 500px;
+		top: 650px;
 		left: 90px;
 		width: 500px;
 	}
 	#pi2 {
 		position: absolute;
-		top: 600px;
+		top: 750px;
 		left: 90px;
 		width: 500px;
 	}
@@ -83,13 +87,23 @@
 	}
 	#game {
 		position: absolute;
-		top: 225px;
+		top: 50px;
 		left: 460px;
 		width: 1000px;
 		height: 100px;
 	}
-	#game > .GameContainer > .GameExtra {
-		color: #484848;
+	#gamec {
+		position: absolute;
+		left: 0px;
+		width: 1000px;
+		top: 200px;
+	}
+	#logo {
+		position: absolute;
+		height: 150px;
+		width: 255px;
+		top: 25px;
+		left: 370px;
 	}
 	#timer{
 		position: absolute;

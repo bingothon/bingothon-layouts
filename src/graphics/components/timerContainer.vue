@@ -118,7 +118,7 @@ export default class TestTimerContainer extends Vue {
   }
 
   .TimerBox.finished {
-    color: blue;
+    color: #ffe85b;
   }
 
   .EstimateBox {

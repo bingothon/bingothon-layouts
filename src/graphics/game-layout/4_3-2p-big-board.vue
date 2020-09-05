@@ -1,13 +1,17 @@
 <template>
+
 	<div>
 		<twitch-player id="stream1" streamIndex="0"></twitch-player>
 		<twitch-player id="stream2" streamIndex="1"></twitch-player>
     <div id="fillvoice" class="flexContainer"></div>
     <player-info id="pi1" playerIndex="0" height=45px></player-info>
     <player-info id="pi2" playerIndex="1" height=45px></player-info>
-		<test-timer-container id="timer"></test-timer-container>
-		<discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="125px" maxUserCount="4"></discord-voice-display>
-	<test-game-container id="game"></test-game-container>
+	<test-timer-container id="timer"></test-timer-container>
+	<discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="125px" maxUserCount="4"></discord-voice-display>
+	<div id="game"	class="flexContainer">
+	  <test-game-container id="gamec"></test-game-container>
+      <img src="../../../static/Super_Mario_Sunshine_logo.png" id="logo">
+	</div>
     <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
 	</div>
 </template>
@@ -94,9 +98,8 @@
   #Bingo-board {
     position: absolute;
     top: 0px;
-    left: 840px;
-    border: 2px var(--container-border-color) solid;
-    width: 1080px;
+    left: 845px;
+    width: 1075px;
     height: 1080px;
   }
   #game {
@@ -109,6 +112,19 @@
     width: 360px;
     border: 2px var(--container-border-color) solid;
     height: 420px;
+  }
+  #gamec{
+	  position: absolute;
+	  left: 0px;
+	  width: 360px;
+	  top: 250px;
+	  -webkit-text-stroke: 1px black;
+  }
+  #logo {
+	  position: absolute;
+	  height: 150px;
+	  top: 75px;
+	  left: 65px;
   }
   #timer{
     position: absolute;

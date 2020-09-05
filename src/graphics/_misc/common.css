@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:600&subset=cyrillic,cyrillic-ext,latin-ext,vietnamese');
 
 :root {
-    --container-background-color: rgba(206, 13, 0, 0.6);
+    --container-background-color: rgba(0, 0, 0, 0.4);
     --container-border-color: white;
     --font-color: #fff;
-    --darker-main-color: #ea8c00;
-    --lighter-main-color: #f39200;
-	--alternative-main-color: #f39200;
+    --darker-main-color: #e2a339;
+    --lighter-main-color: #ffff89;
+	--alternative-main-color: #ffff89;
 }
 
 body {

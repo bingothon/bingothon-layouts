@@ -9,7 +9,10 @@
 		<test-timer-container id="timer"></test-timer-container>
 		<discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="125px" maxUserCount="4"></discord-voice-display>
 	</div>
-	<test-game-container id="game"></test-game-container>
+	<div id="game"	class="flexContainer">
+		<test-game-container id="gamec"></test-game-container>
+		<img src="../../../static/Super_Mario_Sunshine_logo.png" id="logo">
+	</div>
     <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
 	</div>
 </template>
@@ -107,6 +110,18 @@
     width: 730px;
     border: 2px var(--container-border-color) solid;
     height: 300px;
+  }
+  #gamec {
+	  position: absolute;
+	  top: 185px;
+	  left: 0px;
+	  width: 730px;
+  }
+  #logo {
+	  position: absolute;
+	  height: 150px;
+	  top: 25px;
+	  left: 250px;
   }
   #timer{
     position: absolute;
