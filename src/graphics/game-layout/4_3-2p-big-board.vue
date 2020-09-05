@@ -7,12 +7,13 @@
     <player-info id="pi1" playerIndex="0" height=45px></player-info>
     <player-info id="pi2" playerIndex="1" height=45px></player-info>
 	<test-timer-container id="timer"></test-timer-container>
-	<discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="125px" maxUserCount="4"></discord-voice-display>
+	<discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="125px" maxUserCount="6"></discord-voice-display>
 	<div id="game"	class="flexContainer">
 	  <test-game-container id="gamec"></test-game-container>
       <img src="../../../static/Super_Mario_Sunshine_logo.png" id="logo">
 	</div>
     <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
+	<div id="bingo-bottom-border" class="FlexContainer"></div>
 	</div>
 </template>
 
@@ -98,9 +99,19 @@
   #Bingo-board {
     position: absolute;
     top: 0px;
-    left: 845px;
-    width: 1075px;
-    height: 1080px;
+    left: 843px;
+    width: 1073px;
+    height: 1076px;
+	border: 2px var(--container-border-color) solid;
+	border-bottom: 2px var(--container-border-color) solid;;
+  }
+  #bingo-bottom-border {
+	  position: absolute;
+	  left: 845px;
+	  top: 1078px;
+	  width: 1080px;
+	  height: 2px;
+	  background: white;
   }
   #game {
     background-image: url("../../../static/background-sunshine.jpg");
@@ -118,7 +129,6 @@
 	  left: 0px;
 	  width: 360px;
 	  top: 250px;
-	  -webkit-text-stroke: 1px black;
   }
   #logo {
 	  position: absolute;

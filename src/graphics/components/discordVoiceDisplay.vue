@@ -7,6 +7,7 @@
             class="Member FlexContainer"
             v-for="member in voiceActivityMembers"
             :class="{'Active':member.isSpeaking}"
+			:class="{'Inactive':!member.isSpeaking}"
             :key="member.id"
         >
             <div class="AvatarContainer">
@@ -111,4 +112,8 @@ export default class DiscordVoiceDisplay extends Vue {
     .DiscordVoiceDisplay > .Member.Active > div.Name {
         text-shadow: 0px 0px 15px var(--voice-highlight-color);
     }
+
+	.DiscordVoiceDisplay > .Member > div.Name {
+		text-shadow: 0px 0px 5px black;
+	}
 </style>

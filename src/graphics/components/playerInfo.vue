@@ -40,7 +40,7 @@
     <div v-if="showSound"
       class="Sound"
     >
-      <img :src="'/bundles/bingothon-layouts/static/music-note.png'">
+      <img :src="'/bundles/bingothon-layouts/static/music-note-shadow.png'">
     </div>
     <div
       v-if="bingoColorShown === true"
@@ -59,8 +59,8 @@ import { store } from "../../browser-util/state";
 import { RunDataPlayer } from "../../../speedcontrol-types";
 import TextFit from "../helpers/text-fit.vue";
 
-const playerSoloImg = require('../_misc/player-solo.png');
-const twitchIconImg = require('../_misc/twitch-icon.png');
+const playerSoloImg = require('../_misc/player-solo-shadow.png');
+const twitchIconImg = require('../_misc/twitch-icon-shadow.png');
 
 @Component({
   components: {
@@ -239,6 +239,7 @@ export default class PlayerInfo extends Vue {
     padding: 7px;
     font-weight: 500;
     font-size: 30px;
+	text-shadow: 2px 2px 5px black;
   }
 
   .PlayerInfoBox.ReverseOrder {
@@ -254,7 +255,7 @@ export default class PlayerInfo extends Vue {
   .PlayerInfoBox > .CurrentIcon > img {
     height: 100%;
     position: absolute;
-    filter: invert(1);
+    /*'filter: invert(1);*/
   }
 
   .PlayerInfoBox > .PlayerName {

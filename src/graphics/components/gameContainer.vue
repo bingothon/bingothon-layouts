@@ -44,14 +44,16 @@ export default class TestGameContainer extends Vue {
 	color: white;
 	text-align: center;
 	margin: 5px;
+	text-shadow: 3px 3px 5px black;
 }
 
 .GameContainer > .GameExtra {
-	font-size: 18px;
+	font-size: 20px;
 	font-weight: thin;
 	align-content: center;
 	color: white;
 	text-align: center;
+	text-shadow: 1px 1px 5px black;
 }
 
 /*#est {
