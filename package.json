@@ -89,14 +89,6 @@
         "workspace": "Bingothon"
       },
       {
-        "name": "countdown-control",
-        "title": "Countdown Control",
-        "width": 2,
-        "file": "countdown-control.html",
-        "workspace": "Main Workspace",
-        "headerColor": "#c49215"
-      },
-      {
         "name": "camnames-control",
         "title": "Cam Names Control",
         "file": "camnames-control.html",
@@ -140,6 +132,11 @@
       },
       {
         "file": "intermission.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "intro.html",
         "width": 1920,
         "height": 1080
       },
