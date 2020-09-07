@@ -4,7 +4,7 @@
 		class="Music FlexContainer"
 	>
 		<div class="MCat">
-			<!--<img src="music.png">-->
+			<img src="music.png">
 		</div>
 		<div
 			class="NameContainer"
@@ -41,8 +41,8 @@ export default class Music extends Vue {
 	scrollingEffect: boolean = false;
 
 	mounted() {
-		store.watch((state) => state.songData, this.onSongDataUpdate, {immediate: true})
-		//this.onSongDataUpdate({title: "Epic bingothon Rap Remix - Flo & Tr1cks", playing: true});
+		//store.watch((state) => state.songData, this.onSongDataUpdate, {immediate: true})
+		this.onSongDataUpdate({title: "Epic bingothon Rap Remix - Flo & Tr1cks", playing: true});
 	}
 
 	onSongDataUpdate(newSong : SongData | undefined) {

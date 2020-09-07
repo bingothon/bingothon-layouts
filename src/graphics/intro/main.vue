@@ -92,6 +92,7 @@ export default class Intermission extends Vue{
 	 top: 200px;
 	 font-size: 50px;
 	 color: white;
+	 text-shadow: 3px 3px 5px black;
  }
  #matchupC{
 	 position: absolute;
@@ -102,6 +103,7 @@ export default class Intermission extends Vue{
 	 font-size: 50px;
 	 color: white;
 	 text-align: center;
+	 text-shadow: 3px 3px 5px black;
  }
  #Countdown{
 	 position: absolute;
@@ -112,6 +114,7 @@ export default class Intermission extends Vue{
 	 font-size: 100px;
 	 color: white;
 	 text-align: center;
+	 text-shadow: 3px 3px 5px black;
  }
  #Music {
 	 font-family: Delfino;
@@ -119,7 +122,7 @@ export default class Intermission extends Vue{
 	 justify-content: flex-start;
 	 flex-direction: row;
 	 background-color: rgba(0,0,0,0.3);
-	 left: 0px;
+	 left: 1400px;
 	 top: 940px;
 	 width: 1920px;
 	 height: 60px;
