@@ -255,17 +255,25 @@ export default class BingoBoard extends Vue {
     }
     .marker {
         position: absolute;
-        width: 50%;
-        height: 50%;
+        width: 20px;
+        height: 20px;
+        opacity: 0.9;
+        border-radius: 50%;
     }
     .marker0 {
-        transform: skew(-45deg);
-        left: -25%;
-        top: -25%;
+        left: 10%;
+        top: 10%;
     }
     .marker1 {
-        transform: skew(45deg);
-        right: -25%;
-        top: -25%;
+        right: 10%;
+        top: 10%;
+    }
+    .marker2 {
+        left: 10%;
+        bottom: 10%;
+    }
+    .marker3 {
+        right: 10%;
+        bottom: 10%;
     }
 </style>
