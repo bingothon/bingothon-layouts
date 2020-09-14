@@ -175,7 +175,7 @@
     width: 105px;
     height: 95px;
     text-align: center;
-    border: 1px #424242 solid;
+    /* border: 1px #424242 solid; */
     background: #181818;
 
     /* vertical-align changed to top so background colors wont be pushed halfway down */

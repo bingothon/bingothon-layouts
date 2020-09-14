@@ -13,5 +13,6 @@ export interface Bingoboard {
     name: string;
     slot: string;
     colors: string;
+    markers?: [string | null, string | null, string | null, string | null];
   }[];
 }

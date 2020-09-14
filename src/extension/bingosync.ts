@@ -10,7 +10,7 @@ import { Replicant } from 'nodecg/types/server'; // eslint-disable-line import/n
 import * as nodecgApiContext from './util/nodecg-api-context';
 import { BingoboardMeta, Bingoboard, BingosyncSocket } from '../../schemas';
 
-import equal = require('deep-equal');
+import equal from 'deep-equal';
 
 const nodecg = nodecgApiContext.get();
 const log = new nodecg.Logger(`${nodecg.bundleName}:bingosync`);
@@ -23,6 +23,28 @@ const bingosyncSiteUrl = 'https://bingosync.com';
 // recover().catch((error) => {
 //  log.error(`Failed to recover connection to room ${socketRep.value.roomCode}:`, error);
 // });
+
+const colorRedirects = [['orange','red'],['teal','blue']];
+
+function processCellForMarkers(cell: {colors: string, markers: any}) {
+  if (cell.colors === 'blank') return;
+  const newColors: string[] = [];
+  const markers: (string | null)[] = [null,null,null,null];
+  cell.colors.split(' ').forEach((color): void => {
+    let redirected = false;
+    for(const [i,redirect] of colorRedirects.entries()) {
+      if (color === redirect[0]) {
+        markers[i] = redirect[1];
+        redirected = true;
+      }
+    }
+    if (!redirected) {
+      newColors.push(color);
+    }
+  });
+  cell.colors = newColors.join(' ');
+  cell.markers = markers;
+}
 
 class BingosyncManager {
   public name: string;
@@ -144,7 +166,7 @@ class BingosyncManager {
       purple: 0,
     };
 
-    newBoardState.forEach((cell: {colors: string}): void => {
+    newBoardState.forEach((cell: {colors: string, markers: any}): void => {
       // remove blank cause thats not a color
       // count all the color occurences
       cell.colors.split(' ').forEach((color): void => {
@@ -152,6 +174,7 @@ class BingosyncManager {
           goalCounts[color] += 1;
         }
       });
+      processCellForMarkers(cell);
     });
 
     this.boardRep.value.colorCounts = goalCounts;
@@ -160,6 +183,7 @@ class BingosyncManager {
     if (equal(this.boardRep.value.cells, newBoardState)) {
       return;
     }
+
 
     this.boardRep.value.cells = newBoardState;
   }
@@ -212,14 +236,14 @@ class BingosyncManager {
 
         if (json.type === 'goal') {
           const index = parseInt(json.square.slot.slice(4), 10) - 1;
-          this.boardRep.value.cells[index] = json.square;
-          const { color } = json;
-          this.boardRep.value.cells[index] = json.square;
+          const cell = json.square;
+          processCellForMarkers(cell);
+          this.boardRep.value.cells[index] = cell;
           // update goal count
           if (json.remove) {
-            this.boardRep.value.colorCounts[color] -= 1;
+            this.boardRep.value.colorCounts[cell.color] -= 1;
           } else {
-            this.boardRep.value.colorCounts[color] += 1;
+            this.boardRep.value.colorCounts[cell.color] += 1;
           }
         }
       };

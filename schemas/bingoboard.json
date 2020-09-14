@@ -14,13 +14,20 @@
             "default": [],
             "additionalProperties": false,
             "items": {
-                "type":"object",
+                "type": "object",
                 "required": ["name","slot","colors"],
                 "additionalProperties": false,
                 "properties": {
                     "name": {"type":"string"},
                     "slot": {"type":"string"},
-                    "colors": {"type":"string"}
+                    "colors": {"type":"string"},
+                    "markers": {
+                        "type": "array",
+                        "default": [null,null,null,null],
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "items": {"type": ["string", "null"]}
+                    }
                 }
             }
         }
