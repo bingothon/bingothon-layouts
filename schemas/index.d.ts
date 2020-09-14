@@ -3,6 +3,7 @@ export * from './allGameLayouts';
 export * from './allInterviews';
 export * from './bingoboard';
 export * from './bingoboardMeta';
+export * from './bingoboardMode';
 export * from './bingosyncSocket';
 export * from './currentCamNames';
 export * from './currentGameLayout';

@@ -8,13 +8,14 @@ import WebSocket from 'ws';
 // Ours
 import { Replicant } from 'nodecg/types/server'; // eslint-disable-line import/no-extraneous-dependencies
 import * as nodecgApiContext from './util/nodecg-api-context';
-import { BingoboardMeta, Bingoboard, BingosyncSocket } from '../../schemas';
+import { BingoboardMeta, Bingoboard, BingosyncSocket, BingoboardMode } from '../../schemas';
 
 import equal from 'deep-equal';
 
 const nodecg = nodecgApiContext.get();
 const log = new nodecg.Logger(`${nodecg.bundleName}:bingosync`);
 const boardMetaRep = nodecg.Replicant<BingoboardMeta>('bingoboardMeta');
+const bingoboardMode = nodecg.Replicant<BingoboardMode>('bingoboardMode');
 
 const noop = (): void => {}; // tslint:disable-line:no-empty
 const bingosyncSocketUrl = 'wss://sockets.bingosync.com';
@@ -24,15 +25,14 @@ const bingosyncSiteUrl = 'https://bingosync.com';
 //  log.error(`Failed to recover connection to room ${socketRep.value.roomCode}:`, error);
 // });
 
-const colorRedirects = [['orange','red'],['teal','blue']];
-
 function processCellForMarkers(cell: {colors: string, markers: any}) {
   if (cell.colors === 'blank') return;
   const newColors: string[] = [];
   const markers: (string | null)[] = [null,null,null,null];
+  // each color could be overritten by a marker
   cell.colors.split(' ').forEach((color): void => {
     let redirected = false;
-    for(const [i,redirect] of colorRedirects.entries()) {
+    for(const [i,redirect] of bingoboardMode.value.markerRedirects.entries()) {
       if (color === redirect[0]) {
         markers[i] = redirect[1];
         redirected = true;
@@ -40,6 +40,12 @@ function processCellForMarkers(cell: {colors: string, markers: any}) {
     }
     if (!redirected) {
       newColors.push(color);
+    }
+  });
+  // if a cell has both a marker and is filled with the same color, drop the marker
+  markers.forEach((color, index) => {
+    if (color !== null && newColors.includes(color)) {
+      markers[index] = null;
     }
   });
   cell.colors = newColors.join(' ');
