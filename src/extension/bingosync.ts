@@ -11,6 +11,7 @@ import * as nodecgApiContext from './util/nodecg-api-context';
 import { BingoboardMeta, Bingoboard, BingosyncSocket, BingoboardMode } from '../../schemas';
 
 import equal from 'deep-equal';
+import clone from 'clone';
 import { InvasionContext } from './util/invasion';
 import { waitForReplicants } from './util/waitForReplicants';
 
@@ -47,6 +48,7 @@ class BingosyncManager {
     public boardModeRep: Replicant<BingoboardMode> | null) {
 
     this.boardModeRep?.on('change', (newVal, old) => {
+      log.info(newVal);
       if (newVal.boardMode === 'invasion') {
         if (this.invasionCtx === null) {
           const playerColors = boardMetaRep.value.playerColors;
@@ -56,6 +58,7 @@ class BingosyncManager {
       } else {
         this.invasionCtx = null;
       }
+      this.fullUpdateMarkers();
     });
     boardMetaRep.on('change', newVal => {
       if (this.invasionCtx !== null) {
@@ -187,6 +190,21 @@ class BingosyncManager {
     this.boardRep.value.cells = newBoardState;
   }
 
+  private fullUpdateMarkers(): void {
+    const clonedCells = clone(this.boardRep.value.cells);
+    clonedCells.forEach((cell: {colors: string, markers: any}): void => {
+      
+      cell.markers = [null,null,null,null];
+      this.processCellForMarkers(cell);
+    });
+
+    if (this.invasionCtx !== null) {
+      this.invasionCtx.updateSides(clonedCells);
+      this.invasionCtx.setMarkers(clonedCells);
+    }
+    this.boardRep.value.cells = clonedCells;
+  }
+
   private processCellForMarkers(cell: {colors: string, markers: (string | null)[]}) {
     if (cell.colors === 'blank') {
       return;
@@ -278,7 +296,9 @@ class BingosyncManager {
           }
           if (this.invasionCtx !== null) {
             this.invasionCtx.updateSides(this.boardRep.value.cells);
-            this.invasionCtx.setMarkers(this.boardRep.value.cells);
+            const clonedCells = clone(this.boardRep.value.cells);
+            this.invasionCtx.setMarkers(clonedCells);
+            this.boardRep.value.cells = clonedCells;
           }
         }
       };
@@ -409,6 +429,13 @@ nodecg.listenFor('bingosync:setPlayerColor', (data: {
   color: ('pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple');
 }, callback): void => {
   boardMetaRep.value.playerColors[data.idx] = data.color;
+  if (callback && !callback.handled) {
+    callback();
+  }
+});
+
+nodecg.listenFor('bingomode:setBingoboardMode', (data: BingoboardMode, callback): void => {
+  mainBingoboardMode.value = data;
   if (callback && !callback.handled) {
     callback();
   }
