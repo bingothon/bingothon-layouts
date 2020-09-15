@@ -13,6 +13,6 @@ export interface HostingBingoboard {
     name: string;
     slot: string;
     colors: string;
-    markers?: (string | null)[];
+    markers: (string | null)[];
   }[];
 }

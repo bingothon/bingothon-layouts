@@ -15,7 +15,7 @@
             "additionalProperties": false,
             "items": {
                 "type": "object",
-                "required": ["name","slot","colors"],
+                "required": ["name","slot","colors","markers"],
                 "additionalProperties": false,
                 "properties": {
                     "name": {"type":"string"},
