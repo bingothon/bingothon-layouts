@@ -1,8 +1,8 @@
 <template>
 
 	<div>
-		<twitch-player id="stream1" streamIndex="0"></twitch-player>
-		<twitch-player id="stream2" streamIndex="1"></twitch-player>
+		<!--<twitch-player id="stream1" streamIndex="0"></twitch-player>
+		<twitch-player id="stream2" streamIndex="1"></twitch-player>-->
     <div id="fillvoice" class="flexContainer"></div>
     <player-info id="pi1" playerIndex="0" height=45px></player-info>
     <player-info id="pi2" playerIndex="1" height=45px></player-info>
@@ -53,6 +53,7 @@
 </script>
 
 <style scoped>
+
   #stream1 {
     position: absolute;
     top: 60px;
@@ -73,7 +74,7 @@
   }
   #discord-voice {
     position: absolute;
-    top: 660px;
+    top: 663px;
     left: 480px;
     width: 360px;
     height: 420px;
@@ -122,7 +123,7 @@
     left: 480px;
     width: 360px;
     border: 2px var(--container-border-color) solid;
-    height: 420px;
+    height: 418px;
   }
   #gamec{
 	  position: absolute;
