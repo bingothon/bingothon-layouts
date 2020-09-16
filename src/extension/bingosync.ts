@@ -21,8 +21,8 @@ const log = new nodecg.Logger(`${nodecg.bundleName}:bingosync`);
 const boardMetaRep = nodecg.Replicant<BingoboardMeta>('bingoboardMeta');
 
 const noop = (): void => {}; // tslint:disable-line:no-empty
-const bingosyncSocketUrl = 'wss://bingosock.bingothon.com';
-const bingosyncSiteUrl = 'https://bingosync.bingothon.com';
+const bingosyncSocketUrl = 'wss://sockets.bingosync.com';
+const bingosyncSiteUrl = 'https://bingosync.com';
 
 // recover().catch((error) => {
 //  log.error(`Failed to recover connection to room ${socketRep.value.roomCode}:`, error);
