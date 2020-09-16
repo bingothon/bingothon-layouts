@@ -78,41 +78,18 @@
         "name": "bingo-control",
         "title": "Bingo Control",
         "file": "bingo-control.html",
-        "width": 2,
-        "workspace": "Bingothon"
-      },
-      {
-        "name": "interview-control",
-        "title": "Interview Control",
-        "file": "interview-control.html",
-        "width": 2,
-        "workspace": "Bingothon"
-      },
-      {
-        "name": "camnames-control",
-        "title": "Cam Names Control",
-        "file": "camnames-control.html",
-        "width": 2,
-        "workspace": "Bingothon"
+        "width": 2
       },
       {
         "name": "layout-control",
         "title": "Layout Control",
         "file": "layout-control.html",
-        "width": 2,
-        "workspace": "Bingothon"
+        "width": 2
       },
       {
         "name": "twitch-control",
         "title": "Twitch Control",
         "file": "twitch-control.html",
-        "width": 2,
-        "workspace": "Bingothon"
-      },
-      {
-        "name": "obs-control",
-        "title": "OBS Control",
-        "file": "obs-control.html",
         "width": 2
       },
       {
@@ -131,22 +108,7 @@
         "height": 1080
       },
       {
-        "file": "intermission.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
         "file": "intro.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
-        "file": "host-dashboard.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
-        "file": "exploration-bingo.html",
         "width": 1920,
         "height": 1080
       },
@@ -156,19 +118,9 @@
         "height": 1080
       },
       {
-        "file": "camnames.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
         "file": "bingo.html",
         "width": 500,
         "height": 500
-      },
-      {
-        "file": "omnibar.html",
-        "width": 1920,
-        "height": 80
       }
     ],
     "mount": [
@@ -185,6 +137,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.22",
     "@fortawesome/free-solid-svg-icons": "^5.10.2",
     "@fortawesome/vue-fontawesome": "^0.1.6",
+    "@mdi/font": "^5.5.55",
     "cheerio": "^1.0.0-rc.3",
     "d3": "^3.5.17",
     "deep-equal": "^1.0.1",

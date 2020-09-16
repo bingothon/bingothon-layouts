@@ -62,16 +62,16 @@ function sortColors(colors: string[]): string[] {
 }
 
 const colorToGradient={
-    green: "#31D814",
-    red: "#FF4944",
-    orange: "#FF9C12",
-    blue: "#409CFF",
-    purple: "#822dbf",
+    green: "#181",
+    red: "#da4440",
+    orange: "#F98e1e",
+    blue: "#37a1de",
+    purple: "#823d8f",
     pink: "#ed86aa",
-    brown: "#ab5c23",
+    brown: "#3b5",
     teal: "#419695",
     navy: "#0d48b5",
-    yellow: "#d8d014",
+    yellow: "#808080",
 };
 
 function defaultBingoBoard(): BingoCell[][] {
@@ -105,7 +105,7 @@ export default class BingoBoard extends Vue {
 
     splashActivated: string = "";
     bingoAnimColor: string = "black";
-    
+
     mounted() {
         const height = this.$el.scrollHeight;
         const width = this.$el.scrollWidth;
