@@ -2,12 +2,12 @@
 
 import * as tmi from 'tmi.js';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Replicant } from 'nodecg/types/server';
 import bingoDefinitions from './bingodefinitions';
 import { RunDataActiveRun, RunDataPlayer, TwitchAPIData } from '../../speedcontrol-types';
 import { Configschema } from '../../configschema';
 
 import * as nodecgApiContext from './util/nodecg-api-context';
+import { waitForReplicants } from "./util/waitForReplicants";
 
 const nodecg = nodecgApiContext.get();
 const log = new nodecg.Logger(`${nodecg.bundleName}:twitch-chat-bot`);
@@ -33,18 +33,6 @@ const cooldowns = { runner: { lastUsed: 0, cooldown: 15 }, bingo: { lastUsed: 0,
 const twichAPIDataRep = nodecg.Replicant<TwitchAPIData>('twitchAPIData', 'nodecg-speedcontrol');
 const runDataActiveRunRep = nodecg.Replicant<RunDataActiveRun>('runDataActiveRun', 'nodecg-speedcontrol');
 const bundleConfig = nodecg.bundleConfig as Configschema;
-
-function waitForReplicants(replicants: Replicant<unknown>[], callback: Function): void {
-  let count = 0;
-  replicants.forEach((r): void => {
-    r.once('change', (): void => {
-      count += 1;
-      if (count === replicants.length) {
-        callback();
-      }
-    });
-  });
-}
 
 if (bundleConfig.twitch && bundleConfig.twitch.enable && bundleConfig.twitch.chatBot) {
   waitForReplicants([twichAPIDataRep, runDataActiveRunRep], (): void => {

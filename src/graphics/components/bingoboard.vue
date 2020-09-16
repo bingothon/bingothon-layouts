@@ -6,6 +6,7 @@
                 <td class="square" :key="i+''+j" v-for="(cell,j) in column">
                     <div :key="color.name" v-for="color in cell.colors" :class="'bg-color '+color.color+'square'" :style="color.style"></div>
                     <div class="shadow"></div>
+                    <div :class="'marker marker'+k+' '+(marker||'blank')+'square'" :key="k" v-for="(marker, k) in cell.markers"></div>
                     <div class="CellTextFitContainer">
                         <CellTextFit :text="cell.name" :fontSize="fontSize"/>
                     </div>
@@ -23,6 +24,7 @@
 import { Component, Vue, Watch, Prop } from "vue-property-decorator";
 import { nodecg, NodeCG } from "../../browser-util/nodecg";
 import { Bingoboard, BingosyncSocket, BingoboardMeta } from "../../../schemas";
+import equals from "deep-equal";
 import { store, getReplicant } from "../../browser-util/state";
 import CellTextFit from "../helpers/cell-text-fit.vue";
 
@@ -31,6 +33,7 @@ type ColorEnum = ("pink" | "red" | "orange" | "brown" | "yellow" | "green" | "te
 interface BingoCell {
     name: string,
     rawColors: string,
+    markers?: string[];
     colors: {
         color: string,
         style: string,
@@ -155,10 +158,10 @@ export default class BingoBoard extends Vue {
                     Vue.set(this.bingoCells[rowIndex][columnIndex],'name', newCell.name);
                 }
                 // update cell with color backgrounds, if changed
-                if (!oldGoals || !oldGoals.cells.length || newCell.colors != oldGoals.cells[idx].colors) {
-                    var colors = newCell.colors.split(' ');
-                    if (colors[0]!="blank") {
-                        colors = sortColors(colors);
+                if (!oldGoals || !oldGoals.cells.length || !equals(newCell.colors, oldGoals.cells[idx].colors)) {
+                    if (newCell.colors.length !== 0) {
+                        const colors = sortColors(newCell.colors);
+                        console.log(colors);
                         var newColors = [];
                         newColors.push({color: colors[0], style: ''});
                         var translations = translatePercent[colors.length];
@@ -172,6 +175,9 @@ export default class BingoBoard extends Vue {
                     } else {
                         Vue.set(this.bingoCells[rowIndex][columnIndex],'colors', []);
                     }
+                }
+                if (!oldGoals || !oldGoals.cells.length || !equals(newCell.markers, oldGoals.cells[idx].markers)) {
+                    Vue.set(this.bingoCells[rowIndex][columnIndex],'markers',newCell.markers);
                 }
                 idx++;
             });
@@ -246,5 +252,28 @@ export default class BingoBoard extends Vue {
         width: calc(100% - 4px);
         position: absolute;
         margin: 2px;
+    }
+    .marker {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        opacity: 0.9;
+        border-radius: 50%;
+    }
+    .marker0 {
+        left: 10%;
+        top: 10%;
+    }
+    .marker1 {
+        right: 10%;
+        top: 10%;
+    }
+    .marker2 {
+        left: 10%;
+        bottom: 10%;
+    }
+    .marker3 {
+        right: 10%;
+        bottom: 10%;
     }
 </style>

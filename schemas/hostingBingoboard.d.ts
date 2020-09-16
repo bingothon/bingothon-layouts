@@ -12,6 +12,8 @@ export interface HostingBingoboard {
   cells: {
     name: string;
     slot: string;
-    colors: string;
+    colors: ("pink" | "red" | "orange" | "brown" | "yellow" | "green" | "teal" | "blue" | "navy" | "purple")[];
+    rawColors: string;
+    markers: (string | null)[];
   }[];
 }

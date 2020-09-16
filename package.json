@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.13",
+    "@types/clone": "^2.1.0",
     "@types/d3": "^5.7.2",
     "@types/deep-equal": "^1.0.1",
     "@types/request-promise": "^4.1.44",
@@ -84,6 +85,12 @@
         "name": "layout-control",
         "title": "Layout Control",
         "file": "layout-control.html",
+        "width": 2
+      },
+      {
+        "name": "bingomode-control",
+        "title": "Bingo Mode Control",
+        "file": "bingomode-control.html",
         "width": 2
       },
       {

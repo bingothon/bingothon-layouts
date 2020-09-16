@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["boardMode","markerRedirects"],
+    "properties": {
+        "boardMode": {
+            "default": "normal",
+            "type":"string",
+            "enum":["normal","lockout","invasion","rowcontrol","draft","draftlockout"]
+        },
+        "markerRedirects": {
+            "type":"array",
+            "default":[],
+            "items": {
+                "type":"array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                    "type": "string",
+                    "enum": ["pink", "red", "orange", "brown", "yellow", "green", "teal", "blue", "navy", "purple"]
+                }
+            }
+        }
+    }
+}

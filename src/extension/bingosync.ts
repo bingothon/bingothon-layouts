@@ -8,9 +8,13 @@ import WebSocket from 'ws';
 // Ours
 import { Replicant } from 'nodecg/types/server'; // eslint-disable-line import/no-extraneous-dependencies
 import * as nodecgApiContext from './util/nodecg-api-context';
-import { BingoboardMeta, Bingoboard, BingosyncSocket } from '../../schemas';
+import { BingoboardMeta, Bingoboard, BingosyncSocket, BingoboardMode } from '../../schemas';
 
-import equal = require('deep-equal');
+import equal from 'deep-equal';
+import clone from 'clone';
+import { InvasionContext } from './util/invasion';
+import { waitForReplicants } from './util/waitForReplicants';
+import { BingoboardCell, BoardColor, BingosyncCell } from '../../types';
 
 const nodecg = nodecgApiContext.get();
 const log = new nodecg.Logger(`${nodecg.bundleName}:bingosync`);
@@ -25,11 +29,6 @@ const bingosyncSiteUrl = 'https://bingosync.com';
 // });
 
 class BingosyncManager {
-  public name: string;
-
-  public boardRep: Replicant<Bingoboard>;
-
-  public socketRep: Replicant<BingosyncSocket>;
 
   private request = RequestPromise.defaults({ jar: true });
 
@@ -43,11 +42,31 @@ class BingosyncManager {
 
   private websocket: WebSocket | null = null;
 
-  public constructor(name: string, boardRep: Replicant<Bingoboard>,
-    socketRep: Replicant<BingosyncSocket>) {
-    this.name = name;
-    this.boardRep = boardRep;
-    this.socketRep = socketRep;
+  private invasionCtx: InvasionContext | null = null;
+
+  public constructor(public name: string, public boardRep: Replicant<Bingoboard>,
+    public socketRep: Replicant<BingosyncSocket>,
+    public boardModeRep: Replicant<BingoboardMode> | null) {
+
+    this.boardModeRep?.on('change', (newVal, old) => {
+      log.info(newVal);
+      if (newVal.boardMode === 'invasion') {
+        if (this.invasionCtx === null) {
+          const playerColors = boardMetaRep.value.playerColors;
+          this.invasionCtx = new InvasionContext(playerColors[0] || 'red', playerColors[1] || 'orange');
+          this.invasionCtx.initSides(this.boardRep.value.cells);
+        }
+      } else {
+        this.invasionCtx = null;
+      }
+      this.fullUpdateMarkers();
+    });
+    boardMetaRep.on('change', newVal => {
+      if (this.invasionCtx !== null) {
+        this.invasionCtx.setPlayerColor1(newVal.playerColors[0] || 'red');
+        this.invasionCtx.setPlayerColor2(newVal.playerColors[1] || 'orange');
+      }
+    });
     // recovering past connection
     // catch startup errors when this is all empty
     if (!this.socketRep.value
@@ -119,8 +138,15 @@ class BingosyncManager {
     this.socketRep.value.roomCode = '';
   }
 
+  public forceRefreshInvasionCtx(): void {
+    if (this.invasionCtx !== null) {
+      this.invasionCtx.initSides(this.boardRep.value.cells);
+      this.invasionCtx.setMarkers(this.boardRep.value.cells);
+    }
+  }
+
   public async fullUpdate(roomCode: string): Promise<void> {
-    const newBoardState = await this.request.get({
+    const bingosyncBoard: BingosyncCell[] = await this.request.get({
       uri: `${bingosyncSiteUrl}/room/${roomCode}/board`,
       json: true,
     });
@@ -144,15 +170,29 @@ class BingosyncManager {
       purple: 0,
     };
 
-    newBoardState.forEach((cell: {colors: string}): void => {
+    const newBoardState = bingosyncBoard.map((cell): BingoboardCell => {
       // remove blank cause thats not a color
       // count all the color occurences
-      cell.colors.split(' ').forEach((color): void => {
+      let newCell: BingoboardCell = {
+        name: cell.name,
+        slot: cell.slot,
+        colors: [],
+        markers: [null, null, null, null],
+        rawColors: cell.colors,
+      };
+      newCell.rawColors.split(' ').forEach((color): void => {
         if (color !== 'blank') {
           goalCounts[color] += 1;
         }
       });
+      this.processCellForMarkers(newCell);
+      return newCell;
     });
+
+    if (this.invasionCtx !== null) {
+      this.invasionCtx.updateSides(newBoardState);
+      this.invasionCtx.setMarkers(newBoardState);
+    }
 
     this.boardRep.value.colorCounts = goalCounts;
 
@@ -161,7 +201,53 @@ class BingosyncManager {
       return;
     }
 
+
     this.boardRep.value.cells = newBoardState;
+  }
+
+  private fullUpdateMarkers(): void {
+    const clonedCells = clone(this.boardRep.value.cells);
+    clonedCells.forEach((cell: BingoboardCell): void => {
+      
+      cell.markers = [null,null,null,null];
+      this.processCellForMarkers(cell);
+    });
+
+    if (this.invasionCtx !== null) {
+      this.invasionCtx.updateSides(clonedCells);
+      this.invasionCtx.setMarkers(clonedCells);
+    }
+    this.boardRep.value.cells = clonedCells;
+  }
+
+  private processCellForMarkers(cell: BingoboardCell) {
+    if (cell.rawColors === 'blank') {
+      cell.colors = [];
+      return;
+    }
+    const newColors: BoardColor[] = [];
+    const markers: [string | null, string | null, string | null, string | null] = [null,null,null,null];
+    // each color could be overritten by a marker
+    cell.rawColors.split(' ').forEach((color): void => {
+      let redirected = false;
+      for(const [i,redirect] of this.boardModeRep?.value.markerRedirects.entries() || []) {
+        if (color === redirect[0]) {
+          markers[i] = redirect[1];
+          redirected = true;
+        }
+      }
+      if (!redirected) {
+        newColors.push(color as BoardColor);
+      }
+    });
+    // if a cell has both a marker and is filled with the same color, drop the marker
+    markers.forEach((color, index) => {
+      if (color !== null && newColors.includes(color as BoardColor)) {
+        markers[index] = null;
+      }
+    });
+    cell.colors = newColors;
+    cell.markers = markers;
   }
 
   public async createWebsocket(socketUrl: string, socketKey: string): Promise<void> {
@@ -212,14 +298,26 @@ class BingosyncManager {
 
         if (json.type === 'goal') {
           const index = parseInt(json.square.slot.slice(4), 10) - 1;
-          this.boardRep.value.cells[index] = json.square;
-          const { color } = json;
-          this.boardRep.value.cells[index] = json.square;
+          const cell: BingoboardCell = {
+            name: json.square.name,
+            slot: json.square.slot,
+            colors: [],
+            markers: [null, null, null, null],
+            rawColors: json.square.colors,
+          };
+          this.processCellForMarkers(cell);
+          this.boardRep.value.cells[index] = cell;
           // update goal count
           if (json.remove) {
-            this.boardRep.value.colorCounts[color] -= 1;
+            this.boardRep.value.colorCounts[json.color] -= 1;
           } else {
-            this.boardRep.value.colorCounts[color] += 1;
+            this.boardRep.value.colorCounts[json.color] += 1;
+          }
+          if (this.invasionCtx !== null) {
+            this.invasionCtx.updateSides(this.boardRep.value.cells);
+            const clonedCells = clone(this.boardRep.value.cells);
+            this.invasionCtx.setMarkers(clonedCells);
+            this.boardRep.value.cells = clonedCells;
           }
         }
       };
@@ -260,11 +358,12 @@ class BingosyncManager {
 const bingosyncInstances: Map<string, BingosyncManager> = new Map();
 const mainBoardRep = nodecg.Replicant<Bingoboard>('bingoboard');
 const mainSocketRep = nodecg.Replicant<BingosyncSocket>('bingosyncSocket');
+const mainBingoboardMode = nodecg.Replicant<BingoboardMode>('bingoboardMode');
 const hostingBoardRep = nodecg.Replicant<Bingoboard>('hostingBingoboard');
 const hostingSocketRep = nodecg.Replicant<BingosyncSocket>('hostingBingosocket');
 
-bingosyncInstances.set('bingoboard', new BingosyncManager('bingoboard', mainBoardRep, mainSocketRep));
-bingosyncInstances.set('hostingBingoboard', new BingosyncManager('hostingBingoboard', hostingBoardRep, hostingSocketRep));
+bingosyncInstances.set('bingoboard', new BingosyncManager('bingoboard', mainBoardRep, mainSocketRep, mainBingoboardMode));
+bingosyncInstances.set('hostingBingoboard', new BingosyncManager('hostingBingoboard', hostingBoardRep, hostingSocketRep, null)); // TODO hosting bingo bingoboard mode
 
 // listeners for messages to interact from the dashboard
 
@@ -349,6 +448,23 @@ nodecg.listenFor('bingosync:setPlayerColor', (data: {
   color: ('pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple');
 }, callback): void => {
   boardMetaRep.value.playerColors[data.idx] = data.color;
+  if (callback && !callback.handled) {
+    callback();
+  }
+});
+
+nodecg.listenFor('bingomode:setBingoboardMode', (data: BingoboardMode, callback): void => {
+  if (data.boardMode === 'invasion') {
+    data.markerRedirects = [];
+  }
+  mainBingoboardMode.value = data;
+  if (callback && !callback.handled) {
+    callback();
+  }
+});
+
+nodecg.listenFor('bingomode:forceRefreshInvasion', (_data: any, callback): void => {
+  bingosyncInstances.get('bingoboard')?.forceRefreshInvasionCtx();
   if (callback && !callback.handled) {
     callback();
   }
