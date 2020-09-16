@@ -15,12 +15,19 @@
             "additionalProperties": false,
             "items": {
                 "type": "object",
-                "required": ["name","slot","colors","markers"],
+                "required": ["name","slot","colors","rawColors","markers"],
                 "additionalProperties": false,
                 "properties": {
                     "name": {"type":"string"},
                     "slot": {"type":"string"},
-                    "colors": {"type":"string"},
+                    "colors": {
+                        "type":"array",
+                        "items": {
+                            "type": "string",
+                            "enum": ["pink", "red", "orange", "brown", "yellow", "green", "teal", "blue", "navy", "purple"]
+                        }
+                    },
+                    "rawColors": {"type":"string"},
                     "markers": {
                         "type": "array",
                         "default": [null,null,null,null],

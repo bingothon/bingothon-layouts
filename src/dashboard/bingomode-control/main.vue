@@ -10,7 +10,7 @@
       </option>
     </select>
     <div
-      v-if="showColorOverrides"
+      v-if="isNotInvasion"
     >
       Color to marker overrides
       <div
@@ -39,6 +39,9 @@
         <button @click="removeOverride(i)">-</button>
       </div>
       <button @click="addOverride">+</button>
+    </div>
+    <div v-else>
+      <button @click="forceRefreshInvasion">Force Refresh invasion</button>
     </div>
     <button class="v-btn" @click="update">Update</button>
     <button class="v-btn" @click="reset">Reset</button>
@@ -86,7 +89,11 @@ export default class BingomodeControl extends Vue {
     this.markerRedirects.splice(index, 1);
   }
 
-  get showColorOverrides(): boolean {
+  forceRefreshInvasion(): void {
+    nodecg.sendMessage('bingomode:forceRefreshInvasion');
+  }
+
+  get isNotInvasion(): boolean {
     return this.currentBingomode !== 'invasion';
   }
 

@@ -158,10 +158,10 @@ export default class BingoBoard extends Vue {
                     Vue.set(this.bingoCells[rowIndex][columnIndex],'name', newCell.name);
                 }
                 // update cell with color backgrounds, if changed
-                if (!oldGoals || !oldGoals.cells.length || newCell.colors != oldGoals.cells[idx].colors) {
-                    var colors = newCell.colors.split(' ');
-                    if (colors[0]!="blank") {
-                        colors = sortColors(colors);
+                if (!oldGoals || !oldGoals.cells.length || !equals(newCell.colors, oldGoals.cells[idx].colors)) {
+                    if (newCell.colors.length !== 0) {
+                        const colors = sortColors(newCell.colors);
+                        console.log(colors);
                         var newColors = [];
                         newColors.push({color: colors[0], style: ''});
                         var translations = translatePercent[colors.length];

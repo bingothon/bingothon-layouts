@@ -1,11 +1,6 @@
 import { BingoboardMeta, Bingoboard, BingosyncSocket, BingoboardMode } from '../../../schemas';
 
-interface BingoboardCell {
-    name: string;
-    slot: string;
-    colors: string;
-    markers: [string | null, string | null, string | null, string | null];
-};
+import { BingoboardCell } from "../../../types";
 
 export enum InvasionStart {
     LEFT = 0,
@@ -111,7 +106,7 @@ export class InvasionContext {
             if (lineGoalCount < maxGoalCount) {
                 for (let j = 0;j<5;j++) {
                     const cell = cells[getRotatedIndex(side, i, j)];
-                    if (cell.colors === 'blank') {
+                    if (cell.rawColors === 'blank') {
                         // set markers only if cell is empty
                         cell.markers[playerIdx] = playerColor;
                     }
@@ -123,7 +118,7 @@ export class InvasionContext {
 }
 
 function isEmpty(cells: BingoboardCell[]): boolean {
-    return cells.every(cell => cell.colors === 'blank');
+    return cells.every(cell => cell.rawColors === 'blank');
 }
 
 function sideValid(cells: BingoboardCell[], side: InvasionStart, color: string): boolean {
@@ -156,7 +151,7 @@ function sideValid(cells: BingoboardCell[], side: InvasionStart, color: string):
  * @param y 0 to 5 (exclusive) to get all squares in that line, makes no guarantees otherwise
  */
 function getColor(cells: BingoboardCell[], side: InvasionStart, x: number, y: number): string {
-    return cells[getRotatedIndex(side, x, y)].colors;
+    return cells[getRotatedIndex(side, x, y)].rawColors;
 }
 
 function getRotatedIndex(side: InvasionStart, x: number, y: number): number {
