@@ -8,6 +8,7 @@ export = (nodecg: NodeCG): void => {
   nodecgApiContext.set(nodecg);
   nodecg.log.info('Extension code working!');
   const { bundleConfig } = nodecg;
+  require('./countdownTimer');
   require('./bingosync');
   require('./bingoColors');
   require('./oriBingoBoard');

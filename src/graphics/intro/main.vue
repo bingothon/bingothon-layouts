@@ -11,7 +11,7 @@
 		</div>
 		<!--TODO Replace with actual countdown-->
 		<div id="Countdown">
-			15:00
+			<countdown></countdown>
 		</div>
 		<info-storage-box
 			id="Music"
@@ -26,10 +26,12 @@ import {Component, Prop, Vue} from "vue-property-decorator";
 import {RunData, RunDataPlayer} from "../../../speedcontrol-types";
 import {store} from "../../browser-util/state";
 import Music from "./components/Music.vue";
+import Countdown from "../components/countdownTimer.vue";
 
 @Component({
 	components: {
-		Music
+		Music,
+		Countdown,
 	},
 })
 

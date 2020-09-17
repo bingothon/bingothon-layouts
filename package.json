@@ -88,6 +88,12 @@
         "width": 2
       },
       {
+        "name": "countdown-control",
+        "title": "Countdown Control",
+        "file": "countdown-control.html",
+        "width": 2
+      },
+      {
         "name": "bingomode-control",
         "title": "Bingo Mode Control",
         "file": "bingomode-control.html",
