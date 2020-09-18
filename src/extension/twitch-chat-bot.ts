@@ -16,7 +16,12 @@ const log = new nodecg.Logger(`${nodecg.bundleName}:twitch-chat-bot`);
 // var chatCommandsRep = nodecg.Replicant('chatCommands', {defaultValue: {}});
 
 // keep track of cooldowns
-const cooldowns = { runner: { lastUsed: 0, cooldown: 15 }, bingo: { lastUsed: 0, cooldown: 15 } };
+const cooldowns = {
+	runner: { lastUsed: 0, cooldown: 15 },
+	bingo: { lastUsed: 0, cooldown: 15 },
+	standings: {lastUsed: 0, cooldown: 15},
+	schedule: {lastUsed: 0, cooldown: 15}
+};
 // in case the cooldowns need to be adjusted
 /* nodecg.listenFor('setCommandCooldown',data=>{
     if (!data || !data.command || !data.cooldown) {
@@ -113,6 +118,28 @@ if (bundleConfig.twitch && bundleConfig.twitch.enable && bundleConfig.twitch.cha
           }
         }
       }
+
+		if (userCommandName === 'standings' || userCommandName === 'stats') {
+			// check cooldown to not spam chat
+			if (now - cooldowns.standings.lastUsed < cooldowns.standings.cooldown) {
+				return;
+			}
+			cooldowns.standings.lastUsed = now;
+			client.say(channel, "Current Bingo League standings can be found here: https://bingothon.com/sms-division-stats/")
+				.catch((e): void => log.error('', e));
+		}
+
+		if (userCommandName === 'schedule' || userCommandName === 'upcomming') {
+			// check cooldown to not spam chat
+			if (now - cooldowns.standings.lastUsed < cooldowns.standings.cooldown) {
+				return;
+			}
+			cooldowns.standings.lastUsed = now;
+			client.say(channel, "Find the upcomming matches for the league here: https://bingothon.com/super-mario-sunshine-1v1-bingo-league-upcoming-matches/")
+				.catch((e): void => log.error('', e));
+		}
+
+
       /* also custom chatbot stuff not used
           if (chatCommandsRep.value.hasOwnProperty(userCommandName)) {
               var userCommand = chatCommandsRep.value[userCommandName];
@@ -128,12 +155,18 @@ if (bundleConfig.twitch && bundleConfig.twitch.enable && bundleConfig.twitch.cha
       .catch((e): void => log.error('', e))
       .then((): void => {
         client.on('message', messageHandler);
-        client.join(twichAPIDataRep.value.channelName || 'speedrunslive')
+        client.join('bingothon')
           .catch((reason): void => {
             log.error(`Couldn't join channel: ${reason}`);
           }).then((data): void => {
             log.info(`Joined channel: ${data}`);
           });
+		  client.join('sunshinecommunity')
+			  .catch((reason): void => {
+				  log.error(`Couldn't join channel: ${reason}`);
+			  }).then((data): void => {
+			  log.info(`Joined channel: ${data}`);
+		  });
       });
   });
 }
