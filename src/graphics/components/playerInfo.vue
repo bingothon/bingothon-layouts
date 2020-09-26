@@ -21,7 +21,7 @@
     <div :class="medalClasses"></div>
     <div class="PlayerName">
       <transition name="fade">
-        <text-fit :key="text" :text="finishTime+text" :align="reverseOrder?'right':'left'">
+        <text-fit :key="text" :text="text" :align="reverseOrder?'right':'left'">
         </text-fit>
       </transition>
     </div>
