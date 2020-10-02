@@ -42,9 +42,10 @@ export default class CountdownControl extends Vue {
   }
 
   finishEdit(): void {
-    const match = this.time.match(/^(\d{1}|\d{2}):(\d{2})$/);
+    const match = this.time.match(/^((?<hours>\d+):)?(?<minutes>\d{1}|\d{2}):(?<seconds>\d{2})$/);
     if (match) {
-      const seconds = parseInt(match[1]) * 60 + parseInt(match[2]);
+      console.log(match.groups);
+      const seconds = parseInt(match.groups['hours'] || '0') * 3600 + parseInt(match.groups['minutes']) * 60 + parseInt(match.groups['seconds']);
       nodecg.sendMessageToBundle('countdownTimer:setTime', bingothonBundleName, seconds);
     }
     (event.target as HTMLTextAreaElement).blur();

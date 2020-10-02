@@ -1,6 +1,5 @@
 import * as nodecgApiContext from './util/nodecg-api-context';
 import { CountdownTimer } from '../../schemas';
-import moment from "moment";
 
 const nodecg = nodecgApiContext.get();
 const log = new nodecg.Logger(`${nodecg.bundleName}:countdownTimer`);
@@ -10,7 +9,17 @@ let currentNextTick: NodeJS.Timeout | null = null;
 const countdownTimerRep = nodecg.Replicant<CountdownTimer>('countdownTimer');
 
 function formatSeconds(secs: number): string {
-  return moment(secs * 1000).format('mm:ss');
+  let formatted = '';
+  const hours = Math.floor(secs / 3600);
+  const minutes = Math.floor((secs % 3600) / 60);
+  const seconds = Math.floor(secs % 60);
+  if (hours > 0) {
+    formatted = hours.toFixed(0) + ':';
+  }
+  formatted += minutes.toFixed(0).padStart(2, '0');
+  formatted += ':';
+  formatted += seconds.toFixed(0).padStart(2, '0');
+  return formatted;
 }
 
 function startTimer() {
