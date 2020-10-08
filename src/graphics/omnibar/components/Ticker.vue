@@ -51,9 +51,9 @@ export default class Ticker extends Vue {
 
     mounted() {
         this.staticMessages = [
-            this.genericMessage('This is Bingothon Summer 2020, enjoy your stay!'),
-            this.genericMessage('#Bingothon Summer 2020 benefits Fred Hutch!'),
-            this.genericMessage('Donate @ donate.bingothon.com'),
+            this.genericMessage('Welcome to Bingothon, enjoy your stay!'),
+            this.genericMessage('Want more bingos? Check out Bingothon Winter 2020 from 27/11 - 30/11'),
+            this.genericMessage('Check out our website at bingothon.com for even more bingo action'),
             this.genericMessage("Can't get enough of Bingothon? Join the Bingothon Discord at discord.bingothon.com"),
         ];
         store.watch(state => state.trackerDonations, newVal => {

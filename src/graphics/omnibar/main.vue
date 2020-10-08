@@ -4,8 +4,6 @@
   >
     <rotating-logos></rotating-logos>
     <divider></divider>
-    <total></total>
-    <divider></divider>
     <ticker></ticker>
   </div>
 </template>

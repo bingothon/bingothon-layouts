@@ -50,7 +50,7 @@ export default class TestGameContainer extends Vue {
     font-size: 18px;
     font-weight: thin;
     align-content: center;
-    color: grey;
+    color: #c8c8c8;
     text-align: center;
 }
 

@@ -14,7 +14,7 @@ const routes = [
 	{name: "4p CoOp Interview", path: "/interview-4p-CoOp", component: Interviews.Interview_4p_CoOp},
 	{name: "Charity Interview", path: "/interview-charity", component: Interviews.Interview_Charity},
 	{name: "Var Interview", path: "/interview-var", component: Interviews.Interview_Var},
-	{path: "*", redirect: "/interview-4p"},
+	{path: "*", redirect: "/interview-var"},
 ];
 
 // put all of the interviews in the replicant

@@ -1,6 +1,6 @@
 <template>
 	<div class="Interview">
-	<img src="../../../static/logo-summer-wide.png" id="logo">
+	<img src="../../../static/logo-neutral-wide.png" id="logo">
     <div id="fillvoice" class="flexContainer"></div>
 	<div id="player-container">
     	<player-info v-for="playerIndex in playerCount" :key="playerIndex" class="player" :playerIndex="playerIndex" height=45px></player-info>
@@ -8,7 +8,7 @@
 		<test-game-container id="game"></test-game-container>
     <test-timer-container id="timer"></test-timer-container>
     <bingo-board id="Bingo-board" fontSize="20px"></bingo-board>
-    <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px" maxUserCount="16"></discord-voice-display>
+    <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px" maxUserCount="8"></discord-voice-display>
 	<test-next-game-container id="nextGame"></test-next-game-container>
 	</div>
 </template>
@@ -58,7 +58,7 @@
 		top: 0px;
 		width: 1935px;
 		height: 1090px;
-		background: linear-gradient(var(--darker-main-color), var(--lighter-main-color));
+		background: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
 	}
 	#discord-voice {
 		position: absolute;
@@ -70,10 +70,10 @@
 	}
 	#logo{
 		position: absolute;
-		left: 690px;
+		left: 640px;
 		top: 10px;
-		width: 568px;
-		height: 200px;
+		width: 668px;
+		height: 150px;
 	}
 	#player-container {
 		position: absolute;
@@ -82,7 +82,7 @@
 	}
 	.player {
 		width: 500px;
-		margin-bottom: 30px;
+		margin-bottom: 50px;
 	}
 	#Bingo-board {
 		position: absolute;

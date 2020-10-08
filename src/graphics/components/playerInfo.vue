@@ -25,6 +25,11 @@
         </text-fit>
       </transition>
     </div>
+	  <div v-if="showSound"
+		   class="Sound"
+	  >
+		  <img :src="'/bundles/bingothon-layouts/static/music-note.png'">
+	  </div>
     <div v-if="!!player.country"
       class="Flag FlexContainer"
       :style="{'width' : `calc(${height} * 1.9)`}"
@@ -36,11 +41,6 @@
           :src="getPlayerFlag(player.country)"
         >
       </transition>
-    </div>
-    <div v-if="showSound"
-      class="Sound"
-    >
-      <img :src="'/bundles/bingothon-layouts/static/music-note.png'">
     </div>
     <div
       v-if="bingoColorShown === true"
@@ -234,7 +234,7 @@ export default class PlayerInfo extends Vue {
   @import './medals.css';
 
   .PlayerInfoBox {
-    background-image: linear-gradient(var(--alternative-main-color), var(--darker-main-color));
+    background-image: linear-gradient( #d93636, #d80303);
     color: var(--font-color);
     padding: 7px;
     font-weight: 500;
