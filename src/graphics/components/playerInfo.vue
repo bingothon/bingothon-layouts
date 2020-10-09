@@ -234,7 +234,7 @@ export default class PlayerInfo extends Vue {
   @import './medals.css';
 
   .PlayerInfoBox {
-    background-image: linear-gradient( #d93636, #d80303);
+    background-image: linear-gradient(#6d001d, #280000);
     color: var(--font-color);
     padding: 7px;
     font-weight: 500;
