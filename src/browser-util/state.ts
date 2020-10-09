@@ -31,7 +31,7 @@ import {
   HostsSpeakingDuringIntermission,
   ObsStreamMode,
   ShowPictureDuringIntermission,
-  AllCamNames, CurrentCamNames
+  AllCamNames, CurrentCamNames, CountdownTimer
 } from "../../schemas";
 import { RunDataActiveRun, RunDataArray, Timer } from "../../speedcontrol-types";
 import {Scene} from 'obs-websocket-js';
@@ -45,6 +45,7 @@ const replicantNames = [
   'bingoboard',
   'bingoboardMeta',
   'bingosyncSocket',
+  'countdownTimer',
   'currentGameLayout',
   'currentInterview',
   'currentCamNames',
@@ -91,6 +92,7 @@ export const store = new Vuex.Store({
     bingoboard: {} as Bingoboard,
     bingoboardMeta: {} as BingoboardMeta,
     bingosyncSocket: {} as BingosyncSocket,
+	countdownTimer: {} as CountdownTimer,
     currentGameLayout: {} as CurrentGameLayout,
 	currentInterview: {} as CurrentInterview,
     currentCamNames: {} as CurrentCamNames,

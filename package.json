@@ -81,6 +81,12 @@
         "width": 2
       },
       {
+        "name": "countdown-control",
+        "title": "Countdown Control",
+        "file": "countdown-control.html",
+        "width": 2
+      },
+      {
         "name": "twitch-control",
         "title": "Twitch Control",
         "file": "twitch-control.html",
@@ -113,6 +119,11 @@
       },
       {
         "file": "interview.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "intro.html",
         "width": 1920,
         "height": 1080
       },
