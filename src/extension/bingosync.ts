@@ -8,7 +8,7 @@ import WebSocket from 'ws';
 // Ours
 import { Replicant } from 'nodecg/types/server'; // eslint-disable-line import/no-extraneous-dependencies
 import * as nodecgApiContext from './util/nodecg-api-context';
-import { BingoboardMeta, Bingoboard, BingosyncSocket, BingoboardMode } from '../../schemas';
+import { BingoboardMeta, Bingoboard, BingosyncSocket, BingoboardMode, BingoboardColors } from '../../schemas';
 
 import equal from 'deep-equal';
 import clone from 'clone';
@@ -162,10 +162,10 @@ class BingosyncManager {
       purple: 0,
     };
 
-    newBoardState.forEach((cell: {colors: string, markers: any}): void => {
+    newBoardState.forEach((cell: {colors: BingoboardColors[], markers: any}): void => {
       // remove blank cause thats not a color
       // count all the color occurences
-      cell.colors.split(' ').forEach((color): void => {
+      cell.colors.forEach((color): void => {
         if (color !== 'blank') {
           goalCounts[color] += 1;
         }
@@ -192,7 +192,7 @@ class BingosyncManager {
 
   private fullUpdateMarkers(): void {
     const clonedCells = clone(this.boardRep.value.cells);
-    clonedCells.forEach((cell: {colors: string, markers: any}): void => {
+    clonedCells.forEach((cell: {colors: BingoboardColors[], markers: any}): void => {
       
       cell.markers = [null,null,null,null];
       this.processCellForMarkers(cell);
@@ -205,16 +205,16 @@ class BingosyncManager {
     this.boardRep.value.cells = clonedCells;
   }
 
-  private processCellForMarkers(cell: {colors: string, markers: (string | null)[]}) {
-    if (cell.colors === 'blank') {
+  private processCellForMarkers(cell: {colors: BingoboardColors[], markers: (string | null)[]}) {
+    if (cell.colors.indexOf("blank") > 0) {
       return;
     }
     // no color override during invasion
     if (this.boardModeRep?.value.boardMode === 'invasion') return;
-    const newColors: string[] = [];
-    const markers: (string | null)[] = [null,null,null,null];
+    const newColors: BingoboardColors[] = [];
+    const markers: (BingoboardColors | null)[] = [null,null,null,null];
     // each color could be overritten by a marker
-    cell.colors.split(' ').forEach((color): void => {
+    cell.colors.forEach((color): void => {
       let redirected = false;
       for(const [i,redirect] of this.boardModeRep?.value.markerRedirects.entries() || []) {
         if (color === redirect[0]) {
@@ -232,7 +232,7 @@ class BingosyncManager {
         markers[index] = null;
       }
     });
-    cell.colors = newColors.join(' ');
+    cell.colors = newColors;
     cell.markers = markers;
   }
 
