@@ -15,12 +15,18 @@
             "additionalProperties": false,
             "items": {
                 "type": "object",
-                "required": ["name","slot","colors"],
+                "required": ["name","slot","colors","rawColors","markers"],
                 "additionalProperties": false,
                 "properties": {
                     "name": {"type":"string"},
                     "slot": {"type":"string"},
-                    "colors": {"type":"string"},
+                    "colors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "./bingoboard.json"
+                        }
+                    },
+                    "rawColors": {"type":"string"},
                     "markers": {
                         "type": "array",
                         "default": [null,null,null,null],
