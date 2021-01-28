@@ -34,8 +34,24 @@ const twichAPIDataRep = nodecg.Replicant<TwitchAPIData>('twitchAPIData', 'nodecg
 const runDataActiveRunRep = nodecg.Replicant<RunDataActiveRun>('runDataActiveRun', 'nodecg-speedcontrol');
 const bundleConfig = nodecg.bundleConfig as Configschema;
 
+function getTwitchAccessToken(): string {
+  return twichAPIDataRep.value.accessToken || '';
+}
+
+function waitForEverythingReady(): Promise<void> {
+  return new Promise((resolve, _) => {
+    waitForReplicants([twichAPIDataRep, runDataActiveRunRep], () => {
+      twichAPIDataRep.on('change', val => {
+        if (val.state == 'on') {
+          resolve();
+        }
+      })
+    });
+  });
+}
+
 if (bundleConfig.twitch && bundleConfig.twitch.enable && bundleConfig.twitch.chatBot) {
-  waitForReplicants([twichAPIDataRep, runDataActiveRunRep], (): void => {
+  waitForEverythingReady().then((): void => {
     log.info('Twitch chat bot is enabled.');
 
     nodecg.listenFor("repeaterFeaturedChannels", "nodecg-speedcontrol", (channels: string[]) => {
@@ -54,14 +70,14 @@ if (bundleConfig.twitch && bundleConfig.twitch.enable && bundleConfig.twitch.cha
       },
       identity: {
         username: twichAPIDataRep.value.channelName || '',
-        password: twichAPIDataRep.value.accessToken,
+        password: getTwitchAccessToken,
       },
     };
 
     const client = tmi.Client(options);
 
     // message handler function
-    function messageHandler(channel: string, user: {[key: string]: string},
+    function messageHandler(channel: string, user: tmi.ChatUserstate,
       message: string, self: boolean): void {
       // only listen to commands in chat
       if (self) return;
@@ -123,10 +139,15 @@ if (bundleConfig.twitch && bundleConfig.twitch.enable && bundleConfig.twitch.cha
                       userCommand.lastUsed = new Date().getTime();
               }
           } */
-    }
-    client.connect()
-      .catch((e): void => log.error('', e))
-      .then((): void => {
+        }
+    let tokenRefreshed = false;
+    function connectBot(attempts: number) {
+      client.connect().catch(err => {
+        log.error(`failed connect attempt ${attempts}`,err);
+        if (attempts < 10) {
+          setTimeout(() => connectBot(attempts + 1), 5000);
+        }
+      }).then(() => {
         client.on('message', messageHandler);
         client.join(twichAPIDataRep.value.channelName || 'speedrunslive')
           .catch((reason): void => {
@@ -135,5 +156,7 @@ if (bundleConfig.twitch && bundleConfig.twitch.enable && bundleConfig.twitch.cha
             log.info(`Joined channel: ${data}`);
           });
       });
+    }
+    connectBot(0);
   });
 }
