@@ -1,0 +1,51 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["state","deactivated","commands"],
+    "properties": {
+        "state": {
+            "type": "string",
+            "default": "disconnected",
+            "enum": ["disconnected","connecting","connected","error"]
+        },
+        "deactivated": {
+            "type": "boolean",
+            "default": false
+        },
+        "commands": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name","text","cooldown","lastUsed","enabled", "commandList"],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "text": {
+                        "type": "string"
+                    },
+                    "cooldown": {
+                        "type": "integer",
+                        "default": 0,
+                        "$comment": "Time in seconds"
+                    },
+                    "lastUsed": {
+                        "type": "integer",
+                        "default": 0
+                    },
+                    "enabled": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "commandList": {
+                        "type": "string",
+                        "default": "global"
+                    }
+                }
+            }
+        }
+    }
+}
