@@ -148,7 +148,7 @@ export default class PlayerInfo extends Vue {
     }
 
     get pronouns(): string {
-        return this.player.customData.pronouns || '';
+        return this.player.pronouns || '';
     }
 
     get finishTime(): string {

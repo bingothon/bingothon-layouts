@@ -26,16 +26,17 @@ export interface RunDataTeam {
 }
 
 export interface RunDataPlayer {
-  name: string;
-  id: string;
-  teamID: string;
-  country?: string;
-  social: {
-    twitch?: string;
-  };
-  customData: {
-    [key: string]: string;
-  };
+    name: string;
+    id: string;
+    teamID: string;
+    country?: string;
+    pronouns?: string;
+    social: {
+        twitch?: string;
+    };
+    customData: {
+        [key: string]: string;
+    };
 }
 
 export type RunDataArray = RunData[];
