@@ -159,16 +159,16 @@ const config = (name) => {
 					},
 				},
 				{
-					test: /\.(png|svg)?$/,
-					exclude: [
-						path.resolve(__dirname, `src/${name}/_misc/fonts`),
-					],
-					loader: 'file-loader',
-					options: {
-						name: 'img/[name]-[contenthash].[ext]',
-						esModule: false,
-					},
-				},
+                    test: /\.(png|svg|jpg)?$/,
+                    exclude: [
+                        path.resolve(__dirname, `src/${name}/_misc/fonts`),
+                    ],
+                    loader: 'file-loader',
+                    options: {
+                        name: 'img/[name]-[contenthash].[ext]',
+                        esModule: false,
+                    },
+                },
 				{
 					test: /\.tsx?$/,
 					loader: 'ts-loader',

@@ -15,24 +15,21 @@
     import UpcomingRuns from './Rotation/UpcomingRuns.vue';
     import Bid from './Rotation/Bid.vue';
     import Prize from './Rotation/Prize.vue';
+    import Socials from './Rotation/Socials.vue';
     import {Component, Vue} from "vue-property-decorator";
     import {store} from "../../../browser-util/state";
     import {RunData} from "../../../../speedcontrol-types";
 
     @Component({
 		components: {
-			UpcomingRuns,
-			Bid,
-			Prize,
-		},
+            Socials,
+        },
 	})
 	export default class Rotation extends Vue {
 		currentComponent = null;
 		componentArray: Array<any> = [
-			UpcomingRuns,
-			Bid,
-			Prize,
-		]
+            Socials,
+        ]
 		index: number = 0
 		nextRuns: RunData[] = [];
 
