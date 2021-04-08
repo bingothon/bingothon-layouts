@@ -1,13 +1,32 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:600&subset=cyrillic,cyrillic-ext,latin-ext,vietnamese');
 
 :root {
-	--container-background-color: #3b5d7e;
-	--container-border-color: #5c88bc;
-	--font-color: #fff;
-	--darker-main-color: #315091;
-	--lighter-main-color: #5c88bc;
-	--alternative-main-color: #310088;
+    --container-background-color: rgba(206, 13, 0, 0.6);
+    --container-border-color: black;
+    --font-color: #fff;
+    --darker-main-color: #e94e1b;
+    --lighter-main-color: #f39200;
+    --alternative-main-color: #d32f3e;
 }
+
+summer {
+    --container-background-color: rgba(206, 13, 0, 0.6);
+    --container-border-color: black;
+    --font-color: #fff;
+    --darker-main-color: #e94e1b;
+    --lighter-main-color: #f39200;
+    --alternative-main-color: #d32f3e;
+}
+
+winter {
+    --container-background-color: #3b5d7e;
+    --container-border-color: #5c88bc;
+    --font-color: #fff;
+    --darker-main-color: #315091;
+    --lighter-main-color: #5c88bc;
+    --alternative-main-color: #310088;
+}
+
 
 body {
     font-family: 'Montserrat', sans-serif;
