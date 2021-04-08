@@ -12,6 +12,26 @@
                     &#64;Bingothon
                 </td>
             </tr>
+            <tr class="FlexContainer YouTubeRow">
+                <td>
+                    <div id="YouTubeLogo">
+                        <img src="../../../../../static/youtube-logo.png">
+                    </div>
+                </td>
+                <td class="SociallNames">
+                    c/Bingothon
+                </td>
+            </tr>
+            <tr class="FlexContainer YouTubeRow">
+                <td>
+                    <div id="TwitchLogo">
+                        <img src="../../../../../static/Twitch_icon.png">
+                    </div>
+                </td>
+                <td class="SociallNames">
+                    Bingothon
+                </td>
+            </tr>
         </table>
     </div>
 </template>
@@ -56,13 +76,28 @@ export default class Socials extends Vue {
 #TwitterLogo > img {
     position: absolute;
     top: 0px;
-    left: 100px;
+    left: 250px;
     height: 100px;
-    width: 100px;
+}
+
+#YouTubeLogo > img {
+    position: absolute;
+    top: 200px;
+    left: 240px;
+    height: 115px;
+}
+
+#TwitchLogo > img {
+    position: absolute;
+    top: 400px;
+    left: 250px;
+    height: 100px;
 }
 
 .SociallNames {
+    margin-left: 150px;
     font-size: 70px;
     font-weight: bold;
+    margin-bottom: 115px;
 }
 </style>

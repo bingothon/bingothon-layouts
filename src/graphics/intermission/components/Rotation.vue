@@ -22,12 +22,18 @@
 
     @Component({
 		components: {
+            UpcomingRuns,
+            Bid,
+            Prize,
             Socials,
         },
 	})
 	export default class Rotation extends Vue {
 		currentComponent = null;
 		componentArray: Array<any> = [
+            UpcomingRuns,
+            Bid,
+            Prize,
             Socials,
         ]
 		index: number = 0
