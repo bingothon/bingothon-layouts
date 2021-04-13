@@ -22,7 +22,7 @@
             P{{ i }}:
             <v-select
                 :value="color"
-                @change="updatePlayerColor(i, $event)"
+                @input="updatePlayerColor(i, $event)"
                 :items="allColors"
             >
             </v-select>
