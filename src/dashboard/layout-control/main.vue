@@ -1,20 +1,16 @@
 <template>
   <div id="App">
-    Game Layout:
-    <select
-      v-model="selectedLayoutName"
-    >
-      <option
-        v-for="(layout,i) in allGameLayoutNames"
-        :key="i"
-        :value="layout"
+      Game Layout:
+      <v-select
+          v-model="selectedLayoutName"
+          :items="allGameLayoutNames"
+          dark
       >
-        {{ layout }}
-      </option>
-    </select>
-    <button @click="updateCurrentLayout">
-      Update Layout
-    </button>
+      </v-select>
+      <v-btn @click="updateCurrentLayout"
+             dark>
+          Update Layout
+      </v-btn>
   </div>
 </template>
 
