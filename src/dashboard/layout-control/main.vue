@@ -1,5 +1,5 @@
 <template>
-  <div id="App">
+  <v-app>
       Game Layout:
       <v-select
           v-model="selectedLayoutName"
@@ -11,7 +11,7 @@
              dark>
           Update Layout
       </v-btn>
-  </div>
+  </v-app>
 </template>
 
 <script lang="ts">

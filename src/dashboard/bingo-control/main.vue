@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-app>
         <span
             class="error-warning"
             @click="errorMessage=''"
@@ -47,7 +47,6 @@
             </span>
         </div>
         Select Board:
-        <v-row>
             <v-select v-model="currentBoardRep"
                       :items="allBingoReps">
                 <option
@@ -58,7 +57,6 @@
                     {{ boardRep }}
                 </option>
             </v-select>
-        </v-row>
         <div v-if="showExtraBingosyncOptions">
             <div>
                 Room Code:
@@ -106,7 +104,7 @@
                 {{ toggleCountText }}
             </v-btn>
         </div>
-    </div>
+    </v-app>
 </template>
 
 <script lang="ts">
