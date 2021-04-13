@@ -10,6 +10,7 @@
                    dark
                    small
                    @click="toggleManualScoreOverride"
+                   :style="`width: 100%`"
             >
                 {{ manualScoreOverrideText }}
             </v-btn>
@@ -19,22 +20,12 @@
             :key="i"
         >
             P{{ i }}:
-            <select
+            <v-select
                 :value="color"
                 @change="updatePlayerColor(i, $event)"
+                :items="allColors"
             >
-                <option
-                    v-for="(sColor,j) in allColors"
-                    :key="j"
-                    :value="sColor"
-                >
-                    <!--<v-list-item-content>
-                        <v-list-item-title>-->
-                    {{ sColor }}
-                    <!--</v-list-item-title>
-                </v-list-item-content>-->
-                </option>
-            </select>
+            </v-select>
             <span v-show="isManualScoreOverride">
                 <v-text-field
                     v-model="manualScore[i]"
@@ -47,16 +38,9 @@
             </span>
         </div>
         Select Board:
-            <v-select v-model="currentBoardRep"
-                      :items="allBingoReps">
-                <option
-                    v-for="(boardRep, i) in allBingoReps"
-                    :key="i"
-                    :value="boardRep"
-                >
-                    {{ boardRep }}
-                </option>
-            </v-select>
+        <v-select v-model="currentBoardRep"
+                  :items="allBingoReps">
+        </v-select>
         <div v-if="showExtraBingosyncOptions">
             <div>
                 Room Code:
@@ -73,6 +57,7 @@
                     dark
                     small
                     @click="connectAction"
+                    :style="`width: 100%`"
                 >
                     {{ connectActionText }}
                 </v-btn>
@@ -83,7 +68,9 @@
                 class="button"
                 dark
                 small
-                @click="toggleCard">
+                @click="toggleCard"
+                :style="`width: 43%`"
+            >
                 {{ toggleCardText }}
             </v-btn>
             <v-btn
@@ -91,8 +78,8 @@
                 dark
                 small
                 @click="toggleColors"
+                :style="`width: 43%`"
             >
-
                 {{ toggleColorsText }}
             </v-btn>
             <v-btn
@@ -100,6 +87,7 @@
                 dark
                 small
                 @click="toggleCount"
+                :style="`width: 100%`"
             >
                 {{ toggleCountText }}
             </v-btn>
@@ -362,6 +350,14 @@ export default class BingoControl extends Vue {
 </script>
 
 <style>
+.v-app {
+    width: 100%;
+}
+
+#app {
+    width: 100%;
+}
+
 .error-warning {
     color: red;
     font-size: small;
@@ -369,5 +365,27 @@ export default class BingoControl extends Vue {
 
 input.manual-score {
     width: 3em;
+}
+
+.override {
+    width: 100%;
+}
+
+.lineButton >>> .v-btn {
+    width: 100%;
+    margin-bottom: 4px;
+    margin-top: 4px;
+}
+
+.v-btn:not(.v-btn--round).v-size--x-small {
+    margin: 2px;
+}
+
+.halfLine >>> .v-btn {
+    width: 49%;
+}
+
+.v-btn {
+    margin: 5px;
 }
 </style>
