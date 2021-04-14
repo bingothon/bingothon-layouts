@@ -27,7 +27,7 @@
                 :style="`width: 35%`"
             >
             </v-select>
-            <span v-show="isManualScoreOverride">
+            <div v-show="isManualScoreOverride" :style="`width: 30%`">
                 <v-text-field
                     v-model="manualScore[i]"
                     background-color="#455A64"
@@ -37,7 +37,7 @@
                     @change="updateManualScore"
                     :style="`width: 30%`"
                 />
-            </span>
+            </div>
         </div>
         Select Board:
         <v-select v-model="currentBoardRep"
