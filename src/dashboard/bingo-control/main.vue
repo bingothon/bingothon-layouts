@@ -327,9 +327,8 @@ export default class BingoControl extends Vue {
         getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this.currentBoardRep as BingoRepEnum;
     }
 
-    updatePlayerColor(idx: number, evt: any) {
-        console.log(evt, idx);
-        getReplicant<BingoboardMeta>('bingoboardMeta').value.playerColors[idx] = evt.target.value;
+    updatePlayerColor(idx: number, val: any) {
+        getReplicant<BingoboardMeta>('bingoboardMeta').value.playerColors[idx] = val;
     }
 
     toggleCard() {
