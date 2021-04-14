@@ -20,24 +20,26 @@
             :key="i"
         >
             P{{ i }}:
-            <v-select
-                :value="color"
-                @input="updatePlayerColor(i, $event)"
-                :items="allColors"
-                :style="`width: 35%`"
-            >
-            </v-select>
-            <div v-show="isManualScoreOverride" :style="`width: 30%`">
-                <v-text-field
-                    v-model="manualScore[i]"
-                    background-color="#455A64"
-                    class="manual-score"
-                    dark
-                    type="number"
-                    @change="updateManualScore"
-                    :style="`width: 30%`"
-                />
-            </div>
+            <v-row>
+                <v-select
+                    :value="color"
+                    @input="updatePlayerColor(i, $event)"
+                    :items="allColors"
+                    :style="isManualScoreOverride ? `width: 35%` : `width: 100%`"
+                >
+                </v-select>
+                <span v-show="isManualScoreOverride" :style="`width: 30%`">
+                    <v-text-field
+                        v-model="manualScore[i]"
+                        background-color="#455A64"
+                        class="manual-score"
+                        dark
+                        type="number"
+                        @change="updateManualScore"
+                        :style="`width: 30%`"
+                    />
+                </span>
+            </v-row>
         </div>
         Select Board:
         <v-select v-model="currentBoardRep"
