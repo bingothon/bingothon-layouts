@@ -24,6 +24,7 @@
                 :value="color"
                 @input="updatePlayerColor(i, $event)"
                 :items="allColors"
+                :style="`width: 35%`"
             >
             </v-select>
             <span v-show="isManualScoreOverride">
@@ -34,6 +35,7 @@
                     dark
                     type="number"
                     @change="updateManualScore"
+                    :style="`width: 30%`"
                 />
             </span>
         </div>
