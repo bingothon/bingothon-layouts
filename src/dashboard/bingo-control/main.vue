@@ -25,10 +25,9 @@
                     :value="color"
                     @input="updatePlayerColor(i, $event)"
                     :items="allColors"
-                    :style="isManualScoreOverride ? `width: 35%` : `width: 100%`"
                 >
                 </v-select>
-                <span v-show="isManualScoreOverride" :style="`width: 30%`">
+                <span v-show="isManualScoreOverride">
                     <v-text-field
                         v-model="manualScore[i]"
                         background-color="#455A64"
@@ -36,7 +35,6 @@
                         dark
                         type="number"
                         @change="updateManualScore"
-                        :style="`width: 30%`"
                     />
                 </span>
             </v-row>
