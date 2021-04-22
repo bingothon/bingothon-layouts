@@ -35,6 +35,7 @@ import {
     TrackerDonations,
     TrackerOpenBids,
     TrackerPrizes,
+    TwitchChatBotData,
     TwitchStreams,
     VoiceActivity
 } from "../../schemas";
@@ -76,6 +77,7 @@ const replicantNames = [
     'trackerDonations',
     'trackerOpenBids',
     'trackerPrizes',
+    'twitchChatBotData',
     'twitchStreams',
     'voiceActivity',
     'songData'
@@ -129,6 +131,7 @@ export const store = new Vuex.Store({
         trackerDonations: [] as TrackerDonations,
         trackerOpenBids: [] as TrackerOpenBids,
         trackerPrizes: [] as TrackerPrizes,
+        twitchChatBotData: {} as TwitchChatBotData,
         twitchStreams: [] as TwitchStreams,
         voiceActivity: {} as VoiceActivity,
         songData: {} as SongData,

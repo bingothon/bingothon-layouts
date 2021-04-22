@@ -154,6 +154,13 @@
         "file": "crop-control.html",
         "headerColor": "#008BB9",
         "workspace": "Twitch Resizing"
+      },
+      {
+        "name": "chat-bot-control",
+        "title": "Twitch Chat Bot Control",
+        "file": "chat-bot-control.html",
+        "headerColor": "#b92b36",
+        "width": 2
       }
     ],
     "graphics": [
