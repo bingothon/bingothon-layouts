@@ -145,6 +145,13 @@
         "file": "bestOfX-control.html",
         "headerColor": "#b92b36",
         "width": 2
+      },
+      {
+        "name": "chat-bot-control",
+        "title": "Twitch Chat Bot Control",
+        "file": "chat-bot-control.html",
+        "headerColor": "#b92b36",
+        "width": 2
       }
     ],
     "graphics": [

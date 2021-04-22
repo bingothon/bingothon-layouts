@@ -14,6 +14,11 @@ import { TwitchChatBotCommand } from '../../types';
 const nodecg = nodecgApiContext.get();
 const log = new nodecg.Logger(`${nodecg.bundleName}:twitch-chat-bot`);
 
+// there is probably a npm package with only that function
+const asyncSleep = (milliseconds: number) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
 // Map<str, {response:bla, enabled:true, cooldown:0, lastUsed:123456}>
 // var chatCommandsRep = nodecg.Replicant('chatCommands', {defaultValue: {}});
 
@@ -279,6 +284,20 @@ class TwitchBotWrapper {
 
   async connect(): Promise<void> {
     if (['disconnected', 'error'].includes(twitchChatBotDataRep.value.state)) {
+      // check if the twitch access token should still be valid
+      const tokenExpiresAt = twichAPIDataRep.value.tokenExpiresAt;
+      if (tokenExpiresAt !== undefined) {
+        if (tokenExpiresAt - 10 * 1000 < Date.now()) {
+          log.info("twitch api token is NOT up to date, sending refresh request...");
+          nodecg.sendMessageToBundle("twitchRefreshAccessToken", "nodecg-speedcontrol");
+          await asyncSleep(1000);
+        } else {
+          log.info("twitch api token is up to date");
+        }
+      } else {
+        log.warn("tokenExpiresAt is undefined, speedcontrol is probably not up to date! Trying to refresh token anyway");
+        nodecg.sendMessageToBundle("twitchRefreshAccessToken", "nodecg-speedcontrol");
+      }
       twitchChatBotDataRep.value.state = 'connecting';
       for (let i = 0;i<MAX_CONNECT_RETRIES;i++) {
         try {
@@ -286,6 +305,7 @@ class TwitchBotWrapper {
           log.info('successfully connected');
           break;
         } catch(e) {
+          nodecg.sendMessageToBundle("twitchRefreshAccessToken", "nodecg-speedcontrol");
           log.error(`connection Error on try ${i}:`, e);
         }
       }
@@ -315,6 +335,14 @@ if (bundleConfig.twitch && bundleConfig.twitch.enable && bundleConfig.twitch.cha
     log.info('Twitch chat bot is enabled.');
 
     const bot = new TwitchBotWrapper();
+
+    setTimeout(() => {
+      nodecg.sendMessageToBundle("twitchGetAccessToken", "nodecg-speedcontrol", null, (err, args) => {
+        log.info("got new access token!");
+        log.info(err);
+        log.info(args);
+      })
+    }, 10 * 1000);
 
     // nodecg.listenFor("repeaterFeaturedChannels", "nodecg-speedcontrol", (channels: string[]) => {
     //   if (twichAPIDataRep.value.channelName) {
