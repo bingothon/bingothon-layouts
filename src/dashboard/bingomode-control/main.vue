@@ -16,27 +16,60 @@
             <div
                 v-for="(markerRedirect, i) in markerRedirects"
                 :key="i"
-                class="override d-flex justify-center"
+                class="override d-flex justify-center color-control"
             >
-                <v-select v-model="markerRedirect[0]" :items="ALL_COLORS" item-text="ALL_COLORS">
-                    <option
-                        v-for="(color, j) in ALL_COLORS"
-                        :key="j"
-                        :value="color"
+                
+                <div id="bingomode-color-control">
+                    <v-select 
+                        v-model="markerRedirect[0]" 
+                        v-bind:items="ALL_COLORS.options"
+                        item-text="title"
+                        item-value="title"
                     >
-                        {{ color }}
-                    </option>
-                </v-select>
-                to
-                <v-select v-model="markerRedirect[1]" :items="ALL_COLORS">
-                    <option
-                        v-for="(color, j) in ALL_COLORS"
-                        :key="j"
-                        :value="color"
+                        
+                        <template slot="selection" slot-scope="data">
+                            <v-list-content v-bind:id="data.item.colorId">
+                                    <div style="height: 10px; width: 45px;"></div>
+                            </v-list-content>
+                        </template>
+                        <template slot="item" slot-scope="data">
+                            <template v-if="typeof data.item !== 'object'">
+                                <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                            </template>
+                            <template v-else>
+                                <v-list-content>
+                                    {{data.item.title}}
+                                </v-list-content>
+                            </template>
+                        </template>
+                    </v-select>
+                </div>
+                <div id="fromToColor"> &gt; </div>
+                <div id="bingomode-color-control">
+                    <v-select 
+                        v-model="markerRedirect[1]" 
+                        v-bind:items="ALL_COLORS.options"
+                        item-text="title"
+                        item-value="title"
                     >
-                        {{ color }}
-                    </option>
-                </v-select>
+                        
+                        <template slot="selection" slot-scope="data">
+                            <v-list-content v-bind:id="data.item.colorId">
+                                    <div style="height: 10px; width: 45px;"></div>
+                            </v-list-content>
+                        </template>
+                        <template slot="item" slot-scope="data">
+                            <template v-if="typeof data.item !== 'object'">
+                                <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                            </template>
+                            <template v-else>
+                                <v-list-content>
+                                    {{data.item.title}}
+                                </v-list-content>
+                            </template>
+                        </template>
+                    </v-select>
+                </div>
                 <v-btn
                     dark
                     x-small
@@ -88,10 +121,54 @@ type ColorEnum = ('pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'te
 export default class BingomodeControl extends Vue {
 
     ALL_BINGO_MODES = Object.freeze(['invasion', 'normal']);
-    ALL_COLORS = Object.freeze(['pink', 'red', 'orange', 'brown', 'yellow', 'green', 'teal', 'blue', 'navy', 'purple']);
+
+    ALL_COLORS = {
+        options: [
+        {
+            title: 'pink',
+            colorId: 'color-control-pink'
+        },
+        {
+            title: 'red',
+            colorId: 'color-control-red'
+        },
+        {
+            title: 'orange',
+            colorId: 'color-control-orange'
+        },
+        {
+            title: 'brown',
+            colorId: 'color-control-brown'
+        },
+        {
+            title: 'yellow',
+            colorId: 'color-control-yellow'
+        },
+        {
+            title: 'green',
+            colorId: 'color-control-green'
+        },
+        {
+            title: 'teal',
+            colorId: 'color-control-teal'
+        },
+        {
+            title: 'blue',
+            colorId: 'color-control-blue'
+        },
+        {
+            title: 'navy',
+            colorId: 'color-control-navy'
+        },
+        {
+            title: 'purple',
+            colorId: 'color-control-purple'
+        }
+    ]}
+    //Object.freeze(['pink', 'red', 'orange', 'brown', 'yellow', 'green', 'teal', 'blue', 'navy', 'purple']);
     currentBingomode: string = 'invasion';
     markerRedirects: [string, string][] = [];
-
+ 
     get bingoboardModeRep(): BingoboardMode {
         return store.state.bingoboardMode;
     }
@@ -126,11 +203,33 @@ export default class BingomodeControl extends Vue {
     }
 
 }
+
 </script>
 
 <style>
+/* import bingo colors */
+
+#color-control-pink{background: var(--bingo-color-pink);}
+#color-control-red{background: var(--bingo-color-red);}
+#color-control-orange{background: var(--bingo-color-orange);}
+#color-control-brown{background: var(--bingo-color-brown);}
+#color-control-yellow{background: var(--bingo-color-yellow);}
+#color-control-green{background: var(--bingo-color-green);}
+#color-control-teal{background: var(--bingo-color-teal);}
+#color-control-blue{background: var(--bingo-color-blue);}
+#color-control-navy{background: var(--bingo-color-navy);}
+#color-control-purple{background: var(--bingo-color-purple);}
+
 .override {
     width: 100%;
+    align-items:center;
+}
+
+#fromToColor {
+    margin-left: 5px;
+    margin-right: 5px;
+    background: #485264;
+    padding: 5px;
 }
 
 .lineButton > .v-btn {

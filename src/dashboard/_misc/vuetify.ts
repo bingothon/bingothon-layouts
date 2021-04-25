@@ -3,6 +3,7 @@ import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
 import './common.css';
 import './fonts/roboto.css'
+import '../../graphics/_misc/common.css'
 
 Vue.use(Vuetify);
 
