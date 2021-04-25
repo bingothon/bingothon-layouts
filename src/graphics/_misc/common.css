@@ -9,6 +9,20 @@
     --alternative-main-color: #d32f3e;
 }
 
+/*Bingo Colors*/
+:root {
+    --bingo-color-red: linear-gradient(#FF4944, #DA4440 60%, #CE302C);;
+    --bingo-color-orange: linear-gradient(#FF9C12, #F98E1E 60%, #D0800F);
+    --bingo-color-green: linear-gradient(#129912, #108010 60%, #0c660c);
+    --bingo-color-blue: linear-gradient(#409CFF, #37A1DE 60%, #088CBD);
+    --bingo-color-purple: linear-gradient(#822dbf, #7120ab);
+    --bingo-color-pink: linear-gradient(#ed86aa, #cc6e8f);
+    --bingo-color-brown: linear-gradient(#3bd45f, #30b050);
+    --bingo-color-teal: linear-gradient(#419695, #2e7372);
+    --bingo-color-navy: linear-gradient(#0d48b5, #022b75);
+    --bingo-color-yellow: linear-gradient(#8c8b8b, #808080);
+}
+
 summer {
     --container-background-color: rgba(206, 13, 0, 0.6);
     --container-border-color: black;
