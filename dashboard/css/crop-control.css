@@ -1,0 +1,11 @@
+
+.ResizeContainer {
+  overflow: hidden;
+  position: relative;
+  background: green;
+}
+.ResizeContainer > .TwitchPlayer {
+  overflow: hidden;
+  position: absolute;
+}
+

@@ -1,0 +1,208 @@
+
+#TextContainer {
+    height: 100%;
+    width: 100%;
+    white-space: nowrap;
+}
+#FittedTextContent {
+    position: absolute;
+}
+
+/*Medal styles*/
+.medal {
+	width: 26px;
+	height: 26px;
+	margin: 4px;
+	background-repeat: no-repeat;
+}
+.medal.shine {
+	animation: shine 334ms steps(20);
+}
+@keyframes shine {
+	from { background-position-x: 0; }
+	to { background-position-x: -520px; } /* <-- width of spritesheet */
+}
+
+.medal-bronze {
+	background: url(../img/medal-bronze-f713233c2c777134cf06964562cd8ab3.png);
+}
+
+.medal-silver {
+	background: url(../img/medal-silver-93b17477b984e14383f99e5e657a1e8a.png);
+}
+
+.medal-gold {
+	background: url(../img/medal-gold-31114d38f23e80895f37bbe59471f706.png);
+}
+
+.PlayerInfoBox {
+    /*Summer background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));*/
+    background-image: linear-gradient(var(--alternative-main-color), var(--darker-main-color));;
+    color: var(--font-color);
+    padding: 7px;
+    font-weight: 500;
+    font-size: 30px;
+}
+.PlayerInfoBox.ReverseOrder {
+    flex-direction: row-reverse;
+}
+.PlayerInfoBox > .CurrentIcon {
+    height: 100%;
+    text-align: left;
+    position: relative;
+}
+.PlayerInfoBox > .CurrentIcon > img {
+    height: 100%;
+    position: absolute;
+    filter: invert(1);
+}
+.PlayerInfoBox > .CurrentIcon > .PronounsContainer {
+    font-size: 60%;
+    /* color: #f3ad00; */
+    /* border: 1px solid #f3ad00; */
+    /* background-color: #f3ad00; */
+    bottom: 1px;
+    color: white;
+    height: 75%;
+    position: absolute;
+    width: 70px;
+}
+.PlayerInfoBox > .PlayerName {
+    flex-grow: 1;
+    flex-shrink: 0;
+    height: 100%;
+    margin-left: 10px;
+    margin-right: 10px;
+    justify-content: flex-start;
+    position: relative;
+}
+
+/*.PlayerInfoBox > .PlayerName > div > .FinishTime {
+  color: var(--font-colour);
+}*/
+.PlayerInfoBox > .Flag {
+    height: 100%;
+    justify-content: flex-end;
+    position: relative;
+    margin-right: 15px;
+}
+.PlayerInfoBox.ReverseOrder > .Flag {
+    justify-content: flex-start;
+}
+.PlayerInfoBox > .Flag > img {
+    visibility: visible;
+    position: absolute;
+    border: 1px solid white;
+    height: calc(100% - 2px);
+}
+.PlayerInfoBox > .BingoColor {
+    justify-content: center;
+    margin-left: 14px;
+    font-size: 40px;
+    border-radius: 10%;
+    border: 1px white solid;
+}
+.PlayerInfoBox > .Sound > img {
+    width: 30px;
+}
+
+/* Bingosync styled gradients */
+.PlayerInfoBox > .BingoColor.bingo-green {
+    background-image: linear-gradient(#31D814, #00B500 60%, #20A00A);
+}
+.PlayerInfoBox > .BingoColor.bingo-red {
+    background-image: linear-gradient(#FF4944, #DA4440 60%, #CE302C);
+}
+.PlayerInfoBox > .BingoColor.bingo-orange {
+    background-image: linear-gradient(#FF9C12, #F98E1E 60%, #D0800F);
+}
+.PlayerInfoBox > .BingoColor.bingo-blue {
+    background-image: linear-gradient(#409CFF, #37A1DE 60%, #088CBD);
+}
+.PlayerInfoBox > .BingoColor.bingo-purple {
+    background-image: linear-gradient(#822dbf, #7120ab);
+}
+.PlayerInfoBox > .BingoColor.bingo-pink {
+    background-image: linear-gradient(#ed86aa, #cc6e8f);
+}
+.PlayerInfoBox > .BingoColor.bingo-brown {
+    background-image: linear-gradient(#ab5c23, #6d3811);
+}
+.PlayerInfoBox > .BingoColor.bingo-teal {
+    background-image: linear-gradient(#419695, #2e7372);
+}
+.PlayerInfoBox > .BingoColor.bingo-navy {
+    background-image: linear-gradient(#0d48b5, #022b75);
+}
+.PlayerInfoBox > .BingoColor.bingo-yellow {
+    background-image: linear-gradient(#d8d014, #c1ba0b);
+}
+
+
+#pi1[data-v-4a9672e0] {
+	position: absolute;
+	top: 940px;
+	left: 480px;
+	width: 960px;
+}
+
+
+#pi1[data-v-a8f344ae] {
+	position: absolute;
+	top: 940px;
+	left: 0px;
+	width: 946px;
+}
+#pi2[data-v-a8f344ae] {
+	position: absolute;
+	top: 940px;
+	left: 960px;
+	width: 946px;
+}
+
+
+#pi1[data-v-32a64102] {
+	position: absolute;
+	top: 940px;
+	left: 0px;
+	width: 626px;
+}
+#pi2[data-v-32a64102] {
+	position: absolute;
+	top: 940px;
+	left: 640px;
+	width: 626px;
+}
+#pi3[data-v-32a64102] {
+	position: absolute;
+	top: 940px;
+	left: 1280px;
+	width: 626px;
+}
+
+
+#pi1[data-v-0e9f4cef] {
+	position: absolute;
+	top: 440px;
+	left: 0px;
+	width: 946px;
+}
+#pi2[data-v-0e9f4cef] {
+	position: absolute;
+	top: 440px;
+	left: 960px;
+	width: 946px;
+}
+#pi3[data-v-0e9f4cef] {
+	position: absolute;
+	top: 940px;
+	left: 0px;
+	width: 946px;
+}
+#pi4[data-v-0e9f4cef] {
+	position: absolute;
+	top: 940px;
+	left: 960px;
+	width: 946px;
+}
+

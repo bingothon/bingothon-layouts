@@ -1,0 +1,631 @@
+
+#container {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+#fittedContent {
+    position: absolute;
+    left: 0;
+}
+span.underline {
+    text-decoration: underline;
+}
+
+.m-b-s {
+    margin-bottom: 8px;
+}
+
+.m-b-l {
+    margin-bottom: 20px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.vertical-center {
+    /* set left and right to keep the width the same when changing to position: absolute */
+    left: 5px;
+    right: 5px;
+    /* position: absolute fixes vertical centering in chrome (when the containing td has verticle-align: top) */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+}
+
+.vertical-center.skew {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%) skewX(45deg);
+}
+
+.fill-parent {
+    height: 100%;
+    width: 100%;
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.flipped {
+    transform: rotate(180deg);
+}
+
+.sidebar-right {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+.sidebar-header {
+    flex: 0 1 auto;
+}
+
+.sidebar-content {
+    flex: 1 1 auto;
+    position: relative;
+}
+
+.sidebar-footer {
+    flex: 0 1 relative;
+}
+
+.sidebar-footer-fixed {
+    flex: 0 1 80px;
+}
+
+.page-container {
+    min-height: 100vh;
+}
+
+.flex-col-container {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+.flex-col-header {
+    flex: 0 1 auto;
+}
+
+.flex-col-content {
+    flex: 1 1 auto;
+    position: relative;
+}
+
+.flex-col-content .fill-parent {
+    position: absolute;
+}
+
+.flex-col-footer {
+    flex: 0 1 auto;
+}
+
+.flex-col-footer .panel {
+    margin-bottom: 0px;
+}
+
+.panel-body-overflow-container {
+    /* panel-header is ~40px tall, so body should be 100% minus header height */
+    height: calc(100% - 40px);
+}
+
+/* for use with panel-body-overflow-container above */
+.panel-overflow-inner {
+    height: 100%;
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+
+.panel-window {
+    height: 100%;
+}
+
+.panel-inner {
+    border: solid 1px #444;
+    height: 100%;
+    width: 100%;
+    background-color: #272b30;
+    padding: 3px;
+    padding-left: 6px;
+    overflow-y: scroll;
+}
+
+.chat-window {
+    display: flex;
+    flex-flow: column;
+}
+
+.chat-body {
+    flex: 1 1 auto;
+}
+
+.chat-input-container {
+    flex: 0 1 auto;
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+}
+
+.chat-input {
+    flex: 1 1 auto;
+    color: #DDD;
+    background-color: #222;
+    border-color: #444;
+}
+
+.chat-send {
+    flex: 0 1 auto;
+}
+
+#settings-table tr td {
+    padding-right: 5px;
+}
+
+#room-settings .panel-body, #chat-settings .panel-body {
+    font-size: 90%;
+}
+
+.collapse-button {
+    position: absolute;
+    right: 2.2em;
+}
+
+/* plain old square */
+.square {
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+    padding: 0 5px;
+    cursor: pointer;
+    width: 105px;
+    height: 95px;
+    text-align: center;
+    /* border: 1px #424242 solid; */
+    background: #181818;
+
+    /* vertical-align changed to top so background colors wont be pushed halfway down */
+    vertical-align: top;
+
+    /* position needs to be relative for overflow hidden to work */
+    position: relative;
+    overflow: hidden;
+}
+
+/* square that is covered by a board cover, hides the goal text */
+.hidden-card .square {
+    text-indent: 120%;
+    white-space: nowrap;
+}
+
+.square .bg-color, .square .shadow {
+    height: inherit;
+    position: absolute;
+    left: -2px;
+    right: -2px;
+}
+
+.square .bg-color {
+    transform-origin: top;
+    -webkit-transform-origin: top;
+    -moz-transform-origin: top;
+}
+
+.square:hover .shadow,
+.square.hover .shadow {
+    box-shadow: inset 0px 0px 50px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: inset 0px 0px 50px rgba(0, 0, 0, 0.6);
+    -webkit-box-shadow: inset 0px 0px 50px rgba(0, 0, 0, 0.6);
+}
+
+.blanksquare:hover,
+.blanksquare.hover {
+    background: #0a245a;
+}
+
+.greensquare {
+    background-image: linear-gradient(#129912, #108010 60%, #0c660c);
+}
+
+.redsquare {
+    background-image: linear-gradient(#FF4944, #DA4440 60%, #CE302C);
+}
+
+.orangesquare {
+    background-image: linear-gradient(#FF9C12, #F98E1E 60%, #D0800F);
+}
+
+.bluesquare {
+    background-image: linear-gradient(#409CFF, #37A1DE 60%, #088CBD);
+}
+
+.purplesquare {
+    background-image: linear-gradient(#822dbf, #7120ab);
+}
+
+.pinksquare {
+    background-image: linear-gradient(#ed86aa, #cc6e8f);
+}
+
+.brownsquare {
+    background-image: linear-gradient(#3bd45f, #30b050);
+}
+
+.tealsquare {
+    background-image: linear-gradient(#419695, #2e7372);
+}
+
+.navysquare {
+    background-image: linear-gradient(#0d48b5, #022b75);
+}
+
+.yellowsquare {
+    background-image: linear-gradient(#8c8b8b, #808080);
+}
+
+.board-container {
+    display: inline-block;
+    position: relative;
+}
+
+.board-cover {
+    /* pin it over top of the board container */
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: 1;
+
+    /* size of popouts (measured, not enforced) */
+    margin-top: 31px;
+    margin-left: 31px;
+
+    /* cover the board */
+    width: calc(100% - 31px);
+    height: calc(100% - 61px);
+    background: #101821;
+
+    /* helps align text */
+    display: flex;
+    justify-content: center;
+
+    /* slight gradient to not look weird */
+    box-shadow: inset 0px 0px 30px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: inset 0px 0px 30px rgba(0, 0, 0, 0.6);
+    -webkit-box-shadow: inset 0px 0px 30px rgba(0, 0, 0, 0.6);
+}
+
+.board-cover:hover,
+.board-cover.hover {
+    cursor: pointer;
+    background: #05132E;
+    box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.6);
+    -webkit-box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.6);
+}
+
+/* align text */
+.board-cover-text {
+    align-self: center;
+}
+
+.goalcounter {
+    color: white;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    width: 3ch;
+    padding: 0px 0px;
+    margin: 2px 0px;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#players-panel {
+    height: 100%;
+    overflow: auto;
+}
+
+.player-panel-entry {
+    white-space: nowrap;
+}
+
+.playername {
+}
+
+.blankplayer {
+    color: #c8c8c8;
+}
+
+.greenplayer {
+    color: #62c462;
+}
+
+.redplayer {
+    color: #ee5f5b;
+}
+
+.orangeplayer {
+    color: #f89406;
+}
+
+.blueplayer {
+    color: #5bc0de;
+}
+
+.purpleplayer {
+    color: #822dbf;
+}
+
+.navyplayer {
+    color: #0d48b5;
+}
+
+.tealplayer {
+    color: #419695;
+}
+
+.pinkplayer {
+    color: #de799c;
+}
+
+.brownplayer {
+    color: #ab5c23;
+}
+
+.yellowplayer {
+    color: #c1ba0b;
+}
+
+.color-chooser {
+    color: #fff;
+}
+
+.color-chooser:hover {
+    box-shadow: inset 0px 0px 50px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: inset 0px 0px 50px rgba(0, 0, 0, 0.6);
+    -webkit-box-shadow: inset 0px 0px 50px rgba(0, 0, 0, 0.6);
+}
+
+.chosen-color,
+.chosen-color:hover {
+    border: solid 2px #eee;
+}
+
+.chat-link {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #aaa;
+    font-size: 80%;
+    text-align: center;
+    background-color: #181818;
+}
+
+.connection-message {
+    font-style: italic;
+    color: #888;
+}
+
+.chat-name {
+    font-weight: bold;
+}
+
+.goal-name {
+    font-weight: bold;
+}
+
+.chat-message {
+}
+
+.goal-message {
+    font-style: italic;
+    color: #888;
+}
+
+.color-message {
+    font-style: italic;
+    color: #888;
+}
+
+.chat-timestamp {
+    font-size: 80%;
+    color: #888;
+}
+
+.color-name {
+    font-weight: bold;
+}
+
+.revealed-message {
+    font-style: italic;
+    color: #888;
+}
+
+.new-card-message {
+    font-style: italic;
+    color: #888;
+}
+
+.new-card-message .game-title,.new-card-message .seed, .new-card-message .seed-hidden {
+    font-weight: bold;
+    color: #c8c8c8;
+}
+
+.history-placeholder {
+    font-style: italic;
+    color: #888;
+}
+
+.footer-bar {
+    float: right;
+    color: #888;
+}
+
+.footer-bar a {
+    font-style: italic;
+    color: #888;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* styling for idle room rows in the rooms list */
+.idle-room {
+    color: #888;
+}
+
+.idle-room a {
+    color: #ccc;
+}
+
+.hide-idle-rooms .idle-room {
+    display: none;
+}
+
+/*
+ * Styling for the buttons to show and hide idle rooms when they are hidden.
+ * The show button only needs to display when rooms are not hidden, while
+ * the hide button only needs to display when rooms are hidden.
+ */
+.show-button {
+    color: #ddd;
+    display: none;
+}
+
+.hide-button {
+    color: #ddd;
+}
+
+.hide-idle-rooms .show-button {
+    display: inline;
+}
+
+.hide-idle-rooms .hide-button {
+    display: none;
+}
+
+/* bootstrap form overrides */
+.help-block {
+    color: #b0b0b0;
+    font-size: 90%;
+}
+
+.form-group .help-block {
+    margin-bottom: 0;
+}
+
+.form-group .checkbox {
+    padding-top: 0;
+    min-height: 0;
+}
+
+/* hide asterisk denoting required inputs */
+.asteriskField {
+    display: none;
+}
+
+
+table {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+}
+@keyframes bingo-splash {
+0% {opacity: 0;font-size: 1px}
+40% {transform: rotate(1800deg); opacity: 1; font-size: 100px;text-shadow: -5px -5px 10px white, 5px -5px 10px white, -5px 5px 10px white, 5px 5px 10px white;}
+70% {transform: rotate(1800deg); opacity: 1; font-size: 100px;text-shadow: -5px -5px 10px white, 5px -5px 10px white, -5px 5px 10px white, 5px 5px 10px white;}
+100% {transform: rotate(1800deg) translateY(30%); opacity: 0; font-size: 90px;text-shadow: -5px -5px 50px white, 5px -5px 50px white, -5px 5px 50px white, 5px 5px 50px white;}
+}
+.bingo-board-hide {
+        width: 100%;
+        height: 100%;
+        background: black;
+        position: absolute;
+		color: white;
+		align-content: center;
+		justify-content: center;
+		font-size: 45px;
+		text-align: center;
+		align-items: center;
+}
+.bingo-splash {
+        position: absolute;
+        opacity: 0;
+}
+.bingo-splash.activated {
+        animation: bingo-splash 4s;
+}
+.square .bg-color, .square .shadow {
+        width: 100%;
+        height: 100%;
+        /*Remove padding cause the board is kinda small*/
+        padding: 0;
+        border: 0;
+        left: 0;
+        right: 0;
+}
+.square {
+        padding: 0;
+        height: 20%;
+        width: 20%;
+        border: 2px black solid;
+}
+.text-container {
+        left: 0px;
+        right: 0px;
+}
+.bingo-table{
+        border-collapse: collapse;
+}
+.text-span {
+        left: 0px;
+        right: 0px;
+        top: 50%;
+        transform: translateY(-50%);
+}
+.CellTextFitContainer {
+        height: calc(100% - 4px);
+        width: calc(100% - 4px);
+        position: absolute;
+        margin: 2px;
+}
+.marker {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        opacity: 0.9;
+        border: 1px #0009 solid;
+        border-radius: 50%;
+}
+.marker0 {
+        left: 10%;
+        top: 10%;
+}
+.marker1 {
+        right: 10%;
+        top: 10%;
+}
+.marker2 {
+        left: 10%;
+        bottom: 10%;
+}
+.marker3 {
+        right: 10%;
+        bottom: 10%;
+}
+

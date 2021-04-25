@@ -1,0 +1,506 @@
+
+.Logo > img[data-v-a800da06] {
+	width: 307px;
+}
+
+
+.RunUpcoming {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 199px;
+	text-align: center;
+}
+.RunUpcoming > .Header {
+	font-weight: 500;
+	height: 60px;
+	line-height: 60px;
+	background-color: var(--border-colour);
+	color: white;
+	font-size: 41px;
+	text-transform: uppercase;
+}
+.RunUpcoming > .Body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	flex: 1;
+	font-size: 41px;
+	background-color: rgba(0,0,0,0.3);
+}
+.AdditionalDetails {
+	font-size: 30px;
+}
+.AdditionalDetails > span:not(:last-of-type)::after {
+	content: '/';
+}
+
+
+#UpcomingRuns {
+	position: absolute;
+	display: flex;
+	height: 100%;
+	width: 100%;
+	flex-direction: column;
+	justify-content: space-around;
+}
+
+
+#progressbar {
+	position: absolute;
+	top: 300px;
+	left: 133px;
+	width: 900px;
+	background-color: rgba(0,0,0,0);
+	border: 2px var(--container-border-color) solid;
+	height: 100px;
+	align-content: end;
+}
+#amount {
+	position: absolute;
+	height: 100px;
+	left: 0px;
+	z-index: 6;
+	top: 20px;
+	align-content: center;
+	align-self: center;
+	align-items: center;
+	justify-content: center;
+	justify-items: center;
+}
+#progress {
+	top: 0px;
+	left: 0px;
+	position: absolute;
+	height: 100px;
+	background-image: linear-gradient(#2F6FAF, #235589);
+	z-index: 5;
+}
+#goal{
+	position: absolute;
+	left: 1000px;
+	top: 325px;
+}
+#Bid {
+	position: absolute;
+	display: flex;
+	height: 100%;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	text-align: center;
+}
+#Bid > .Header {
+	width: 100%;
+	font-weight: 500;
+	height: 60px;
+	line-height: 60px;
+	//background-color: var(--border-colour);
+	color: white;
+	font-size: 41px;
+	text-transform: uppercase;
+}
+#Bid > .incentive-container {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	flex: 1;
+	background-color: rgba(0,0,0,0.3);
+	overflow: hidden;
+}
+#Bid > .incentive-container > div {
+	margin: 10px;
+}
+#Bid > .incentive-container > .RunName {
+	font-size: 45px;
+}
+#Bid > .incentive-container > .BidName {
+	font-size: 32px;
+}
+#Bid > .incentive-container > .BidAmount {
+	height: 445px;
+	font-size: 40px;
+}
+svg {
+	font-size: 25px;
+	color: white;
+}
+.arc text {
+	text-anchor: middle;
+}
+.axis {
+	font-size: 25px;
+	fill: #fff;
+}
+.axis path,
+.axis line {
+	fill: none;
+	display: none;
+}
+.label {
+	font-size: 25px;
+	fill: #fff;
+}
+.bid-graphics{
+	width:1172px;
+	height: 400px;
+}
+
+
+#Prize {
+	position: absolute;
+	display: flex;
+	height: 100%;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	text-align: center;
+}
+#Prize > .Header {
+	width: 100%;
+	font-weight: 500;
+	height: 60px;
+	line-height: 60px;
+	background-color: var(--border-colour);
+	color: white;
+	font-size: 41px;
+	text-transform: uppercase;
+}
+#Prize > .Body {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	flex: 1;
+	font-size: 41px;
+	background-color: rgba(0,0,0,0.3);
+}
+#Prize > .Body > .Image {
+	height: 400px;
+	object-fit: contain;
+}
+#Prize > .Body > .Title {
+	font-size: 40px;
+}
+#Prize > .Body > .MinAmount {
+	font-size: 30px;
+}
+#Prize > .Body > .Deadline {
+	font-size: 30px;
+}
+
+
+#SocialText[data-v-f75b9e4c] {
+    position: absolute;
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    top: 0px;
+    left: 470px;
+    font-size: 50px;
+}
+#SocialsTable[data-v-f75b9e4c] {
+    position: absolute;
+    top: 100px;
+}
+#Socials[data-v-f75b9e4c] {
+    position: absolute;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-around;
+}
+#TwitterLogo > img[data-v-f75b9e4c] {
+    position: absolute;
+    top: 0px;
+    left: 250px;
+    height: 100px;
+}
+#YouTubeLogo > img[data-v-f75b9e4c] {
+    position: absolute;
+    top: 200px;
+    left: 240px;
+    height: 115px;
+}
+#TwitchLogo > img[data-v-f75b9e4c] {
+    position: absolute;
+    top: 400px;
+    left: 250px;
+    height: 100px;
+}
+.SociallNames[data-v-f75b9e4c] {
+    margin-left: 150px;
+    font-size: 70px;
+    font-weight: bold;
+    margin-bottom: 115px;
+}
+
+
+#Rotation {
+	position: absolute;
+}
+.fade-enter-active, .fade-leave-active {
+	transition: opacity 1s;
+}
+.fade-enter, .fade-leave-to {
+	opacity: 0;
+}
+
+
+.InfoStorageBox[data-v-2b638973] {
+	position: absolute;
+	box-sizing: border-box;
+	justify-content: flex-start;
+	flex-direction: column;
+}
+
+
+#TextContainer {
+    height: 100%;
+    width: 100%;
+    white-space: nowrap;
+}
+#FittedTextContent {
+    position: absolute;
+}
+
+
+.DiscordVoiceDisplay {
+        justify-content: center;
+		align-content: center;
+		text-align: center;
+        flex-wrap: wrap;
+}
+.DiscordVoiceDisplay > .Member {
+        margin: 5px 0 0 5px;
+}
+.DiscordVoiceDisplay > .Member > .AvatarContainer {
+        position: relative;
+}
+.DiscordVoiceDisplay > .Member > .AvatarContainer > img {
+        width: var(--icon-height);
+        height: var(--icon-height);
+        border-radius: 100%;
+}
+.DiscordVoiceDisplay > .Member > .AvatarContainer > .MicIcon {
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        top: -4px;
+        right: -4px;
+        background-color: var(--voice-highlight-color);
+        border-radius: 100%;
+
+        opacity: 0;
+}
+.DiscordVoiceDisplay > .Member.Active > .AvatarContainer > .MicIcon {
+        opacity: 1;
+}
+.DiscordVoiceDisplay > .Member > div.Name {
+        font-size: 22px;
+        margin-left: 8px;
+        margin-right: 8px;
+        color: white;
+        width: var(--name-width);
+        position: relative;
+}
+.DiscordVoiceDisplay > .Member.Active > div.Name {
+        text-shadow: 0px 0px 15px var(--voice-highlight-color);
+}
+
+
+.Music[data-v-a8d6759a] {
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		width: 450px;
+}
+.MCat[data-v-a8d6759a] {
+		box-sizing: border-box;
+		height: 100%;
+		padding: 5px;
+}
+.MCat > img[data-v-a8d6759a] {
+		height: 100%;
+		object-fit: contain;
+}
+.NameContainer[data-v-a8d6759a] {
+		position: relative;
+		flex: 1;
+		margin: 0 15px;
+		overflow: hidden;
+		height: 100%;
+		vertical-align: super;
+		align-items: center;
+		display: flex;
+}
+.NameContainer > .Name[data-v-a8d6759a] {
+		position: absolute;
+		overflow: hidden;
+        white-space: nowrap;
+}
+.NameContainer > .Name.Animation1[data-v-a8d6759a] {
+		/* Make sure that this one reaches default position before the other one goes away to avoid flickering*/
+		animation: music-marquee1-data-v-a8d6759a 15s 200ms linear infinite;
+}
+.NameContainer > .Name.Animation2[data-v-a8d6759a] {
+		animation: music-marquee2-data-v-a8d6759a 15s linear infinite;
+}
+@keyframes music-marquee1-data-v-a8d6759a {
+0% {
+			transform: translateX(110%);
+}
+20% {
+			transform: translateX(110%);
+}
+90% {
+			transform: translateX(0)
+}
+100% {
+			transform: translateX(0)
+}
+}
+@keyframes music-marquee2-data-v-a8d6759a {
+0% {
+			transform: translateX(0%);
+}
+20% {
+			transform: translateX(0%);
+}
+90% {
+			transform: translateX(-110%);
+}
+100% {
+			transform: translateX(-110%);
+}
+}
+.fade-enter-active[data-v-a8d6759a], .fade-leave-active[data-v-a8d6759a] {
+		transition: opacity 1s;
+}
+.fade-enter[data-v-a8d6759a], .fade-leave-to[data-v-a8d6759a] {
+		opacity: 0;
+}
+
+
+#Intermission {
+    height: 900px;
+    overflow: hidden;
+}
+#logoWinter {
+    position: absolute;
+    left: 48px;
+    top: 50px;
+    width: 631px;
+}
+#logoSummer {
+    position: absolute;
+    left: 48px;
+    top: 20px;
+    width: 631px;
+}
+#ComingUpNext {
+    position: absolute;
+    left: 718px;
+    top: 31px;
+    width: 1172px;
+    height: 199px;
+    color: white;
+}
+#host-bingo-text {
+    width: 100%;
+    font-weight: 500;
+    height: 60px;
+    line-height: 60px;
+    color: #fff;
+    font-size: 41px;
+    text-transform: uppercase;
+    position: absolute;
+    left: 105px;
+    top: 237px;
+}
+#Rotation {
+    left: 718px;
+    top: 240px;
+    width: 1172px;
+    height: 660px;
+    color: white;
+}
+#ReaderAndMusic {
+    justify-content: flex-start;
+    flex-direction: row;
+    background-color: rgba(0, 0, 0, 0.3);
+    left: 718px;
+    top: 910px;
+    width: 1172px;
+    height: 60px;
+    font-size: 30px;
+}
+.DiscordVoiceDisplay {
+    left: 750px;
+    top: 920px;
+}
+.Mic {
+    /*background-color: var(--lighter-main-color);*/
+    top: 910px;
+    height: 60px;
+    padding: 5px;
+}
+.Mic > img {
+    top: 910px;
+    height: 60px;
+    object-fit: contain;
+}
+.Music {
+    position: absolute;
+    left: 730px;
+}
+body {
+    background: linear-gradient(var(--darker-main-color), var(--lighter-main-color) 80%, var(--darker-main-color));
+    /*background-color: rgba(98, 127, 190, 0.5)*/
+}
+.CardPlaceholder {
+    position: absolute;
+    top: 350px;
+    left: 0px;
+    height: 650px;
+    width: 650px;
+    background-color: var(--container-background-color);
+}
+.HostingBingo {
+    position: absolute;
+    color: #fff;
+    top: 300px;
+    height: 670px;
+    width: 670px;
+    font-size: 50px;
+    left: 33px;
+}
+.HostingBingo > .BingoBoard {
+    height: 670px;
+    width: 670px;
+    position: relative;
+}
+.ImageView {
+    position: absolute;
+    top: 300px;
+    height: 670px;
+    width: 670px;
+    left: 33px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ImageView.PictureShown {
+    background: rgba(0, 0, 0, 0.7);
+}
+.ImageView > img {
+    max-width: 100%;
+    max-height: 100%;
+}
+

@@ -1,0 +1,147 @@
+
+#RotatingLogos[data-v-0ecc295e] {
+  padding-right: 7px;
+  padding-left: 7px;
+}
+#LogoWrapper[data-v-0ecc295e] {
+  position: relative;
+  top: 50%;
+  width: 230px;
+}
+#LogoWrapper > img[data-v-0ecc295e] {
+  position: absolute;
+  max-width: 100%;
+  transform: translateY(-50%);
+}
+.fade-enter-active[data-v-0ecc295e], .fade-leave-active[data-v-0ecc295e] {
+  transition: opacity 1s;
+}
+.fade-enter[data-v-0ecc295e], .fade-leave-to[data-v-0ecc295e] {
+  opacity: 0;
+}
+
+
+#Total[data-v-d5c26446] {
+  padding: 0 10px;
+  font-size: 40px;
+  font-weight: 500;
+  min-width: 50px;
+  text-align: center;
+  align-self: center;
+  font-variant-numeric: tabular-nums;
+}
+
+
+#GenericMessage {
+  width: 100%;
+  font-weight: 500;
+  font-size: var(--font-size);
+  text-align: center;
+  align-self: center;
+}
+
+
+#UpcomingRun[data-v-72bb97a3] {
+  padding: 0 17px;
+  height: 100%;
+  font-weight: 500;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.Line1[data-v-72bb97a3] {
+  font-size: 25px;
+}
+.Line2[data-v-72bb97a3] {
+  font-size: 22px;
+}
+
+
+#Prize[data-v-8be2578e] {
+  padding: 0 17px;
+  height: 100%;
+  font-weight: 500;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.Line1[data-v-8be2578e] {
+  font-size: 26px;
+}
+.Line2[data-v-8be2578e] {
+  font-size: 20px;
+}
+
+
+#Bid[data-v-5e05d3e1] {
+  padding: 0 17px;
+  height: 100%;
+  font-weight: 500;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.Line1[data-v-5e05d3e1] {
+  font-size: 25px;
+}
+.Line2[data-v-5e05d3e1] {
+  font-size: 23px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+#Options > span[data-v-5e05d3e1]:not(:last-of-type)::after {
+  content: '/'
+}
+
+
+#Alert {
+  padding: 0 17px;
+  height: 100%;
+  font-weight: 500;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: #ffffff38;
+}
+#Alert > .Line1 {
+  font-size: 25px;
+}
+#Alert > .Line2 {
+  font-size: 23px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+#Alert > .Line1 > .TwitterLogo, #Alert > .Line1 > .CrowdControlLogo {
+  height: 1.2em;
+  margin: 0 .05em 0 .1em;
+  vertical-align: -0.25em;
+}
+
+
+#Ticker {
+  height: 100%;
+  flex: 1;
+  display: flex;
+}
+#Ticker .fade-enter-active, #Ticker .fade-leave-active {
+  transition: opacity .5s;
+}
+#Ticker .fade-enter, #Ticker .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+
+.Divider[data-v-d66b3b30] {
+  height: 100%;
+  width: 3px;
+  min-width: 3px;
+  background-color: white;
+}
+
+
+#Omnibar {
+  position: fixed;
+  display: flex;
+  width: 1920px;
+  height: 80px;
+  justify-content: flex-start;
+  color: white;
+  background: linear-gradient(to bottom, var(--lighter-main-color), var(--darker-main-color));
+}
+
