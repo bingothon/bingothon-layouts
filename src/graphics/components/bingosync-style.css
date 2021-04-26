@@ -218,43 +218,43 @@
 }
 
 .greensquare {
-    background-image: linear-gradient(#129912, #108010 60%, #0c660c);
+    background-image: var(--bingo-color-green);
 }
 
 .redsquare {
-    background-image: linear-gradient(#FF4944, #DA4440 60%, #CE302C);
+    background-image: var(--bingo-color-red);
 }
 
 .orangesquare {
-    background-image: linear-gradient(#FF9C12, #F98E1E 60%, #D0800F);
+    background-image: var(--bingo-color-orange);
 }
 
 .bluesquare {
-    background-image: linear-gradient(#409CFF, #37A1DE 60%, #088CBD);
+    background-image: var(--bingo-color-blue);
 }
 
 .purplesquare {
-    background-image: linear-gradient(#822dbf, #7120ab);
+    background-image: var(--bingo-color-purple);
 }
 
 .pinksquare {
-    background-image: linear-gradient(#ed86aa, #cc6e8f);
+    background-image: var(--bingo-color-pink);
 }
 
 .brownsquare {
-    background-image: linear-gradient(#3bd45f, #30b050);
+    background-image: var(--bingo-color-brown);
 }
 
 .tealsquare {
-    background-image: linear-gradient(#419695, #2e7372);
+    background-image: var(--bingo-color-teal);
 }
 
 .navysquare {
-    background-image: linear-gradient(#0d48b5, #022b75);
+    background-image: var(--bingo-color-navy);
 }
 
 .yellowsquare {
-    background-image: linear-gradient(#8c8b8b, #808080);
+    background-image: var(--bingo-color-yellow);
 }
 
 .board-container {

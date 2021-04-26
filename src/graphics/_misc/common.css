@@ -9,6 +9,7 @@
     --alternative-main-color: #d32f3e;
 }
 
+/*Bingo Colors*/
 :root {
     --bingo-color-red: linear-gradient(#FF4944, #DA4440 60%, #CE302C);
     --bingo-color-orange: linear-gradient(#FF9C12, #F98E1E 60%, #D0800F);
