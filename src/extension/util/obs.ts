@@ -55,6 +55,48 @@ class OBSUtility extends obsWebsocketJs {
       });
     });
   }
+
+  /**
+   * Update the played input from a media source
+   * @param source name of the media source
+   * @param url link to the stream that ffmpeg can handle, get from streamlink
+   */
+  public async setMediasourceUrl(source: string, url: string): Promise<void> {
+    await this.send("SetSourceSettings", {
+      sourceName: source,
+      sourceType: "ffmpeg_source", // just to make sure
+      sourceSettings: {
+        input: url,
+        is_local_file: false,
+      }
+    });
+  }
+
+  /**
+   * Play or pause a media source
+   * @param source name of the media source
+   * @param pause whether the source should be paused now, false starts the source
+   */
+  public async setMediasourcePlayPause(source: string, pause: boolean): Promise<void> {
+    // TODO: remove this garbage once obs-websocket-js updates to proper bindings
+    await (this as any).send("PlayPauseMedia", {
+      sourceName: source,
+      playPause: pause,
+    });
+  }
+
+  public async refreshMediasource(source: string): Promise<void> {
+    // TODO: remove this garbage once obs-websocket-js updates to proper bindings
+    await (this as any).send("RestartMedia", {
+      sourceName: source,
+    });
+  }
+
+  public async setSourceBoundsAndCrop(x: number | undefined, y: number | undefined,
+    width : number | undefined, height: number | undefined,
+    cropTop: number | undefined, cropBottom: number | undefined, cropLeft: number | undefined, cropRight: number | undefined): Promise<void> {
+      // TODO: implement, see SetSceneItemProperties
+    }
 }
 
 const obsConnectionRep = nodecg.Replicant<ObsConnection>('obsConnection');
@@ -81,6 +123,22 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     obs.connect(settings).then((): void => {
       logger.info('OBS connection successful.');
       obsConnectionRep.value.status = 'connected';
+
+      obs.refreshMediasource("twitch-stream-0")
+        .then(v => console.log("refreshed stream!!!"));
+
+      // obs.send("GetSourceSettings", {
+      //   sourceName: "twitch-stream-0",
+      // }).then(v => {
+      //   logger.info(JSON.stringify(v));
+      // }).catch(e => {
+      //   logger.error("no settings?", e);
+      // });
+      // obs.send("GetVersion").then(v => {
+      //   logger.info(JSON.stringify(v));
+      // }).catch(e => {
+      //   logger.error("no settings?", e);
+      // });
 
       // we need studio mode
       obs.send('EnableStudioMode').catch((e): void => {
