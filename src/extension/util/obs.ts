@@ -2,6 +2,7 @@ import obsWebsocketJs from 'obs-websocket-js';
 import * as nodecgApiContext from './nodecg-api-context';
 import { Configschema } from '../../../configschema';
 import { ObsAudioSources, ObsConnection } from '../../../schemas';
+import { getStreamsForChannel } from './streamlink';
 
 // this module is used to communicate directly with OBS
 // and transparently handle:
@@ -12,6 +13,18 @@ import { ObsAudioSources, ObsConnection } from '../../../schemas';
 const nodecg = nodecgApiContext.get();
 const logger = new nodecg.Logger(`${nodecg.bundleName}:obs`);
 const bundleConfig = nodecg.bundleConfig as Configschema;
+
+interface OBSTransformParams {
+  x?: number,
+  y?: number,
+  width?: number,
+  height?: number,
+  cropTop?: number,
+  cropBottom?: number,
+  cropLeft?: number,
+  cropRight?: number,
+  visible?: boolean,
+};
 
 // Extending the OBS library with some of our own functions.
 class OBSUtility extends obsWebsocketJs {
@@ -92,10 +105,29 @@ class OBSUtility extends obsWebsocketJs {
     });
   }
 
-  public async setSourceBoundsAndCrop(x: number | undefined, y: number | undefined,
-    width : number | undefined, height: number | undefined,
-    cropTop: number | undefined, cropBottom: number | undefined, cropLeft: number | undefined, cropRight: number | undefined): Promise<void> {
+  public async setSourceBoundsAndCrop(source: string, params: OBSTransformParams): Promise<void> {
       // TODO: implement, see SetSceneItemProperties
+      await this.send("SetSceneItemProperties", {
+        "scene-name": "gameplay", // TODO: should probably go in config
+        item: {name: source},
+        position: {
+          x: params.x,
+          y: params.y,
+        },
+        bounds: {
+          type: "OBS_BOUNDS_SCALE_INNER", // TODO: test
+          x: params.width,
+          y: params.height,
+        },
+        scale: {},
+        visible: params.visible,
+        crop: {
+          bottom: params.cropBottom,
+          left: params.cropLeft,
+          right: params.cropRight,
+          top: params.cropTop,
+        },
+      });
     }
 }
 
@@ -124,21 +156,28 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
       logger.info('OBS connection successful.');
       obsConnectionRep.value.status = 'connected';
 
-      obs.refreshMediasource("twitch-stream-0")
-        .then(v => console.log("refreshed stream!!!"));
+      // getStreamsForChannel("esamarathon").then(async streams => {
+      //   const best = streams.find(s => s.quality == '720p');
+      //   if (best === undefined) {
+      //     throw Error('no best quality');
+      //   }
+      //   const sourceName = "twitch-stream-0";
+      //   await obs.setMediasourceUrl(sourceName, best.streamUrl);
+      //   const params: OBSTransformParams = {
+      //     x: 159,
+      //     y: 204,
+      //     width: 810,
+      //     height: 608,
+      //     cropLeft: 669,
+      //     cropBottom: 149,
+      //     cropRight: 0,
+      //     cropTop: 0,
+      //   };
+      //   await obs.setSourceBoundsAndCrop(sourceName, params);
+      // });
 
-      // obs.send("GetSourceSettings", {
-      //   sourceName: "twitch-stream-0",
-      // }).then(v => {
-      //   logger.info(JSON.stringify(v));
-      // }).catch(e => {
-      //   logger.error("no settings?", e);
-      // });
-      // obs.send("GetVersion").then(v => {
-      //   logger.info(JSON.stringify(v));
-      // }).catch(e => {
-      //   logger.error("no settings?", e);
-      // });
+      // obs.refreshMediasource("twitch-stream-0")
+      //   .then(v => console.log("refreshed stream!!!"));
 
       // we need studio mode
       obs.send('EnableStudioMode').catch((e): void => {
