@@ -5,6 +5,7 @@ export * from './bingoboard';
 export * from './bingoboardMeta';
 export * from './bingoboardMode';
 export * from './bingosyncSocket';
+export * from './capturePositions';
 export * from './currentCamNames';
 export * from './currentGameLayout';
 export * from './currentInterview';
