@@ -5,7 +5,7 @@ import { Configschema } from '../../configschema';
 import {
   ObsDashboardAudioSources, ObsAudioSources, ObsConnection, DiscordDelayInfo,
   TwitchStreams, ObsStreamMode, CurrentGameLayout,
-  CurrentInterview, HostsSpeakingDuringIntermission, LastIntermissionTimestamp,
+  CurrentInterview, HostsSpeakingDuringIntermission, LastIntermissionTimestamp, ObsStreamsInternal,
 } from '../../schemas';
 import { RunDataActiveRun } from '../../speedcontrol-types';
 
@@ -32,6 +32,7 @@ const runDataActiveRunRep = nodecg.Replicant<RunDataActiveRun>('runDataActiveRun
 
 const voiceDelayRep = nodecg.Replicant<number>('voiceDelay', { defaultValue: 0, persistent: true });
 const streamsReplicant = nodecg.Replicant <TwitchStreams>('twitchStreams', { defaultValue: [] });
+const obsStreamsInternal = nodecg.Replicant<ObsStreamsInternal>('obsStreamsInternal');
 const soundOnTwitchStream = nodecg.Replicant<number>('soundOnTwitchStream', { defaultValue: -1 });
 const hostDiscordDuringIntermissionRep = nodecg.Replicant<HostsSpeakingDuringIntermission>('hostsSpeakingDuringIntermission');
 const lastIntermissionTimestampRep = nodecg.Replicant<LastIntermissionTimestamp>('lastIntermissionTimestamp');
