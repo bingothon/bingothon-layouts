@@ -18,18 +18,18 @@
                 :key="i"
                 class="override d-flex justify-center color-control"
             >
-                
-                <div id="bingomode-color-control">
-                    <v-select 
-                        v-model="markerRedirect[0]" 
+
+                <div class="bingomode-color-control">
+                    <v-select
+                        v-model="markerRedirect[0]"
                         v-bind:items="ALL_COLORS.options"
                         item-text="title"
                         item-value="title"
                     >
-                        
+
                         <template slot="selection" slot-scope="data">
                             <v-list-content v-bind:id="data.item.colorId">
-                                    <div style="height: 10px; width: 45px;"></div>
+                                <div style="height: 10px; width: 45px;"></div>
                             </v-list-content>
                         </template>
                         <template slot="item" slot-scope="data">
@@ -38,24 +38,24 @@
                             </template>
                             <template v-else>
                                 <v-list-content>
-                                    {{data.item.title}}
+                                    {{ data.item.title }}
                                 </v-list-content>
                             </template>
                         </template>
                     </v-select>
                 </div>
-                <div id="fromToColor"> &gt; </div>
-                <div id="bingomode-color-control">
-                    <v-select 
-                        v-model="markerRedirect[1]" 
+                <div id="fromToColor"> &gt;</div>
+                <div class="bingomode-color-control">
+                    <v-select
+                        v-model="markerRedirect[1]"
                         v-bind:items="ALL_COLORS.options"
                         item-text="title"
                         item-value="title"
                     >
-                        
+
                         <template slot="selection" slot-scope="data">
                             <v-list-content v-bind:id="data.item.colorId">
-                                    <div style="height: 10px; width: 45px;"></div>
+                                <div style="height: 10px; width: 45px;"></div>
                             </v-list-content>
                         </template>
                         <template slot="item" slot-scope="data">
@@ -112,7 +112,7 @@ import {Component, Vue, Watch} from 'vue-property-decorator';
 import {nodecg} from '../../browser-util/nodecg';
 import {BingoboardMode,} from '../../../schemas';
 import {store} from '../../browser-util/state';
-import clone from 'clone';
+import clone from "clone";
 
 type ColorEnum = ('pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple');
 
@@ -168,7 +168,7 @@ export default class BingomodeControl extends Vue {
     //Object.freeze(['pink', 'red', 'orange', 'brown', 'yellow', 'green', 'teal', 'blue', 'navy', 'purple']);
     currentBingomode: string = 'invasion';
     markerRedirects: [string, string][] = [];
- 
+
     get bingoboardModeRep(): BingoboardMode {
         return store.state.bingoboardMode;
     }
