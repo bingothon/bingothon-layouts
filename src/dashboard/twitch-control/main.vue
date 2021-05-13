@@ -1,110 +1,130 @@
 <template>
-  <div>
-    <div
-      v-for="(stream, i) in twitchStreams"
-      :key="i"
-    >
-      <span class="stream-label">Player {{ i }}:</span>
-      <button
-        class="stream-mute"
-        @click="muteChange(i)"
-      >
-        {{ i == soundOnTwitchStream?'Mute':'Unmute' }}
-      </button>
-      <button
-        class="stream-refresh"
-        @click="refresh(i)"
-      >
-        Refresh
-      </button>
-      <button
-        class="stream-pause"
-        @click="togglePlayPause(i)"
-      >
-        {{ stream.paused?'Play':'Pause' }}
-      </button>
-      <select
-        :value="stream.quality"
-        @change="updateStreamQuality(i, $event)"
-      >
-        <option
-          v-for="(quality,j) in stream.availableQualities"
-          :key="j"
-          :value="quality.group"
+    <v-app>
+        <div
+            v-for="(stream, i) in twitchStreams"
+            :key="i"
         >
-          {{ quality.name }}
-        </option>
-      </select>
-      <div>
-        <span>Vol: </span><input
-          class="stream-volume"
-          type="range"
-          min="0"
-          max="100"
-          :value="stream.volume*100"
-          @change="volumeChange(i,$event)"
-        >
-      </div>
-      <div><span>Delay:</span><span class="delay-display">{{ stream.delay }}</span></div>
-      <div>
-        <input v-model="twitchChannelOverrides[i]"><button @click="overrideChannelName(i)">
-          Override stream
-        </button>
-      </div>
-    </div>
-  </div>
+            <span class="stream-label">Player {{ i }}:</span>
+            <v-btn
+                class="stream-mute"
+                dark
+                small
+                @click="muteChange(i)"
+            >
+                <v-icon v-if="i === soundOnTwitchStream">
+                    mdi-volume-off
+                </v-icon>
+                <v-icon v-else>
+                    mdi-volume-high
+                </v-icon>
+            </v-btn>
+            <v-btn
+                class="stream-refresh"
+                dark
+                small
+                @click="refresh(i)"
+            >
+                <v-icon>
+                    mdi-refresh
+                </v-icon>
+            </v-btn>
+            <v-btn
+                class="stream-pause"
+                dark
+                small
+                @click="togglePlayPause(i)"
+            >
+                <v-icon v-if="stream.paused">
+                    mdi-play
+                </v-icon>
+                <v-icon v-else>
+                    mdi-pause
+                </v-icon>
+            </v-btn>
+            <!--<v-select
+                :value="stream.quality"
+                @input="updateStreamQuality(i, $event)"
+                :items="stream.availableQualities"
+            >
+            </v-select>-->
+            <div>
+                <span>Vol: </span>
+                <v-slider
+                    class="stream-volume"
+                    min="0"
+                    max="100"
+                    :value="stream.volume*100"
+                    @change="volumeChange(i,$event)"
+                />
+            </div>
+            <div><span>Delay:</span><span class="delay-display">{{ stream.delay }}</span></div>
+            <div>
+                <v-text-field v-model="twitchChannelOverrides[i]"
+                              single-line
+                              solo
+                              dark
+                              type="text"
+                              :background-color="'#455A64'"/>
+                <v-btn @click="overrideChannelName(i)"
+                       :style="'margin: 2px'"
+                >
+                    Override stream
+                </v-btn>
+            </div>
+        </div>
+    </v-app>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { nodecg } from '../../browser-util/nodecg';
+import {Component, Vue} from 'vue-property-decorator';
+import {nodecg} from '../../browser-util/nodecg';
 import {
-  TwitchStreams,
+    TwitchStreams,
 } from '../../../schemas';
-import { store, getReplicant } from '../../browser-util/state';
+import {store, getReplicant} from '../../browser-util/state';
 
 const bingothonBundleName = 'bingothon-layouts';
 
 @Component({})
 export default class TwitchControl extends Vue {
-  twitchChannelOverrides: string[] = ['', '', '', ''];
+    twitchChannelOverrides: string[] = ['', '', '', ''];
 
-  get twitchStreams(): TwitchStreams {
-    return store.state.twitchStreams;
-  }
-
-  get soundOnTwitchStream(): number {
-    return store.state.soundOnTwitchStream;
-  }
-
-  volumeChange(id: number, event: any) {
-    const newVolume = parseInt(event.target.value, 10) / 100;
-    nodecg.sendMessageToBundle('streams:setStreamVolume', bingothonBundleName, { id, volume: newVolume });
-  }
-
-  updateStreamQuality(id: number, event: any) {
-    nodecg.sendMessageToBundle('streams:setStreamQuality', bingothonBundleName, { id, quality: event.target.value });
-  }
-
-  muteChange(id: number) {
-    if (this.soundOnTwitchStream === id) {
-      nodecg.sendMessageToBundle('streams:setSoundOnTwitchStream', bingothonBundleName, -1);
-    } else {
-      nodecg.sendMessageToBundle('streams:setSoundOnTwitchStream', bingothonBundleName, id);
+    get twitchStreams(): TwitchStreams {
+        return store.state.twitchStreams;
     }
-  }
 
-  togglePlayPause(id: number) {
-    nodecg.sendMessageToBundle('streams:toggleStreamPlayPause', bingothonBundleName, id);
-  }
+    get soundOnTwitchStream(): number {
+        return store.state.soundOnTwitchStream;
+    }
 
-  refresh(id: number) {
-    nodecg.sendMessageToBundle('streams:refreshStream', bingothonBundleName, id);
-  }
+    volumeChange(id: number, event: any) {
+        const newVolume = parseInt(event.target.value, 10) / 100;
+        nodecg.sendMessageToBundle('streams:setStreamVolume', bingothonBundleName, {id, volume: newVolume});
+    }
 
-  overrideChannelName(id: number) {
-    getReplicant<TwitchStreams>('twitchStreams').value[id].channel = this.twitchChannelOverrides[id];
-  }
+    updateStreamQuality(id: number, event: any) {
+        nodecg.sendMessageToBundle('streams:setStreamQuality', bingothonBundleName, {id, quality: event.target.value});
+    }
+
+    muteChange(id: number) {
+        if (this.soundOnTwitchStream === id) {
+            nodecg.sendMessageToBundle('streams:setSoundOnTwitchStream', bingothonBundleName, -1);
+        } else {
+            nodecg.sendMessageToBundle('streams:setSoundOnTwitchStream', bingothonBundleName, id);
+        }
+    }
+
+    togglePlayPause(id: number) {
+        nodecg.sendMessageToBundle('streams:toggleStreamPlayPause', bingothonBundleName, id);
+    }
+
+    refresh(id: number) {
+        nodecg.sendMessageToBundle('streams:refreshStream', bingothonBundleName, id);
+    }
+
+    overrideChannelName(id: number) {
+        getReplicant<TwitchStreams>('twitchStreams').value[id].channel = this.twitchChannelOverrides[id];
+    }
 }
 </script>
 
