@@ -35,6 +35,7 @@
                         background-color="#455A64"
                         class="manual-score"
                         dark
+                        solo
                         type="number"
                         @change="updateManualScore"
                     />
@@ -45,14 +46,15 @@
         <v-select v-model="currentBoardRep"
                   :items="allBingoReps">
         </v-select>
+        <!-- Normal Bingosync Stuff -->
         <div v-if="showExtraBingosyncOptions">
             <div>
                 Room Code:
-                <v-text-field v-model="roomCode" background-color="#455A64" dark/>
+                <v-text-field v-model="roomCode" background-color="#455A64" clearable solo dark/>
             </div>
             <div>
                 Passphrase:
-                <v-text-field v-model="passphrase" background-color="#455A64" dark/>
+                <v-text-field v-model="passphrase" background-color="#455A64" clearable solo dark/>
             </div>
             <div class="d-flex justify-center line-buttons">
                 <v-btn
@@ -67,6 +69,27 @@
                 </v-btn>
             </div>
         </div>
+        <!-- Ori Stuff -->
+        <div v-if="showExtraOriOptions">
+            <div>
+                BoardID:
+                <v-text-field v-model="oriBoardID" background-color="#455A64" clearable solo single-line dark/>
+            </div>
+            <div>
+                PlayerID:
+                <v-text-field v-model="oriPlayerID" background-color="#455A64" clearable solo single-line dark/>
+            </div>
+            <v-btn
+                :disabled="!oriCanActivate"
+                @click="toggleOriActivate"
+                class="button"
+                small
+                :style="'width: 100%'"
+            >
+                {{ toggleOriText }}
+            </v-btn>
+        </div>
+
         <div class="boardOptions">
             <v-btn
                 class="button"
@@ -128,7 +151,7 @@ export default class BingoControl extends Vue {
 
     allColors = Object.freeze(['pink', 'red', 'orange', 'brown', 'yellow', 'green', 'teal', 'blue', 'navy', 'purple']);
 
-    allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'oriBingoboard', 'hostingBingoboard', 'explorationBingoboard']);
+    allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'oriBingoboard', 'hostingBingoboard']);//add back when need  'explorationBingoboard'
 
     mounted() {
         store.watch(state => state.currentMainBingoboard, (newVal) => {
