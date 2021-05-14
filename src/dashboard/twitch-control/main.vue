@@ -41,12 +41,6 @@
                     mdi-pause
                 </v-icon>
             </v-btn>
-            <!--<v-select
-                :value="stream.quality"
-                @input="updateStreamQuality(i, $event)"
-                :items="stream.availableQualities"
-            >
-            </v-select>-->
             <div>
                 <span>Vol: </span>
                 <v-slider
@@ -57,7 +51,6 @@
                     @change="volumeChange(i,$event)"
                 />
             </div>
-            <div><span>Delay:</span><span class="delay-display">{{ stream.delay }}</span></div>
             <div>
                 <v-text-field v-model="twitchChannelOverrides[i]"
                               single-line
@@ -97,8 +90,8 @@ export default class TwitchControl extends Vue {
         return store.state.soundOnTwitchStream;
     }
 
-    volumeChange(id: number, event: any) {
-        const newVolume = parseInt(event.target.value, 10) / 100;
+    volumeChange(id: number, newVal: number) {
+        const newVolume = newVal / 100;
         nodecg.sendMessageToBundle('streams:setStreamVolume', bingothonBundleName, {id, volume: newVolume});
     }
 
