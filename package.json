@@ -102,42 +102,49 @@
         "name": "bingo-control",
         "title": "Bingo Control",
         "file": "bingo-control.html",
+        "headerColor": "#b92b36",
         "width": 2
       },
       {
         "name": "bingomode-control",
         "title": "Bingo Mode Control",
         "file": "bingomode-control.html",
+        "headerColor": "#b92b36",
         "width": 2
       },
       {
         "name": "camnames-control",
         "title": "Cam Names Control",
         "file": "camnames-control.html",
+        "headerColor": "#b92b36",
         "width": 2
       },
       {
         "name": "layout-control",
         "title": "Layout Control",
         "file": "layout-control.html",
+        "headerColor": "#b92b36",
         "width": 2
       },
       {
         "name": "twitch-control",
         "title": "Twitch Control",
         "file": "twitch-control.html",
+        "headerColor": "#b92b36",
         "width": 2
       },
       {
         "name": "obs-control",
         "title": "OBS Control",
         "file": "obs-control.html",
+        "headerColor": "#b92b36",
         "width": 2
       },
       {
         "name": "checklist",
         "title": "Checklist",
         "file": "checklist.html",
+        "headerColor": "#b92b36",
         "width": 4
       },
       {
