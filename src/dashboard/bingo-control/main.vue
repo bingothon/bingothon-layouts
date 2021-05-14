@@ -21,13 +21,15 @@
         >
             P{{ i }}:
             <v-row>
-                <v-select
-                    :value="color"
-                    @input="updatePlayerColor(i, $event)"
-                    :items="allColors"
-                >
-                </v-select>
-                <span v-show="isManualScoreOverride">
+                <v-col>
+                    <v-select
+                        :value="color"
+                        @input="updatePlayerColor(i, $event)"
+                        :items="allColors"
+                    >
+                    </v-select>
+                </v-col>
+                <v-col v-show="isManualScoreOverride">
                     <v-text-field
                         v-model="manualScore[i]"
                         background-color="#455A64"
@@ -36,7 +38,7 @@
                         type="number"
                         @change="updateManualScore"
                     />
-                </span>
+                </v-col>
             </v-row>
         </div>
         Select Board:
