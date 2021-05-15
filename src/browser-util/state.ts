@@ -36,7 +36,7 @@ import {
     TwitchStreams,
     VoiceActivity
 } from "../../schemas";
-import {RunDataActiveRun, RunDataArray, Timer} from "../../speedcontrol-types";
+import {RunDataActiveRun, RunDataArray, Timer, TwitchCommercialTimer} from "../../speedcontrol-types";
 import {Scene} from 'obs-websocket-js';
 
 Vue.use(Vuex);
@@ -47,7 +47,7 @@ const replicantNames = [
     'allCamNames',
     'bingoboard',
     'bingoboardMeta',
-  'bingoboardMode',
+    'bingoboardMode',
     'bingosyncSocket',
     'currentGameLayout',
     'currentInterview',
@@ -81,7 +81,8 @@ const replicantNames = [
 const nodecgSpeedcontrolReplicantNames = [
     'runDataActiveRun',
     'runDataArray',
-    'timer'
+    'timer',
+    'twitchCommercialTimer'
 ]
 const replicants: Map<string, ReplicantBrowser<any>> = new Map();
 
@@ -129,6 +130,7 @@ export const store = new Vuex.Store({
         runDataActiveRun: {} as RunDataActiveRun,
         runDataArray: [] as RunDataArray,
         timer: {} as Timer,
+        twitchCommericalTimer: {} as TwitchCommercialTimer,
         // timer
         playerAlternate: true,
     },
