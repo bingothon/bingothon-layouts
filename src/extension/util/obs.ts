@@ -116,7 +116,7 @@ class OBSUtility extends obsWebsocketJs {
   public async setSourceBoundsAndCrop(source: string, params: OBSTransformParams): Promise<void> {
       // TODO: implement, see SetSceneItemProperties
       await this.send("SetSceneItemProperties", {
-        "scene-name": "gameplay", // TODO: should probably go in config
+        "scene-name": bundleConfig.obs.gameScene || 'game', // TODO: should probably go in config
         item: {name: source},
         position: {
           x: params.x,

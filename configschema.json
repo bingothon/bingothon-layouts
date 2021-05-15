@@ -46,7 +46,7 @@
 		},
 		"obs": {
             "type":"object",
-            "required": ["discordAudio","streamsAudio","mpdAudio","address","password","enable"],
+            "required": ["discordAudio","streamsAudio","mpdAudio","address","password","enable", "gameScene"],
             "additionalProperties": false,
 			"properties": {
 				"enable": {"type": "boolean", "default": false},
@@ -54,7 +54,8 @@
 				"password": { "type": "string", "default": "" },
 				"discordAudio": {"type":"string", "default":"Discord-Audio"},
 				"mpdAudio": {"type":"string", "default":"MPD-Audio"},
-				"streamsAudio": {"type":"string", "default":"Desktop-Audio"}
+				"streamsAudio": {"type":"string", "default":"Desktop-Audio"},
+				"gameScene": {"type":"string", "default": "game"}
 			}
 		},
 		"mpd": {
