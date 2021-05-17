@@ -95,20 +95,3 @@ export = (nodecg: NodeCG): void => {
     //const text = fs.readFileSync('src/graphics/host-dashboard/fhfacts.txt', 'utf-8');
 
 };
-
-//idk where to put this so I'll put it here
-//triggers ads when switching to Ad scene
-const adsTimerReplicant = nodecg.Replicant<TwitchCommercialTimer>('twitchCommercialTimer', 'nodecg-speedcontrol');
-obs.on('SwitchScenes', async (data) => {
-    if (data['scene-name'].startsWith('(ads) Intermission')
-        && adsTimerReplicant.value && adsTimerReplicant.value.secondsRemaining <= 0) {
-        //play ads
-        nodecg.sendMessageToBundle('twitchStartCommercial', 'nodecg-speedcontrol', { duration: 180 })
-            .then(() => {
-                nodecg.log.info('Playing 3 minute Twitch Ad');
-            })
-            .catch((err) => {
-                nodecg.log.error('Could not play Twitch Ad ', err);
-            })
-    }
-});

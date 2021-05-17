@@ -1,32 +1,33 @@
 <template>
     <v-app>
-        <span v-if="hostsSpeakingDuringIntermission">Hosts are currently speaking!</span>
-        <span>Last intermission: {{ timeSinceLastIntermission }}</span>
-        <div v-if="obsConnectionStatus === 'disconnected'">
-            Currently disconnected :(
-        </div>
-        <div v-if="obsConnectionStatus === 'error'">
-            OBS connection error monkaS
-        </div>
-        <div v-if="obsConnectionStatus === 'disabled'">
-            OBS is disabled, nothing to see here
-        </div>
-        <div v-if="obsConnectionStatus === 'connected'">
-            Current Scene: {{ currentScene }}
-            <v-select v-model="previewScene" :items="sceneNameList">
-            </v-select>
-            <v-btn @click="doTransition">
-                Transition now
-            </v-btn>
-            <div>
-                Audio Preset:
-                <v-row>
-                    <v-radio-group
-                        v-model="obsStreamMode"
-                        :value="obsStreamMode"
-                    >
-                        <v-col v-for="mode in obsStreamModes">
-                            <v-radio
+		<span v-if="hostsSpeakingDuringIntermission">Hosts are currently speaking!</span>
+		<span>Last intermission: {{ timeSinceLastIntermission }}</span>
+		<span>Playing ads for {{ adTimer }} seconds</span>
+		<div v-if="obsConnectionStatus === 'disconnected'">
+			Currently disconnected :(
+		</div>
+		<div v-if="obsConnectionStatus === 'error'">
+			OBS connection error monkaS
+		</div>
+		<div v-if="obsConnectionStatus === 'disabled'">
+			OBS is disabled, nothing to see here
+		</div>
+		<div v-if="obsConnectionStatus === 'connected'">
+			Current Scene: {{ currentScene }}
+			<v-select v-model="previewScene" :items="sceneNameList">
+			</v-select>
+			<v-btn @click="doTransition" :disabled="adTimer > 0">
+				{{ transitionText }}
+			</v-btn>
+			<div>
+				Audio Preset:
+				<v-row>
+					<v-radio-group
+						v-model="obsStreamMode"
+						:value="obsStreamMode"
+					>
+						<v-col v-for="mode in obsStreamModes">
+							<v-radio
                                 :id="`mode-${mode}`"
                                 :key="mode"
                                 :value="mode"
@@ -72,8 +73,9 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {nodecg} from '../../browser-util/nodecg';
 import {
-    ObsDashboardAudioSources, DiscordDelayInfo, ObsStreamMode,
+	ObsDashboardAudioSources, DiscordDelayInfo, ObsStreamMode,
 } from '../../../schemas';
+import twitchCommercialTimer from '../../../speedcontrol-types'
 import {store, getReplicant} from '../../browser-util/state';
 
 const bundleName = 'bingothon-layouts';
@@ -89,26 +91,37 @@ export default class OBSControl extends Vue {
             const totalS = ((new Date().getTime() / 1000) - store.state.lastIntermissionTimestamp);
             const mins = (totalS / 60).toFixed(0);
             const secs = (totalS % 60).toFixed(0);
-            this.timeSinceLastIntermission = mins + ":" + secs.padStart(2, "0");
-        }, 1000);
-    }
+			this.timeSinceLastIntermission = mins + ":" + secs.padStart(2, "0");
+		}, 1000);
+	}
 
-    destroyed() {
-        if (this.lastIntermissionInterval) {
-            clearInterval(this.lastIntermissionInterval);
-            this.lastIntermissionInterval = null;
-        }
-    }
+	destroyed() {
+		if (this.lastIntermissionInterval) {
+			clearInterval(this.lastIntermissionInterval);
+			this.lastIntermissionInterval = null;
+		}
+	}
 
-    get obsStreamModes(): ObsStreamMode[] {
-        return ['external-commentary', 'runner-commentary', 'racer-audio-only'];
-    }
+	get transitionText(): string {
+		if (this.adTimer > 0) {
+			return 'Twitch Ads playing for ' + this.adTimer + ' seconds';
+		}
+		return 'Transition'
+	}
 
-    get hostsSpeakingDuringIntermission(): boolean {
-        return store.state.hostsSpeakingDuringIntermission.speaking;
-    }
+	get adTimer(): number {
+		return store.state.twitchCommericalTimer.secondsRemaining;
+	}
 
-    get obsConnectionStatus(): string {
+	get obsStreamModes(): ObsStreamMode[] {
+		return ['external-commentary', 'runner-commentary', 'racer-audio-only'];
+	}
+
+	get hostsSpeakingDuringIntermission(): boolean {
+		return store.state.hostsSpeakingDuringIntermission.speaking;
+	}
+
+	get obsConnectionStatus(): string {
         return store.state.obsConnection.status;
     }
 
