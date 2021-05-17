@@ -91,16 +91,25 @@
         </div>
 
         <div class="boardOptions">
-            <v-btn
-                class="button"
-                dark
-                small
-                @click="toggleCard"
-                :style="`width: 43%`"
-            >
-                {{ toggleCardText }}
-            </v-btn>
-            <v-btn
+			<v-btn
+				:disabled="currentBoardActive"
+				@click="switchAction"
+				small
+				class="button"
+				:style="`width: 100%`"
+			>
+				{{ currentBoardActive ? "[Active] " : "" }}Switch
+			</v-btn>
+			<v-btn
+				class="button"
+				dark
+				small
+				@click="toggleCard"
+				:style="`width: 43%`"
+			>
+				{{ toggleCardText }}
+			</v-btn>
+			<v-btn
                 class="button"
                 dark
                 small
