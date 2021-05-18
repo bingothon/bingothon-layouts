@@ -227,7 +227,7 @@ export default class BingoControl extends Vue {
     }
 
     get oriCanActivate(): boolean {
-        return !!this.oriBoardID && !!this.oriPlayerID;
+        return store.state.oriBingoMeta.active ? true : (!!this.oriBoardID && !!this.oriPlayerID);
     }
 
     get playerColors(): Array<ColorEnum> {
