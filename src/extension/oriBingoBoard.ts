@@ -15,7 +15,6 @@ const emphasisRegex = /\*([^*]+)\*/;
 
 let oldBoard: ExplorationOriField[] | null = null;
 let updateLoopTimer: NodeJS.Timer | null = null;
-let revealedGoals: Set<number> | null = null;
 
 interface OriField {
   name: string;
@@ -132,7 +131,6 @@ function squareShouldBeRevealed(apiResp: OriApiResponse, idx: number): boolean {
 			}
 		});
 	}
-	revealedGoals = current;
 	return current.has(idx);
 }
 
@@ -161,7 +159,6 @@ nodecg.listenFor('oriBingo:activate', async (data, callback): Promise<void> => {
 
 nodecg.listenFor('oriBingo:deactivate', async (_data, callback): Promise<void> => {
   oriBingoMeta.value.active = false;
-  revealedGoals = null;
   if (updateLoopTimer) {
     clearInterval(updateLoopTimer);
   }
