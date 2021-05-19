@@ -181,7 +181,7 @@ export default class HostDashboard extends Vue {
 	}
 
 	get adTimer(): number {
-		return store.state.twitchCommericalTimer.secondsRemaining;
+		return store.state.twitchCommercialTimer.secondsRemaining;
 	}
 
 	get donationTotal() {

@@ -130,7 +130,7 @@ export const store = new Vuex.Store({
         runDataActiveRun: {} as RunDataActiveRun,
         runDataArray: [] as RunDataArray,
         timer: {} as Timer,
-        twitchCommericalTimer: {} as TwitchCommercialTimer,
+        twitchCommercialTimer: {} as TwitchCommercialTimer,
         // timer
         playerAlternate: true,
     },

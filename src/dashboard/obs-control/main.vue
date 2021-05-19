@@ -110,7 +110,7 @@ export default class OBSControl extends Vue {
 	}
 
 	get adTimer(): number {
-		return store.state.twitchCommericalTimer.secondsRemaining;
+		return store.state.twitchCommercialTimer.secondsRemaining;
 	}
 
 	get obsStreamModes(): ObsStreamMode[] {
