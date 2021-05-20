@@ -2,7 +2,6 @@
     <v-app>
 		<span v-if="hostsSpeakingDuringIntermission">Hosts are currently speaking!</span>
 		<span>Last intermission: {{ timeSinceLastIntermission }}</span>
-		<span>Playing ads for {{ adTimer }} seconds</span>
 		<div v-if="obsConnectionStatus === 'disconnected'">
 			Currently disconnected :(
 		</div>
@@ -104,7 +103,7 @@ export default class OBSControl extends Vue {
 
 	get transitionText(): string {
 		if (this.adTimer > 0) {
-			return 'Twitch Ads playing for ' + this.adTimer + ' seconds';
+			return 'Playing ' + this.adTimer + 's Twitch ads';
 		}
 		return 'Transition'
 	}
