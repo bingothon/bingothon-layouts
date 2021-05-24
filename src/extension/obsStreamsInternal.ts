@@ -128,6 +128,9 @@ function handleStreamChange(obsStreams: ObsStreams, oldStreams: ObsStreams) {
                 logger.info("processing crop change");
                 handleStreamPosChange(newStreamInternal, newStream, idx, currentGameLayoutReplicant.value, capturePositionsReplicant.value);
             }
+        // copy stuff from obsStreams
+        newStreamInternal.paused = newStream.paused;
+        newStreamInternal.volume = newStream.volume; 
         newStreamsInternal.streams[idx] = newStreamInternal;
         idx++;
     }

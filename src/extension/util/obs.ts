@@ -222,6 +222,17 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         logger.warn(`Cannot get current scene list: ${err.error}`);
       });
 
+      nodecg.listenFor('streams:refreshStream', 'bingothon-layouts', (id, callback) => {
+        const sourceName = `twitch-stream-${id}`;
+        // logger.info(`refreshing stream ${sourceName}`);
+        obs.refreshMediasource(sourceName).catch(e => {
+          logger.error(`error refreshing stream ${sourceName}`, e);
+        });
+        if (callback && !callback.handled) {
+          callback();
+        }
+      });
+
       obsStreamsInternal.on('change', async (newStreams, old) => {
         // limited to 8 streams, idk if we ever need more
         // if the layout changed, update everything

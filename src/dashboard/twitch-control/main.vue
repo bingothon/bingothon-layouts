@@ -72,6 +72,8 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {nodecg} from '../../browser-util/nodecg';
 import {
+  ObsStreams,
+  ObsStreamsInternal,
     TwitchStreams,
 } from '../../../schemas';
 import {store, getReplicant} from '../../browser-util/state';
@@ -82,8 +84,12 @@ const bingothonBundleName = 'bingothon-layouts';
 export default class TwitchControl extends Vue {
     twitchChannelOverrides: string[] = ['', '', '', ''];
 
-    get twitchStreams(): TwitchStreams {
-        return store.state.twitchStreams;
+    get twitchStreams(): ObsStreams {
+        return store.state.obsStreams;
+    }
+
+    get obsStreamsInternal(): ObsStreamsInternal {
+        return store.state.obsStreamsInternal;
     }
 
     get soundOnTwitchStream(): number {
@@ -95,9 +101,9 @@ export default class TwitchControl extends Vue {
         nodecg.sendMessageToBundle('streams:setStreamVolume', bingothonBundleName, {id, volume: newVolume});
     }
 
-    updateStreamQuality(id: number, event: any) {
-        nodecg.sendMessageToBundle('streams:setStreamQuality', bingothonBundleName, {id, quality: event.target.value});
-    }
+    // updateStreamQuality(id: number, event: any) {
+    //     nodecg.sendMessageToBundle('streams:setStreamQuality', bingothonBundleName, {id, quality: event.target.value});
+    // }
 
     muteChange(id: number) {
         if (this.soundOnTwitchStream === id) {
@@ -116,7 +122,7 @@ export default class TwitchControl extends Vue {
     }
 
     overrideChannelName(id: number) {
-        getReplicant<TwitchStreams>('twitchStreams').value[id].channel = this.twitchChannelOverrides[id];
+        getReplicant<ObsStreams>('obsStreams').value[id].channel = this.twitchChannelOverrides[id];
     }
 }
 </script>
