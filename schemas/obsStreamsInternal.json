@@ -1,0 +1,107 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"type": "object",
+	"required": ["streams", "layout"],
+	"additionalProperties":false,
+	"properties": {
+		"layout": {
+			"type":"string",
+			"default": ""
+		},
+		"streams": {
+			"type": "array",
+			"default": [],
+			"items": {
+					"type": "object",
+					"additionalProperties": false,
+					"required": ["channel","x","y","width","height","originalWidth","originalHeight","cropTop","cropBottom","cropLeft","cropRight","quality","volume","paused","muted","visible","streamUrl","availableQualities"],
+				"properties": {
+					"channel": {
+						"type": "string",
+						"default": "esamarathon"
+					},
+					"x": {
+						"type": "number",
+						"default": 0
+					},
+					"y": {
+						"type": "number",
+						"default": 0
+					},
+					"width": {
+						"type": "number",
+						"default": 100
+					},
+					"height": {
+						"type": "number",
+						"default": 100
+					},
+					"originalWidth": {
+						"type": "number",
+						"default": 100
+					},
+					"originalHeight": {
+						"type": "number",
+						"default": 100
+					},
+					"cropTop": {
+						"type": "number",
+						"default": 0
+					},
+					"cropBottom": {
+						"type": "number",
+						"default": 0
+					},
+					"cropLeft": {
+						"type": "number",
+						"default": 0
+					},
+					"cropRight": {
+						"type": "number",
+						"default": 0
+					},
+					"quality": {
+						"type": "string",
+						"default": "720p"
+					},
+					"volume": {
+						"type": "number",
+						"default": 0.5
+					},
+					"muted": {
+						"type": "boolean",
+						"default": false
+					},
+					"paused": {
+						"type": "boolean",
+						"default": "false"
+					},
+					"visible": {
+						"type": "boolean",
+						"default": true
+					},
+					"streamUrl": {
+						"type": "string",
+						"default": ""
+					},
+					"availableQualities": {
+						"type": "array",
+						"default": [],
+						"items": {
+							"type": "object",
+							"additionalProperties": false,
+							"required": ["name","streamUrl","masterUrl","width","height"],
+							"properties": {
+								"name": {"type":"string"},
+								"width": {"type":"number"},
+								"height": {"type":"number"},
+								"streamUrl": {"type":"string"},
+								"masterUrl": {"type":"string"}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

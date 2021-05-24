@@ -31,6 +31,7 @@ export interface Configschema {
     discordAudio: string;
     mpdAudio: string;
     streamsAudio: string;
+    gameScene: string;
   };
   mpd?: {
     enable: boolean;

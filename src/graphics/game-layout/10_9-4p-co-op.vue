@@ -29,7 +29,7 @@
   import PlayerInfo from "../components/playerInfo.vue";
   import TeamInfo from "../components/teamInfo.vue";
   import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
-  import TwitchPlayer from "../components/twitchPlayer.vue";
+  import TwitchPlayer from "../components/twitchStreamPlaceholder.vue";
   import { RunDataPlayer, RunDataTeam } from "../../../speedcontrol-types";
   import PlayerTeamContainer from "../components/playerTeamContainer.vue";
 
