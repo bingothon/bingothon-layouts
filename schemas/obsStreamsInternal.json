@@ -5,7 +5,8 @@
 	"additionalProperties":false,
 	"properties": {
 		"layout": {
-			"type":"string"
+			"type":"string",
+			"default": ""
 		},
 		"streams": {
 			"type": "array",
@@ -13,7 +14,7 @@
 			"items": {
 					"type": "object",
 					"additionalProperties": false,
-					"required": ["channel","x","y","width","height","cropTop","cropBottom","cropLeft","cropRight","quality","volume","paused","muted","visible","streamUrl","availableQualities"],
+					"required": ["channel","x","y","width","height","originalWidth","originalHeight","cropTop","cropBottom","cropLeft","cropRight","quality","volume","paused","muted","visible","streamUrl","availableQualities"],
 				"properties": {
 					"channel": {
 						"type": "string",
@@ -32,6 +33,14 @@
 						"default": 100
 					},
 					"height": {
+						"type": "number",
+						"default": 100
+					},
+					"originalWidth": {
+						"type": "number",
+						"default": 100
+					},
+					"originalHeight": {
 						"type": "number",
 						"default": 100
 					},
@@ -81,9 +90,11 @@
 						"items": {
 							"type": "object",
 							"additionalProperties": false,
-							"required": ["name","streamUrl","masterUrl"],
+							"required": ["name","streamUrl","masterUrl","width","height"],
 							"properties": {
 								"name": {"type":"string"},
+								"width": {"type":"number"},
+								"height": {"type":"number"},
 								"streamUrl": {"type":"string"},
 								"masterUrl": {"type":"string"}
 							}

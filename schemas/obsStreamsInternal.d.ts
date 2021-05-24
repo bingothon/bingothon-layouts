@@ -13,6 +13,8 @@ export interface ObsStreamsInternal {
     y: number;
     width: number;
     height: number;
+    originalWidth: number;
+    originalHeight: number;
     cropTop: number;
     cropBottom: number;
     cropLeft: number;
@@ -25,6 +27,8 @@ export interface ObsStreamsInternal {
     streamUrl: string;
     availableQualities: {
       name: string;
+      width: number;
+      height: number;
       streamUrl: string;
       masterUrl: string;
     }[];
