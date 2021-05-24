@@ -162,7 +162,7 @@ function handleStreamNameChange(streamIdx: number, newChannelName: string) {
         const internalStream = obsStreamsInternalReplicant.value.streams[streamIdx];
         internalStream.availableQualities = qualities;
         internalStream.quality = qualities[0].name; // best quality
-        internalStream.streamUrl = qualities[0].masterUrl;
+        internalStream.streamUrl = qualities[0].streamUrl;
         internalStream.originalWidth = qualities[0].width;
         internalStream.originalHeight = qualities[0].height;
         handleStreamPosChange(internalStream, obsStreamsReplicant.value[streamIdx], streamIdx, currentGameLayoutReplicant.value, capturePositionsReplicant.value);
