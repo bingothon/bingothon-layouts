@@ -90,7 +90,7 @@ class OBSUtility extends obsWebsocketJs {
         input: url,
         is_local_file: false,
       }
-    });
+    }).catch(e => logger.error('could not set source settings', e));
   }
 
   /**
@@ -103,14 +103,14 @@ class OBSUtility extends obsWebsocketJs {
     await (this as any).send("PlayPauseMedia", {
       sourceName: source,
       playPause: pause,
-    });
+    }).catch((e: any) => logger.error('could not set play pause', e));
   }
 
   public async refreshMediasource(source: string): Promise<void> {
     // TODO: remove this garbage once obs-websocket-js updates to proper bindings
     await (this as any).send("RestartMedia", {
       sourceName: source,
-    });
+    }).catch((e: any) => logger.error('could not restart media', e));
   }
 
   public async setSourceBoundsAndCrop(source: string, params: OBSTransformParams): Promise<void> {
@@ -135,7 +135,7 @@ class OBSUtility extends obsWebsocketJs {
           right: params.cropRight,
           top: params.cropTop,
         },
-      });
+      }).catch(e => logger.error('could not set source settings', e));
     }
 }
 
