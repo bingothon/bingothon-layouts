@@ -20,6 +20,7 @@ import {
     HostingBingoboard,
     HostingBingosocket,
     HostsSpeakingDuringIntermission,
+    IntermissionVideos,
     LastIntermissionTimestamp,
     ObsAudioSources,
     ObsConnection,
@@ -86,7 +87,11 @@ const nodecgSpeedcontrolReplicantNames = [
     'runDataArray',
     'timer',
     'twitchCommercialTimer'
-]
+];
+
+const assetNames = [
+    'intermissionVideos'
+];
 const replicants: Map<string, ReplicantBrowser<any>> = new Map();
 
 var playerAlternateInterval: NodeJS.Timeout | null = null;
@@ -136,6 +141,8 @@ export const store = new Vuex.Store({
         runDataArray: [] as RunDataArray,
         timer: {} as Timer,
         twitchCommercialTimer: {} as TwitchCommercialTimer,
+        //assets
+        intermissionVideos: [] as IntermissionVideos,
         // timer
         playerAlternate: true,
     },
@@ -198,6 +205,17 @@ nodecgSpeedcontrolReplicantNames.forEach(name => {
     });
 
     replicants.set(name, rep);
+})
+
+assetNames.forEach(name => {
+    const asset = nodecg.Replicant('assets:' + name);
+
+    asset.on('change', newVal => {
+        store.commit('updateReplicant', {
+            name: asset.name,
+            value: clone(newVal),
+        })
+    })
 })
 
 export async function create() {
