@@ -196,6 +196,13 @@
         "directory": "static",
         "endpoint": "static"
       }
+    ],
+    "assetCategories": [
+      {
+        "name": "intermissionVideos",
+        "title": "Intermission Videos",
+        "allowedTypes": ["mp4"]
+      }
     ]
   },
   "vue": {
