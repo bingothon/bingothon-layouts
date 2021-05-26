@@ -6,6 +6,7 @@ import {
     AllCamNames,
     AllGameLayouts,
     AllInterviews,
+    Asset,
     Bingoboard,
     BingoboardMeta,
     BingoboardMode,
@@ -20,7 +21,6 @@ import {
     HostingBingoboard,
     HostingBingosocket,
     HostsSpeakingDuringIntermission,
-    IntermissionVideos,
     LastIntermissionTimestamp,
     ObsAudioSources,
     ObsConnection,
@@ -90,7 +90,7 @@ const nodecgSpeedcontrolReplicantNames = [
 ];
 
 const assetNames = [
-    'intermissionVideos'
+    'assets:intermissionVideos'
 ];
 const replicants: Map<string, ReplicantBrowser<any>> = new Map();
 
@@ -142,7 +142,7 @@ export const store = new Vuex.Store({
         timer: {} as Timer,
         twitchCommercialTimer: {} as TwitchCommercialTimer,
         //assets
-        intermissionVideos: [] as IntermissionVideos,
+        "assets:intermissionVideos": [] as Asset[],
         // timer
         playerAlternate: true,
     },
@@ -207,16 +207,16 @@ nodecgSpeedcontrolReplicantNames.forEach(name => {
     replicants.set(name, rep);
 })
 
-assetNames.forEach(name => {
-    const asset = nodecg.Replicant('assets:' + name);
-
-    asset.on('change', newVal => {
+assetNames.forEach((name) => {
+    const rep = nodecg.Replicant(name)
+    rep.on('change', newValue => {
         store.commit('updateReplicant', {
-            name: asset.name,
-            value: clone(newVal),
-        })
-    })
-})
+            name: rep.name,
+            value: rep.value,
+        });
+    });
+    replicants.set(name, rep);
+});
 
 export async function create() {
     return NodeCG.waitForReplicants(...Array.from(replicants.values())).then(() => store);

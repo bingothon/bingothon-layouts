@@ -5,11 +5,11 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type IntermissionVideos = {
+export interface Asset {
   base: string;
   namespace: string;
   category: string;
   ext: string;
   sum: string;
   url: string;
-}[];
+}

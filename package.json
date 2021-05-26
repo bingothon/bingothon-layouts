@@ -193,6 +193,11 @@
         "height": 1080
       },
       {
+        "file": "video-player.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
         "file": "omnibar.html",
         "width": 1920,
         "height": 80
@@ -208,7 +213,9 @@
       {
         "name": "intermissionVideos",
         "title": "Intermission Videos",
-        "allowedTypes": ["mp4"]
+        "allowedTypes": [
+          "mp4"
+        ]
       }
     ]
   },

@@ -272,14 +272,14 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
               await obs.setMediasourceUrl(sourceName, stream.streamUrl);
             }
             // check if any other params changed
-            if (stream.x !== oldStream.x || 
-              stream.y !== oldStream.y || 
-              stream.width !== oldStream.width || 
-              stream.height !== oldStream.height || 
-              stream.cropBottom !== oldStream.cropBottom || 
-              stream.cropLeft !== oldStream.cropLeft || 
-              stream.cropRight !== oldStream.cropRight || 
-              stream.cropTop !== oldStream.cropTop || 
+            if (stream.x !== oldStream.x ||
+              stream.y !== oldStream.y ||
+              stream.width !== oldStream.width ||
+              stream.height !== oldStream.height ||
+              stream.cropBottom !== oldStream.cropBottom ||
+              stream.cropLeft !== oldStream.cropLeft ||
+              stream.cropRight !== oldStream.cropRight ||
+              stream.cropTop !== oldStream.cropTop ||
               stream.visible !== oldStream.visible) {
                 await obs.setSourceBoundsAndCrop(sourceName, {
                   x: stream.x,
