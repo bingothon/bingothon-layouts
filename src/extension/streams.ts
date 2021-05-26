@@ -1,8 +1,7 @@
 import * as nodecgApiContext from './util/nodecg-api-context';
-import { CapturePositions, ObsStreams, ObsStreamsInternal } from '../../schemas';
+import { TwitchStreams } from '../../schemas';
 import { RunDataActiveRun } from '../../speedcontrol-types';
-import { waitForReplicants } from './util/waitForReplicants';
-import { getStreamsForChannel } from './util/streamlink';
+import { TwitchStream } from '../../types';
 
 const nodecg = nodecgApiContext.get();
 
@@ -10,8 +9,7 @@ const nodecg = nodecgApiContext.get();
 
 const runDataActiveRunReplicant = nodecg.Replicant <RunDataActiveRun>('runDataActiveRun', 'nodecg-speedcontrol');
 
-const obsStreamsReplicant = nodecg.Replicant<ObsStreams>('obsStreams');
-const obsStreamsInternalReplicant = nodecg.Replicant<ObsStreamsInternal>('obsStreamsInternal');
+const streamsReplicant = nodecg.Replicant <TwitchStreams>('twitchStreams', { defaultValue: [] });
 const soundOnTwitchStream = nodecg.Replicant<number>('soundOnTwitchStream', { defaultValue: -1 });
 
 const aspectRatioToCropping: {[key: string]: {widthPercent: number, heightPercent: number, topPercent: number, leftPercent: number}} = {
@@ -47,7 +45,7 @@ const aspectRatioToCropping: {[key: string]: {widthPercent: number, heightPercen
   },
 };
 
-waitForReplicants([obsStreamsReplicant], () => {
+streamsReplicant.once('change', (): void => {
   runDataActiveRunReplicant.on('change', (newVal, old): void => {
     // don't reset on server restart
     if (!newVal || !old) return;
@@ -61,29 +59,34 @@ waitForReplicants([obsStreamsReplicant], () => {
     }
 
     // grab all runners
-    const newStreams: ObsStreams = [];
+    const newStreams: TwitchStreams = [];
     let idx = 0;
     newVal.teams.forEach((team, teamIndex): void => {
       team.players.forEach((player, playerIndex): void => {
         // nodecg.log.info(`${player.social.twitch} to ${old.teams[teamIndex]?.players[playerIndex]?.social.twitch}`)
         // in case the replicant changed, but this stream wasn't affected, don't reset cropping
         // fill everything with defaults
-        let current = {
-          widthPercent: 100,
-          heightPercent: 100,
-          leftPercent: 0,
-          topPercent: 0,
+        let current: TwitchStream = {
           channel: 'esamarathon',
           quality: 'chunked',
+          widthPercent: 100,
+          heightPercent: 100,
+          topPercent: 0,
+          leftPercent: 0,
           volume: 1,
           paused: false,
-          availableQualities: [] as string[],
+          delay: -1,
+          availableQualities: [],
         };
+        current.widthPercent = cropping.widthPercent;
+        current.heightPercent = cropping.heightPercent;
+        current.topPercent = cropping.topPercent;
+        current.leftPercent = cropping.leftPercent;
         if (!player.social || !player.social.twitch) {
           nodecg.log.error(`Twitch name for player ${player.name} missing!`);
           current.paused = true;
         } else {
-          const oldStream = obsStreamsReplicant.value[idx];
+          const oldStream = streamsReplicant.value[idx];
           // check against old replicant, in case of a stream override
           if (!oldStream || player.social.twitch !== old.teams[teamIndex]?.players[playerIndex]?.social.twitch) {
             current.channel = player.social.twitch;
@@ -99,7 +102,7 @@ waitForReplicants([obsStreamsReplicant], () => {
     if (soundOnTwitchStream.value >= newStreams.length) {
       soundOnTwitchStream.value = -1; // mute all
     }
-    obsStreamsReplicant.value = newStreams;
+    streamsReplicant.value = newStreams;
   });
 });
 
@@ -111,8 +114,8 @@ nodecg.listenFor('streams:setSoundOnTwitchStream', (streamNr: number, callback):
 });
 
 nodecg.listenFor('streams:toggleStreamPlayPause', (streamNr: number, callback): void => {
-  if (streamNr >= 0 && streamNr < obsStreamsReplicant.value.length) {
-    obsStreamsReplicant.value[streamNr].paused = !obsStreamsReplicant.value[streamNr].paused;
+  if (streamNr >= 0 && streamNr < streamsReplicant.value.length) {
+    streamsReplicant.value[streamNr].paused = !streamsReplicant.value[streamNr].paused;
   }
   if (callback && !callback.handled) {
     callback();
@@ -126,8 +129,8 @@ nodecg.listenFor('streams:setStreamVolume', (data: {id: number; volume: number},
     }
     return;
   }
-  if (data.id >= 0 && data.id < obsStreamsReplicant.value.length) {
-    obsStreamsReplicant.value[data.id].volume = data.volume;
+  if (data.id >= 0 && data.id < streamsReplicant.value.length) {
+    streamsReplicant.value[data.id].volume = data.volume;
   }
   if (callback && !callback.handled) {
     callback();
@@ -135,8 +138,8 @@ nodecg.listenFor('streams:setStreamVolume', (data: {id: number; volume: number},
 });
 
 nodecg.listenFor('streams:setStreamQuality', (data: {id: number; quality: string}, callback): void => {
-  if (data.id >= 0 && data.id < obsStreamsReplicant.value.length) {
-    obsStreamsReplicant.value[data.id].quality = data.quality;
+  if (data.id >= 0 && data.id < streamsReplicant.value.length) {
+    streamsReplicant.value[data.id].quality = data.quality;
   }
   if (callback && !callback.handled) {
     callback();

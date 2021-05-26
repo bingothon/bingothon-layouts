@@ -21,8 +21,6 @@ export * from './obsAudioSources';
 export * from './obsConnection';
 export * from './obsDashboardAudioSources';
 export * from './obsStreamMode';
-export * from './obsStreams';
-export * from './obsStreamsInternal';
 export * from './oriBingoMeta';
 export * from './oriBingoboard';
 export * from './showPictureDuringIntermission';
