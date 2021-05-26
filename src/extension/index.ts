@@ -78,7 +78,6 @@ export = (nodecg: NodeCG): void => {
     require('./twitch-chat-bot');
     require('./gdq-donationtracker');
     require('./streams');
-    require('./obsStreamsInternal');
     require('./util/obs');
     require('./obsremotecontrol');
     if (bundleConfig.mpd && bundleConfig.mpd.enable) {

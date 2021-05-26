@@ -1,8 +1,8 @@
 import obsWebsocketJs from 'obs-websocket-js';
 import * as nodecgApiContext from './nodecg-api-context';
 import { Configschema } from '../../../configschema';
-import { ObsAudioSources, ObsConnection, ObsStreamsInternal } from '../../../schemas';
-import { getStreamsForChannel } from './streamlink';
+import { CapturePositions, CurrentGameLayout, ObsAudioSources, ObsConnection, TwitchStreams } from '../../../schemas';
+import { TwitchStream } from 'types';
 
 // this module is used to communicate directly with OBS
 // and transparently handle:
@@ -25,6 +25,38 @@ interface OBSTransformParams {
   cropRight?: number,
   visible?: boolean,
 };
+
+function getStreamSrcName(idx: number): string {
+  return `twitch-stream-${idx}`;
+}
+
+function handleStreamPosChange(obs: OBSUtility, stream: TwitchStream, streamIdx: number, currentGameLayout: CurrentGameLayout, capturePositions: CapturePositions) {
+  const layoutName = currentGameLayout.path.slice(1); // leading slash we don't want
+  const captureLayout = capturePositions[layoutName];
+  if (captureLayout === undefined) {
+      logger.error(`capture layout ${layoutName} not found!`);
+      return;
+  }
+  const capturePos = captureLayout[`stream${streamIdx + 1}`];
+  if (capturePos === undefined) {
+    obs.setSourceBoundsAndCrop(getStreamSrcName(streamIdx), {visible: false});
+      logger.error(`capture pos for index ${streamIdx} not found on ${layoutName}!`);
+      return;
+  }
+  // calculate cropping, the browser source is fixed to 1920x1080
+  const cropLeft = 1920 * stream.leftPercent / 100;
+  const cropTop = 1080 * stream.topPercent / 100;
+  const cropRight = 1920 * (100 - stream.widthPercent) / 100;
+  const cropBottom = 1080 * (100 - stream.heightPercent) / 100;
+  // fire and forget
+  obs.setSourceBoundsAndCrop(getStreamSrcName(streamIdx),
+    {cropLeft, cropTop, cropRight, cropBottom, visible: true,
+      x: capturePos.x,
+      y: capturePos.y,
+      width: capturePos.width,
+      height: capturePos.height,
+    });
+}
 
 // Extending the OBS library with some of our own functions.
 class OBSUtility extends obsWebsocketJs {
@@ -114,7 +146,6 @@ class OBSUtility extends obsWebsocketJs {
   }
 
   public async setSourceBoundsAndCrop(source: string, params: OBSTransformParams): Promise<void> {
-      // TODO: implement, see SetSceneItemProperties
       await this.send("SetSceneItemProperties", {
         "scene-name": bundleConfig.obs.gameScene || 'game', // TODO: should probably go in config
         item: {name: source},
@@ -137,6 +168,28 @@ class OBSUtility extends obsWebsocketJs {
         },
       }).catch(e => logger.error('could not set source settings', e));
     }
+
+  public async setDefaultBrowserSettings(source: string): Promise<void> {
+    await this.send("SetSourceSettings", {
+      sourceName: source,
+      sourceSettings: {
+        height: 1080,
+        width: 1920,
+        fps: 30, // TODO: maybe 60?
+        reroute_audio: true,
+      }
+    })
+  }
+
+  public async setBrowserSourceUrl(source: string, url: string): Promise<void> {
+    // browser settings: "fps":28,"height":1080,"url":"https://obsproject.com/browser-source2","width":1920
+    await this.send("SetSourceSettings", {
+      sourceName: source,
+      sourceSettings: {
+        url,
+      }
+    }).catch(e => logger.error('could not set browser source settings', e));
+  }
 }
 
 const obsConnectionRep = nodecg.Replicant<ObsConnection>('obsConnection');
@@ -150,8 +203,10 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
   const obsPreviewSceneRep = nodecg.Replicant<string | null>('obsPreviewScene', { defaultValue: null });
   const obsCurrentSceneRep = nodecg.Replicant<string | null>('obsCurrentScene', { defaultValue: null });
   const obsSceneListRep = nodecg.Replicant<obsWebsocketJs.Scene[] | null>('obsSceneList', { defaultValue: null });
+  const capturePositionsRep = nodecg.Replicant<CapturePositions>('capturePositions');
+  const currentGameLayoutRep = nodecg.Replicant<CurrentGameLayout>('currentGameLayout');
 
-  const obsStreamsInternal = nodecg.Replicant<ObsStreamsInternal>('obsStreamsInternal', {defaultValue: {layout: "asdf", streams: []}});
+  const twitchStreams = nodecg.Replicant<TwitchStreams>('twitchStreams');
 
   const settings = {
     address: bundleConfig.obs.address,
@@ -165,29 +220,6 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     obs.connect(settings).then((): void => {
       logger.info('OBS connection successful.');
       obsConnectionRep.value.status = 'connected';
-
-      // getStreamsForChannel("esamarathon").then(async streams => {
-      //   const best = streams.find(s => s.quality == '720p');
-      //   if (best === undefined) {
-      //     throw Error('no best quality');
-      //   }
-      //   const sourceName = "twitch-stream-0";
-      //   await obs.setMediasourceUrl(sourceName, best.streamUrl);
-      //   const params: OBSTransformParams = {
-      //     x: 159,
-      //     y: 204,
-      //     width: 810,
-      //     height: 608,
-      //     cropLeft: 669,
-      //     cropBottom: 149,
-      //     cropRight: 0,
-      //     cropTop: 0,
-      //   };
-      //   await obs.setSourceBoundsAndCrop(sourceName, params);
-      // });
-
-      // obs.refreshMediasource("twitch-stream-0")
-      //   .then(v => console.log("refreshed stream!!!"));
 
       // we need studio mode
       obs.send('EnableStudioMode').catch((e): void => {
@@ -222,86 +254,64 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         logger.warn(`Cannot get current scene list: ${err.error}`);
       });
 
-      nodecg.listenFor('streams:refreshStream', 'bingothon-layouts', (id, callback) => {
-        const sourceName = `twitch-stream-${id}`;
-        // logger.info(`refreshing stream ${sourceName}`);
-        obs.refreshMediasource(sourceName).catch(e => {
-          logger.error(`error refreshing stream ${sourceName}`, e);
-        });
-        if (callback && !callback.handled) {
-          callback();
+      // obs default browser sources
+      for(let i = 0; i < 4; i++) {
+        obs.setDefaultBrowserSettings(getStreamSrcName(i));
+      }
+
+      // TODO: mute and unmute
+
+      twitchStreams.on('change', (newValue, old) => {
+        if (!old) return;
+        for (let i = 0; i < 4; i++) {
+          const stream = newValue[i];
+          const oldStream = old[i] || {}; // old stream might be undefined
+          if (stream === undefined) {
+            // this stream should not be displayed
+            let transProps: OBSTransformParams = {
+              visible: false,
+            };
+            // fire and forget
+            obs.setSourceBoundsAndCrop(getStreamSrcName(i), transProps);
+          } else {
+            // check if the streamurl changed
+            if (stream.channel !== oldStream.channel) {
+              // fire and forget
+              obs.setBrowserSourceUrl(getStreamSrcName(i), `https://player.twitch.tv/?channel=${stream.channel}&enableExtensions=true&muted=false&parent=twitch.tv&player=popout&volume=1`);
+            }
+            // check if the cropping changed
+            if (stream.widthPercent !== oldStream.widthPercent ||
+              stream.heightPercent !== oldStream.heightPercent ||
+              stream.leftPercent !== oldStream.leftPercent ||
+              stream.topPercent !== oldStream.topPercent) {
+                handleStreamPosChange(obs, stream, i, currentGameLayoutRep.value, capturePositionsRep.value);
+              } else {
+                // since this channel exists, make it visible
+                obs.setSourceBoundsAndCrop(getStreamSrcName(i), {visible: true});
+              }
+          }
         }
       });
 
-      obsStreamsInternal.on('change', async (newStreams, old) => {
-        // limited to 8 streams, idk if we ever need more
-        // if the layout changed, update everything
-        if (newStreams.layout !== (old || {}).layout) {
-          for(let i = 0;i<8;i++) {
-            const stream = newStreams.streams[i];
-            if (stream === undefined) {
-              continue;
-            }
-            const sourceName = `twitch-stream-${i}`;
-            await obs.setMediasourceUrl(sourceName, stream.streamUrl);
-            await obs.setSourceBoundsAndCrop(sourceName, {
-              x: stream.x,
-              y: stream.y,
-              width: stream.width,
-              height: stream.height,
-              cropBottom: stream.cropBottom,
-              cropLeft: stream.cropLeft,
-              cropRight: stream.cropRight,
-              cropTop: stream.cropTop,
-              visible: stream.visible,
-            });
-            await obs.setAudioVolume(sourceName, stream.volume);
-            await obs.setAudioMute(sourceName, stream.muted);
-          }
-        } else {
-          for(let i = 0;i < 8;i++) {
-            const stream = newStreams.streams[i];
-            const oldStream = (old?.streams || [])[i] || {};
-            if (stream === undefined) {
-              // this is fine, not all streams might be set
-              continue;
-            }
-            const sourceName = `twitch-stream-${i}`;
-            // check if url changed
-            if (stream.streamUrl !== oldStream.streamUrl) {
-              await obs.setMediasourceUrl(sourceName, stream.streamUrl);
-            }
-            // check if any other params changed
-            if (stream.x !== oldStream.x ||
-              stream.y !== oldStream.y ||
-              stream.width !== oldStream.width ||
-              stream.height !== oldStream.height ||
-              stream.cropBottom !== oldStream.cropBottom ||
-              stream.cropLeft !== oldStream.cropLeft ||
-              stream.cropRight !== oldStream.cropRight ||
-              stream.cropTop !== oldStream.cropTop ||
-              stream.visible !== oldStream.visible) {
-                await obs.setSourceBoundsAndCrop(sourceName, {
-                  x: stream.x,
-                  y: stream.y,
-                  width: stream.width,
-                  height: stream.height,
-                  cropBottom: stream.cropBottom,
-                  cropLeft: stream.cropLeft,
-                  cropRight: stream.cropRight,
-                  cropTop: stream.cropTop,
-                  visible: stream.visible,
-                });
-              }
-            if (stream.volume !== oldStream.volume) {
-              await obs.setAudioVolume(sourceName, stream.volume);
-            }
-            if (stream.muted !== oldStream.muted) {
-              await obs.setAudioMute(sourceName, stream.muted);
-            }
-          }
+      capturePositionsRep.on('change', (newVal, old) => {
+        if (!old) return;
+
+        for(let i = 0; i < 4; i++) {
+          const stream = twitchStreams.value[i];
+          if (stream === undefined) continue;
+          handleStreamPosChange(obs, stream, i, currentGameLayoutRep.value, newVal);
         }
       });
+
+      currentGameLayoutRep.on('change', (newVal, old) => {
+        if (!old) return;
+
+        for(let i = 0; i < 4; i++) {
+          const stream = twitchStreams.value[i];
+          if (stream === undefined) continue;
+          handleStreamPosChange(obs, stream, i, newVal, capturePositionsRep.value);
+        }
+      })
     }).catch((err): void => {
       logger.warn('OBS connection error.');
       logger.debug('OBS connection error:', err);
