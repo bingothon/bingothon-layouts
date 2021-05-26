@@ -1,7 +1,7 @@
 import obsWebsocketJs from 'obs-websocket-js';
 import * as nodecgApiContext from './nodecg-api-context';
 import { Configschema } from '../../../configschema';
-import { CapturePositions, CurrentGameLayout, ObsAudioSources, ObsConnection, TwitchStreams } from '../../../schemas';
+import { CapturePositions, CurrentGameLayout, ObsAudioSources, ObsConnection, SoundOnTwitchStream, TwitchStreams } from '../../../schemas';
 import { TwitchStream } from 'types';
 
 // this module is used to communicate directly with OBS
@@ -56,6 +56,14 @@ function handleStreamPosChange(obs: OBSUtility, stream: TwitchStream, streamIdx:
       width: capturePos.width,
       height: capturePos.height,
     });
+}
+
+function handleSoundChange(obs: OBSUtility, soundOnTwitchStream: SoundOnTwitchStream, streamIdx: number, newStream: TwitchStream, oldStream: TwitchStream) {
+  obs.setAudioMute(getStreamSrcName(streamIdx), soundOnTwitchStream !== streamIdx);
+
+  if (newStream.volume !== oldStream.volume) {
+    obs.setAudioVolume(getStreamSrcName(streamIdx), newStream.volume);
+  }
 }
 
 // Extending the OBS library with some of our own functions.
@@ -205,6 +213,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
   const obsSceneListRep = nodecg.Replicant<obsWebsocketJs.Scene[] | null>('obsSceneList', { defaultValue: null });
   const capturePositionsRep = nodecg.Replicant<CapturePositions>('capturePositions');
   const currentGameLayoutRep = nodecg.Replicant<CurrentGameLayout>('currentGameLayout');
+  const soundOnTwitchStreamRep = nodecg.Replicant<SoundOnTwitchStream>('soundOnTwitchStream');
 
   const twitchStreams = nodecg.Replicant<TwitchStreams>('twitchStreams');
 
@@ -259,8 +268,6 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         obs.setDefaultBrowserSettings(getStreamSrcName(i));
       }
 
-      // TODO: mute and unmute
-
       twitchStreams.on('change', (newValue, old) => {
         if (!old) return;
         for (let i = 0; i < 4; i++) {
@@ -281,14 +288,15 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
             }
             // check if the cropping changed
             if (stream.widthPercent !== oldStream.widthPercent ||
-              stream.heightPercent !== oldStream.heightPercent ||
-              stream.leftPercent !== oldStream.leftPercent ||
-              stream.topPercent !== oldStream.topPercent) {
-                handleStreamPosChange(obs, stream, i, currentGameLayoutRep.value, capturePositionsRep.value);
-              } else {
-                // since this channel exists, make it visible
-                obs.setSourceBoundsAndCrop(getStreamSrcName(i), {visible: true});
-              }
+                stream.heightPercent !== oldStream.heightPercent ||
+                stream.leftPercent !== oldStream.leftPercent ||
+                stream.topPercent !== oldStream.topPercent) {
+              handleStreamPosChange(obs, stream, i, currentGameLayoutRep.value, capturePositionsRep.value);
+            } else {
+              // since this channel exists, make it visible
+              obs.setSourceBoundsAndCrop(getStreamSrcName(i), {visible: true});
+            }
+            handleSoundChange(obs, soundOnTwitchStreamRep.value, i, stream, oldStream);
           }
         }
       });
@@ -311,7 +319,17 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
           if (stream === undefined) continue;
           handleStreamPosChange(obs, stream, i, newVal, capturePositionsRep.value);
         }
-      })
+      });
+
+      soundOnTwitchStreamRep.on('change', (newVal, old) => {
+        if (old === undefined) return;
+
+        for(let i = 0; i < 4; i++) {
+          const stream = twitchStreams.value[i];
+          if (stream === undefined) continue;
+          handleSoundChange(obs, newVal, i, stream, stream);
+        }
+      });
     }).catch((err): void => {
       logger.warn('OBS connection error.');
       logger.debug('OBS connection error:', err);
