@@ -15,12 +15,12 @@ import {store} from "../../browser-util/state";
 @Component({})
 export default class VideoPlayer extends Vue {
     videoIndex: number = 0;
-    video: {name: string, path: string};
+    video: Asset;
     @Ref('VideoPlayer') player: HTMLVideoElement;
     @Ref('PlayerSrc') playerSrc: HTMLSourceElement;
 
-    get videos(): IntermissionVideos {
-        return store.state.intermissionVideos;
+    get videos(): Asset[] {
+        return store.state["assets:intermissionVideos"];
     }
 
     get domain(): string {
@@ -48,30 +48,20 @@ export default class VideoPlayer extends Vue {
         const video = this.videos[this.videoIndex];
         if (video) {
             this.video = video;
-            this.playerSrc.src = `/bundles/${nodecg.bundleName}/`+video.path;
-            const ext = video.name.slice(video.name.lastIndexOf(".")+1);
-            this.playerSrc.type = `video/${ext.toLowerCase()}`;
+            this.playerSrc.src = video.url;
+            this.playerSrc.type = `video/${video.ext.toLowerCase().replace('.', '')}`;
             this.player.load();
             this.player.play();
         } else {
             //something went wrong, play next video
-            if (this.videos.length - 1 > this.videoIndex) {
-                this.videoIndex += 1;
-            } else {
-                // End of playlist.
-                this.videoIndex = 0;
-            }
+            this.videoIndex = (this.videoIndex + 1) % this.videos.length;
             this.playNextVideo();
         }
     }
 
     videoEnded(): void {
-        if (this.videos.length - 1 > this.videoIndex) {
-            this.videoIndex += 1;
-        } else {
-            // End of playlist.
-            this.videoIndex = 0;
-        }
+        // console.log("video ended!");
+        this.videoIndex = (this.videoIndex + 1) % this.videos.length;
         nodecg.sendMessage('videoPlayerFinished');
         //TODO transition back to intermission
     }
