@@ -69,3 +69,6 @@ typings/
 #VS settings
 .vs
 .vscode
+
+# videos
+static/intermissionVideos/*.mp4

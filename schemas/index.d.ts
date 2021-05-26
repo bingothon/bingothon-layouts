@@ -17,6 +17,7 @@ export * from './explorationBingoboard';
 export * from './hostingBingoboard';
 export * from './hostingBingosocket';
 export * from './hostsSpeakingDuringIntermission';
+export * from './intermissionVideos';
 export * from './lastIntermissionTimestamp';
 export * from './obsAudioSources';
 export * from './obsConnection';

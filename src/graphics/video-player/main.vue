@@ -8,19 +8,19 @@
 </template>
 
 <script lang="ts">
-import {Ref, Vue, Watch} from "vue-property-decorator";
-import {Asset} from "../../../schemas";
+import {Component, Ref, Vue, Watch} from "vue-property-decorator";
+import {Asset, IntermissionVideos} from "../../../schemas";
 import {store} from "../../browser-util/state";
 
-
+@Component({})
 export default class VideoPlayer extends Vue {
     videoIndex: number = 0;
-    video: Asset;
+    video: {name: string, path: string};
     @Ref('VideoPlayer') player: HTMLVideoElement;
     @Ref('PlayerSrc') playerSrc: HTMLSourceElement;
 
-    get videos(): Asset[] {
-        return store.state["assets:intermissionVideos"];
+    get videos(): IntermissionVideos {
+        return store.state.intermissionVideos;
     }
 
     get domain(): string {
@@ -28,14 +28,16 @@ export default class VideoPlayer extends Vue {
     }
 
     get currentObsScene(): string  {
-        return store.state.obsCurrentScene
+        return store.state.obsCurrentScene;
     }
 
     @Watch('currentObsScene', {immediate: true})
     onOBSSceneChanged(newVal : string){
-        if (newVal === 'VideoPlayer') {
-            this.playNextVideo()
-        }
+        this.$nextTick(() => {
+            if (newVal === 'VideoPlayer') {
+                this.playNextVideo()
+            }
+        });
     }
 
     get compVideoIndex(): number {
@@ -46,8 +48,9 @@ export default class VideoPlayer extends Vue {
         const video = this.videos[this.videoIndex];
         if (video) {
             this.video = video;
-            this.playerSrc.src = video.url;
-            this.playerSrc.type = `video/${video.ext.toLowerCase().replace('.', '')}`;
+            this.playerSrc.src = `/bundles/${nodecg.bundleName}/`+video.path;
+            const ext = video.name.slice(video.name.lastIndexOf(".")+1);
+            this.playerSrc.type = `video/${ext.toLowerCase()}`;
             this.player.load();
             this.player.play();
         } else {

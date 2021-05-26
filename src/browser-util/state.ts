@@ -21,6 +21,7 @@ import {
     HostingBingoboard,
     HostingBingosocket,
     HostsSpeakingDuringIntermission,
+    IntermissionVideos,
     LastIntermissionTimestamp,
     ObsAudioSources,
     ObsConnection,
@@ -60,6 +61,7 @@ const replicantNames = [
     'hostingBingoboard',
     'hostingBingosocket',
     'hostsSpeakingDuringIntermission',
+    'intermissionVideos',
     'lastIntermissionTimestamp',
     'obsAudioSources',
     'obsConnection',
@@ -86,7 +88,7 @@ const nodecgSpeedcontrolReplicantNames = [
 ];
 
 const assetNames = [
-    'assets:intermissionVideos'
+    // 'assets:intermissionVideos'
 ];
 const replicants: Map<string, ReplicantBrowser<any>> = new Map();
 
@@ -112,6 +114,7 @@ export const store = new Vuex.Store({
         hostingBingoboard: {} as HostingBingoboard,
         hostingBingosocket: {} as HostingBingosocket,
         hostsSpeakingDuringIntermission: {} as HostsSpeakingDuringIntermission,
+        intermissionVideos: [] as IntermissionVideos,
         lastIntermissionTimestamp: 0 as LastIntermissionTimestamp,
         obsAudioSources: {} as ObsAudioSources,
         obsConnection: {} as ObsConnection,
@@ -135,8 +138,6 @@ export const store = new Vuex.Store({
         runDataArray: [] as RunDataArray,
         timer: {} as Timer,
         twitchCommercialTimer: {} as TwitchCommercialTimer,
-        //assets
-        "assets:intermissionVideos": [] as Asset[],
         // timer
         playerAlternate: true,
     },
