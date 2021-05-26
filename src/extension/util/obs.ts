@@ -44,10 +44,10 @@ function handleStreamPosChange(obs: OBSUtility, stream: TwitchStream, streamIdx:
       return;
   }
   // calculate cropping, the browser source is fixed to 1920x1080
-  const cropLeft = 1920 * stream.leftPercent / 100;
-  const cropTop = 1080 * stream.topPercent / 100;
-  const cropRight = 1920 * (100 - stream.widthPercent) / 100;
-  const cropBottom = 1080 * (100 - stream.heightPercent) / 100;
+  const cropLeft = 1920 * -stream.leftPercent / 100;
+  const cropTop = 1080 * -stream.topPercent / 100;
+  const cropRight = 1920 * (1 - 100 / stream.widthPercent) - cropLeft;
+  const cropBottom = 1080 * (1 - 100 / stream.heightPercent) - cropTop;
   // fire and forget
   obs.setSourceBoundsAndCrop(getStreamSrcName(streamIdx),
     {cropLeft, cropTop, cropRight, cropBottom, visible: true,
@@ -154,8 +154,9 @@ class OBSUtility extends obsWebsocketJs {
   }
 
   public async setSourceBoundsAndCrop(source: string, params: OBSTransformParams): Promise<void> {
+      logger.info(`updating source ${source}: `+JSON.stringify(params));
       await this.send("SetSceneItemProperties", {
-        "scene-name": bundleConfig.obs.gameScene || 'game', // TODO: should probably go in config
+        "scene-name": bundleConfig.obs.gameScene || 'game',
         item: {name: source},
         position: {
           x: params.x,
