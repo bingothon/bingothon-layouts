@@ -13,9 +13,9 @@
 		<test-game-container id="game"></test-game-container>
 		<test-timer-container id="timer"></test-timer-container>
 		<bingo-board id="Bingo-board" fontSize="20px"></bingo-board>
-		<discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px"
-							   maxUserCount="16"></discord-voice-display>
-		<test-next-game-container id="nextGame"></test-next-game-container>
+        <discord-interview id="discord-voice" iconHeight="150px" maxUserCount="9"
+                           nameWidth="250px"
+        ></discord-interview>
 	</div>
 </template>
 
@@ -28,7 +28,7 @@ import BingoBoard from "../components/bingoboard.vue";
 import PlayerInfo from "../components/playerInfo.vue";
 import TeamInfo from "../components/teamInfo.vue";
 import PlayerTeamContainer from "../components/playerTeamContainer.vue";
-import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
+import DiscordInterview from "../components/discordInterview";
 
 @Component({
 	components: {
@@ -38,7 +38,7 @@ import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
 		TeamInfo,
 		PlayerTeamContainer,
 		TestTimerContainer,
-		DiscordVoiceDisplay,
+		DiscordInterview
 	}
 })
 
