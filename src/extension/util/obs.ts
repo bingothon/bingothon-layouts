@@ -199,6 +199,13 @@ class OBSUtility extends obsWebsocketJs {
       }
     }).catch(e => logger.error('could not set browser source settings', e));
   }
+
+  public async refreshBrowserSource(source: string): Promise<void> {
+    // outdating typings :(
+    await (this as any).send("RefreshBrowserSource", {
+      sourceName: source,
+    }).catch((e: any) => logger.error('could not refresh browser source', e));
+  }
 }
 
 const obsConnectionRep = nodecg.Replicant<ObsConnection>('obsConnection');
@@ -329,6 +336,13 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
           const stream = twitchStreams.value[i];
           if (stream === undefined) continue;
           handleSoundChange(obs, newVal, i, stream, stream);
+        }
+      });
+
+      nodecg.listenFor('streams:refreshStream', (index, callback) => {
+        obs.refreshBrowserSource(getStreamSrcName(index));
+        if (callback && !callback.handled) {
+          callback();
         }
       });
     }).catch((err): void => {
