@@ -11,7 +11,7 @@ import {RunDataActiveRun, TwitchCommercialTimer} from '../../speedcontrol-types'
 import obs from './util/obs';
 
 // this handles dashboard utilities, all around automating the run setup process
-// and setting everything in OBS properly ontransitions
+// and setting everything in OBS properly on transitions
 // this uses the transparent bindings form the obs.ts in util
 
 const nodecg = nodecgApiContext.get();
@@ -277,7 +277,7 @@ waitTillConnected().then((): void => {
           logger.warn(`Problem fading out streams during transition: ${err.error}`);
         });
       }
-      // discord muted exept for interview
+      // discord muted except for interview
       if (nextSceneName === 'interview' || (nextSceneName === 'intermission' && hostsSpeaking)) {
         nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.discordAudio }, (err): void => {
           logger.warn(`Problem fading in discord during transition: ${err.error}`);
@@ -365,10 +365,26 @@ waitTillConnected().then((): void => {
 //triggers ads when switching to Ad scene
 const adsTimerReplicant = nodecg.Replicant<TwitchCommercialTimer>('twitchCommercialTimer', 'nodecg-speedcontrol');
 obs.on('SwitchScenes', async (data) => {
-	if (data['scene-name'].startsWith('(ads) Intermission')
+	if (data['scene-name'].startsWith('(ads) intermission')
 		&& adsTimerReplicant.value && adsTimerReplicant.value.secondsRemaining <= 0) {
 		//play ads
 		nodecg.sendMessageToBundle('twitchStartCommercial', 'nodecg-speedcontrol', {duration: 180})
 		nodecg.log.info('Playing 3 minute Twitch Ad');
 	}
+});
+
+adsTimerReplicant.on('change', (newVal): void => {
+    if (newVal.secondsRemaining <= 0 && obsCurrentSceneRep.value === '(ads) intermission') {
+        obs.changeScene('videoPlayer');
+        nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.mpdAudio }, (err): void => {
+            logger.warn(`Problem fading out mpd during transition: ${err.error}`);
+        });
+    }
+});
+
+nodecg.listenFor('videoPlayerFinished', (): void => {
+    obs.changeScene('intermission')
+    nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.mpdAudio }, (err): void => {
+        logger.warn(`Problem fading in mpd during transition: ${err.error}`);
+    });
 });
