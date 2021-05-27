@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import {Component, Ref, Vue, Watch} from "vue-property-decorator";
-import {Asset, IntermissionVideos} from "../../../schemas";
+import {Asset} from "../../../schemas";
 import {store} from "../../browser-util/state";
 
 @Component({})
@@ -34,14 +34,10 @@ export default class VideoPlayer extends Vue {
     @Watch('currentObsScene', {immediate: true})
     onOBSSceneChanged(newVal : string){
         this.$nextTick(() => {
-            if (newVal === 'VideoPlayer') {
+            if (newVal === 'videoPlayer') {
                 this.playNextVideo()
             }
         });
-    }
-
-    get compVideoIndex(): number {
-        return this.videoIndex;
     }
 
     async playNextVideo(): Promise<void> {
