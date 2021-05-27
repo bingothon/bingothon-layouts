@@ -105,8 +105,8 @@ export default class Interview extends Vue {
 }
 #logo {
     position: absolute;
-    left: 35px;
-    top: 10px;
+    left: 60px;
+    top: 60px;
     /*width: 568px;*/
     height: 200px;
 }
@@ -120,7 +120,7 @@ export default class Interview extends Vue {
 
 #game {
      position: absolute;
-     top: 200px;
+     top: 150px;
      left: 700px;
      width: 520px;
      height: 100px;

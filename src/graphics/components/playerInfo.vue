@@ -96,7 +96,6 @@ export default class PlayerInfo extends Vue {
     get player(): RunDataPlayer {
         let idx = 0;
         let correctPlayer;
-        console.log(this.playerIndex);
         for (let i = 0; i < store.state.runDataActiveRun.teams.length; i++) {
             const team = store.state.runDataActiveRun.teams[i];
             for (let j = 0; j < team.players.length; j++) {
