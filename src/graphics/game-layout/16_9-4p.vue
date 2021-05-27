@@ -60,7 +60,6 @@
     left: 0px;
     width: 782px;
     height: 440px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #stream2 {
@@ -69,7 +68,6 @@
     left: 1138px;
     width: 782px;
     height: 440px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #stream3 {
@@ -78,7 +76,6 @@
     left: 0px;
     width: 782px;
     height: 440px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #stream4 {
@@ -87,7 +84,6 @@
     left: 1138px;
     width: 782px;
     height: 440px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #fillbar {
