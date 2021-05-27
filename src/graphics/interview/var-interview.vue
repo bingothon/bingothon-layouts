@@ -1,6 +1,6 @@
 <template>
 	<div class="Interview">
-		<img src="../../../static/logo-winter-wide.png" id="logo">
+		<img src="../../../static/logo-summer-wide.png" id="logo">
 		<div id="fillvoice" class="flexContainer"></div>
 		<div id="team-container" v-if="playerCount.length===4 && teamCount.length===2">
 			<player-team-container v-for="teamIndex in teamCount" :key="teamIndex" class="team" :teamIndex="teamIndex"
@@ -28,7 +28,7 @@ import BingoBoard from "../components/bingoboard.vue";
 import PlayerInfo from "../components/playerInfo.vue";
 import TeamInfo from "../components/teamInfo.vue";
 import PlayerTeamContainer from "../components/playerTeamContainer.vue";
-import DiscordInterview from "../components/discordInterview";
+import DiscordInterview from "../components/discordInterview.vue";
 
 @Component({
 	components: {
@@ -68,79 +68,69 @@ export default class Interview extends Vue {
 </script>
 
 <style scoped>
+#player-container {
+    position: absolute;
+    top: 500px;
+    left: 90px;
+}
+#team-container {
+    position: absolute;
+    top: 500px;
+    left: 90px;
+}
+.player {
+    width: 500px;
+    margin-bottom: 30px;
+}
+.team {
+    width: 500px;
+    margin-bottom: 30px;
+}
 .Interview {
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	width: 1935px;
-	height: 1090px;
-	background: linear-gradient(var(--darker-main-color), var(--lighter-main-color));
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 1920px;
+    height: 1080px;
+    background-image: linear-gradient(var(--darker-main-color), var(--lighter-main-color))
 }
 
 #discord-voice {
-	position: absolute;
-	top: 500px;
-	left: 1330px;
-	width: 500px;
-	height: 400px;
-	background-color: var(--container-background-color);
+    position: absolute;
+    top: -30px;
+    left: 1220px;
+    width: 700px;
+    height: 1080px;
+    /*background-color: var(--container-background-color);*/
 }
-
 #logo {
-	position: absolute;
-	left: 543px;
-	top: 10px;
-	/*width: 568px;*/
-	height: 200px;
+    position: absolute;
+    left: 35px;
+    top: 10px;
+    /*width: 568px;*/
+    height: 200px;
 }
-
-#player-container {
-	position: absolute;
-	top: 500px;
-	left: 90px;
-}
-
-#team-container {
-	position: absolute;
-	top: 500px;
-	left: 90px;
-}
-
-.player {
-	width: 500px;
-	margin-bottom: 30px;
-}
-
-.team {
-	width: 500px;
-	margin-bottom: 30px;
-}
-
 #Bingo-board {
-	position: absolute;
-	top: 500px;
-	left: 710px;
-	width: 500px;
-	height: 500px;
+    position: absolute;
+    top: 500px;
+    left: 710px;
+    width: 500px;
+    height: 500px;
 }
 
 #game {
-	position: absolute;
-	top: 225px;
-	left: 460px;
-	width: 1000px;
-	height: 100px;
-}
-
-#game.GameContainer > .GameExtra {
-	color: #484848;
+     position: absolute;
+     top: 200px;
+     left: 700px;
+     width: 520px;
+     height: 100px;
 }
 
 #timer {
-	position: absolute;
-	top: 325px;
-	left: 710px;
-	width: 500px;
-	height: 150px;
+    position: absolute;
+    top: 325px;
+    left: 710px;
+    width: 500px;
+    height: 150px;
 }
 </style>
