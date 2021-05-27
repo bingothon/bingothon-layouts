@@ -232,16 +232,16 @@ class TwitchBotWrapper {
         }
       }
     }
-
-    if (userCommandName === 'schedule' || userCommandName === 'upcoming') {
-        // check cooldown to not spam chat
-        if (now - cooldowns.schedule.lastUsed < cooldowns.schedule.cooldown) {
-            return;
-        }
-        cooldowns.schedule.lastUsed = now;
-        this.client.say(channel, "Find the schedule at https://horaro.org/bingothons21/schedule")
-            .catch((e): void => log.error('', e));
-    }
+    //// handled by nightbot
+    // if (userCommandName === 'schedule' || userCommandName === 'upcoming') {
+    //     // check cooldown to not spam chat
+    //     if (now - cooldowns.schedule.lastUsed < cooldowns.schedule.cooldown) {
+    //         return;
+    //     }
+    //     cooldowns.schedule.lastUsed = now;
+    //     this.client.say(channel, "Find the schedule at https://horaro.org/bingothons21/schedule")
+    //         .catch((e): void => log.error('', e));
+    // }
     const knownCommand = twitchChatBotDataRep.value.commands.find(command =>
       command.name === userCommandName
       && ['global'].includes(command.commandList));
