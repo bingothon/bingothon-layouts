@@ -1,6 +1,6 @@
 import {NodeCG} from 'nodecg/types/server'; // eslint-disable-line
 import * as nodecgApiContext from './util/nodecg-api-context';
-import {VoiceActivity, SongData, ShowPictureDuringIntermission, CapturePositions } from '../../schemas';
+import {VoiceActivity, SongData, ShowPictureDuringIntermission, CapturePositions, Asset } from '../../schemas';
 import obs from "./util/obs";
 import {TwitchCommercialTimer} from "../../speedcontrol-types";
 /* eslint-disable global-require */
@@ -80,7 +80,6 @@ export = (nodecg: NodeCG): void => {
     require('./streams');
     require('./util/obs');
     require('./obsremotecontrol');
-    require('./intermission-vids');
     if (bundleConfig.mpd && bundleConfig.mpd.enable) {
         require('./music');
     } else {
@@ -91,5 +90,7 @@ export = (nodecg: NodeCG): void => {
     // just make sure to declare
     nodecg.Replicant<ShowPictureDuringIntermission>('showPictureDuringIntermission');
     nodecg.Replicant<CapturePositions>('capturePositions');
+    // for some reason, assets have the wrong type if it's not declared here (they aren't an array, which makes nodecg crash)
+    nodecg.Replicant<Asset[]>('assets:intermissionVideos', {defaultValue: []});
     //const text = fs.readFileSync('src/graphics/host-dashboard/fhfacts.txt', 'utf-8');
 };
