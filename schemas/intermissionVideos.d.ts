@@ -5,7 +5,8 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type IntermissionVideos = {
-  path: string;
-  name: string;
-}[];
+export interface IntermissionVideos {
+  path?: string;
+  name?: string;
+  index: number;
+}

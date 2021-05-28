@@ -117,6 +117,7 @@ export const store = new Vuex.Store({
         hostingBingoboard: {} as HostingBingoboard,
         hostingBingosocket: {} as HostingBingosocket,
         hostsSpeakingDuringIntermission: {} as HostsSpeakingDuringIntermission,
+        intermissionVideos: {} as IntermissionVideos,
         lastIntermissionTimestamp: 0 as LastIntermissionTimestamp,
         obsAudioSources: {} as ObsAudioSources,
         obsConnection: {} as ObsConnection,

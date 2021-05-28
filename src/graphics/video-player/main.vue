@@ -14,7 +14,6 @@ import {store} from "../../browser-util/state";
 
 @Component({})
 export default class VideoPlayer extends Vue {
-    videoIndex: number = 0;
     video: Asset;
     @Ref('VideoPlayer') player: HTMLVideoElement;
     @Ref('PlayerSrc') playerSrc: HTMLSourceElement;
@@ -41,7 +40,7 @@ export default class VideoPlayer extends Vue {
     }
 
     async playNextVideo(): Promise<void> {
-        const video = this.videos[this.videoIndex];
+        const video = this.videos[store.state.intermissionVideos.index];
         if (video) {
             this.video = video;
             this.playerSrc.src = video.url;
@@ -50,21 +49,19 @@ export default class VideoPlayer extends Vue {
             this.player.play();
         } else {
             //something went wrong, play next video
-            this.videoIndex = (this.videoIndex + 1) % this.videos.length;
+            store.state.intermissionVideos.index = (store.state.intermissionVideos.index + 1) % this.videos.length;
             this.playNextVideo();
         }
     }
 
     videoEnded(): void {
         // console.log("video ended!");
-        this.videoIndex = (this.videoIndex + 1) % this.videos.length;
+        store.state.intermissionVideos.index = (store.state.intermissionVideos.index + 1) % this.videos.length;
         nodecg.sendMessage('videoPlayerFinished');
         //TODO transition back to intermission
     }
 
     mounted() {
-        this.videoIndex = 0;
-        console.log(this.videoIndex)
         this.player.addEventListener('ended', this.videoEnded);
     }
 }
