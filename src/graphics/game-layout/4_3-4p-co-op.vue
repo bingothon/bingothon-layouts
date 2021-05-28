@@ -166,7 +166,6 @@
     height: 1080px;
     left: 0px;
     width: 660px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #fillright {
@@ -175,7 +174,6 @@
     height: 1080px;
     left: 1260px;
     width: 660px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #timer{
