@@ -25,7 +25,7 @@
 						v-model="obsStreamMode"
 						:value="obsStreamMode"
 					>
-						<v-col v-for="mode in obsStreamModes">
+						<v-col v-for="(mode, i) in obsStreamModes" :key="i">
 							<v-radio
                                 :id="`mode-${mode}`"
                                 :key="mode"
@@ -65,6 +65,7 @@
                 </v-row>
             </div>
         </div>
+        <v-text-field v-model="discordDisplayDelay" type="number" label="Discord Display Delay (ms)"></v-text-field>
     </v-app>
 </template>
 
@@ -148,21 +149,21 @@ export default class OBSControl extends Vue {
         return store.state.obsSceneList.map(s => s.name);
     }
 
-    get discordAudioDelay(): string {
-        return `${store.state.discordDelayInfo.discordAudioDelayMs}`;
-    }
+    // get discordAudioDelay(): string {
+    //     return `${store.state.discordDelayInfo.discordAudioDelayMs}`;
+    // }
 
-    set discordAudioDelay(delay: string) {
-        getReplicant<DiscordDelayInfo>('discordDelayInfo').value.discordAudioDelayMs = parseInt(delay, 10);
-    }
+    // set discordAudioDelay(delay: string) {
+    //     getReplicant<DiscordDelayInfo>('discordDelayInfo').value.discordAudioDelayMs = parseInt(delay, 10);
+    // }
 
-    get discordAudioDelaySync(): boolean {
-        return store.state.discordDelayInfo.discordAudioDelaySyncStreamLeader;
-    }
+    // get discordAudioDelaySync(): boolean {
+    //     return store.state.discordDelayInfo.discordAudioDelaySyncStreamLeader;
+    // }
 
-    set discordAudioDelaySync(sync: boolean) {
-        getReplicant<DiscordDelayInfo>('discordDelayInfo').value.discordAudioDelaySyncStreamLeader = sync;
-    }
+    // set discordAudioDelaySync(sync: boolean) {
+    //     getReplicant<DiscordDelayInfo>('discordDelayInfo').value.discordAudioDelaySyncStreamLeader = sync;
+    // }
 
     get discordDisplayDelay(): string {
         return `${store.state.discordDelayInfo.discordDisplayDelayMs}`;
@@ -172,13 +173,13 @@ export default class OBSControl extends Vue {
         getReplicant<DiscordDelayInfo>('discordDelayInfo').value.discordDisplayDelayMs = parseInt(delay, 10);
     }
 
-    get discordDisplayDelaySync(): boolean {
-        return store.state.discordDelayInfo.discordDisplayDelaySyncStreamLeader;
-    }
+    // get discordDisplayDelaySync(): boolean {
+    //     return store.state.discordDelayInfo.discordDisplayDelaySyncStreamLeader;
+    // }
 
-    set discordDisplayDelaySync(sync: boolean) {
-        getReplicant<DiscordDelayInfo>('discordDelayInfo').value.discordDisplayDelaySyncStreamLeader = sync;
-    }
+    // set discordDisplayDelaySync(sync: boolean) {
+    //     getReplicant<DiscordDelayInfo>('discordDelayInfo').value.discordDisplayDelaySyncStreamLeader = sync;
+    // }
 
     get obsStreamMode(): ObsStreamMode {
         return store.state.obsStreamMode;

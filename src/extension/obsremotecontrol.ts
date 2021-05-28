@@ -253,8 +253,8 @@ waitTillConnected().then((): void => {
         discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false;
         discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false;
       } else {
-        discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = true;
-        discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = true;
+        discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false; // there is no stream leader delay anymore
+        discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false;
       }
       // if the next scene isn't intermission unmute discord, also don't fade out if hosts are speaking
       if (nextSceneName === 'intermission' && !hostsSpeaking) {
@@ -291,8 +291,8 @@ waitTillConnected().then((): void => {
         discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false;
         discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false;
       } else {
-        discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = true;
-        discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = true;
+        discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false; // not used anymore, so just use false
+        discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false;
       }
     } else {
       logger.error(`Unknown stream configuration: ${streamMode}`);
