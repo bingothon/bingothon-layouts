@@ -256,7 +256,8 @@ class TwitchBotWrapper {
   }
   
   async disconnect(): Promise<void> {
-    await this.client.disconnect();
+    await this.client.disconnect()
+      .catch(e => log.error('error on disconnecting, ignoring', e));
     twitchChatBotDataRep.value.state = 'disconnected';
   }
 
