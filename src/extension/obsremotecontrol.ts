@@ -310,8 +310,8 @@ waitTillConnected().then((): void => {
 
   nodecg.listenFor('obs:startingTransition', (data): void => {
     logger.info('catched transition starting', data);
-    const nextScene = (data || {}).scene || '';
-    if (nextScene === 'intermission') {
+    const nextScene: string = (data || {}).scene || '';
+    if (nextScene.toLocaleLowerCase().includes('intermission')) {
       // update last intermission time
       lastIntermissionTimestampRep.value = new Date().getTime() / 1000;
     }
