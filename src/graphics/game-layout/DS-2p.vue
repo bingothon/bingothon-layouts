@@ -55,7 +55,6 @@
     left: 0px;
     width: 800px;
     height: 1080px;
-    /*background-image: url("../../../static/middle-info-background.png");*/
     border: 2px var(--container-border-color) solid;
 		z-index: 0;
   }
@@ -65,7 +64,6 @@
     left: 1120px;
     width: 800px;
     height: 1080px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 		z-index: 0;
   }

@@ -57,7 +57,6 @@
     left: 0px;
     width: 667px;
     height: 500px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #stream2 {
@@ -66,7 +65,6 @@
     left: 1253px;
     width: 667px;
     height: 500px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #stream3 {
@@ -75,7 +73,6 @@
     left: 0px;
     width: 667px;
     height: 500px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #stream4 {
@@ -84,7 +81,6 @@
     left: 1253px;
     width: 667px;
     height: 500px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #fillbar {
@@ -170,7 +166,6 @@
     height: 1080px;
     left: 0px;
     width: 660px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #fillright {
@@ -179,7 +174,6 @@
     height: 1080px;
     left: 1260px;
     width: 660px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #timer{

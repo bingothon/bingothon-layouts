@@ -55,7 +55,6 @@
     left: 0px;
     width: 960px;
     height: 640px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #stream2 {
@@ -64,7 +63,6 @@
     left: 960px;
     width: 960px;
     height: 640px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #fillbar {

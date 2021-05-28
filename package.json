@@ -117,7 +117,8 @@
         "title": "Cam Names Control",
         "file": "camnames-control.html",
         "headerColor": "#b92b36",
-        "width": 2
+        "width": 2,
+        "workspace": "Misc"
       },
       {
         "name": "layout-control",
@@ -160,7 +161,8 @@
         "title": "Twitch Chat Bot Control",
         "file": "chat-bot-control.html",
         "headerColor": "#b92b36",
-        "width": 2
+        "width": 2,
+        "workspace": "Misc"
       }
     ],
     "graphics": [

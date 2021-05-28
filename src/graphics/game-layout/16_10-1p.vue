@@ -53,7 +53,6 @@
     left: 552px;
     width: 1368px;
     height: 855px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #fillbar {

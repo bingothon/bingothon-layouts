@@ -80,6 +80,7 @@ const replicantNames = [
     'twitchChatBotData',
     'twitchStreams',
     'voiceActivity',
+    'voiceDelay',
     'songData'
 ];
 const nodecgSpeedcontrolReplicantNames = [
@@ -134,6 +135,7 @@ export const store = new Vuex.Store({
         twitchChatBotData: {} as TwitchChatBotData,
         twitchStreams: [] as TwitchStreams,
         voiceActivity: {} as VoiceActivity,
+        voiceDelay: 0,
         songData: {} as SongData,
         // nodecg-speedcontrol
         runDataActiveRun: {} as RunDataActiveRun,

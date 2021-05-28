@@ -55,7 +55,6 @@ export default class GameLayout extends Vue {
     left: 0px;
     width: 960px;
     height: 720px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 
@@ -65,7 +64,6 @@ export default class GameLayout extends Vue {
     left: 960px;
     width: 960px;
     height: 720px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
     object-fit: fill;
     filter: blur(10px);
@@ -77,7 +75,6 @@ export default class GameLayout extends Vue {
     left: 960px;
     width: 960px;
     height: 540px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 
