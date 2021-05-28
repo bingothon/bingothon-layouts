@@ -13,7 +13,7 @@
 		<test-game-container id="game"></test-game-container>
 		<test-timer-container id="timer"></test-timer-container>
 		<bingo-board id="Bingo-board" fontSize="20px"></bingo-board>
-        <discord-interview id="discord-voice" iconHeight="150px" maxUserCount="9"
+        <discord-interview id="discord-voice" iconHeight="150px" maxUserCount="6"
                            nameWidth="250px"
         ></discord-interview>
 	</div>
@@ -97,7 +97,7 @@ export default class Interview extends Vue {
 
 #discord-voice {
     position: absolute;
-    top: -30px;
+    top: -90px;
     left: 1220px;
     width: 700px;
     height: 1080px;
