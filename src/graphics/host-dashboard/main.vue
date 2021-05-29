@@ -92,6 +92,12 @@
 						</div>
 					</div>
 				</div>
+                <div id="BingothonTexts">
+                    <div class="fact">
+                        {{ bingothonTexts[textIndex] }}
+                    </div>
+                    <button v-on:click="updateTextIndex()">Update Text</button>
+                </div>
 			</div>
 			<div id="column3" class="column">
 				<div>
@@ -168,6 +174,7 @@ import {HostsSpeakingDuringIntermission, ShowPictureDuringIntermission} from "..
 
 export default class HostDashboard extends Vue {
 	private factIndex: number = 0;
+	private textIndex: number = 0;
 
 	timeSinceLastIntermission: string = '';
 	lastIntermissionInterval: NodeJS.Timeout | null = null;
@@ -276,12 +283,20 @@ export default class HostDashboard extends Vue {
 	}
 
 	get hostTexts(): String[] {
-		return (Array.prototype.concat(CHARITY_BLURBS.split('\n'), BINGOTHON_BLURBS.split('\n')));
+		return CHARITY_BLURBS.split('\n');
 	}
+
+	get bingothonTexts(): String[] {
+	    return BINGOTHON_BLURBS.split('\n');
+    }
 
 	updateFactIndex() {
 		this.factIndex = (this.factIndex + 1) % (this.hostTexts.length - 1);
 	}
+
+	updateTextIndex() {
+            this.textIndex = (this.textIndex + 1) % (this.bingothonTexts.length - 1);
+    }
 
 	// Get the next Xth run in the schedule.
 	getNextRuns(runData: RunData, X: number): RunData {
@@ -436,7 +451,7 @@ button {
 #intermission-ad-warning {
 	width: 100%;
 	height: 50px;
-	background-color: yellow;
+	background-color: darkred;
 	text-align: center;
 	font-size: 40px;
 }
