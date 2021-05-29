@@ -53,8 +53,9 @@
             </div>
             <div>
                 <v-text-field v-model="twitchChannelOverrides[i]"
-                              single-line
-                              solo
+                              label="Channel override"
+                              hide-details
+                              filled
                               dark
                               type="text"
                               :background-color="'#455A64'"/>
