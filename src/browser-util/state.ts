@@ -72,6 +72,7 @@ const replicantNames = [
     'obsSceneList',
     'obsStreamMode',
     'oriBingoMeta',
+    'oriBingoboard',
     'showPictureDuringIntermission',
     'soundOnTwitchStream',
     'trackerDonations',
