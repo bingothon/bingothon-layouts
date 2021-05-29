@@ -5,10 +5,11 @@ import { Configschema } from '../../configschema';
 import {
   ObsDashboardAudioSources, ObsAudioSources, ObsConnection, DiscordDelayInfo,
   TwitchStreams, ObsStreamMode, CurrentGameLayout,
-  CurrentInterview, HostsSpeakingDuringIntermission, LastIntermissionTimestamp,
+  CurrentInterview, HostsSpeakingDuringIntermission, LastIntermissionTimestamp, AllGameLayouts, AllInterviews,
 } from '../../schemas';
 import {RunDataActiveRun, TwitchCommercialTimer} from '../../speedcontrol-types';
 import obs from './util/obs';
+import clone from 'clone';
 
 // this handles dashboard utilities, all around automating the run setup process
 // and setting everything in OBS properly on transitions
@@ -26,7 +27,9 @@ const obsConnectionRep = nodecg.Replicant<ObsConnection>('obsConnection');
 const obsStreamModeRep = nodecg.Replicant<ObsStreamMode>('obsStreamMode');
 const discordDelayInfoRep = nodecg.Replicant<DiscordDelayInfo>('discordDelayInfo');
 
+const allGameLayoutsRep = nodecg.Replicant<AllGameLayouts>('allGameLayouts');
 const currentGameLayoutRep = nodecg.Replicant<CurrentGameLayout>('currentGameLayout');
+const allInterviewLayoutsRep = nodecg.Replicant<AllInterviews>('allInterviews');
 const currentInterviewLayoutRep = nodecg.Replicant<CurrentInterview>('currentInterview');
 
 const runDataActiveRunRep = nodecg.Replicant<RunDataActiveRun>('runDataActiveRun', 'nodecg-speedcontrol');
@@ -347,8 +350,13 @@ waitTillConnected().then((): void => {
           playerCount += 1;
         });
       }
-      currentGameLayoutRep.value.name = `${playerCount}p ${newValue.customData.Layout} Layout`;
-      currentInterviewLayoutRep.value.name = `${playerCount}p Interview`;
+      const layout = `${playerCount}p ${newValue.customData.Layout} Layout`;
+      const foundLayout = allGameLayoutsRep.value.find(l => l.name == layout);
+      if (foundLayout !== undefined) {
+        currentGameLayoutRep.value = clone(foundLayout);
+      } else {
+        logger.error('did not find game layout '+layout);
+      }
     }
   });
 
