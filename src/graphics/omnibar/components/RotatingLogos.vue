@@ -16,20 +16,20 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import {Vue, Component, Prop} from "vue-property-decorator";
 
-const wide = require('../logo-winter-wide.png');
-const fhLogo = require('../BingothonFredHutchWinter.png');
+const wide = require('../logo-summer-wide2.png');
+const fhLogo = require('../BingothonFredHutch.png');
 
 @Component({})
-export default class RotatingLogos extends Vue{
-  logo: string = wide;
+export default class RotatingLogos extends Vue {
+	logo: string = wide;
 
-  mounted(): void {
-    this.changeLogo();
-  }
+	mounted(): void {
+		this.changeLogo();
+	}
 
-  changeLogo() : void {
+	changeLogo(): void {
     this.logo = (this.logo !== wide) ? wide : fhLogo;
     const time = (this.logo === fhLogo) ? 30 : 30;
     setTimeout(this.changeLogo, time * 1000);
