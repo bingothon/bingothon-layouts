@@ -6,6 +6,7 @@ import {
     AllCamNames,
     AllGameLayouts,
     AllInterviews,
+    Asset,
     Bingoboard,
     BingoboardMeta,
     BingoboardMode,
@@ -34,10 +35,11 @@ import {
     TrackerDonations,
     TrackerOpenBids,
     TrackerPrizes,
+    TwitchChatBotData,
     TwitchStreams,
     VoiceActivity
 } from "../../schemas";
-import {RunDataActiveRun, RunDataArray, Timer} from "../../speedcontrol-types";
+import {RunDataActiveRun, RunDataArray, Timer, TwitchCommercialTimer} from "../../speedcontrol-types";
 import {Scene} from 'obs-websocket-js';
 
 Vue.use(Vuex);
@@ -60,6 +62,7 @@ const replicantNames = [
     'hostingBingoboard',
     'hostingBingosocket',
     'hostsSpeakingDuringIntermission',
+    'intermissionVideos',
     'lastIntermissionTimestamp',
     'obsAudioSources',
     'obsConnection',
@@ -68,25 +71,28 @@ const replicantNames = [
     'obsCurrentScene',
     'obsSceneList',
     'obsStreamMode',
-    'oriBingoboard',
     'oriBingoMeta',
+    'oriBingoboard',
     'showPictureDuringIntermission',
     'soundOnTwitchStream',
     'trackerDonations',
     'trackerOpenBids',
     'trackerPrizes',
+    'twitchChatBotData',
     'twitchStreams',
     'voiceActivity',
+    'voiceDelay',
     'songData'
 ];
 const nodecgSpeedcontrolReplicantNames = [
     'runDataActiveRun',
     'runDataArray',
-    'timer'
+    'timer',
+    'twitchCommercialTimer'
 ];
 
 const assetNames = [
-    'intermissionVideos'
+    'assets:intermissionVideos'
 ];
 const replicants: Map<string, ReplicantBrowser<any>> = new Map();
 
@@ -112,6 +118,7 @@ export const store = new Vuex.Store({
         hostingBingoboard: {} as HostingBingoboard,
         hostingBingosocket: {} as HostingBingosocket,
         hostsSpeakingDuringIntermission: {} as HostsSpeakingDuringIntermission,
+        intermissionVideos: {} as IntermissionVideos,
         lastIntermissionTimestamp: 0 as LastIntermissionTimestamp,
         obsAudioSources: {} as ObsAudioSources,
         obsConnection: {} as ObsConnection,
@@ -127,15 +134,18 @@ export const store = new Vuex.Store({
         trackerDonations: [] as TrackerDonations,
         trackerOpenBids: [] as TrackerOpenBids,
         trackerPrizes: [] as TrackerPrizes,
+        twitchChatBotData: {} as TwitchChatBotData,
         twitchStreams: [] as TwitchStreams,
         voiceActivity: {} as VoiceActivity,
+        voiceDelay: 0,
         songData: {} as SongData,
         // nodecg-speedcontrol
         runDataActiveRun: {} as RunDataActiveRun,
         runDataArray: [] as RunDataArray,
         timer: {} as Timer,
-        //assets
-        intermissionVideos: [] as IntermissionVideos,
+        twitchCommercialTimer: {} as TwitchCommercialTimer,
+        // assets
+        "assets:intermissionVideos": [] as Asset[],
         // timer
         playerAlternate: true,
     },
@@ -200,16 +210,16 @@ nodecgSpeedcontrolReplicantNames.forEach(name => {
     replicants.set(name, rep);
 })
 
-assetNames.forEach(name => {
-    const asset = nodecg.Replicant('assets:' + name);
-
-    asset.on('change', newVal => {
+assetNames.forEach((name) => {
+    const rep = nodecg.Replicant(name)
+    rep.on('change', newValue => {
         store.commit('updateReplicant', {
-            name: asset.name,
-            value: clone(newVal),
-        })
-    })
-})
+            name: rep.name,
+            value: clone(newValue),
+        });
+    });
+    replicants.set(name, rep);
+});
 
 export async function create() {
     return NodeCG.waitForReplicants(...Array.from(replicants.values())).then(() => store);

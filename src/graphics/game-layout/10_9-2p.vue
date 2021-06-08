@@ -26,7 +26,7 @@ import PlayerInfo from "../components/playerInfo.vue";
 import TeamInfo from "../components/teamInfo.vue";
 import PlayerTeamContainer from "../components/playerTeamContainer.vue";
 import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
-import TwitchPlayer from "../components/twitchPlayer.vue";
+import TwitchPlayer from "../components/twitchStreamPlaceholder.vue";
 import {RunDataTeam} from "../../../speedcontrol-types";
 
 @Component({
@@ -56,7 +56,6 @@ export default class GameLayout extends Vue {
     left: 160px;
     width: 800px;
     height: 720px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 
@@ -66,7 +65,6 @@ export default class GameLayout extends Vue {
     left: 960px;
     width: 800px;
     height: 720px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 

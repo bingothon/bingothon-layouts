@@ -62,10 +62,13 @@ typings/
 
 # Built files
 .cache/
-/dashboard/
-/extension/
-/graphics/
+./dashboard/
+./extension/
+./graphics/
 
 #VS settings
 .vs
 .vscode
+
+# videos
+static/intermissionVideos/*.mp4

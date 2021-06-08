@@ -5,12 +5,14 @@ import { Configschema } from '../../configschema';
 import {
   ObsDashboardAudioSources, ObsAudioSources, ObsConnection, DiscordDelayInfo,
   TwitchStreams, ObsStreamMode, CurrentGameLayout,
-  CurrentInterview, HostsSpeakingDuringIntermission, LastIntermissionTimestamp,
+  CurrentInterview, HostsSpeakingDuringIntermission, LastIntermissionTimestamp, AllGameLayouts, AllInterviews,
 } from '../../schemas';
-import { RunDataActiveRun } from '../../speedcontrol-types';
+import {RunDataActiveRun, TwitchCommercialTimer} from '../../speedcontrol-types';
+import obs from './util/obs';
+import clone from 'clone';
 
 // this handles dashboard utilities, all around automating the run setup process
-// and setting everything in OBS properly ontransitions
+// and setting everything in OBS properly on transitions
 // this uses the transparent bindings form the obs.ts in util
 
 const nodecg = nodecgApiContext.get();
@@ -25,7 +27,9 @@ const obsConnectionRep = nodecg.Replicant<ObsConnection>('obsConnection');
 const obsStreamModeRep = nodecg.Replicant<ObsStreamMode>('obsStreamMode');
 const discordDelayInfoRep = nodecg.Replicant<DiscordDelayInfo>('discordDelayInfo');
 
+const allGameLayoutsRep = nodecg.Replicant<AllGameLayouts>('allGameLayouts');
 const currentGameLayoutRep = nodecg.Replicant<CurrentGameLayout>('currentGameLayout');
+const allInterviewLayoutsRep = nodecg.Replicant<AllInterviews>('allInterviews');
 const currentInterviewLayoutRep = nodecg.Replicant<CurrentInterview>('currentInterview');
 
 const runDataActiveRunRep = nodecg.Replicant<RunDataActiveRun>('runDataActiveRun', 'nodecg-speedcontrol');
@@ -35,6 +39,11 @@ const streamsReplicant = nodecg.Replicant <TwitchStreams>('twitchStreams', { def
 const soundOnTwitchStream = nodecg.Replicant<number>('soundOnTwitchStream', { defaultValue: -1 });
 const hostDiscordDuringIntermissionRep = nodecg.Replicant<HostsSpeakingDuringIntermission>('hostsSpeakingDuringIntermission');
 const lastIntermissionTimestampRep = nodecg.Replicant<LastIntermissionTimestamp>('lastIntermissionTimestamp');
+
+// intermission (ads or no), VideoPlayer
+function isIntermissionLikeScene(name: string): boolean {
+  return name.toLowerCase().includes('intermission') || name.toLowerCase() == 'videoplayer';
+}
 
 // make sure we are connected to OBS before loading any of the functions that depend on OBS
 function waitTillConnected(): Promise<void> {
@@ -221,7 +230,7 @@ waitTillConnected().then((): void => {
     const hostsSpeaking = hostDiscordDuringIntermissionRep.value.speaking;
     logger.info(`handling stream mode ${streamMode} in scene ${nextSceneName}`);
     // music only during intermission
-    if (nextSceneName === 'intermission') {
+    if (nextSceneName.includes('intermission')) {
       // updates the next run panels
       nodecg.sendMessage('forceRefreshIntermission');
       nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.mpdAudio }, (err): void => {
@@ -248,15 +257,15 @@ waitTillConnected().then((): void => {
     if (streamMode === 'external-commentary' || streamMode === 'runner-commentary') {
       // no discord delay in intermission
       // if commentary is external no delay is necessary
-      if (nextSceneName === 'intermission' || streamMode === 'external-commentary') {
-        discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false;
-        discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false;
-      } else {
-        discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = true;
-        discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = true;
-      }
+      // if (nextSceneName.includes('intermission') || streamMode === 'external-commentary') {
+      //   discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false;
+      //   discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false;
+      // } else {
+      //   discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false; // there is no stream leader delay anymore
+      //   discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false;
+      // }
       // if the next scene isn't intermission unmute discord, also don't fade out if hosts are speaking
-      if (nextSceneName === 'intermission' && !hostsSpeaking) {
+      if (isIntermissionLikeScene(nextSceneName) && !hostsSpeaking) {
         nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.discordAudio }, (err): void => {
           logger.warn(`Problem fading out discord during transition: ${err.error}`);
         });
@@ -276,8 +285,8 @@ waitTillConnected().then((): void => {
           logger.warn(`Problem fading out streams during transition: ${err.error}`);
         });
       }
-      // discord muted exept for interview
-      if (nextSceneName === 'interview' || (nextSceneName === 'intermission' && hostsSpeaking)) {
+      // discord muted except for interview
+      if (nextSceneName === 'interview' || (nextSceneName.includes('intermission') && hostsSpeaking)) {
         nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.discordAudio }, (err): void => {
           logger.warn(`Problem fading in discord during transition: ${err.error}`);
         });
@@ -286,13 +295,13 @@ waitTillConnected().then((): void => {
           logger.warn(`Problem fading out discord during transition: ${err.error}`);
         });
       }
-      if (nextSceneName === 'intermission') {
-        discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false;
-        discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false;
-      } else {
-        discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = true;
-        discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = true;
-      }
+      // if (nextSceneName === 'intermission') {
+      //   discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false;
+      //   discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false;
+      // } else {
+      //   discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false; // not used anymore, so just use false
+      //   discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false;
+      // }
     } else {
       logger.error(`Unknown stream configuration: ${streamMode}`);
     }
@@ -309,8 +318,8 @@ waitTillConnected().then((): void => {
 
   nodecg.listenFor('obs:startingTransition', (data): void => {
     logger.info('catched transition starting', data);
-    const nextScene = (data || {}).scene || '';
-    if (nextScene === 'intermission') {
+    const nextScene: string = (data || {}).scene || '';
+    if (isIntermissionLikeScene(nextScene)) {
       // update last intermission time
       lastIntermissionTimestampRep.value = new Date().getTime() / 1000;
     }
@@ -322,7 +331,7 @@ waitTillConnected().then((): void => {
     if (!old) return;
     // nothing changed
     if (newVal.speaking === old.speaking) return;
-    if ((obsCurrentSceneRep.value || '').toLowerCase() !== 'intermission') {
+    if (!(obsCurrentSceneRep.value || '').toLowerCase().includes('intermission')) {
       // only accepted during intermission
       hostDiscordDuringIntermissionRep.value.speaking = false;
     }
@@ -332,7 +341,7 @@ waitTillConnected().then((): void => {
     // bail on server restart
     if (!newValue || !old) return;
     // set layout defaults only in intermission
-    if ((obsCurrentSceneRep.value || '').toLowerCase() === 'intermission') {
+    if (isIntermissionLikeScene(obsCurrentSceneRep.value || '')) {
       let playerCount = 0;
       for (let i = 0; i < newValue.teams.length; i += 1) {
         const team = newValue.teams[i];
@@ -341,13 +350,18 @@ waitTillConnected().then((): void => {
           playerCount += 1;
         });
       }
-      currentGameLayoutRep.value.name = `${playerCount}p ${newValue.customData.Layout} Layout`;
-      currentInterviewLayoutRep.value.name = `${playerCount}p Interview`;
+      const layout = `${playerCount}p ${newValue.customData.Layout} Layout`;
+      const foundLayout = allGameLayoutsRep.value.find(l => l.name == layout);
+      if (foundLayout !== undefined) {
+        currentGameLayoutRep.value = clone(foundLayout);
+      } else {
+        logger.error('did not find game layout '+layout);
+      }
     }
   });
 
   hostDiscordDuringIntermissionRep.on('change', (newVal): void => {
-    if ((obsCurrentSceneRep.value || '').toLowerCase() === 'intermission') {
+    if ((obsCurrentSceneRep.value || '').toLowerCase().includes('intermission')) {
       if (newVal.speaking) {
         nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.discordAudio }, (err): void => {
           logger.warn(`Problem fading in discord during transition: ${err.error}`);
@@ -359,4 +373,31 @@ waitTillConnected().then((): void => {
       }
     }
   });
+});
+
+//triggers ads when switching to Ad scene
+const adsTimerReplicant = nodecg.Replicant<TwitchCommercialTimer>('twitchCommercialTimer', 'nodecg-speedcontrol');
+obs.on('SwitchScenes', async (data) => {
+	if (data['scene-name'].startsWith('(ads) intermission')
+		&& adsTimerReplicant.value && adsTimerReplicant.value.secondsRemaining <= 0) {
+		//play ads
+		nodecg.sendMessageToBundle('twitchStartCommercial', 'nodecg-speedcontrol', {duration: 180})
+		nodecg.log.info('Playing 3 minute Twitch Ad');
+	}
+});
+
+adsTimerReplicant.on('change', (newVal): void => {
+    if (newVal.secondsRemaining <= 0 && obsCurrentSceneRep.value === '(ads) intermission') {
+        obs.changeScene('videoPlayer');
+        nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.mpdAudio }, (err): void => {
+            logger.warn(`Problem fading out mpd during transition: ${err.error}`);
+        });
+    }
+});
+
+nodecg.listenFor('videoPlayerFinished', (): void => {
+    obs.changeScene('intermission')
+    nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.mpdAudio }, (err): void => {
+        logger.warn(`Problem fading in mpd during transition: ${err.error}`);
+    });
 });

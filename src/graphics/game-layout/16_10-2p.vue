@@ -25,7 +25,7 @@
   import PlayerTeamContainer from "../components/playerTeamContainer.vue";
   import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
   import { RunDataPlayer, RunDataTeam } from "../../../speedcontrol-types";
-  import TwitchPlayer from "../components/twitchPlayer.vue";
+  import TwitchPlayer from "../components/twitchStreamPlaceholder.vue";
 
 	@Component({
 		components: {
@@ -54,7 +54,6 @@
     left: 0px;
     width: 960px;
     height: 600px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #stream2 {
@@ -63,7 +62,6 @@
     left: 960px;
     width: 960px;
     height: 600px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #fillbar {

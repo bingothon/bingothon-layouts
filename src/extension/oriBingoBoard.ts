@@ -107,35 +107,33 @@ function recover(): void {
 }
 
 function squareShouldBeRevealed(apiResp: OriApiResponse, idx: number): boolean {
-  if (apiResp.disc_squares.includes(idx) || apiResp.cards[idx].completed) {
-    return true;
-  }
-  if (idx - 5 >= 0) {
-    const other = idx - 5;
-    if (apiResp.disc_squares.includes(other) || apiResp.cards[other].completed) {
-      return true;
-    }
-  }
-  if (idx % 5 !== 0 && idx - 1 >= 0) {
-    const other = idx - 1;
-    if (apiResp.disc_squares.includes(other) || apiResp.cards[other].completed) {
-      return true;
-    }
-  }
-  if (idx + 5 < 25) {
-    const other = idx + 5;
-    if (apiResp.disc_squares.includes(other) || apiResp.cards[other].completed) {
-      return true;
-    }
-  }
-  if (idx % 5 !== 4 && idx + 1 < 25) {
-    const other = idx + 1;
-    if (apiResp.disc_squares.includes(other) || apiResp.cards[other].completed) {
-      return true;
-    }
-  }
-  return false;
+	let completed: Set<number> = new Set<number>();
+	for (let i = 0; i < apiResp.cards.length; i++) {
+		if (apiResp.cards[i].completed) {
+			completed.add(i);
+		}
+	}
+	let current = new Set<number>();
+	apiResp.disc_squares.forEach((square) => {
+		current.add(square)
+	});
+	let lastSize = 0;
+	while (current.size != lastSize) {
+		lastSize = current.size
+		current.forEach((square) => {
+			if (completed.has(square)) {
+				if (square % 5 > 1)
+					current.add(square - 1)
+				if (square % 5 < 4)
+					current.add(square + 1)
+				current.add(square - 5)
+				current.add(square + 5)
+			}
+		});
+	}
+	return current.has(idx);
 }
+
 
 nodecg.listenFor('oriBingo:activate', async (data, callback): Promise<void> => {
   try {
