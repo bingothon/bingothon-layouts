@@ -21,6 +21,11 @@
     --bingo-color-teal: linear-gradient(#419695, #2e7372);
     --bingo-color-navy: linear-gradient(#0d48b5, #022b75);
     --bingo-color-yellow: linear-gradient(#8c8b8b, #808080);
+
+    --border-color-red: #CE302C;
+    --border-color-teal: #2e7372;
+    --border-color-blue: #088CBD;
+    --border-color-purple: #7120ab;
 }
 
 summer {
