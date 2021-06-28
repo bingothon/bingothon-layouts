@@ -1,11 +1,13 @@
 <template>
 	<div>
-    <div id="fillleft" class="flexContainer"></div>
-    <div id="fillright" class="flexContainer"></div>
-		<twitch-player id="stream1" streamIndex="0"></twitch-player>
-		<twitch-player id="stream2" streamIndex="1"></twitch-player>
+    <div id="fillleft" class="flexContainer">
+        <twitch-player id="stream1" streamIndex="0"></twitch-player>
+        <twitch-player id="stream2" streamIndex="1"></twitch-player>
+    </div>
+    <div id="fillright" class="flexContainer">
 		<twitch-player id="stream3" streamIndex="2"></twitch-player>
 		<twitch-player id="stream4" streamIndex="3"></twitch-player>
+    </div>
     <div id="fillbar" class="flexContainer"></div>
     <div id="fillvoice" class="flexContainer"></div>
 		<div id="fillupperplayers"></div>
@@ -64,7 +66,7 @@
     height: 500px;
     border: 2px var(--container-border-color) solid;
   }
-  #stream2 {
+  #stream3 {
     position: absolute;
     top: 0px;
     left: 1253px;
@@ -72,7 +74,7 @@
     height: 499px;
     border: 2px var(--container-border-color) solid;
   }
-  #stream3 {
+  #stream2 {
     position: absolute;
     top: 500px;
     left: 0px;
@@ -142,14 +144,14 @@
     width: 530px;
   }
 
-  #pi2 {
+  #pi3 {
 	  position: absolute;
 	  top: 63px;
 	  left: 705px;
 	  border: 2px var(--container-border-color) solid;
 	  width: 530px;
   }
-  #pi3 {
+  #pi2 {
     position: absolute;
     top: 875px;
     left: 670px;
