@@ -45,6 +45,10 @@ export interface Configschema {
     address: string;
     port: number;
   };
-  esaRepeaterPostKey: string;
+  firebase: {
+    dbURL: string;
+    userID: string;
+    secret: string;
+  };
   [k: string]: unknown;
 }

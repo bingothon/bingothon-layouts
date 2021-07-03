@@ -5,3 +5,4 @@ export * from "./TrackerOpenBid";
 export * from "./TrackerPrize";
 export * from "./TwitchStream";
 export * from "./VoiceActivityMember";
+export * from "./Games";

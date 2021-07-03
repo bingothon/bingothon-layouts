@@ -211,6 +211,9 @@
     "deep-equal": "^1.0.1",
     "discord.js": "^12.3.1",
     "fibers": "^5.0.0",
+    "firebase": "^8.7.0",
+    "firebase-app": "^0.0.1",
+    "firebase-auth": "^0.1.2",
     "gsap": "^3.1.1",
     "mpc-js": "^1.2.1",
     "node-opus": "^0.3.3",
@@ -220,9 +223,11 @@
     "sass-loader": "^10.0.5",
     "tmi.js": "^1.7.1",
     "ts-loader": "^8.0.7",
+    "vuefire": "^2.2.5",
     "vuetify": "^2.4.2",
     "vuetify-loader": "^1.6.0",
     "vuex": "^3.1.1",
+    "vuexfire": "^3.2.5",
     "webpack-livereload-plugin": "^2.3.0",
     "ws": "^7.1.2"
   }
