@@ -1,21 +1,44 @@
 {
-	"$schema": "http://json-schema.org/draft-07/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
+    "required": [
+        "twitch",
+        "discord",
+        "discordSunshine",
+        "donationtracker",
+        "obs",
+        "firebase"
+    ],
     "required": ["twitch", "discord","donationtracker","obs","esaRepeaterPostKey"],
     "additionalItems": false,
-	"properties": {
-		"twitch": {
-            "type":"object",
-            "required": ["enable","chatBot"],
-            "additionalProperties": false,
-			"properties": {
-				"enable": {"type":"boolean", "default": false},
-				"chatBot": {"type":"boolean", "default": false}
-			}
-		},
-		"discord": {
+    "properties": {
+        "twitch": {
             "type": "object",
-            "required": ["test","token","serverID","commandChannelID","voiceChannelID"],
+            "required": [
+                "enable",
+                "chatBot"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "enable": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "chatBot": {
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "discord": {
+            "type": "object",
+            "required": [
+                "test",
+                "token",
+                "serverID",
+                "commandChannelID",
+                "voiceChannelID"
+            ],
             "additionalProperties": false,
 			"properties": {
 				"test": {"type": "boolean", "default": true},
@@ -46,7 +69,7 @@
 		},
 		"obs": {
             "type":"object",
-            "required": ["discordAudio","streamsAudio","mpdAudio","address","password","enable", "gameScene"],
+            "required": ["discordAudio","streamsAudio","mpdAudio","address","password","enable"],
             "additionalProperties": false,
 			"properties": {
 				"enable": {"type": "boolean", "default": false},

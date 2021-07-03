@@ -1,7 +1,9 @@
 import clone from 'clone';
 import {ReplicantBrowser} from 'nodecg/types/browser'; // eslint-disable-line
 import Vue from 'vue';
+import { vuexfireMutations, firebaseAction } from "vuexfire";
 import Vuex from 'vuex';
+import {db} from "../extension/firebase"
 import {
     AllCamNames,
     AllGameLayouts,
@@ -41,6 +43,7 @@ import {
 } from "../../schemas";
 import {RunDataActiveRun, RunDataArray, Timer, TwitchCommercialTimer} from "../../speedcontrol-types";
 import {Scene} from 'obs-websocket-js';
+import {Games} from "../../types";
 
 Vue.use(Vuex);
 
@@ -154,6 +157,8 @@ export const store = new Vuex.Store({
         'assets:squareLogos': [] as Asset[],
         // timer
         playerAlternate: true,
+        //firebase
+        games: {} as Games,
     },
     mutations: {
         updateReplicant(state, {name, value}) {
@@ -172,8 +177,18 @@ export const store = new Vuex.Store({
                 clearInterval(playerAlternateInterval);
             }
             playerAlternateInterval = null;
-        }
+        },
+        vuexfireMutations
     },
+    actions: {
+        bindGames: firebaseAction(({ bindFirebaseRef }) => {
+            // return the promise returned by `bindFirebaseRef`
+            return bindFirebaseRef('games', db.ref('games'))
+        }),
+        unbindGames: firebaseAction(({ unbindFirebaseRef }) => {
+            unbindFirebaseRef('games')
+        }),
+    }
 });
 
 store.commit('startPlayerAlternateInterval', 10000);
