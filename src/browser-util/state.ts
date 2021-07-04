@@ -3,7 +3,7 @@ import {ReplicantBrowser} from 'nodecg/types/browser'; // eslint-disable-line
 import Vue from 'vue';
 import { vuexfireMutations, firebaseAction } from "vuexfire";
 import Vuex from 'vuex';
-import {db} from "../extension/firebase"
+import {db} from "../extension/firebase";
 import {
     AllCamNames,
     AllGameLayouts,
@@ -170,7 +170,7 @@ export const store = new Vuex.Store({
             }
             playerAlternateInterval = null;
         },
-        vuexfireMutations
+        ...vuexfireMutations
     },
     actions: {
         bindGames: firebaseAction(({ bindFirebaseRef }) => {

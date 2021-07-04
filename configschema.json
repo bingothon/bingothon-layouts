@@ -7,7 +7,7 @@
         "discordSunshine",
         "donationtracker",
         "obs",
-        "firebase"
+        "firebaseConfig"
     ],
     "additionalItems": false,
     "properties": {
@@ -199,24 +199,49 @@
                 }
             }
         },
-        "firebase": {
+        "firebaseConfig": {
             "type": "object",
             "required": [
-                "dbURL",
-                "userID",
-                "secret"
+                "apiKey",
+                "authDomain",
+                "databaseURL",
+                "projectID",
+                "storageBucket",
+                "messagingSenderId",
+                "appId",
+                "measurementId"
             ],
             "additionalProperties": false,
             "properties": {
-                "dbURL": {
+                "apiKey": {
                     "type": "string",
                     "default": ""
                 },
-                "userID": {
+                "authDomain": {
                     "type": "string",
                     "default": ""
                 },
-                "secret": {
+                "databaseURL": {
+                    "type": "string",
+                    "default": ""
+                },
+                "projectID": {
+                    "type": "string",
+                    "default": ""
+                },
+                "storageBucket": {
+                    "type": "string",
+                    "default": ""
+                },
+                "messagingSenderId": {
+                    "type": "string",
+                    "default": ""
+                },
+                "appId": {
+                    "type": "string",
+                    "default": ""
+                },
+                "measurementId": {
                     "type": "string",
                     "default": ""
                 }

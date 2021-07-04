@@ -1,9 +1,12 @@
 export type Games = {
     [k: string]: {
         editors: {
-            [j: boolean]
+            [l: boolean]
         }[];
         owner: string;
         passcode: string
+        items: {
+            [m: any]
+        }[]
     }
 }[]
