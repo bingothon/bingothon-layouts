@@ -38,10 +38,15 @@ export interface Configschema {
     address: string;
     port: number;
   };
-  firebase: {
-    dbURL: string;
-    userID: string;
-    secret: string;
+  firebaseConfig: {
+    apiKey: string;
+    authDomain: string;
+    databaseURL: string;
+    projectID: string;
+    storageBucket: string;
+    messagingSenderId: string;
+    appId: string;
+    measurementId: string;
   };
   [k: string]: unknown;
 }
