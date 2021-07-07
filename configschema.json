@@ -205,7 +205,7 @@
                 "apiKey",
                 "authDomain",
                 "databaseURL",
-                "projectID",
+                "projectId",
                 "storageBucket",
                 "messagingSenderId",
                 "appId",
@@ -225,7 +225,7 @@
                     "type": "string",
                     "default": ""
                 },
-                "projectID": {
+                "projectId": {
                     "type": "string",
                     "default": ""
                 },

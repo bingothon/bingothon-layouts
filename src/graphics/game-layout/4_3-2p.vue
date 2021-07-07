@@ -1,39 +1,42 @@
 <template>
     <div>
-        <div v-if="game === 'sms'">
-            <!--<twitch-player id="stream1" streamIndex="0"></twitch-player
-            <twitch-player id="stream2" streamIndex="1"></twitch-player>-->
-            <div id="borderline"></div>
-            <div id="fillvoice" class="flexContainer"></div>
-            <player-info id="pi1" height=45px playerIndex="0" :hide-finish-time="true"></player-info>
-            <player-info id="pi2" height=45px playerIndex="1" :hide-finish-time="true"></player-info>
-            <div id="timer-and-discord-container">
-                <test-timer-container id="timer"></test-timer-container>
-                <discord-voice-display id="discord-voice" iconHeight="40px" maxUserCount="4"
-                                       nameWidth="125px"></discord-voice-display>
+        <div>
+            <div v-if="game === 'sms'">
+                <!--<twitch-player id="stream1" streamIndex="0"></twitch-player
+                <twitch-player id="stream2" streamIndex="1"></twitch-player>-->
+                <div id="borderline"></div>
+                <div id="fillvoice" class="flexContainer"></div>
+                <player-info id="pi1" height=45px playerIndex="0" :hide-finish-time="true"></player-info>
+                <player-info id="pi2" height=45px playerIndex="1" :hide-finish-time="true"></player-info>
+                <div id="timer-and-discord-container">
+                    <test-timer-container id="timer"></test-timer-container>
+                    <discord-voice-display id="discord-voice" iconHeight="40px" maxUserCount="4"
+                                           nameWidth="125px"></discord-voice-display>
+                </div>
+                <div id="game" class="flexContainer">
+                    <test-game-container id="gamec"></test-game-container>
+                    <img id="logo" src="../../../static/Super_Mario_Sunshine_logo.png">
+                </div>
+                <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
             </div>
-            <div id="game" class="flexContainer">
-                <test-game-container id="gamec"></test-game-container>
-                <img id="logo" src="../../../static/Super_Mario_Sunshine_logo.png">
-            </div>
-            <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
-        </div>
-        <div v-else>
-            <!--<twitch-player id="stream1" streamIndex="0"></twitch-player>
-            <twitch-player id="stream2" streamIndex="1"></twitch-player>-->
-            <div id="borderlineBOTW"></div>
-            <div id="fillvoiceBOTW" class="flexContainer"></div>
-            <player-info id="pi1BOTW" height=45px playerIndex="0" :hide-finish-time="true"></player-info>
-            <player-info id="pi2BOTW" height=45px playerIndex="1" :hide-finish-time="true"></player-info>
+            <div v-else>
+                <!--<twitch-player id="stream1" streamIndex="0"></twitch-player>
+                <twitch-player id="stream2" streamIndex="1"></twitch-player>-->
+                <div id="borderlineBOTW"></div>
+                <div id="fillvoiceBOTW" class="flexContainer"></div>
+                <player-info id="pi1BOTW" height=45px playerIndex="0" :hide-finish-time="true"></player-info>
+                <player-info id="pi2BOTW" height=45px playerIndex="1" :hide-finish-time="true"></player-info>
                 <test-timer-container id="timerBOTW"></test-timer-container>
                 <discord-voice-display id="discord-voiceBOTW" iconHeight="40px" maxUserCount="4"
                                        nameWidth="125px" voice-highlight-color="darkred"></discord-voice-display>
-            <div id="gameBOTW" class="flexContainer">
-                <test-game-container id="gamecBOTW"></test-game-container>
-                <img id="logoBOTW" src="../../../static/the-legend-of-zelda-breath-of-the-wild-logo.png">
+                <div id="gameBOTW" class="flexContainer">
+                    <test-game-container id="gamecBOTW"></test-game-container>
+                    <img id="logoBOTW" src="../../../static/the-legend-of-zelda-breath-of-the-wild-logo.png">
+                </div>
+                <bingo-board id="Bingo-boardBOTW" fontSize="30px"></bingo-board>
             </div>
-            <bingo-board id="Bingo-boardBOTW" fontSize="30px"></bingo-board>
         </div>
+        <Tracker class="Tracker"></Tracker>
     </div>
 </template>
 
@@ -49,9 +52,11 @@ import PlayerTeamContainer from "../components/playerTeamContainer.vue";
 import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
 import TwitchPlayer from "../components/twitchPlayer.vue";
 import {RunDataTeam} from "../../../speedcontrol-types";
+import Tracker from "../components/tracker.vue";
 
 @Component({
     components: {
+        Tracker,
         BingoBoard,
         TestGameContainer,
         PlayerInfo,
@@ -252,6 +257,14 @@ export default class GameLayout extends Vue {
     height: 480px;
     border: 2px var(--container-border-color) solid;
     background-image: url("../../../static/middle-info-background.png");
+}
+
+.Tracker {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
 }
 
 /*#timer-and-discord-containerBOTW {

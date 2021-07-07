@@ -9,4 +9,4 @@ export type Games = {
             [m: any]
         }[]
     }
-}[]
+}
