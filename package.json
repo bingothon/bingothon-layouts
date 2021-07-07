@@ -277,6 +277,8 @@
     "firebase-app": "^0.0.1",
     "firebase-auth": "^0.1.2",
     "gsap": "^3.1.1",
+    "moment": "^2.29.1",
+    "momentjs": "^2.0.0",
     "mpc-js": "^1.2.1",
     "obs-websocket-js": "^4.0.2",
     "request-promise": "^4.2.4",

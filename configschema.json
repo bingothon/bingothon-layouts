@@ -7,9 +7,8 @@
         "discordSunshine",
         "donationtracker",
         "obs",
-        "firebase"
+        "firebaseConfig"
     ],
-    "required": ["twitch", "discord","donationtracker","obs","esaRepeaterPostKey"],
     "additionalItems": false,
     "properties": {
         "twitch": {
@@ -40,57 +39,213 @@
                 "voiceChannelID"
             ],
             "additionalProperties": false,
-			"properties": {
-				"test": {"type": "boolean", "default": true},
-				"token": {"type": "string", "default": "DISCORD_BOT_TOKEN"},
-				"serverID": {"type": "string", "default": "DISCORD_SERVER_ID"},
-				"commandChannelID": {"type": "string", "default": "DISCORD_COMMAND_CHANNEL_ID"},
-				"voiceChannelID": {"type": "string", "default": "DISCORD_VC_ID"},
-				"ignoredUsers": {
-					"type":"array",
-					"default":[],
-					"$comment": "discord tags of users that won't show up in the layout (for the bot), example `Bot#1234`",
-					"items": {
-						"type": "string"
-					}
-				}
-			}
-		},
-		"donationtracker": {
+            "properties": {
+                "test": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "token": {
+                    "type": "string",
+                    "default": "DISCORD_BOT_TOKEN"
+                },
+                "serverID": {
+                    "type": "string",
+                    "default": "DISCORD_SERVER_ID"
+                },
+                "commandChannelID": {
+                    "type": "string",
+                    "default": "DISCORD_COMMAND_CHANNEL_ID"
+                },
+                "voiceChannelID": {
+                    "type": "string",
+                    "default": "DISCORD_VC_ID"
+                },
+                "ignoredUsers": {
+                    "type": "array",
+                    "default": [],
+                    "$comment": "discord tags of users that won't show up in the layout (for the bot), example `Bot#1234`",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "discordSunshine": {
             "type": "object",
-            "required": ["enable","url","eventSlug"],
+            "required": [
+                "test",
+                "token",
+                "serverID",
+                "commandChannelID",
+                "voiceChannelID"
+            ],
             "additionalProperties": false,
-			"properties": {
-				"enable": {"type": "boolean", "default": false},
-				"url": {"type": "string", "default": "https://devdonations.bingothon.com"},
-				"eventSlug": {"type": "string", "default": "bingothon18"},
-				"test": {"type": "boolean", "default": false}
-			}
-		},
-		"obs": {
-            "type":"object",
-            "required": ["discordAudio","streamsAudio","mpdAudio","address","password","enable"],
+            "properties": {
+                "test": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "token": {
+                    "type": "string",
+                    "default": "DISCORD_BOT_TOKEN"
+                },
+                "serverID": {
+                    "type": "string",
+                    "default": "DISCORD_SERVER_ID"
+                },
+                "commandChannelID": {
+                    "type": "string",
+                    "default": "DISCORD_COMMAND_CHANNEL_ID"
+                },
+                "voiceChannelID": {
+                    "type": "string",
+                    "default": "DISCORD_VC_ID"
+                },
+                "ignoredUsers": {
+                    "type": "array",
+                    "default": [],
+                    "$comment": "discord tags of users that won't show up in the layout (for the bot), example `Bot#1234`",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "donationtracker": {
+            "type": "object",
+            "required": [
+                "enable",
+                "url",
+                "eventSlug"
+            ],
             "additionalProperties": false,
-			"properties": {
-				"enable": {"type": "boolean", "default": false},
-				"address": { "type": "string", "default": "localhost:4444" },
-				"password": { "type": "string", "default": "" },
-				"discordAudio": {"type":"string", "default":"Discord-Audio"},
-				"mpdAudio": {"type":"string", "default":"MPD-Audio"},
-				"streamsAudio": {"type":"string", "default":"Desktop-Audio"},
-				"gameScene": {"type":"string", "default": "game"}
-			}
-		},
-		"mpd": {
-			"type":"object",
-			"required": ["enable","address","port"],
-			"additionalProperties": false,
-			"properties": {
-				"enable": {"type":"boolean", "default": false},
-				"address": {"type": "string", "default": "localhost"},
-				"port": {"type": "number", "default": 6600}
-			}
-		},
-		"esaRepeaterPostKey": {"type": "string", "default": "DEFAULT_KEY"}
-	}
+            "properties": {
+                "enable": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "url": {
+                    "type": "string",
+                    "default": "https://devdonations.bingothon.com"
+                },
+                "eventSlug": {
+                    "type": "string",
+                    "default": "bingothon18"
+                },
+                "test": {
+                    "type": "boolean",
+                    "default": false
+                }
+            }
+        },
+        "obs": {
+            "type": "object",
+            "required": [
+                "discordAudio",
+                "streamsAudio",
+                "mpdAudio",
+                "address",
+                "password",
+                "enable"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "enable": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "address": {
+                    "type": "string",
+                    "default": "localhost:4444"
+                },
+                "password": {
+                    "type": "string",
+                    "default": ""
+                },
+                "discordAudio": {
+                    "type": "string",
+                    "default": "Discord-Audio"
+                },
+                "mpdAudio": {
+                    "type": "string",
+                    "default": "MPD-Audio"
+                },
+                "streamsAudio": {
+                    "type": "string",
+                    "default": "Desktop-Audio"
+                }
+            }
+        },
+        "mpd": {
+            "type": "object",
+            "required": [
+                "enable",
+                "address",
+                "port"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "enable": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "address": {
+                    "type": "string",
+                    "default": "localhost"
+                },
+                "port": {
+                    "type": "number",
+                    "default": 6600
+                }
+            }
+        },
+        "firebaseConfig": {
+            "type": "object",
+            "required": [
+                "apiKey",
+                "authDomain",
+                "databaseURL",
+                "projectID",
+                "storageBucket",
+                "messagingSenderId",
+                "appId",
+                "measurementId"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "apiKey": {
+                    "type": "string",
+                    "default": ""
+                },
+                "authDomain": {
+                    "type": "string",
+                    "default": ""
+                },
+                "databaseURL": {
+                    "type": "string",
+                    "default": ""
+                },
+                "projectID": {
+                    "type": "string",
+                    "default": ""
+                },
+                "storageBucket": {
+                    "type": "string",
+                    "default": ""
+                },
+                "messagingSenderId": {
+                    "type": "string",
+                    "default": ""
+                },
+                "appId": {
+                    "type": "string",
+                    "default": ""
+                },
+                "measurementId": {
+                    "type": "string",
+                    "default": ""
+                }
+            }
+        }
+    }
 }

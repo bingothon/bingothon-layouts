@@ -42,7 +42,7 @@ export interface Configschema {
     apiKey: string;
     authDomain: string;
     databaseURL: string;
-    projectID: string;
+    projectId: string;
     storageBucket: string;
     messagingSenderId: string;
     appId: string;
