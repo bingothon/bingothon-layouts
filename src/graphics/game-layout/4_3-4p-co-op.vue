@@ -1,6 +1,5 @@
 <template>
     <div>
-        <div id="fillMiddle"></div>
         <div id="fillbar" class="flexContainer"></div>
         <twitch-player id="stream1" streamIndex="0"
                        :style="{'border': '2px var(--border-color-' + teamColor1 + ') solid'}"></twitch-player>
@@ -13,6 +12,9 @@
         <test-game-container id="game"></test-game-container>
         <test-timer-container id="timer"></test-timer-container>
         <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
+        <div id="SponsorContainer">
+            <img src="../../../static/logo-winter.png" style="height: 100%; width: 100%; object-fit: contain">
+        </div>
         <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="125px"
         maxUserCount="6"></discord-voice-display>
         <team-info
@@ -27,6 +29,7 @@
             id="pi1"
             show-color="false"
             class="PlayerInfo"
+            height="45px"
             :style="{'border': '5px var(--border-color-' + teamColor1 + ') solid'}"
         ></player-info>
         <player-info
@@ -35,12 +38,14 @@
             id="pi2"
             class="PlayerInfo"
             show-color="false"
+            height="45px"
             :style="{'border': '5px var(--border-color-' + teamColor1 + ') solid'}"
         ></player-info>
         <team-info
             id="ptc2"
             teamIndex="1"
             height="40px"
+            reverseOrder
             :style="{'border': '5px var(--border-color-' + teamColor2 + ') solid'}"
         ></team-info>
         <player-info
@@ -49,6 +54,7 @@
             id="pi3"
             show-color="false"
             class="PlayerInfo"
+            height="45px"
             :style="{'border': '5px var(--border-color-' + teamColor2 + ') solid'}"
         ></player-info>
         <player-info
@@ -57,6 +63,7 @@
             id="pi4"
             class="PlayerInfo"
             show-color="false"
+            height="45px"
             :style="{'border': '5px var(--border-color-' + teamColor2 + ') solid'}"
         ></player-info>
     </div>
@@ -106,41 +113,45 @@ export default class GameLayout extends Vue {
 <style scoped>
 #stream1 {
     position: absolute;
-    top: 0px;
+    top: 69px;
     left: 0px;
-    width: 631px;
-    height: 473px;
+    width: 574px;
+    height: 430px;
+    background-color: aqua;
 }
 
 #stream2 {
     position: absolute;
-    top: 527px;
+    top: 500px;
     left: 0px;
-    width: 631px;
-    height: 469px;
+    width: 574px;
+    height: 430px;
+    background-color: blue;
 }
 
 #stream3 {
     position: absolute;
-    top: 0px;
-    left: 1289px;
-    width: 627px;
-    height: 473px;
+    top: 69px;
+    left: 1342px;
+    width: 574px;
+    height: 430px;
+    background-color: red;
 }
 
 #stream4 {
     position: absolute;
-    top: 527px;
-    left: 1289px;
-    width: 627px;
-    height: 469px;
+    top: 500px;
+    left: 1342px;
+    width: 574px;
+    height: 430px;
+    background-color: orange;
 }
 
 #discord-voice {
     position: absolute;
-    top: 158px;
-    left: 1053px;
-    width: 232px;
+    top: 0px;
+    left: 1029px;
+    width: 309px;
     height: 302px;
     background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
@@ -154,79 +165,80 @@ export default class GameLayout extends Vue {
 #ptc1 {
     position: absolute;
     top: 473px;
-    left: 0px;
+    left: 578px;
     border: 2px var(--container-border-color) solid;
-    width: 611px;
+    width: 358px;
     background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
 }
 
 #ptc2 {
     position: absolute;
     top: 473px;
-    left: 1289px;
+    left: 960px;
     border: 2px var(--container-border-color) solid;
-    width: 607px;
+    width: 358px;
     background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
 }
 
 #pi1 {
-    left: 635px;
+    left: 0px;
     top: 0px;
 }
 
 #pi2 {
-    top: 842px;
-    left: 635px;
+    top: 931px;
+    left: 0px;
 }
 
 #pi3 {
-    left: 765px;
-    top: 79px;
+    left: 1342px;
+    top: 0px;
 }
 
 #pi4 {
-    left: 765px;
-    top: 921px;
+    left: 1342px;
+    top: 931px;
 }
 
 .PlayerInfo {
     position: absolute;
-    width: 500px;
+    width: 554px;
 }
 
 #Bingo-board {
     position: absolute;
-    top: 462px;
-    left: 635px;
-    width: 654px;
-    height: 378px;
+    top: 537px;
+    left: 578px;
+    width: 764px;
+    height: 463px;
 }
 
 #game {
     background-image: url("../../../static/middle-info-background.png");
     position: absolute;
-    top: 158px;
-    left: 635px;
-    width: 416px;
+    top: 0px;
+    left: 578px;
+    width: 449px;
     border: 2px var(--container-border-color) solid;
     height: 155px;
 }
 
-#fillMiddle {
+#SponsorContainer {
     position: absolute;
-    top: 0px;
-    left: 633px;
-    height: 1000px;
-    width: 656px;
+    top: 305px;
+    left: 578px;
+    width: 760px;
+    height: 164px;
     background-image: url("../../../static/middle-info-background.png");
+    border: 2px var(--container-border-color) solid;
 }
 
 #timer {
     position: absolute;
-    top: 315px;
-    left: 635px;
+    top: 157px;
+    left: 578px;
     background-image: url("../../../static/middle-info-background.png");
-    width: 416px;
+    width: 449px;
     border: 2px var(--container-border-color) solid;
     height: 145px;
 }

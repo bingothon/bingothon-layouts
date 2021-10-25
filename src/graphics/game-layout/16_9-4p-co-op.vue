@@ -1,97 +1,148 @@
 <template>
-	<div>
-		<twitch-player id="stream1" streamIndex="0"></twitch-player>
-		<twitch-player id="stream2" streamIndex="1"></twitch-player>
-		<twitch-player id="stream3" streamIndex="2"></twitch-player>
-		<twitch-player id="stream4" streamIndex="3"></twitch-player>
-    <div id="fillbar" class="flexContainer"></div>
-    <div id="fillvoice" class="flexContainer"></div>
-    <player-info id="pi1" playerIndex="0" height=45px hide-finish-time="true" show-color="false"></player-info>
-    <player-info id="pi2" playerIndex="1" height=45px hide-finish-time="true" show-color="false"></player-info>
-    <player-info id="pi3" playerIndex="2" height=45px hide-finish-time="true" show-color="false"></player-info>
-    <player-info id="pi4" playerIndex="3" height=45px hide-finish-time="true" show-color="false"></player-info>
-		<test-game-container id="game"></test-game-container>
-		<div id="ti1">
-			<team-info team-index="0" height="45px"></team-info>
-		</div>
-		<div id="ti2">
-			<team-info team-index="1" height="45px"></team-info>
-		</div>
-    <test-timer-container id="timer"></test-timer-container>
-    <bingo-board id="Bingo-board" fontSize="20px"></bingo-board>
-    <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px" maxUserCount="4"></discord-voice-display>
-	</div>
+    <div>
+        <twitch-player id="stream1" streamIndex="0"
+                       :style="{'border': '2px var(--border-color-' + teamColor1 + ') solid'}"></twitch-player>
+        <twitch-player id="stream2" streamIndex="1"
+                       :style="{'border': '2px var(--border-color-' + teamColor1 + ') solid'}"></twitch-player>
+        <twitch-player id="stream3" streamIndex="2"
+                       :style="{'border': '2px var(--border-color-' + teamColor2 + ') solid'}"></twitch-player>
+        <twitch-player id="stream4" streamIndex="3"
+                       :style="{'border': '2px var(--border-color-' + teamColor2 + ') solid'}"></twitch-player>
+        <div id="fillbar" class="flexContainer"></div>
+        <div id="fillvoice" class="flexContainer"></div>
+        <team-info
+            team-index="0"
+            height="45px"
+            id="ti1"
+            :style="{'border': '5px var(--border-color-' + teamColor1 + ') solid'}"
+        ></team-info>
+        <player-info
+            id="pi1"
+            playerIndex="0"
+            height=45px
+            hide-finish-time="true"
+            show-color="false"
+            :style="{'border': '5px var(--border-color-' + teamColor1 + ') solid'}"
+        ></player-info>
+        <player-info
+            id="pi2"
+            playerIndex="1"
+            height=45px
+            hide-finish-time="true"
+            show-color="false"
+            :style="{'border': '5px var(--border-color-' + teamColor1 + ') solid'}"
+        ></player-info>
+        <team-info
+            team-index="1"
+            height="45px"
+            id="ti2"
+            :style="{'border': '5px var(--border-color-' + teamColor2 + ') solid'}"
+        ></team-info>
+        <player-info
+            id="pi3"
+            playerIndex="2"
+            height=45px
+            hide-finish-time="true"
+            show-color="false"
+            :style="{'border': '5px var(--border-color-' + teamColor2 + ') solid'}"
+        ></player-info>
+        <player-info
+            id="pi4"
+            playerIndex="3"
+            height=45px
+            hide-finish-time="true"
+            show-color="false"
+            :style="{'border': '5px var(--border-color-' + teamColor2 + ') solid'}"
+        ></player-info>
+        <test-game-container id="game"></test-game-container>
+        <test-timer-container id="timer"></test-timer-container>
+        <div id="SponsorContainer">
+            <img src="../../../static/logo-winter.png" style="height: 100%; width: 100%; object-fit: contain">
+        </div>
+        <bingo-board id="Bingo-board" fontSize="20px"></bingo-board>
+        <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px"
+                               maxUserCount="4"></discord-voice-display>
+    </div>
 </template>
 
 <script lang="ts">
-	import { Component, Vue, Watch, Prop } from "vue-property-decorator";
-	import { nodecg, NodeCG } from "../../browser-util/nodecg";
-	import { Bingoboard, BingosyncSocket, BingoboardMeta } from "../../../schemas";
-	import { store, getReplicant } from "../../browser-util/state";
-  import TestTimerContainer from "../components/timerContainer.vue";
-	import TestGameContainer from "../components/gameContainer.vue";
-  import BingoBoard from "../components/bingoboard.vue";
-  import PlayerInfo from "../components/playerInfo.vue";
-  import TeamInfo from "../components/teamInfo.vue";
-  import PlayerTeamContainer from "../components/playerTeamContainer.vue";
-  import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
-  import { RunDataPlayer, RunDataTeam } from "../../../speedcontrol-types";
-  import TwitchPlayer from "../components/twitchStreamPlaceholder.vue";
+import {Component, Vue, Watch, Prop} from "vue-property-decorator";
+import {nodecg, NodeCG} from "../../browser-util/nodecg";
+import {Bingoboard, BingosyncSocket, BingoboardMeta} from "../../../schemas";
+import {store, getReplicant} from "../../browser-util/state";
+import TestTimerContainer from "../components/timerContainer.vue";
+import TestGameContainer from "../components/gameContainer.vue";
+import BingoBoard from "../components/bingoboard.vue";
+import PlayerInfo from "../components/playerInfo.vue";
+import TeamInfo from "../components/teamInfo.vue";
+import PlayerTeamContainer from "../components/playerTeamContainer.vue";
+import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
+import {RunDataPlayer, RunDataTeam} from "../../../speedcontrol-types";
+import TwitchPlayer from "../components/twitchStreamPlaceholder.vue";
 
-	@Component({
-		components: {
-			BingoBoard,
-      TestGameContainer,
-      PlayerInfo,
-      TeamInfo,
-      PlayerTeamContainer,
-      TestTimerContainer,
-      DiscordVoiceDisplay,
-      TwitchPlayer,
-		}
-	})
-
-	export default class GameLayout extends Vue {
-    get teams(): RunDataTeam[] {
-      return store.state.runDataActiveRun.teams;
+@Component({
+    components: {
+        BingoBoard,
+        TestGameContainer,
+        PlayerInfo,
+        TeamInfo,
+        PlayerTeamContainer,
+        TestTimerContainer,
+        DiscordVoiceDisplay,
+        TwitchPlayer,
     }
-	}
+})
+
+export default class GameLayout extends Vue {
+
+    get teamColor1(): string {
+        return store.state.bingoboardMeta.playerColors[0];
+    }
+
+    get teamColor2(): string {
+        return store.state.bingoboardMeta.playerColors[2];
+    }
+}
 </script>
 
 <style scoped>
-  #stream1 {
+#stream1 {
     position: absolute;
-    top: 60px;
+    top: 69px;
     left: 0px;
-    width: 782px;
-    height: 440px;
-    border: 2px var(--container-border-color) solid;
-  }
-  #stream2 {
+    width: 697px;
+    height: 393px;
+    background-color: aqua;
+}
+
+#stream2 {
     position: absolute;
-    top: 60px;
-    left: 1138px;
-    width: 782px;
-    height: 440px;
-    border: 2px var(--container-border-color) solid;
-  }
-  #stream3 {
-    position: absolute;
-    top: 500px;
+    top: 535px;
     left: 0px;
-    width: 782px;
-    height: 440px;
-    border: 2px var(--container-border-color) solid;
-  }
-  #stream4 {
+    width: 697px;
+    height: 392px;
+    background-color: blue;
+}
+
+#stream3 {
     position: absolute;
-    top: 500px;
-    left: 1138px;
-    width: 782px;
-    height: 440px;
-    border: 2px var(--container-border-color) solid;
-  }
-  #fillbar {
+    top: 69px;
+    left: 1224px;
+    width: 697px;
+    height: 393px;
+    background-color: red;
+}
+
+#stream4 {
+    position: absolute;
+    top: 535px;
+    left: 1224px;
+    width: 697px;
+    height: 392px;
+    background-color: orange;
+}
+
+#fillbar {
     position: absolute;
     top: 1000px;
     left: 0px;
@@ -99,86 +150,105 @@
     height: 80px;
     background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
-  }
-  #discord-voice {
+}
+
+#discord-voice {
     position: absolute;
-    top: 370px;
-    left: 782px;
-    width: 356px;
-    height: 130px;
+    top: 276px;
+    left: 961px;
+    width: 259px;
+    height: 222px;
     background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
-  }
-  #pi1 {
+}
+
+#pi1 {
     position: absolute;
     top: 0px;
     left: 0px;
     border: 2px var(--container-border-color) solid;
-    width: 718px;
-  }
-  #pi2 {
+    width: 677px;
+}
+
+#pi2 {
     position: absolute;
-    top: 0px;
-    left: 1188px;
-    border: 2px var(--container-border-color) solid;
-    width: 718px;
-  }
-  #pi3 {
-    position: absolute;
-    top: 940px;
+    top: 931px;
     left: 0px;
     border: 2px var(--container-border-color) solid;
-    width: 718px;
-  }
-  #pi4 {
+    width: 677px;
+}
+
+#pi3 {
     position: absolute;
-    top: 940px;
-    left: 1188px;
+    top: 0px;
+    left: 1224px;
     border: 2px var(--container-border-color) solid;
-    width: 718px;
-  }
-	#ti1 {
-		position: absolute;
-		top: 0px;
-		left: 732px;
-		width: 456px;
-		height: 59px;
-		background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
-		border: 2px var(--container-border-color) solid;
-	}
-	#ti2 {
-		position: absolute;
-		top: 940px;
-		left: 732px;
-		width: 456px;
-		height: 59px;
-		background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
-		border: 2px var(--container-border-color) solid;
-	}
-  #Bingo-board {
+    width: 677px;
+}
+
+#pi4 {
+    position: absolute;
+    top: 931px;
+    left: 1224px;
+    border: 2px var(--container-border-color) solid;
+    width: 677px;
+}
+
+#ti1 {
+    position: absolute;
+    top: 466px;
+    left: 0px;
+    width: 677px;
+    background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
+    border: 2px var(--container-border-color) solid;
+}
+
+#ti2 {
+    position: absolute;
+    top: 466px;
+    left: 1224px;
+    width: 677px;
+    background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
+    border: 2px var(--container-border-color) solid;
+}
+
+#Bingo-board {
     position: absolute;
     top: 500px;
-    left: 782px;
+    left: 701px;
     border: 2px var(--container-border-color) solid;
-    width:356px;
-    height:438px;
-  }
-  #game {
+    width: 519px;
+    height: 496px;
+}
+
+#game {
     background-image: url("../../../static/middle-info-background.png");
     position: absolute;
-    top: 60px;
-    left: 782px;
-    width: 356px;
+    top: 0px;
+    left: 701px;
+    width: 519px;
     border: 2px var(--container-border-color) solid;
-    height: 155px;
-  }
-  #timer{
+    height: 115px;
+}
+
+#timer {
     position: absolute;
-    top: 215px;
-    left: 782px;
+    top: 118px;
+    left: 701px;
     background-image: url("../../../static/middle-info-background.png");
-    width: 356px;
+    width: 519px;
     border: 2px var(--container-border-color) solid;
     height: 155px;
-  }
+}
+
+#SponsorContainer {
+    position: absolute;
+    top: 276px;
+    left: 701px;
+    width: 257px;
+    height: 221px;
+    background-image: url("../../../static/middle-info-background.png");
+    border: 2px var(--container-border-color) solid;
+}
+
 </style>

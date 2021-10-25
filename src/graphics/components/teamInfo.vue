@@ -1,6 +1,7 @@
 <template>
     <div class="FlexContainer TeamInfoBox"
          :style="{'height' : height}"
+         :class="{'ReverseOrder':reverseOrder}"
     >
         <div
             v-if="bingoColorShown"
@@ -12,7 +13,7 @@
         </div>
         <div :class="medalClasses"></div>
         <div class="TeamNameContainer">
-            <text-fit :text="`${finishTime} ${name || ''}`">
+            <text-fit :text="`${finishTime} ${name || ''}`" :align="reverseOrder?'right':'left'">
             </text-fit>
         </div>
     </div>
@@ -41,6 +42,9 @@ export default class TeamInfo extends Vue {
 
     @Prop({default: "55px"})
     height: string;
+
+    @Prop({default: false})
+    reverseOrder: boolean;
 
     get name(): string {
         const team = store.state.runDataActiveRun.teams[this.teamIndex];
@@ -152,6 +156,10 @@ export default class TeamInfo extends Vue {
     padding: 7px;
     font-size: 35px;
     height: 60px;
+}
+
+.TeamInfoBox.ReverseOrder {
+    flex-direction: row-reverse;
 }
 
 .TeamInfoBox > .TeamNameContainer {
