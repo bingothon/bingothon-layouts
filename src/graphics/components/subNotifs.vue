@@ -29,20 +29,20 @@ export default class SubNotifs extends Vue {
     username: string = "LongerName";
 
     mounted() {
-        nodecg.listenFor("CHANNEL_FOLLOW_EVENTS", data => { //change to CHANNEL_SUBSCRIBTION_EVENTS later
+        nodecg.listenFor("CHANNEL_SUBSCRIPTION_EVENTS", data => { //change to CHANNEL_SUBSCRIBTION_EVENTS later
             console.log(`here should be data:`, data)
             this.username = data.username;
 
             const runNotification = async() => {
                 const delay = (milliseconds: Number) => new Promise(resolve => { setTimeout(resolve, Number(milliseconds)) })
-                const $subBox = document.getElementById("SubNotifsNeutral");
+                const $subBox = document.getElementById("SubNotifs");
                     const $subBoxFrames = [
-                        { 
+                        {
                             transform: 'none',
-                            
+
                         },
-                        { 
-                            transform: 'translateY(-100px) scale(1)', 
+                        {
+                            transform: 'translateY(-100px) scale(1)',
                             offset: 0.6
                         },
                         {
@@ -52,7 +52,7 @@ export default class SubNotifs extends Vue {
                         {
                             transform: 'translateY(0px)',
                         }
-                    
+
                     ]
                     $subBox.animate($subBoxFrames, {
                         duration: 10000,

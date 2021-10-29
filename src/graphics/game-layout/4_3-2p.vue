@@ -17,6 +17,7 @@
                 <img id="logo" src="../../../static/Super_Mario_Sunshine_logo.png">
             </div>
             <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
+            <SubNotifs id="SubNotifsSMS" class="SubNotifs"></SubNotifs>
         </div>
         <div v-else-if="game === 'botw'">
             <!--<twitch-player id="stream1" streamIndex="0"></twitch-player>
@@ -33,6 +34,7 @@
                 <img id="logoBOTW" src="../../../static/the-legend-of-zelda-breath-of-the-wild-logo.png">
             </div>
             <bingo-board id="Bingo-boardBOTW" fontSize="30px"></bingo-board>
+            <SubNotifs id="SubNotifsBotw" class="SubNotifs"></SubNotifs>
         </div>
         <div v-else>
             <div id="borderlineBOTW"></div>
@@ -47,7 +49,7 @@
             <div id="Cam1" class="flexContainer"></div>
             <div id="Cam2" class="flexContainer"></div>
             <bingo-board id="Bingo-boardBOTW" fontSize="30px"></bingo-board>
-            <SubNotifs id="SubNotifsNeutral"></SubNotifs>
+            <SubNotifs id="SubNotifsNeutral" class="SubNotifs"></SubNotifs>
         </div>
     </div>
 </template>
@@ -327,7 +329,7 @@ export default class GameLayout extends Vue {
     border: 2px var(--container-border-color) solid;
 }
 
-#SubNotifsNeutral {
+.SubNotifs {
     position: absolute;
     top: 888px;
     left: 300px;
