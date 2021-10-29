@@ -79,7 +79,7 @@ const main = async () => {
             const parsedEventType = sentenceCase(eventSubscription.slice(11, eventSubscription.length))
                 .replace(/ /g, "_").toUpperCase()
 
-            if (parsedEventType === 'CHANNEL_FOLLOW_EVENTS' || parsedEventType === 'CHANNEL_SUBSCRIBTION_EVENTS') {
+            if (parsedEventType === 'CHANNEL_FOLLOW_EVENTS' || parsedEventType === 'CHANNEL_SUBSCRIPTION_EVENTS') {
                 // @ts-ignore
                 console.log(`Attempting to subscribe to ${parsedEventType}`)
                 // @ts-ignore
