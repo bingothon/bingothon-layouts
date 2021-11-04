@@ -4,7 +4,7 @@
       name="fade"
       mode="in-out"
     >
-        <img :src="currentLogo.url" :key="currentLogo.url">
+        <img v-if="currentLogo" :src="currentLogo.url" :key="currentLogo.url">
     </transition>
     </div>
 </template>
@@ -32,8 +32,8 @@ export enum LogoAssetType {
     }
 })
 export default class RotatingLogo extends Vue {
-    @Prop({required: true})
-    logoAssetType: LogoAssetType = LogoAssetType.squareLogos;
+    @Prop({required: true, default: LogoAssetType.wideSmallLogos})
+    logoAssetType: LogoAssetType;
 
     currentIdx = 0;
     changeInterval: NodeJS.Timeout;
