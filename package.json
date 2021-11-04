@@ -225,6 +225,33 @@
         "allowedTypes": [
           "mp4"
         ]
+      },
+      {
+        "name": "wideLargeLogos",
+        "title": "Wide Large Logos",
+        "allowedTypes": [
+          "png",
+          "jpg",
+          "jpeg"
+        ]
+      },
+      {
+        "name": "wideSmallLogos",
+        "title": "Wide Small Logos",
+        "allowedTypes": [
+          "png",
+          "jpg",
+          "jpeg"
+        ]
+      },
+      {
+        "name": "squareLogos",
+        "title": "Square Logos",
+        "allowedTypes": [
+          "png",
+          "jpg",
+          "jpeg"
+        ]
       }
     ]
   },

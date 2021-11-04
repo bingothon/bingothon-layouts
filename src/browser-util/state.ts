@@ -92,7 +92,10 @@ const nodecgSpeedcontrolReplicantNames = [
 ];
 
 const assetNames = [
-    'assets:intermissionVideos'
+    'assets:intermissionVideos',
+    'assets:wideLargeLogos',
+    'assets:wideSmallLogos',
+    'assets:squareLogos'
 ];
 const replicants: Map<string, ReplicantBrowser<any>> = new Map();
 
@@ -146,6 +149,9 @@ export const store = new Vuex.Store({
         twitchCommercialTimer: {} as TwitchCommercialTimer,
         // assets
         "assets:intermissionVideos": [] as Asset[],
+        'assets:wideLargeLogos': [] as Asset[],
+        'assets:wideSmallLogos': [] as Asset[],
+        'assets:squareLogos': [] as Asset[],
         // timer
         playerAlternate: true,
     },
