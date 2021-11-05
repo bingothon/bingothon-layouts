@@ -10,7 +10,7 @@
         <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px"
                                maxUserCount="10"></discord-voice-display>
         <div id="SponsorContainer">
-            <img src="../../../static/logo-winter.png" style="height: 100%; width: 100%; object-fit: contain">
+            <rotating-logo logo-asset-type="wideLargeLogos"></rotating-logo>
         </div>
         <test-game-container id="game"></test-game-container>
         <test-timer-container id="timer"></test-timer-container>
@@ -32,9 +32,11 @@ import PlayerTeamContainer from "../components/playerTeamContainer.vue";
 import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
 import {RunDataPlayer, RunDataTeam} from "../../../speedcontrol-types";
 import TwitchPlayer from "../components/twitchStreamPlaceholder.vue";
+import RotatingLogo from "../components/rotatingLogo.vue";
 
 @Component({
     components: {
+        RotatingLogo,
         BingoBoard,
         TestGameContainer,
         PlayerInfo,
