@@ -8,7 +8,7 @@
 		</div>
 		<div class="flexContainer" id="fillcamIVW2"></div>
 		<div class="flexContainer" id="infoIVW2">
-			<div id="nameIVW2">Palmy</div>
+			<div id="nameIVW2">Pikastroff</div>
 		</div>
 		<div class="flexContainer" id="info">
 			<div id="infotext">
