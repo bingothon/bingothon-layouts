@@ -13,7 +13,7 @@
         <test-timer-container id="timer"></test-timer-container>
         <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
         <div id="SponsorContainer">
-            <img src="../../../static/logo-winter.png" style="height: 100%; width: 100%; object-fit: contain">
+            <rotating-logo logo-asset-type="wideSmallLogos"></rotating-logo>
         </div>
         <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="125px"
         maxUserCount="6"></discord-voice-display>
@@ -83,6 +83,7 @@ import PlayerTeamContainer from "../components/playerTeamContainer.vue";
 import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
 import TwitchPlayer from "../components/twitchStreamPlaceholder.vue";
 import {RunDataPlayer, RunDataTeam} from "../../../speedcontrol-types";
+import RotatingLogo from "../components/rotatingLogo.vue";
 
 @Component({
     components: {
@@ -94,6 +95,7 @@ import {RunDataPlayer, RunDataTeam} from "../../../speedcontrol-types";
         TestTimerContainer,
         DiscordVoiceDisplay,
         TwitchPlayer,
+        RotatingLogo,
     }
 })
 
