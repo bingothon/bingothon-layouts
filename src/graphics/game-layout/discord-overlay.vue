@@ -1,11 +1,6 @@
 <template>
   <div>
-    <div class="bg"></div>
-    <div class="just-dance-video-placeholder"></div>
-	<div class="discord-videocall-placeholder"></div>
-    <img src="../../../static/logo-winter-wide.png" id="logo">
-	  <player-info id="pi1" playerIndex="0" height=45px></player-info>
-	  <player-info id="pi2" playerIndex="1" height=45px></player-info>
+      <discord-voice-display id="discord" maxUserCount="8"></discord-voice-display>
 	</div>
 </template>
 
@@ -48,6 +43,11 @@
 	body{
 		background: linear-gradient(var(--darker-main-color), var(--lighter-main-color));
 	}
+
+    #discord{
+        top: 0px;
+        width: 1920px;
+    }
 
   #stream1 {
     position: absolute;

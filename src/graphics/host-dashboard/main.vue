@@ -16,13 +16,14 @@
 		<div v-if="hostsCanGoLive">
 			Time since last intermission start: {{ timeSinceLastIntermission }}
 		</div>
+
 		<div id="columnsWrapper">
 			<div id="column1" class="column">
 				<div id="PEFacts">
 					<div class="fact">
-						{{ hostTexts[factIndex] }}
+						{{ charityTexts[charityIndex] }}
 					</div>
-					<button v-on:click="updateFactIndex()">Update Text</button>
+					<button v-on:click="updateCharityIndex()">Update Text</button>
 				</div>
 				<div id="bidsHeader">Upcoming Goals/Bidwars:</div>
 				<div id="bidsContainer">
@@ -94,9 +95,15 @@
 				</div>
                 <div id="BingothonTexts">
                     <div class="fact">
-                        {{ bingothonTexts[textIndex] }}
+                        {{ bingothonTexts[bingothonIndex] }}
                     </div>
-                    <button v-on:click="updateTextIndex()">Update Text</button>
+                    <button v-on:click="updateBingothonIndex()">Update Text</button>
+                </div>
+                <div id="SponsorTexts">
+                    <div class="fact">
+                        {{ sponsorTexts[sponsorIndex] }}
+                    </div>
+                    <button v-on:click="updateSponsorIndex()">Update Text</button>
                 </div>
 			</div>
 			<div id="column3" class="column">
@@ -140,6 +147,13 @@
 </template>
 
 <script lang="ts">
+const BINGOTHON_BLURBS = 'Did you know that Bingothon Summer 2021 is being streamed on both the SpeedRunsLive channel as well as our own Twitch channel? If you are enjoying this marathon, then do know that there is even more content on the Bingothon Twitch channel, including for example The Legend of Zelda: Breath of the Wild weekly bingo matches, and more!\n' +
+    'Are you interested in featuring a bingo-related event on the Bingothon Twitch channel? Then do not hesitate to contact the Main Organizers on the Bingothon Discord server and we can certainly can discuss an arrangement to make it happen!\n' +
+    'Bingothon has a Teepublic store where you can buy some cool merch, including the mugs you can win as a prize in this marathon! Revenue gained from the store would be used to further improve the marathon in many ways.\n' +
+    'If you are watching on the Bingothon Twitch channel, why not subscribe? You can get access to some cool emotes, after all! Revenue made from subscribing does NOT go to the charity, but is used to improve Bingothon\'s marathons and other events, so your support is appreciated!\n' +
+    'Do you wonder how people come up with bingo cards for their speedgames? What is the process behind it all? Well we do have the Beyond the Board monthly series that you can find on our YouTube channel, where we sit down with various bingo runners and interview them about their bingo cards, speedgame and much more that allows a great insight into how bingos are made and how the community can further support them! You can also find the FULL uncut interviews on our website at bingothon.com as well!\n' +
+    'Bingothon is committed to supporting as many bingo events as possible, and for that to happen, restreamers are the unsung heroes we need to make that happen! If you are interested in volunteering as a restreamer, then do not hesitate to join our Discord server and talk to a Main Organizer about it!';
+
 const CHARITY_BLURBS = 'Fred Hutch was named the coordinating center for the COVID Vaccine Prevention Network (CoVPN) in July 2020.\n' +
 	'With 25% of Fred Hutch\'s faculties already dedicated to viruses before the pandemic, Fred Hutch was able to take swift action when it started. They have been part of the leading of massive COVID-19 vaccine trials for the US government that have shown great success.\n' +
 	'Fred Hutch opened a first-of-its-kind COVID-19 clinical research center, being one of the United States\' first stand-alone certers dedicated to studying antiviral drugs, monoclonal antibodies and other emerging therapies for COVID-19. With not enough vaccines to go around right now, such treatments have the potential to save many lives until everyone can have access to vaccination.\n' +
@@ -150,12 +164,10 @@ const CHARITY_BLURBS = 'Fred Hutch was named the coordinating center for the COV
 	'Researchers from Fred Hutch have won the Nobel Prize in physiology or medicine three times: in 1990, 2001 and 2004. Dr E. Donnal Thomas was awarded in 1990 for his work on the bone marrow and blood stem cell transplantation. Dr Leland Hartwell was awared in 2001 for discovering the universal mechanism that controls cell division in all eukaryotic, or nucleated, organisms. And finally, Dr. Linda Buck was awared in 2004 for her work on odorant receptors and the organization of the olfactory system — the network responsible for our sense of smell.\n' +
 	'Fred Hutch scientists are doing pardigm-shifting work to understand how the millions of microorganisms in our bodies, called the microbiome, affect overall health — and use that knowlege to improve cancer treatment, fight heart disease, and more.';
 
-const BINGOTHON_BLURBS = 'Did you know that Bingothon Summer 2021 is being streamed on both the SpeedRunsLive channel as well as our own Twitch channel? If you are enjoying this marathon, then do know that there is even more content on the Bingothon Twitch channel, including for example The Legend of Zelda: Breath of the Wild weekly bingo matches, and more!\n' +
-	'Bingothon has a Teepublic store where you can buy some cool merch, including the mugs you can win as a prize in this marathon! Revenue gained from the store would be used to further improve the marathon in many ways.\n' +
-	'If you are watching on the Bingothon Twitch channel, why not subscribe? You can get access to some cool emotes, after all! Revenue made from subscribing does NOT go to the charity, but is used to improve Bingothon\'s marathons and other events, so your support is appreciated!\n' +
-	'Do you wonder how people come up with bingo cards for their speedgames? What is the process behind it all? Well we do have the Beyond the Board monthly series that you can find on our YouTube channel, where we sit down with various bingo runners and interview them about their bingo cards, speedgame and much more that allows a great insight into how bingos are made and how the community can further support them! You can also find the FULL uncut interviews on our website at bingothon.com as well!\n' +
-	'Are you interested in featuring a bingo-related event on the Bingothon Twitch channel? Then do not hesitate to contact the Main Organizers on the Bingothon Discord server and we can certainly can discuss an arrangement to make it happen!\n' +
-	'Bingothon is committed to supporting as many bingo events as possible, and for that to happen, restreamers are the unsung heroes we need to make that happen! If you are interested in volunteering as a restreamer, then do not hesitate to join our Discord server and talk to a Main Organizer about it!';
+const SPONSOR_BLURBS = 'Bingothon is sponsored by Team17, who currently have a huge Black Friday Sale on Steam across their vast library of indie titles, from 20% up to 90% off selected titles\n' +
+    'Bingothon is sponsored by Team17 who recently launched their quirky, culinary adventure game Epic Chef across PC, Switch, Xbox and PS4\n' +
+    'Bingothon is sponsored by Team17 who launched their colourful, dwarven mining simulator Hammerting on PC earlier this month\n' +
+    'Bingothon is sponsored by Team17 who this week unleashed a new hero into their dark fantasy strategy game Age of Darkness currently in Steam Early Access'
 
 import {Component, Vue} from "vue-property-decorator";
 import {store, getReplicant} from "../../browser-util/state";
@@ -173,8 +185,9 @@ import {HostsSpeakingDuringIntermission, ShowPictureDuringIntermission} from "..
 })
 
 export default class HostDashboard extends Vue {
-	private factIndex: number = 0;
-	private textIndex: number = 0;
+	private charityIndex: number = 0;
+	private bingothonIndex: number = 0;
+    private sponsorIndex: number = 0;
 
 	timeSinceLastIntermission: string = '';
 	lastIntermissionInterval: NodeJS.Timeout | null = null;
@@ -282,7 +295,7 @@ export default class HostDashboard extends Vue {
 		return '$' + amount.toFixed(2);
 	}
 
-	get hostTexts(): String[] {
+	get charityTexts(): String[] {
 		return CHARITY_BLURBS.split('\n');
 	}
 
@@ -290,12 +303,20 @@ export default class HostDashboard extends Vue {
 	    return BINGOTHON_BLURBS.split('\n');
     }
 
-	updateFactIndex() {
-		this.factIndex = (this.factIndex + 1) % (this.hostTexts.length - 1);
+    get sponsorTexts(): String[] {
+        return SPONSOR_BLURBS.split('\n');
+    }
+
+	updateCharityIndex() {
+		this.charityIndex = (this.charityIndex + 1) % (this.charityTexts.length);
 	}
 
-	updateTextIndex() {
-            this.textIndex = (this.textIndex + 1) % (this.bingothonTexts.length - 1);
+	updateBingothonIndex() {
+            this.bingothonIndex = (this.bingothonIndex + 1) % (this.bingothonTexts.length);
+    }
+
+    updateSponsorIndex() {
+        this.sponsorIndex = (this.sponsorIndex + 1) % (this.sponsorTexts.length);
     }
 
 	// Get the next Xth run in the schedule.

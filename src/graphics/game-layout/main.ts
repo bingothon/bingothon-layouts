@@ -29,7 +29,7 @@ const routes = [
     {name: "2p 16:10 Layout", path: "/2p-16_10-layout", component: Layouts.Layout_16x10_2p},
     {name: "1p 16:10 Layout", path: "/1p-16_10-layout", component: Layouts.Layout_16x10_1p},
     {name: "Host Bingo Layout", path: "/host-bingo", component: Layouts.Layout_Host_Bingo},
-    {name: "Just Dance Layout", path: "/just-dance", component: Layouts.Layout_Just_Dance},
+    {name: "Discord Overlay", path: "/discord", component: Layouts.Layout_Discord},
     {path: "*", redirect: "/4p-4_3-layout"},
 ];
 
