@@ -9,7 +9,7 @@ const definitions: {[key: string]: string} = {
   exploration: 'In Exploration Bingo all goals except 2 goals are hidden and can be revealed by completing adjacent goals, blackout means all goals',
   coop: ', the players of a team share the same color on the board and work together',
   'double anti': 'In double anti bingo, each player selects a row/column/diagonal for their opponent and chooses an additional line for themselves to complete',
-  'battleships': 'In Battleship bingo, each team places 2,3 and 4 square long battleships on the board, hidden from the other team, which may not overlap. Goal is to sink all of the other teams ships',
+  battleships: 'In Battleship bingo, each team places 2,3 and 4 square long battleships on the board, hidden from the other team, which may not overlap. Goal is to sink all of the other teams ships',
 };
 
 export default definitions;

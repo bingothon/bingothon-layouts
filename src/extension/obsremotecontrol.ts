@@ -343,6 +343,7 @@ waitTillConnected().then((): void => {
     // set layout defaults only in intermission
     if (isIntermissionLikeScene(obsCurrentSceneRep.value || '')) {
       let playerCount = 0;
+      let coOp = false;
       for (let i = 0; i < newValue.teams.length; i += 1) {
         const team = newValue.teams[i];
         // eslint-disable-next-line no-loop-func
@@ -350,7 +351,10 @@ waitTillConnected().then((): void => {
           playerCount += 1;
         });
       }
-      const layout = `${playerCount}p ${newValue.customData.Layout} Layout`;
+      if (playerCount === 4 && newValue.teams.length === 2) {
+          coOp = true;
+      }
+      const layout = `${playerCount}p ${coOp ? 'co-op ' : ''}${newValue.customData.Layout} Layout`;
       const foundLayout = allGameLayoutsRep.value.find(l => l.name == layout);
       if (foundLayout !== undefined) {
         currentGameLayoutRep.value = clone(foundLayout);
