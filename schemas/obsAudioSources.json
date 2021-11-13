@@ -4,10 +4,11 @@
     "default": {},
     "additionalProperties": {
         "type":"object",
-        "required": ["volume","muted","delay"],
+        "required": ["volume","muted","delay","volumeMultiplier"],
         "additionalProperties": false,
         "properties": {
             "volume": {"type":"number"},
+            "volumeMultiplier": {"type": "number", "$comment": "A multiplier to alter the user supplied volume, in case it's needed", "default": 1},
             "muted": {"type":"boolean"},
             "delay": {"type": "number", "$comment": "Time this audio source is delayed in milliseconds"}
         }

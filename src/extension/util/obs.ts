@@ -247,7 +247,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
       [bundleConfig.obs.discordAudio, bundleConfig.obs.mpdAudio, bundleConfig.obs.streamsAudio]
         .forEach((audioSource): void => {
           if (!Object.getOwnPropertyNames(obsAudioSourcesRep.value).includes(audioSource)) {
-            obsAudioSourcesRep.value[audioSource] = { volume: 0.5, muted: false, delay: 0 };
+            obsAudioSourcesRep.value[audioSource] = { volume: 0.5, muted: false, delay: 0, volumeMultiplier: 1};
           }
         });
 
@@ -413,9 +413,9 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     }
     Object.entries(newVal).forEach(([source, sound]): void => {
       const oldSound = old[source];
-      if (!oldSound || oldSound.volume !== sound.volume) {
-        obs.setAudioVolume(source, sound.volume).catch((e): void => {
-          logger.warn(`Error setting Volume for [${source}] to ${sound.volume}: ${e.error}`);
+      if (!oldSound || oldSound.volume !== sound.volume || oldSound.volumeMultiplier !== sound.volumeMultiplier) {
+        obs.setAudioVolume(source, sound.volume * sound.volumeMultiplier).catch((e): void => {
+          logger.warn(`Error setting Volume for [${source}] to ${sound.volume} * ${sound.volumeMultiplier}: ${e.error}`);
         });
       }
       if (!oldSound || oldSound.muted !== sound.muted) {

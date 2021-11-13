@@ -8,6 +8,7 @@
 export interface ObsAudioSources {
   [k: string]: {
     volume: number;
+    volumeMultiplier: number;
     muted: boolean;
     delay: number;
   };

@@ -15,6 +15,8 @@ import clone from 'clone';
 // and setting everything in OBS properly on transitions
 // this uses the transparent bindings form the obs.ts in util
 
+const HOST_SPEAKING_MUSIC_VOLUME_MULTIPLIER = 0.5;
+
 const nodecg = nodecgApiContext.get();
 const logger = new nodecg.Logger(`${nodecg.bundleName}:remotecontrol`);
 const bundleConfig = nodecg.bundleConfig as Configschema;
@@ -367,10 +369,12 @@ waitTillConnected().then((): void => {
   hostDiscordDuringIntermissionRep.on('change', (newVal): void => {
     if ((obsCurrentSceneRep.value || '').toLowerCase().includes('intermission')) {
       if (newVal.speaking) {
+        obsAudioSourcesRep.value[bundleConfig.obs.mpdAudio].volumeMultiplier = HOST_SPEAKING_MUSIC_VOLUME_MULTIPLIER;
         nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.discordAudio }, (err): void => {
           logger.warn(`Problem fading in discord during transition: ${err.error}`);
         });
       } else {
+        obsAudioSourcesRep.value[bundleConfig.obs.mpdAudio].volumeMultiplier = 1;
         nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.discordAudio }, (err): void => {
           logger.warn(`Problem fading out discord during transition: ${err.error}`);
         });
