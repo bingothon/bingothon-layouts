@@ -5,7 +5,7 @@
         </div>
         <div :class="`Crystal ${!game.crystals ? 'greyed' : ''}`">
             <img :src="`${basePath}crystal.png`">
-            {{ game.crystals || 0 }}
+            <span :class="`Counter`"> {{ game.crystals || 0 }} </span>
         </div>
         <div :class="`Beetle ${!game.beetle ? 'greyed' : ''}`">
             <img :src="`${basePath}beetle_${game.beetle || 0}.png`">
@@ -21,7 +21,7 @@
         </div>
         <div :class="`Bottles ${!game.bottles ? 'greyed' : ''}`">
             <img :src="`${basePath}bottle.png`">
-            {{ game.bottles || 0 }}
+            <span :class="`Counter`"> {{ game.bottles || 0 }} </span>
         </div>
         <div :class="`Bugnet ${!game.bugnet ? 'greyed' : ''}`">
             <img :src="`${basePath}bugnet.png`">
@@ -64,7 +64,7 @@
         </div>
         <div :class="`Pouch ${!game.pouch ? 'greyed' : ''}`">
             <img :src="`${basePath}pouch.png`">
-            {{ game.pouch || 0 }}
+            <span :class="`Counter`"> {{ game.pouch || 0 }} </span>
         </div>
         <div :class="`Wallet`">
             <img :src="`${basePath}wallet_${game.wallet || 0}.png`">
@@ -130,9 +130,18 @@ export default class Tracker extends Vue {
 
 /* Number on Item */
 .Crystal, .Bottles, .Pouch {
+    position: relative;
     align-content: center;
     text-align: center;
-    font-size: 10pt;
+    font-size: 14pt;
+}
+
+.Counter {
+    position: absolute;
+    transform: translate(-50%, -60%);
+    left: 50%;
+    top: 50%;
+    -webkit-text-stroke: 1px white;
 }
 
 img {
