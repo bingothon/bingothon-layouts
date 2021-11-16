@@ -1,7 +1,7 @@
 <template>
     <div class="Tracker">
         <div :class="`Sword ${!game.sword ? 'greyed' : ''}`">
-            <img :src="`${basePath}sword_${game.sword || 0}.png`">
+            <img :src="`${basePath}sword_${game.sword || 0}_new.png`">
         </div>
         <div :class="`Crystal ${!game.crystals ? 'greyed' : ''}`">
             <img :src="`${basePath}crystal.png`">
@@ -132,7 +132,7 @@ export default class Tracker extends Vue {
 .Crystal, .Bottles, .Pouch {
     align-content: center;
     text-align: center;
-    font-size: 30pt;
+    font-size: 10pt;
 }
 
 img {
