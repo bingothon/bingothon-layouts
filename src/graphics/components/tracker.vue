@@ -93,21 +93,27 @@
         </div>
         <div :class="`SV ${!game.skyview ? 'greyed' : ''}`">
             <img :src="`${basePath}dungeon_sv.png`">
+            <span class="Name"> SV </span>
         </div>
         <div :class="`ET ${!game.earthtemple ? 'greyed' : ''}`">
             <img :src="`${basePath}dungeon_et.png`">
+            <span class="Name"> ET </span>
         </div>
         <div :class="`LMF ${!game.lmf ? 'greyed' : ''}`">
             <img :src="`${basePath}dungeon_lmf.png`">
+            <span class="Name"> LMF </span>
         </div>
         <div :class="`AC ${!game.ancientcistern ? 'greyed' : ''}`">
             <img :src="`${basePath}dungeon_ac.png`">
+            <span class="Name"> AC </span>
         </div>
         <div :class="`SSH ${!game.sandship ? 'greyed' : ''}`">
             <img :src="`${basePath}dungeon_ssh.png`">
+            <span class="Name"> SSH </span>
         </div>
         <div :class="`FS ${!game.firesanctuary ? 'greyed' : ''}`">
             <img :src="`${basePath}dungeon_fs.png`">
+            <span class="Name"> FS </span>
         </div>
     </div>
 </template>
@@ -115,7 +121,6 @@
 <script lang="ts">
 import {Component, Vue} from "vue-property-decorator";
 import {store} from "../../browser-util/state";
-import {Games} from "../../../types";
 
 @Component({
     components: {}
@@ -142,7 +147,6 @@ export default class Tracker extends Vue {
 .Tracker {
     display: grid;
     grid-template-columns: 30px 30px 30px 30px;
-    /*background-color: black;*/
 }
 
 .greyed {
@@ -160,6 +164,20 @@ export default class Tracker extends Vue {
     align-content: center;
     text-align: center;
     font-size: 14pt;
+}
+
+.SV, .ET, .LMF, .AC, .SSH, .FS {
+    position: relative;
+    align-content: center;
+    text-align: center;
+    font-size: 10pt;
+}
+
+.Name {
+    position: absolute;
+    transform: translate(-50%, -60%);
+    left: 50%;
+    top: 50%;
 }
 
 .Counter {
