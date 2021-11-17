@@ -7,9 +7,6 @@
             <img :src="`${basePath}crystal.png`">
             <span :class="`Counter`"> {{ game.crystals || 0 }} </span>
         </div>
-        <div :class="`Beetle ${!game.beetle ? 'greyed' : ''}`">
-            <img :src="`${basePath}beetle_${game.beetle || 0}.png`">
-        </div>
         <div :class="`Mitts ${!game.mitts ? 'greyed' : ''}`">
             <img :src="`${basePath}mitts_${game.mitts || 0}.png`">
         </div>
@@ -22,6 +19,9 @@
         <div :class="`Bottles ${!game.bottles ? 'greyed' : ''}`">
             <img :src="`${basePath}bottle.png`">
             <span :class="`Counter`"> {{ game.bottles || 0 }} </span>
+        </div>
+        <div :class="`Beetle ${!game.beetle ? 'greyed' : ''}`">
+            <img :src="`${basePath}beetle_${game.beetle || 0}.png`">
         </div>
         <div :class="`Bugnet ${!game.bugnet ? 'greyed' : ''}`">
             <img :src="`${basePath}bugnet.png`">
@@ -72,7 +72,43 @@
         <div :class="`SoT ${!game.sot ? 'greyed' : ''}`">
             <img :src="`${basePath}stone_of_trials.png`">
         </div>
-        {{ game }}
+        <div :class="`FC ${!game.fcsong ? 'greyed' : ''}`">
+            <img :src="`${basePath}harpfc.png`">
+        </div>
+        <div :class="`NW ${!game.nwsong ? 'greyed' : ''}`">
+            <img :src="`${basePath}harpnw.png`">
+        </div>
+        <div :class="`DP ${!game.dpsong ? 'greyed' : ''}`">
+            <img :src="`${basePath}harpdp.png`">
+        </div>
+        <div :class="`BotG ${!game.botgsong ? 'greyed' : ''}`">
+            <img :src="`${basePath}harpbotg.png`">
+        </div>
+        <div :class="`SotH ${!game.sothsong ? 'greyed' : ''}`">
+            <img :src="`${basePath}harpsoth.png`">
+            <span :class="`Counter`"> {{ game.sothsong || 0 }} </span>
+        </div>
+        <div :class="`Harp ${!game.harp ? 'greyed' : ''}`">
+            <img :src="`${basePath}harp.png`">
+        </div>
+        <div :class="`SV ${!game.skyview ? 'greyed' : ''}`">
+            <img :src="`${basePath}dungeon_sv.png`">
+        </div>
+        <div :class="`ET ${!game.earthtemple ? 'greyed' : ''}`">
+            <img :src="`${basePath}dungeon_et.png`">
+        </div>
+        <div :class="`LMF ${!game.lmf ? 'greyed' : ''}`">
+            <img :src="`${basePath}dungeon_lmf.png`">
+        </div>
+        <div :class="`AC ${!game.ancientcistern ? 'greyed' : ''}`">
+            <img :src="`${basePath}dungeon_ac.png`">
+        </div>
+        <div :class="`SSH ${!game.sandship ? 'greyed' : ''}`">
+            <img :src="`${basePath}dungeon_ssh.png`">
+        </div>
+        <div :class="`FS ${!game.firesanctuary ? 'greyed' : ''}`">
+            <img :src="`${basePath}dungeon_fs.png`">
+        </div>
     </div>
 </template>
 
@@ -105,7 +141,7 @@ export default class Tracker extends Vue {
 <style scoped>
 .Tracker {
     display: grid;
-    grid-template-columns: 30px 30px 30px;
+    grid-template-columns: 30px 30px 30px 30px;
     /*background-color: black;*/
 }
 
@@ -113,23 +149,13 @@ export default class Tracker extends Vue {
     filter: opacity(25%);
 }
 
-.Crystal {
-    grid-row: 1 / span 1;
-    grid-column: 2 / span 1;
-}
-
 .Sword {
     grid-row: 1 / span 2;
     grid-column: 1 / span 1;
 }
 
-.Beetle {
-    grid-column: 3 / span 1;
-    grid-row: 1 / span 1;
-}
-
 /* Number on Item */
-.Crystal, .Bottles, .Pouch {
+.Crystal, .Bottles, .Pouch, .SotH {
     position: relative;
     align-content: center;
     text-align: center;
