@@ -81,12 +81,12 @@
         <div :class="`DP ${!game.dpsong ? 'greyed' : ''}`">
             <img :src="`${basePath}harpdp.png`">
         </div>
-        <div :class="`BotG ${!game.botgsong ? 'greyed' : ''}`">
-            <img :src="`${basePath}harpbotg.png`">
-        </div>
         <div :class="`SotH ${!game.sothsong ? 'greyed' : ''}`">
             <img :src="`${basePath}harpsoth.png`">
             <span :class="`Counter`"> {{ game.sothsong || 0 }} </span>
+        </div>
+        <div :class="`BotG ${!game.botgsong ? 'greyed' : ''}`">
+            <img :src="`${basePath}harpbotg.png`">
         </div>
         <div :class="`Harp ${!game.harp ? 'greyed' : ''}`">
             <img :src="`${basePath}harp.png`">
@@ -146,7 +146,7 @@ export default class Tracker extends Vue {
 <style scoped>
 .Tracker {
     display: grid;
-    grid-template-columns: 30px 30px 30px 30px;
+    grid-template-columns: 40px 40px 40px 40px;
 }
 
 .greyed {
@@ -163,14 +163,14 @@ export default class Tracker extends Vue {
     position: relative;
     align-content: center;
     text-align: center;
-    font-size: 14pt;
+    font-size: 18pt;
 }
 
 .SV, .ET, .LMF, .AC, .SSH, .FS {
     position: relative;
     align-content: center;
     text-align: center;
-    font-size: 10pt;
+    font-size: 14pt;
 }
 
 .Name {
@@ -189,7 +189,7 @@ export default class Tracker extends Vue {
 }
 
 img {
-    width: 30px;
+    width: 40px;
 }
 
 </style>
