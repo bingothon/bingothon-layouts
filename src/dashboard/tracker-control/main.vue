@@ -1,7 +1,7 @@
 <template>
     <v-app>
-        <div v-for="team in runData.teams">
-            <div v-for="player in team.players" :key="player.id">
+        <div v-for="(team, i) in runData.teams" :key="i">
+            <div v-for="(player, j) in team.players" :key="j">
                 {{ player.name }}
                 <v-text-field
                               v-model="trackerIds[playerNumberFromID(player.name)]" background-color="#455A64" clearable

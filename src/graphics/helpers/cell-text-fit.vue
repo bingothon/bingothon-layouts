@@ -17,7 +17,7 @@ export default class CellTextFit extends Vue {
     @Prop({required: true})
     text: string;
     @Prop({})
-    fontSize: string;
+    fontSize!: string;
     optimizedFontSize: string = this.fontSize;
     transform: string = "scaleX(1) scaleY(1)";
     top: string = "0";

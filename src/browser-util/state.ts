@@ -104,7 +104,67 @@ const replicants: Map<string, ReplicantBrowser<any>> = new Map();
 
 var playerAlternateInterval: NodeJS.Timeout | null = null;
 
-export const store = new Vuex.Store({
+interface StoreTypes {
+    // bingothon
+    allGameLayouts: AllGameLayouts,
+    allInterviews: AllInterviews,
+    allCamNames: AllCamNames,
+    bingoboard: Bingoboard,
+    bingoboardMeta: BingoboardMeta,
+    bingoboardMode: BingoboardMode,
+    bingosyncSocket: BingosyncSocket,
+    currentGameLayout: CurrentGameLayout,
+    currentInterview: CurrentInterview,
+    currentCamNames: CurrentCamNames,
+    currentMainBingoboard: CurrentMainBingoboard,
+    discordDelayInfo: DiscordDelayInfo,
+    donationTotal: DonationTotal,
+    explorationBingoboard: ExplorationBingoboard,
+    hostingBingoboard: HostingBingoboard,
+    hostingBingosocket: HostingBingosocket,
+    hostsSpeakingDuringIntermission: HostsSpeakingDuringIntermission,
+    intermissionVideos: IntermissionVideos,
+    lastIntermissionTimestamp: LastIntermissionTimestamp,
+    obsAudioSources: ObsAudioSources,
+    obsConnection: ObsConnection,
+    obsDashboardAudioSources: ObsDashboardAudioSources,
+    obsPreviewScene: null | string,
+    obsCurrentScene: null | string,
+    obsSceneList: null | Scene[],
+    obsStreamMode: ObsStreamMode,
+    oriBingoboard: OriBingoboard,
+    oriBingoMeta: OriBingoMeta,
+    showPictureDuringIntermission: ShowPictureDuringIntermission,
+    soundOnTwitchStream: SoundOnTwitchStream,
+    trackerData: TrackerData,
+    trackerDonations: TrackerDonations,
+    trackerOpenBids: TrackerOpenBids,
+    trackerPrizes: TrackerPrizes,
+    twitchChatBotData: TwitchChatBotData,
+    twitchStreams: TwitchStreams,
+    voiceActivity: VoiceActivity,
+    voiceDelay: 0,
+    songData: SongData,
+    // nodecg-speedcontrol
+    runDataActiveRun: RunDataActiveRun,
+    runDataArray: RunDataArray,
+    timer: Timer,
+    twitchCommercialTimer: TwitchCommercialTimer,
+    // assets
+    "assets:intermissionVideos": Asset[],
+    'assets:wideLargeLogos': Asset[],
+    'assets:wideSmallLogos': Asset[],
+    'assets:squareLogos': Asset[],
+    // timer
+    playerAlternate: true,
+    //firebase
+    gameP1: Games,
+    gameP2: Games,
+    gameP3: Games,
+    gameP4: Games,
+}
+
+export const store = new Vuex.Store<StoreTypes>({
     state: {
         // bingothon
         allGameLayouts: [] as AllGameLayouts,
