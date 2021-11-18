@@ -79,6 +79,21 @@
                 PlayerID:
                 <v-text-field v-model="oriPlayerID" background-color="#455A64" clearable solo single-line dark/>
             </div>
+            <v-radio-group
+                v-model="oriGame"
+                :value="oriGame"
+            >
+                <v-radio
+                    value="ori1"
+                    label="Ori and the Blind Forest"
+                    @change="updateOriGame('ori1')"
+                />
+                <v-radio
+                    value="ori2"
+                    label="Ori and the Will of the Wisps"
+                    @change="updateOriGame('ori2')"
+                />                >
+            </v-radio-group>
             <v-btn
                 :disabled="!oriCanActivate"
                 @click="toggleOriActivate"
@@ -153,6 +168,8 @@ export default class BingoControl extends Vue {
     oriBoardID: string = '';
 
     oriPlayerID: string = '';
+
+    oriGame: string = 'ori1';
 
     explorationCustomBoard: string = ''
 
@@ -333,7 +350,7 @@ export default class BingoControl extends Vue {
         if (store.state.oriBingoMeta.active) {
             nodecg.sendMessage('oriBingo:deactivate');
         } else {
-            nodecg.sendMessage('oriBingo:activate', {boardID: this.oriBoardID, playerID: this.oriPlayerID})
+            nodecg.sendMessage('oriBingo:activate', {boardID: this.oriBoardID, game: this.oriGame, playerID: this.oriPlayerID})
                 .catch((error) => {
                     nodecg.log.error(error);
                     this.errorMessage = error.message;
@@ -381,6 +398,10 @@ export default class BingoControl extends Vue {
 
     toggleManualScoreOverride() {
         getReplicant<BingoboardMeta>('bingoboardMeta').value.manualScoreOverride = !store.state.bingoboardMeta.manualScoreOverride;
+    }
+
+    updateOriGame(game: string) {
+        this.oriGame = game;
     }
 }
 </script>

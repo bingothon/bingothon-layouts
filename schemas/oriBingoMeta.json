@@ -2,9 +2,10 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type":"object",
     "additionalProperties": false,
-    "required": ["active","boardID","playerID"],
+    "required": ["active","game","boardID","playerID"],
     "properties": {
         "active": {"type":"boolean","default":false},
+        "game": {"type": "string", "default":"ori1", "enum": ["ori1", "ori2"]},
         "boardID": {"type":"number", "default":0},
         "playerID": {"type":"number", "default":0}
     }
