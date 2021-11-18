@@ -1,13 +1,11 @@
 <template>
     <v-app>
-        <div v-for="(team, i) in runData.teams" :key="i">
-            <div v-for="(player, j) in team.players" :key="j">
+        <div v-for="player in players" :key="player.index">
                 {{ player.name }}
                 <v-text-field
-                              v-model="trackerIds[playerNumberFromID(player.name)]" background-color="#455A64" clearable
+                              v-model="trackerIds[player.index]" background-color="#455A64" clearable
                               solo single-line dark/>
-            </div><!--:value="trackerData[playerNumberFromID(player.name)]"-->
-        </div>
+            </div><!--:value="trackerData[player.index]"-->
         <v-btn
             @click="updateTrackerData"
             class="button"
@@ -20,10 +18,15 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
+import {Component, Vue, Watch} from "vue-property-decorator";
 import {getReplicant, store} from "../../browser-util/state";
 import {RunDataActiveRun, RunDataPlayer, RunDataTeam} from "../../../speedcontrol-types";
 import {TrackerData} from "../../../schemas";
+
+interface IndexedPlayer {
+    name: string,
+    index: number,
+};
 
 @Component({})
 export default class TrackerControl extends Vue {
@@ -37,19 +40,16 @@ export default class TrackerControl extends Vue {
         return store.state.trackerData;
     }
 
-    playerNumberFromID(id: string) {
-        console.log("Triggered playerNumber function")
-        let i = 0;
-        this.runData.teams.forEach((team : RunDataTeam) => {
-            team.players.forEach((player : RunDataPlayer) => {
-                if (player.name === id) {
-                    console.log("hit" + i)
-                    return i;
-                }
-                i++;
-            })
-        })
-        return -1;
+    get players(): IndexedPlayer[] {
+        let idx = 0;
+        let arr = [];
+        store.state.runDataActiveRun.teams.forEach(t => {
+            t.players.forEach(p => {
+                arr.push({name: p.name, index: idx});
+                idx++;
+            });
+        });
+        return arr;
     }
 
     updateTrackerData() {
