@@ -10,7 +10,7 @@
         <div :class="`Mitts ${!game.mitts ? 'greyed' : ''}`">
             <img :src="`${basePath}mitts_${game.mitts || 0}.png`">
         </div>
-        <div :class="`Scale ${!game.mitts ? 'greyed' : ''}`">
+        <div :class="`Scale ${!game.scale ? 'greyed' : ''}`">
             <img :src="`${basePath}scale.png`">
         </div>
         <div :class="`Earrings ${!game.earrings ? 'greyed' : ''}`">
@@ -119,25 +119,67 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
+import {Component, Prop, Vue, Watch} from "vue-property-decorator";
 import {store} from "../../browser-util/state";
+import {Games} from "../../../types";
+import {TrackerData} from "../../../schemas";
 
 @Component({
     components: {}
 })
 
 export default class Tracker extends Vue {
+    @Watch('trackerData')
+    onTrackerDataChange(): void {
+        this.updateTrackers()
+    }
+
+    @Prop({required: true, default: 1})
+    playerNumber: number;
 
     basePath = '/bundles/bingothon-layouts/static/tracker/skyward-sword/'
 
     mounted() {
-        store.dispatch("bindGames", {gameId: "abc"})
-        console.log("Dispatched bind")
-        console.log("Game is", this.game)
+        this.updateTrackers();
     }
 
-    get game() {
-        return store.state.games;
+    get game() : Games {
+        switch (this.playerNumber) {
+            case 4:
+                return store.state.gameP4
+            case 3:
+                return store.state.gameP3
+            case 2:
+                return store.state.gameP2
+            case 1:
+            default:
+                return store.state.gameP1
+        }
+    }
+
+    get trackerData(): TrackerData {
+        return store.state.trackerData;
+    }
+
+    updateTrackers() {
+        switch (this.playerNumber){
+            case 4:
+                store.dispatch("unbindGameP4")
+                store.dispatch("bindGameP4", {gameId: this.trackerData[3].id})
+                break
+            case 3:
+                store.dispatch("unbindGameP3")
+                store.dispatch("bindGameP3", {gameId: this.trackerData[2].id})
+                break
+            case 2:
+                store.dispatch("unbindGameP2")
+                store.dispatch("bindGameP2", {gameId: this.trackerData[1].id})
+                break
+            case 1:
+            default:
+                store.dispatch("unbindGameP1")
+                store.dispatch("bindGameP1", {gameId: this.trackerData[0].id})
+        }
     }
 
 }

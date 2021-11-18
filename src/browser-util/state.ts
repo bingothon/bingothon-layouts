@@ -33,7 +33,7 @@ import {
     OriBingoMeta,
     ShowPictureDuringIntermission,
     SongData,
-    SoundOnTwitchStream,
+    SoundOnTwitchStream, TrackerData,
     TrackerDonations,
     TrackerOpenBids,
     TrackerPrizes,
@@ -137,6 +137,7 @@ export const store = new Vuex.Store({
         oriBingoMeta: {} as OriBingoMeta,
         showPictureDuringIntermission: {} as ShowPictureDuringIntermission,
         soundOnTwitchStream: 0 as SoundOnTwitchStream,
+        trackerData: [] as TrackerData,
         trackerDonations: [] as TrackerDonations,
         trackerOpenBids: [] as TrackerOpenBids,
         trackerPrizes: [] as TrackerPrizes,
@@ -158,7 +159,10 @@ export const store = new Vuex.Store({
         // timer
         playerAlternate: true,
         //firebase
-        games: {} as Games,
+        gameP1: {} as Games,
+        gameP2: {} as Games,
+        gameP3: {} as Games,
+        gameP4: {} as Games,
     },
     mutations: {
         updateReplicant(state, {name, value}) {
@@ -181,14 +185,41 @@ export const store = new Vuex.Store({
         ...vuexfireMutations
     },
     actions: {
-        bindGames: firebaseAction<any, any>(({bindFirebaseRef}, payload) => {
+        bindGameP1: firebaseAction<any, any>(({bindFirebaseRef}, payload) => {
             // return the promise returned by `bindFirebaseRef`
             let ref = "games/" + payload.gameId + "/items"
             console.log(ref)
-            return bindFirebaseRef('games', db.ref(ref))
+            return bindFirebaseRef('gameP1', db.ref(ref))
         }),
-        unbindGames: firebaseAction<any, any>(({ unbindFirebaseRef }) => {
-            unbindFirebaseRef('games')
+        unbindGameP1: firebaseAction<any, any>(({ unbindFirebaseRef }) => {
+            unbindFirebaseRef('gameP1')
+        }),
+        bindGameP2: firebaseAction<any, any>(({bindFirebaseRef}, payload) => {
+            // return the promise returned by `bindFirebaseRef`
+            let ref = "games/" + payload.gameId + "/items"
+            console.log(ref)
+            return bindFirebaseRef('gameP2', db.ref(ref))
+        }),
+        unbindGameP2: firebaseAction<any, any>(({ unbindFirebaseRef }) => {
+            unbindFirebaseRef('gameP2')
+        }),
+        bindGameP3: firebaseAction<any, any>(({bindFirebaseRef}, payload) => {
+            // return the promise returned by `bindFirebaseRef`
+            let ref = "games/" + payload.gameId + "/items"
+            console.log(ref)
+            return bindFirebaseRef('gameP3', db.ref(ref))
+        }),
+        unbindGameP3: firebaseAction<any, any>(({ unbindFirebaseRef }) => {
+            unbindFirebaseRef('gameP3')
+        }),
+        bindGameP4: firebaseAction<any, any>(({bindFirebaseRef}, payload) => {
+            // return the promise returned by `bindFirebaseRef`
+            let ref = "games/" + payload.gameId + "/items"
+            console.log(ref)
+            return bindFirebaseRef('gameP4', db.ref(ref))
+        }),
+        unbindGameP4: firebaseAction<any, any>(({ unbindFirebaseRef }) => {
+            unbindFirebaseRef('gameP4')
         }),
     }
 });

@@ -1,12 +1,37 @@
 export type Games = {
-    [k: string]: {
-        editors: {
-            [l: boolean]
-        }[];
-        owner: string;
-        passcode: string
-        items: {
-            [m: any]
-        }[]
-    }
+    sword: number | undefined;
+    crystals: number | undefined;
+    mitts: number | undefined;
+    scale: boolean | undefined;
+    earrings: boolean | undefined;
+    bottles: number | undefined;
+    beetle: number | undefined;
+    bugnet: boolean | undefined;
+    slingshot: boolean | undefined;
+    bombs: boolean | undefined;
+    bellows: boolean | undefined;
+    whip: boolean | undefined;
+    clawshots: boolean | undefined;
+    bow: boolean | undefined;
+    seachart: boolean | undefined;
+    spiralcharge: boolean | undefined;
+    caveskey: boolean | undefined;
+    letter: boolean | undefined;
+    rattle: boolean | undefined;
+    cage: boolean | undefined;
+    pouch: number | undefined;
+    wallet: number | undefined;
+    sot: boolean | undefined;
+    fcsong: boolean | undefined;
+    nwsong: boolean | undefined;
+    dpsong: boolean | undefined;
+    sothsong: number | undefined;
+    botgsong: boolean | undefined;
+    harp: boolean | undefined;
+    skyview: boolean | undefined;
+    earthtemple: boolean | undefined;
+    lmf: boolean | undefined;
+    ancientcistern: boolean | undefined;
+    sandship: boolean | undefined;
+    firesanctuary: boolean | undefined;
 }
