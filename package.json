@@ -299,6 +299,6 @@
     "vuex": "^3.1.1",
     "vuexfire": "^3.2.5",
     "webpack-livereload-plugin": "^2.3.0",
-    "ws": "^7.1.2"
+    "ws": "^7.4.6"
   }
 }
