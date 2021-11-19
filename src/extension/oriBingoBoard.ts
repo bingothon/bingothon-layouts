@@ -45,8 +45,8 @@ async function sleep(ms: number): Promise<void> {
     return new Promise((resolve): number => setTimeout(resolve, ms));
 }
 
-async function getBoard(boardID: number, playerID: number): Promise<OriApiResponse> {
-    if (oriBingoMeta.value.game === 'ori2') {
+async function getBoard(game: string, boardID: number, playerID: string): Promise<OriApiResponse> {
+    if (game === 'ori2') {
         return request.get(`https://wotw.orirando.com/api/bingothon/latest/${playerID}`, {json: true});
     }
     return request.get(`https://orirando.com/bingo/bingothon/${boardID}/player/${playerID}`, {json: true});
@@ -63,8 +63,13 @@ function init(): void {
 async function oriBingoUpdate(): Promise<void> {
     try {
         // eslint-disable-next-line max-len
-        const oriResp = await getBoard(oriBingoMeta.value.boardID, oriBingoMeta.value.playerID);
-        const oriResp2 = await getBoard(oriBingoMeta.value.boardID, 1);
+        console.log('update')
+        const oriResp = await getBoard(oriBingoMeta.value.game, oriBingoMeta.value.boardID, oriBingoMeta.value.playerID);
+        /*if (oriBingoMeta.value.game === 'ori1') {
+            const oriResp2 = await getBoard(oriBingoMeta.value.game, oriBingoMeta.value.boardID, "1");
+        } else {
+            const oriResp2 = oriResp;
+        }*/
         const oriBoard: OriField[] = oriResp.cards;
         const oriBoardRevealed: ExplorationOriField[] = [];
         const playerColor = boardMetaRep.value.playerColors[0] || 'red';
@@ -78,7 +83,7 @@ async function oriBingoUpdate(): Promise<void> {
                     boardRep.value.cells[idx].name = '';
                 }
             }
-            if (field.completed || oriResp2.cards[idx].completed) {
+            if (field.completed /*|| oriResp2.cards[idx].completed*/) {
                 boardRep.value.cells[idx].colors = playerColor;
                 goalCount++;
             } else {
@@ -99,8 +104,9 @@ function recover(): void {
         if (!newVal.active) return;
         const {boardID} = newVal;
         const {playerID} = newVal;
+        const {game} = newVal;
         try {
-            await getBoard(boardID, playerID);
+            await getBoard(game, boardID, playerID);
             updateLoopTimer = setInterval(oriBingoUpdate, 3000);
             log.info('Successfully recovered connection to Ori Board');
         } catch (e) {
@@ -145,9 +151,9 @@ nodecg.listenFor('oriBingo:activate', async (data, callback): Promise<void> => {
         }
         // see if the board/player actually exists
         const boardID = parseInt(data.boardID, 10);
-        const playerID = parseInt(data.playerID, 10);
-        await getBoard(boardID, playerID);
-        oriBingoMeta.value = {active: true, game: data.game, boardID, playerID};
+        console.log('activate')
+        await getBoard(data.game, boardID, data.playerID);
+        oriBingoMeta.value = {active: true, game: data.game, boardID, playerID: data.playerID};
         updateLoopTimer = setInterval(oriBingoUpdate, 3000);
         if (callback && !callback.handled) {
             callback();

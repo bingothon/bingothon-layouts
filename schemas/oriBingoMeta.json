@@ -7,6 +7,6 @@
         "active": {"type":"boolean","default":false},
         "game": {"type": "string", "default":"ori1", "enum": ["ori1", "ori2"]},
         "boardID": {"type":"number", "default":0},
-        "playerID": {"type":"number", "default":0}
+        "playerID": {"type":"string", "default":"0"}
     }
 }

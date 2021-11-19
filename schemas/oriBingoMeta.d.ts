@@ -9,5 +9,5 @@ export interface OriBingoMeta {
   active: boolean;
   game: "ori1" | "ori2";
   boardID: number;
-  playerID: number;
+  playerID: string;
 }

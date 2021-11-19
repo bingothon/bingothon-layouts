@@ -92,7 +92,7 @@
                     value="ori2"
                     label="Ori and the Will of the Wisps"
                     @change="updateOriGame('ori2')"
-                />                >
+                />
             </v-radio-group>
             <v-btn
                 :disabled="!oriCanActivate"
@@ -347,6 +347,7 @@ export default class BingoControl extends Vue {
     }
 
     toggleOriActivate() {
+        console.log(this.oriGame)
         if (store.state.oriBingoMeta.active) {
             nodecg.sendMessage('oriBingo:deactivate');
         } else {
@@ -402,6 +403,8 @@ export default class BingoControl extends Vue {
 
     updateOriGame(game: string) {
         this.oriGame = game;
+        console.log(game)
+        console.log(this.oriGame)
     }
 }
 </script>

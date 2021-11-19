@@ -146,7 +146,8 @@
                 "mpdAudio",
                 "address",
                 "password",
-                "enable"
+                "enable",
+                "gameScene"
             ],
             "additionalProperties": false,
             "properties": {
@@ -173,6 +174,10 @@
                 "streamsAudio": {
                     "type": "string",
                     "default": "Desktop-Audio"
+                },
+                "gameScene": {
+                    "type": "string",
+                    "default": "game"
                 }
             }
         },
