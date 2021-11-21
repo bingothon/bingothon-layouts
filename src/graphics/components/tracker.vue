@@ -136,7 +136,7 @@ export default class Tracker extends Vue {
     }
 
     @Prop({required: true, default: 1})
-    playerNumber: number;
+    playerNumber: string;// actually a number but who cares about types? shrug
 
     basePath = '/bundles/bingothon-layouts/static/tracker/skyward-sword/'
 
@@ -145,7 +145,9 @@ export default class Tracker extends Vue {
     }
 
     get game() : Games {
-        switch (this.playerNumber) {
+        console.log("PlayerNumber: " + this.playerNumber + " of type: " + typeof this.playerNumber)
+        let player = parseInt(this.playerNumber)
+        switch (player) {
             case 4:
                 return store.state.gameP4
             case 3:
@@ -164,7 +166,8 @@ export default class Tracker extends Vue {
 
     updateTrackers() {
         console.log('update trackers')
-        switch (this.playerNumber){
+        let player = parseInt(this.playerNumber);
+        switch (player){
             case 4:
                 store.dispatch("unbindGameP4")
                 store.dispatch("bindGameP4")
