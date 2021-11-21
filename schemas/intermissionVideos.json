@@ -10,7 +10,11 @@
         "name": {
             "type": "string"
         },
-        "index": {
+        "charityVideoIndex": {
+            "type": "number",
+            "default": 0
+        },
+        "sponsorVideoIndex": {
             "type": "number",
             "default": 0
         }

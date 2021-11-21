@@ -55,11 +55,12 @@ export default class TrackerControl extends Vue {
     updateTrackerData() {
         console.log("click")
         console.log(this.trackerIds)
-        this.trackerIds.forEach((id, i) => {
-            getReplicant<TrackerData>('trackerData').value = [{id: this.trackerIds[0]},
-                {id: this.trackerIds[1]}, {id: this.trackerIds[2]}, {id: this.trackerIds[3]}];
-            console.log("Updating Tracker ID" + i + "to" + id)
+        let newVal = []
+        this.trackerIds.forEach(id => {
+            console.log(typeof id)
+            newVal.push({id: id, password: ''})
         })
+        getReplicant<TrackerData>('trackerData').value = newVal;
     }
 }
 </script>

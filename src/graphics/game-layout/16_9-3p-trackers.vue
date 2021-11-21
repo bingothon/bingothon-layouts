@@ -14,9 +14,9 @@
         </div>
         <test-game-container id="game"></test-game-container>
         <test-timer-container id="timer"></test-timer-container>
-        <tracker id="tracker1" player-number="1"></tracker>
-        <tracker id="tracker2" player-number="2"></tracker>
-        <tracker id="tracker3" player-number="3"></tracker>
+        <tracker id="tracker1" playerNumber="1"></tracker>
+        <tracker id="tracker2" playerNumber="2"></tracker>
+        <tracker id="tracker3" playerNumber="3"></tracker>
         <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
     </div>
 </template>

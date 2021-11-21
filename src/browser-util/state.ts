@@ -151,7 +151,8 @@ interface StoreTypes {
     timer: Timer,
     twitchCommercialTimer: TwitchCommercialTimer,
     // assets
-    "assets:intermissionVideos": Asset[],
+    "assets:charityVideos": Asset[],
+    "assets:sponsorVideos": Asset[],
     'assets:wideLargeLogos': Asset[],
     'assets:wideSmallLogos': Asset[],
     'assets:squareLogos': Asset[],
@@ -212,7 +213,8 @@ export const store = new Vuex.Store<StoreTypes>({
         timer: {} as Timer,
         twitchCommercialTimer: {} as TwitchCommercialTimer,
         // assets
-        "assets:intermissionVideos": [] as Asset[],
+        "assets:charityVideos": [] as Asset[],
+        "assets:sponsorVideos": [] as Asset[],
         'assets:wideLargeLogos': [] as Asset[],
         'assets:wideSmallLogos': [] as Asset[],
         'assets:squareLogos': [] as Asset[],
@@ -246,8 +248,8 @@ export const store = new Vuex.Store<StoreTypes>({
     },
     actions: {
         bindGameP1: firebaseAction<any, any>(({bindFirebaseRef}, payload) => {
-            // return the promise returned by `bindFirebaseRef`
-            let ref = "games/" + payload.gameId + "/items"
+            // return the promise returned by `bindFirebaseRef` hardcoded for now
+            let ref = "games/" + /*payload.gameId*/ "floha258" + "/items"
             console.log(ref)
             return bindFirebaseRef('gameP1', db.ref(ref))
         }),
@@ -256,7 +258,7 @@ export const store = new Vuex.Store<StoreTypes>({
         }),
         bindGameP2: firebaseAction<any, any>(({bindFirebaseRef}, payload) => {
             // return the promise returned by `bindFirebaseRef`
-            let ref = "games/" + payload.gameId + "/items"
+            let ref = "games/" + /*payload.gameId*/ "lepelog" + "/items"
             console.log(ref)
             return bindFirebaseRef('gameP2', db.ref(ref))
         }),
@@ -265,7 +267,7 @@ export const store = new Vuex.Store<StoreTypes>({
         }),
         bindGameP3: firebaseAction<any, any>(({bindFirebaseRef}, payload) => {
             // return the promise returned by `bindFirebaseRef`
-            let ref = "games/" + payload.gameId + "/items"
+            let ref = "games/" + /*payload.gameId*/ "cjs07" + "/items"
             console.log(ref)
             return bindFirebaseRef('gameP3', db.ref(ref))
         }),

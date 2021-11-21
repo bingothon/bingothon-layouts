@@ -131,6 +131,7 @@ import {TrackerData} from "../../../schemas";
 export default class Tracker extends Vue {
     @Watch('trackerData')
     onTrackerDataChange(): void {
+        console.log('watcher function for trackers')
         this.updateTrackers()
     }
 
@@ -162,23 +163,24 @@ export default class Tracker extends Vue {
     }
 
     updateTrackers() {
+        console.log('update trackers')
         switch (this.playerNumber){
             case 4:
                 store.dispatch("unbindGameP4")
-                store.dispatch("bindGameP4", {gameId: this.trackerData[3].id})
+                store.dispatch("bindGameP4")
                 break
             case 3:
                 store.dispatch("unbindGameP3")
-                store.dispatch("bindGameP3", {gameId: this.trackerData[2].id})
+                store.dispatch("bindGameP3")
                 break
             case 2:
                 store.dispatch("unbindGameP2")
-                store.dispatch("bindGameP2", {gameId: this.trackerData[1].id})
+                store.dispatch("bindGameP2")
                 break
             case 1:
             default:
                 store.dispatch("unbindGameP1")
-                store.dispatch("bindGameP1", {gameId: this.trackerData[0].id})
+                store.dispatch("bindGameP1")
         }
     }
 

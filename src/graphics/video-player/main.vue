@@ -12,14 +12,21 @@ import {Component, Ref, Vue, Watch} from "vue-property-decorator";
 import {Asset} from "../../../schemas";
 import {store} from "../../browser-util/state";
 
+type VideoTypeEnum = ("charity" | "sponsor")
+
 @Component({})
 export default class VideoPlayer extends Vue {
     video: Asset;
+    videoType : VideoTypeEnum = "charity";
     @Ref('VideoPlayer') player: HTMLVideoElement;
     @Ref('PlayerSrc') playerSrc: HTMLSourceElement;
 
-    get videos(): Asset[] {
+    get charityVideos(): Asset[] {
         return store.state["assets:intermissionVideos"];
+    }
+
+    get sponsorVideos(): Asset[] {
+        return store.state["assets:sponsorVideos"];
     }
 
     get domain(): string {
@@ -34,13 +41,19 @@ export default class VideoPlayer extends Vue {
     onOBSSceneChanged(newVal : string){
         this.$nextTick(() => {
             if (newVal === 'videoPlayer') {
-                this.playNextVideo()
+                this.videoType = "charity";
+                this.playNextVideo("charity")
             }
         });
     }
 
-    async playNextVideo(): Promise<void> {
-        const video = this.videos[store.state.intermissionVideos.index];
+    async playNextVideo(type: VideoTypeEnum): Promise<void> {
+        let video;
+        if (type === "charity") {
+            video = this.charityVideos[store.state.intermissionVideos.charityVideoIndex];
+        } else {
+            video = this.sponsorVideos[store.state.intermissionVideos.sponsorVideoIndex];
+        }
         if (video) {
             this.video = video;
             this.playerSrc.src = video.url;
@@ -49,16 +62,25 @@ export default class VideoPlayer extends Vue {
             this.player.play();
         } else {
             //something went wrong, play next video
-            store.state.intermissionVideos.index = (store.state.intermissionVideos.index + 1) % this.videos.length;
-            this.playNextVideo();
+            if (type === "charity") {
+                store.state.intermissionVideos.charityVideoIndex = (store.state.intermissionVideos.charityVideoIndex + 1) % this.charityVideos.length;
+            } else {
+                store.state.intermissionVideos.sponsorVideoIndex = (store.state.intermissionVideos.sponsorVideoIndex + 1) % this.sponsorVideos.length;
+            }
+            this.playNextVideo(type);
         }
     }
 
     videoEnded(): void {
         // console.log("video ended!");
-        store.state.intermissionVideos.index = (store.state.intermissionVideos.index + 1) % this.videos.length;
-        nodecg.sendMessage('videoPlayerFinished');
-        //TODO transition back to intermission
+        if (this.videoType === "charity") {
+            store.state.intermissionVideos.charityVideoIndex = (store.state.intermissionVideos.charityVideoIndex + 1) % this.charityVideos.length;
+            this.playNextVideo("sponsor");
+            this.videoType = "sponsor";
+        } else {
+            store.state.intermissionVideos.sponsorVideoIndex = (store.state.intermissionVideos.sponsorVideoIndex + 1) % this.sponsorVideos.length;
+            nodecg.sendMessage('videoPlayerFinished');
+        }
     }
 
     mounted() {
