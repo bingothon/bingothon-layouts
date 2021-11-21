@@ -58,6 +58,11 @@ export default class VideoPlayer extends Vue {
             this.video = video;
             this.playerSrc.src = video.url;
             this.playerSrc.type = `video/${video.ext.toLowerCase().replace('.', '')}`;
+            if  (type === 'charity') {
+                this.player.volume = 1;
+            } else {
+                this.player.volume = 0.5;
+            }
             this.player.load();
             this.player.play();
         } else {
