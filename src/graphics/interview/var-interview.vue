@@ -1,6 +1,6 @@
 <template>
 	<div class="Interview">
-		<img src="../../../static/logo-summer-wide.png" id="logo">
+		<img src="../../../static/logo-winter-wide.png" id="logo">
 		<div id="fillvoice" class="flexContainer"></div>
 		<div id="team-container" v-if="playerCount.length===4 && teamCount.length===2">
 			<player-team-container v-for="teamIndex in teamCount" :key="teamIndex" class="team" :teamIndex="teamIndex"
@@ -108,7 +108,7 @@ export default class Interview extends Vue {
     left: 60px;
     top: 60px;
     /*width: 568px;*/
-    height: 200px;
+    height: 150px;
 }
 #Bingo-board {
     position: absolute;

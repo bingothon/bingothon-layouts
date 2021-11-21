@@ -1,7 +1,7 @@
 <template>
     <div id="Intermission">
-        <!--<img src="../../../static/logo-winter-wide.png" id="logoWinter">-->
-        <img src="../../../static/logo-summer-wide.png" id="logoSummer">
+        <img src="../../../static/logo-winter-wide.png" id="logoWinter">
+<!--        <img src="../../../static/logo-summer-wide.png" id="logoSummer">-->
         <div id="host-bingo-text">Host Blackout Bingo</div>
         <run-upcoming
             v-if="nextRun"
