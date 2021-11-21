@@ -8,6 +8,6 @@
 export interface IntermissionVideos {
   path?: string;
   name?: string;
-  charityVideoIndex?: number;
-  sponsorVideoIndex?: number;
+  charityVideoIndex: number;
+  sponsorVideoIndex: number;
 }
