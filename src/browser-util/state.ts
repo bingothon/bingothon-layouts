@@ -95,7 +95,8 @@ const nodecgSpeedcontrolReplicantNames = [
 ];
 
 const assetNames = [
-    'assets:intermissionVideos',
+    'assets:charityVideos',
+    'assets:sponsorVideos',
     'assets:wideLargeLogos',
     'assets:wideSmallLogos',
     'assets:squareLogos'

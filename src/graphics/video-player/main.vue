@@ -22,7 +22,7 @@ export default class VideoPlayer extends Vue {
     @Ref('PlayerSrc') playerSrc: HTMLSourceElement;
 
     get charityVideos(): Asset[] {
-        return store.state["assets:intermissionVideos"];
+        return store.state["assets:charityVideos"];
     }
 
     get sponsorVideos(): Asset[] {
@@ -63,8 +63,10 @@ export default class VideoPlayer extends Vue {
         } else {
             //something went wrong, play next video
             if (type === "charity") {
+                console.log("Charity Length: " + this.charityVideos.length)
                 store.state.intermissionVideos.charityVideoIndex = (store.state.intermissionVideos.charityVideoIndex + 1) % this.charityVideos.length;
             } else {
+                console.log("Sponsor Length: " + this.sponsorVideos.length)
                 store.state.intermissionVideos.sponsorVideoIndex = (store.state.intermissionVideos.sponsorVideoIndex + 1) % this.sponsorVideos.length;
             }
             this.playNextVideo(type);
