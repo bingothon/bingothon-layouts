@@ -145,7 +145,6 @@ export default class Tracker extends Vue {
     }
 
     get game() : Games {
-        console.log("PlayerNumber: " + this.playerNumber + " of type: " + typeof this.playerNumber)
         let player = parseInt(this.playerNumber)
         switch (player) {
             case 4:
