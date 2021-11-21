@@ -1,8 +1,8 @@
 <template>
     <div>
-        <twitch-player id="stream1" streamIndex="0"></twitch-player>
-        <twitch-player id="stream2" streamIndex="1"></twitch-player>
-        <twitch-player id="stream3" streamIndex="2"></twitch-player>
+        <twitch-player id="stream1" :streamIndex="0"></twitch-player>
+        <twitch-player id="stream2" :streamIndex="1"></twitch-player>
+        <twitch-player id="stream3" :streamIndex="2"></twitch-player>
         <div id="fillbar" class="flexContainer"></div>
         <player-info id="pi1" playerIndex="0" height=45px></player-info>
         <player-info id="pi2" playerIndex="1" height=45px></player-info>

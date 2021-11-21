@@ -145,16 +145,14 @@ export default class Tracker extends Vue {
     }
 
     get game() : Games {
-        switch (this.playerNumber) {
-            case 4:
-                return store.state.gameP4
-            case 3:
-                return store.state.gameP3
-            case 2:
-                return store.state.gameP2
-            case 1:
-            default:
-                return store.state.gameP1
+        if (this.playerNumber == 4) {
+            return store.state.gameP4;
+        } else if (this.playerNumber == 3) {
+            return store.state.gameP3;
+        } else if (this.playerNumber == 2) {
+            return store.state.gameP2;
+        } else {
+            return store.state.gameP1;
         }
     }
 
@@ -164,23 +162,18 @@ export default class Tracker extends Vue {
 
     updateTrackers() {
         console.log('update trackers')
-        switch (this.playerNumber){
-            case 4:
-                store.dispatch("unbindGameP4")
-                store.dispatch("bindGameP4")
-                break
-            case 3:
-                store.dispatch("unbindGameP3")
-                store.dispatch("bindGameP3")
-                break
-            case 2:
-                store.dispatch("unbindGameP2")
-                store.dispatch("bindGameP2")
-                break
-            case 1:
-            default:
-                store.dispatch("unbindGameP1")
-                store.dispatch("bindGameP1")
+        if (this.playerNumber == 4) {
+            store.dispatch("unbindGameP4")
+            store.dispatch("bindGameP4")
+        } else if (this.playerNumber == 3) {
+            store.dispatch("unbindGameP3")
+            store.dispatch("bindGameP3")
+        } else if (this.playerNumber == 2) {
+            store.dispatch("unbindGameP2")
+            store.dispatch("bindGameP2")
+        } else {
+            store.dispatch("unbindGameP1")
+            store.dispatch("bindGameP1")
         }
     }
 
