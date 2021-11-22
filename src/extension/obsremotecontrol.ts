@@ -29,13 +29,6 @@ const obsConnectionRep = nodecg.Replicant<ObsConnection>('obsConnection');
 const obsStreamModeRep = nodecg.Replicant<ObsStreamMode>('obsStreamMode');
 const discordDelayInfoRep = nodecg.Replicant<DiscordDelayInfo>('discordDelayInfo');
 
-const allGameLayoutsRep = nodecg.Replicant<AllGameLayouts>('allGameLayouts');
-const currentGameLayoutRep = nodecg.Replicant<CurrentGameLayout>('currentGameLayout');
-const allInterviewLayoutsRep = nodecg.Replicant<AllInterviews>('allInterviews');
-const currentInterviewLayoutRep = nodecg.Replicant<CurrentInterview>('currentInterview');
-
-const runDataActiveRunRep = nodecg.Replicant<RunDataActiveRun>('runDataActiveRun', 'nodecg-speedcontrol');
-
 const voiceDelayRep = nodecg.Replicant<number>('voiceDelay', { defaultValue: 0, persistent: true });
 const streamsReplicant = nodecg.Replicant <TwitchStreams>('twitchStreams', { defaultValue: [] });
 const soundOnTwitchStream = nodecg.Replicant<number>('soundOnTwitchStream', { defaultValue: -1 });
@@ -336,33 +329,6 @@ waitTillConnected().then((): void => {
     if (!(obsCurrentSceneRep.value || '').toLowerCase().includes('intermission')) {
       // only accepted during intermission
       hostDiscordDuringIntermissionRep.value.speaking = false;
-    }
-  });
-
-  runDataActiveRunRep.on('change', (newValue, old): void => {
-    // bail on server restart
-    if (!newValue || !old) return;
-    // set layout defaults only in intermission
-    if (isIntermissionLikeScene(obsCurrentSceneRep.value || '')) {
-      let playerCount = 0;
-      let coOp = false;
-      for (let i = 0; i < newValue.teams.length; i += 1) {
-        const team = newValue.teams[i];
-        // eslint-disable-next-line no-loop-func
-        team.players.forEach((): void => {
-          playerCount += 1;
-        });
-      }
-      if (playerCount === 4 && newValue.teams.length === 2) {
-          coOp = true;
-      }
-      const layout = `${playerCount}p ${coOp ? 'co-op ' : ''}${newValue.customData.Layout} Layout`;
-      const foundLayout = allGameLayoutsRep.value.find(l => l.name == layout);
-      if (foundLayout !== undefined) {
-        currentGameLayoutRep.value = clone(foundLayout);
-      } else {
-        logger.error('did not find game layout '+layout);
-      }
     }
   });
 

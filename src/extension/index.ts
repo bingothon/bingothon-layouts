@@ -80,6 +80,7 @@ export = (nodecg: NodeCG): void => {
     require('./streams');
     require('./util/obs');
     require('./obsremotecontrol');
+    require('./layoutlogic');
     if (bundleConfig.mpd && bundleConfig.mpd.enable) {
         require('./music');
     } else {
