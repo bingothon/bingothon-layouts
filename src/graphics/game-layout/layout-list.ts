@@ -9,6 +9,7 @@ import Layout_3x2_3p from "./3_2-3p.vue";
 import Layout_4x3_3p from "./4_3-3p.vue";
 import Layout_16x9_3p from "./16_9-3p.vue";
 import Layout_16x9_3p_Trackers from "./16_9-3p-trackers.vue";
+import Layout_16x9_2p_2v2 from "./16_9-2p-2v2.vue";
 import Layout_16x9_2p from "./16_9-2p.vue";
 import Layout_16x9_1p from "./16_9-1p.vue";
 import Layout_4x3_2p from "./4_3-2p.vue";
@@ -38,6 +39,7 @@ export { Layout_16x9_4p,
 	Layout_3x2_2p,
 	Layout_DS_2p,
     Layout_16x9_2p,
+    Layout_16x9_2p_2v2,
 	Layout_16x10_2p,
 	Layout_4x3_2p,
     Layout_16x9_1p,

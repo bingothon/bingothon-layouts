@@ -25,6 +25,7 @@ const routes = [
     {name: "3p 16:9 Layout", path: "/3p-16_9-layout", component: Layouts.Layout_16x9_3p},
     {name: "3p 16:9 Layout Trackers", path: "/3p-16_9-layout-trackers", component: Layouts.Layout_16x9_3p_Trackers},
     {name: "2p 16:9 Layout", path: "/2p-16_9-layout", component: Layouts.Layout_16x9_2p},
+    {name: "2p 16:9 Layout 2v2", path: "/2p-16_9-layout-2v2", component: Layouts.Layout_16x9_2p_2v2},
     {name: "1p 16:9 Layout", path: "/1p-16_9-layout", component: Layouts.Layout_16x9_1p},
     {name: "2p 4:3 16:9 Layout", path: "/2p-4_3-16_9-layout", component: Layouts.Layout_4x3_16x9},
     {name: "2p 16:10 Layout", path: "/2p-16_10-layout", component: Layouts.Layout_16x10_2p},
