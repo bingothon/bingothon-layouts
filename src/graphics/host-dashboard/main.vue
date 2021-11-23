@@ -147,27 +147,57 @@
 </template>
 
 <script lang="ts">
-const BINGOTHON_BLURBS = 'Did you know that Bingothon Summer 2021 is being streamed on both the SpeedRunsLive channel as well as our own Twitch channel? If you are enjoying this marathon, then do know that there is even more content on the Bingothon Twitch channel, including for example The Legend of Zelda: Breath of the Wild weekly bingo matches, and more!\n' +
-    'Are you interested in featuring a bingo-related event on the Bingothon Twitch channel? Then do not hesitate to contact the Main Organizers on the Bingothon Discord server and we can certainly can discuss an arrangement to make it happen!\n' +
-    'Bingothon has a Teepublic store where you can buy some cool merch, including the mugs you can win as a prize in this marathon! Revenue gained from the store would be used to further improve the marathon in many ways.\n' +
-    'If you are watching on the Bingothon Twitch channel, why not subscribe? You can get access to some cool emotes, after all! Revenue made from subscribing does NOT go to the charity, but is used to improve Bingothon\'s marathons and other events, so your support is appreciated!\n' +
-    'Do you wonder how people come up with bingo cards for their speedgames? What is the process behind it all? Well we do have the Beyond the Board monthly series that you can find on our YouTube channel, where we sit down with various bingo runners and interview them about their bingo cards, speedgame and much more that allows a great insight into how bingos are made and how the community can further support them! You can also find the FULL uncut interviews on our website at bingothon.com as well!\n' +
-    'Bingothon is committed to supporting as many bingo events as possible, and for that to happen, restreamers are the unsung heroes we need to make that happen! If you are interested in volunteering as a restreamer, then do not hesitate to join our Discord server and talk to a Main Organizer about it!';
+const BINGOTHON_BLURBS = 'Did you know that Bingothon Winter 2021 is being streamed on both the SpeedRunsLive channel as well as our ' +
+    'own Twitch channel? If you are enjoying this marathon, then do know that there is even more content on the Bingothon Twitch channel,' +
+    ' including for example The Legend of Zelda: Breath of the Wild weekly bingo matches, and more!\n' +
+    'Are you interested in featuring a bingo-related event on the Bingothon Twitch channel? Then do not hesitate to contact the Main Organizers' +
+    ' on the Bingothon Discord server and we can certainly can discuss an arrangement to make it happen!\n' +
+    'Bingothon has a Teepublic store where you can buy some cool merch, including the mugs you can win as a prize in this marathon! Revenue ' +
+    'gained from the store would be used to further improve the marathon in many ways.\n' +
+    'If you are watching on the Bingothon Twitch channel, why not subscribe? You can get access to some cool emotes, after all! Revenue made from ' +
+    'subscribing does NOT go to the charity, but is used to improve Bingothon\'s marathons and other events, so your support is appreciated!\n' +
+    'Do you wonder how people come up with bingo cards for their speedgames? What is the process behind it all? Well we do have the Beyond the ' +
+    'Board monthly series that you can find on our YouTube channel, where we sit down with various bingo runners and interview them about their ' +
+    'bingo cards, speedgame and much more that allows a great insight into how bingos are made and how the community can further support them! You can ' +
+    'also find the FULL uncut interviews on our website at bingothon.com as well!\n' +
+    'Bingothon is committed to supporting as many bingo events as possible, and for that to happen, restreamers are the unsung heroes we need to make ' +
+    'that happen! If you are interested in volunteering as a restreamer, then do not hesitate to join our Discord server and talk to a Main Organizer ' +
+    'about it!';
 
-const CHARITY_BLURBS = 'Fred Hutch was named the coordinating center for the COVID Vaccine Prevention Network (CoVPN) in July 2020.\n' +
-	'With 25% of Fred Hutch\'s faculties already dedicated to viruses before the pandemic, Fred Hutch was able to take swift action when it started. They have been part of the leading of massive COVID-19 vaccine trials for the US government that have shown great success.\n' +
-	'Fred Hutch opened a first-of-its-kind COVID-19 clinical research center, being one of the United States\' first stand-alone certers dedicated to studying antiviral drugs, monoclonal antibodies and other emerging therapies for COVID-19. With not enough vaccines to go around right now, such treatments have the potential to save many lives until everyone can have access to vaccination.\n' +
-	'Fred Hutch is currently leading a study involving 12,000 college students called COVID U, to determine whether COVID-19 vaccines can successfully block asymptomatic transmission of the virus. Results of this trial should be ready by this fall.\n' +
-	'Fred Hutch is the home of the HIV Vaccine Trials Network, the world’s largest publicly funded international collaboration conducting clinical trials of HIV vaccines and treatments.\n' +
-	'Fred Hutch is mainly known for pioneering the Bone marrow Transplantation, which is now a key way to stop cancer, with more than 1.3 million people having received it to this day.\n' +
-	'Fred Hutch is at the forefront of developing treatments that harness the immune system to fight cancer. Some of these therapies include Antibody-based therapies, as well as the current development of potential cancer vaccines that could prevent cancer as well as to treating it, by preventing viral infections that can lead to cancer.\n' +
-	'Researchers from Fred Hutch have won the Nobel Prize in physiology or medicine three times: in 1990, 2001 and 2004. Dr E. Donnal Thomas was awarded in 1990 for his work on the bone marrow and blood stem cell transplantation. Dr Leland Hartwell was awared in 2001 for discovering the universal mechanism that controls cell division in all eukaryotic, or nucleated, organisms. And finally, Dr. Linda Buck was awared in 2004 for her work on odorant receptors and the organization of the olfactory system — the network responsible for our sense of smell.\n' +
-	'Fred Hutch scientists are doing pardigm-shifting work to understand how the millions of microorganisms in our bodies, called the microbiome, affect overall health — and use that knowlege to improve cancer treatment, fight heart disease, and more.';
+const CHARITY_BLURBS = 'Fred Hutch is a cancer research center where world-renowned scientists and humanitarians work together to prevent, diagnose and ' +
+    'treat cancer, ' +
+    'HIV and many other diseases. With three Novel laureates among their researchers, they are at the front of the battle against those illnesses\n' +
+    'Fred Hutch was named the coordinating center for the COVID Vaccine Prevention Network (CoVPN) in July 2020\n' +
+    "Fred Hutch opened a first-of-its-kind COVID-19 clinical research center, being one of the United States' first stand-alone certers dedicated to " +
+    "studying antiviral drugs, monoclonal antibodies and other emerging therapies for COVID-19. With not enough vaccines to go around right now, such " +
+    "treatments have the potential to save many lives until everyone can have access to vaccination\n" +
+    'Fred Hutch is the home of the HIV Vaccine Trials Network, the world’s largest publicly funded international collaboration conducting clinical trials ' +
+    'of HIV vaccines and treatments.' +
+    'Researchers from Fred Hutch have won the Nobel Prize in physiology or medicine three times: in 1990, 2001 and 2004. Dr E. Donnal Thomas was awarded ' +
+    'in 1990 for his work on the bone marrow and blood stem cell transplantation. Dr Leland Hartwell was awared in 2001 for discovering the universal ' +
+    'mechanism that controls cell division in all eukaryotic, or nucleated, organisms. And finally, Dr. Linda Buck was awared in 2004 for her work on ' +
+    'odorant receptors and the organization of the olfactory system — the network responsible for our sense of smell\n' +
+    "On the 30th of November at 2pm PST, or 10pm UTC, three Fred Hutch researchers will be interviewed by comedian and host of \"The Daily Show\" Trevor " +
+    "Noah in an event called Science Says. You may find more information about this upcoming interview on Fred Hutch's website\n" +
+    'Dr Elizabeth Halloran of Fred Hutch is part of a team led by Northeastern University researchers where they are working on modeling the early ' +
+    'worldwide spread of COVID-19 using transportation and population data. The results from that model suggest it could be used in preparation for ' +
+    'future outbreaks.\n' +
+    'Fred Hutch researchers have been at the forefront of the study and research into treatments against COVID-19. One of their latest conclusions, dating' +
+    ' to late october, suggests that COVID-19 patients who received the monoclonal antibody treatment "sotrovimab" were at a much reduced risk of' +
+    ' hospitalization or death.\n' +
+    'Recent research from Fred Hutch has investigated how immune responses can change depending on which strain of coronavirus people get infected with. ' +
+    'The research has shown that antibodies raised against the early 2020 strains of the virus targeted slightly different regions compared to those that' +
+    ' appeared later on. Understanding those differences is key for researchers in treatment and vaccine developments.';
 
 const SPONSOR_BLURBS = 'Bingothon is sponsored by Team17, who currently have a huge Black Friday Sale on Steam across their vast library of indie titles, from 20% up to 90% off selected titles\n' +
     'Bingothon is sponsored by Team17 who recently launched their quirky, culinary adventure game Epic Chef across PC, Switch, Xbox and PS4\n' +
     'Bingothon is sponsored by Team17 who launched their colourful, dwarven mining simulator Hammerting on PC earlier this month\n' +
-    'Bingothon is sponsored by Team17 who this week unleashed a new hero into their dark fantasy strategy game Age of Darkness currently in Steam Early Access'
+    'Bingothon is sponsored by Team17 who this week unleashed a new hero into their dark fantasy strategy game Age of Darkness currently in Steam Early' +
+    ' Access\n' +
+    'Bingothon is sponsored by Team17 who also provide a bunch of prizes for Bingothon Winter 2021. If you would like to learn more about them, type ' +
+    '!prizes in the chat\n' +
+    'We would like to thank Indiethon for providing prizes for Bingothon Winter 2021. Submissions for Indiethon are open until the 19th of December and' +
+    ' will be live on their Twitch channel on the weekend of the 15th of January 2022. You may find more information about it on their Oengus page.'
 
 import {Component, Vue} from "vue-property-decorator";
 import {store, getReplicant} from "../../browser-util/state";
