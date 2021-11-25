@@ -9,8 +9,8 @@
 
 <script lang="ts">
 import {Component, Ref, Vue, Watch} from "vue-property-decorator";
-import {Asset} from "../../../schemas";
-import {store} from "../../browser-util/state";
+import {Asset, CurrentGameLayout, IntermissionVideos} from "../../../schemas";
+import {getReplicant, store} from "../../browser-util/state";
 
 type VideoTypeEnum = ("charity" | "sponsor")
 
@@ -68,11 +68,9 @@ export default class VideoPlayer extends Vue {
         } else {
             //something went wrong, play next video
             if (type === "charity") {
-                console.log("Charity Length: " + this.charityVideos.length)
-                store.state.intermissionVideos.charityVideoIndex = (store.state.intermissionVideos.charityVideoIndex + 1) % this.charityVideos.length;
+                getReplicant<IntermissionVideos>('intermissionVideos').value.charityVideoIndex = (store.state.intermissionVideos.charityVideoIndex + 1) % this.charityVideos.length;
             } else {
-                console.log("Sponsor Length: " + this.sponsorVideos.length)
-                store.state.intermissionVideos.sponsorVideoIndex = (store.state.intermissionVideos.sponsorVideoIndex + 1) % this.sponsorVideos.length;
+                getReplicant<IntermissionVideos>('intermissionVideos').value.sponsorVideoIndex = (store.state.intermissionVideos.sponsorVideoIndex + 1) % this.sponsorVideos.length;
             }
             this.playNextVideo(type);
         }
