@@ -1,7 +1,7 @@
 <template>
     <div>
     <transition
-      name="fade"
+      name="fast-fade"
       mode="in-out"
     >
         <img v-if="currentLogo" :src="currentLogo.url" :key="currentLogo.url">
@@ -17,7 +17,7 @@ import TeamInfo from "./teamInfo.vue";
 import { store } from "../../browser-util/state";
 import { Asset } from "schemas";
 
-const ROTATION_INTERVAL_SECS = 20;
+const ROTATION_INTERVAL_SECS = 5;
 
 export enum LogoAssetType {
     wideSmallLogos = "wideSmallLogos",
@@ -66,5 +66,13 @@ export default class RotatingLogo extends Vue {
         width: 100%;
         object-fit: scale-down;
         position: absolute;
+    }
+
+    /* local animation stuff */
+    .fast-fade-enter-active, .fast-fade-leave-active {
+        transition: opacity 0.5s;
+    }
+    .fast-fade-enter, .fast-fade-leave-to {
+        opacity: 0;
     }
 </style>
