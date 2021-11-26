@@ -10,6 +10,7 @@
                 dark
                 small
                 @click="muteChange(i)"
+                :title="i === soundOnTwitchStream ? 'currently unmuted' : 'currently muted'"
             >
                 <v-icon v-if="i === soundOnTwitchStream">
                     mdi-volume-off
