@@ -12,6 +12,16 @@
                     &#64;Bingothon
                 </td>
             </tr>
+            <tr class="FlexContainer TwitchRow">
+                <td>
+                    <div id="TwitchLogo">
+                        <img src="../../../../../static/Twitch_icon.png">
+                    </div>
+                </td>
+                <td class="SociallNames">
+                    Bingothon
+                </td>
+            </tr>
             <tr class="FlexContainer YouTubeRow">
                 <td>
                     <div id="YouTubeLogo">
@@ -22,14 +32,14 @@
                     c/Bingothon
                 </td>
             </tr>
-            <tr class="FlexContainer YouTubeRow">
+            <tr class="FlexContainer InstaRow">
                 <td>
-                    <div id="TwitchLogo">
-                        <img src="../../../../../static/Twitch_icon.png">
+                    <div id="InstaLogo">
+                        <img src="../../../../../static/Instagram_AppIcon_Aug2017.png">
                     </div>
                 </td>
                 <td class="SociallNames">
-                    Bingothon
+                    Bingothon_Marathon
                 </td>
             </tr>
         </table>
@@ -84,22 +94,30 @@ export default class Socials extends Vue {
 
 #YouTubeLogo > img {
     position: absolute;
-    top: 200px;
+    top: 276px;
     left: 240px;
     height: 115px;
 }
 
 #TwitchLogo > img {
     position: absolute;
-    top: 400px;
+    top: 140px;
+    left: 250px;
+    height: 100px;
+}
+
+#InstaLogo > img {
+    position: absolute;
+    top: 433px;
     left: 250px;
     height: 100px;
 }
 
 .SociallNames {
-    margin-left: 150px;
-    font-size: 70px;
+    margin-left: 300px;
+    font-size: 55px;
     font-weight: bold;
-    margin-bottom: 115px;
+    margin-bottom: 80px;
+    align-content: flex-start;
 }
 </style>
