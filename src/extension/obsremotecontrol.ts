@@ -238,16 +238,16 @@ waitTillConnected().then((): void => {
         logger.warn(`Problem fading out mpd during transition: ${err.error}`);
       });
     }
-    // use player audio
-    if (nextSceneName === 'game') {
-      nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.streamsAudio }, (err): void => {
-        logger.warn(`Problem fading in streams during transition: ${err.error}`);
-      });
-    } else {
-      nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.streamsAudio }, (err): void => {
-        logger.warn(`Problem fading out streams during transition: ${err.error}`);
-      });
-    }
+    // streams audio handled via individual sources
+    // if (nextSceneName === 'game') {
+    //   nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.streamsAudio }, (err): void => {
+    //     logger.warn(`Problem fading in streams during transition: ${err.error}`);
+    //   });
+    // } else {
+    //   nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.streamsAudio }, (err): void => {
+    //     logger.warn(`Problem fading out streams during transition: ${err.error}`);
+    //   });
+    // }
     // depending on the next scene and which mode is used set some stuff automagically
     if (streamMode === 'external-commentary' || streamMode === 'runner-commentary') {
       // no discord delay in intermission
@@ -271,15 +271,16 @@ waitTillConnected().then((): void => {
       }
     } else if (streamMode === 'racer-audio-only') {
       // use player audio
-      if (nextSceneName === 'game') {
-        nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.streamsAudio }, (err): void => {
-          logger.warn(`Problem fading in streams during transition: ${err.error}`);
-        });
-      } else {
-        nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.streamsAudio }, (err): void => {
-          logger.warn(`Problem fading out streams during transition: ${err.error}`);
-        });
-      }
+      // streams audio handled via individual sources
+      // if (nextSceneName === 'game') {
+      //   nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.streamsAudio }, (err): void => {
+      //     logger.warn(`Problem fading in streams during transition: ${err.error}`);
+      //   });
+      // } else {
+      //   nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.streamsAudio }, (err): void => {
+      //     logger.warn(`Problem fading out streams during transition: ${err.error}`);
+      //   });
+      // }
       // discord muted except for interview
       if (nextSceneName === 'interview' || (nextSceneName.includes('intermission') && hostsSpeaking)) {
         nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.discordAudio }, (err): void => {
