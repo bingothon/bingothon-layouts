@@ -2,7 +2,7 @@
     <div>
         <!--   Stream for first player of each team     -->
         <twitch-player id="stream1" streamIndex="0"></twitch-player>
-        <twitch-player id="stream2" streamIndex="2"></twitch-player>
+        <twitch-player id="stream3" streamIndex="2"></twitch-player>
         <div id="fillbar" class="flexContainer"></div>
         <div id="team1" :style="{'border': '5px var(--border-color-' + teamColor1 + ') solid'}">
             <team-info
@@ -93,7 +93,7 @@ export default class GameLayout extends Vue {
     background-color: aqua;
 }
 
-#stream2 {
+#stream3 {
     position: absolute;
     top: 0px;
     left: 960px;
