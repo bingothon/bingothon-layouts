@@ -163,7 +163,7 @@ class OBSUtility extends obsWebsocketJs {
           y: params.y,
         },
         bounds: {
-          type: "OBS_BOUNDS_SCALE_INNER", // TODO: test
+          type: "OBS_BOUNDS_STRETCH", //"OBS_BOUNDS_SCALE_INNER", // TODO: test
           x: params.width,
           y: params.height,
         },
