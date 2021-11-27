@@ -15,7 +15,7 @@ import clone from 'clone';
 // and setting everything in OBS properly on transitions
 // this uses the transparent bindings form the obs.ts in util
 
-const HOST_SPEAKING_MUSIC_VOLUME_MULTIPLIER = 0.5;
+const HOST_SPEAKING_MUSIC_VOLUME_MULTIPLIER = 0.2;
 
 const nodecg = nodecgApiContext.get();
 const logger = new nodecg.Logger(`${nodecg.bundleName}:remotecontrol`);
