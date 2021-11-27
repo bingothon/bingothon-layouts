@@ -63,7 +63,7 @@ function init(): void {
 async function oriBingoUpdate(): Promise<void> {
     try {
         // eslint-disable-next-line max-len
-        console.log('update')
+        // console.log('update')
         const oriResp = await getBoard(oriBingoMeta.value.game, oriBingoMeta.value.boardID, oriBingoMeta.value.playerID);
         /*if (oriBingoMeta.value.game === 'ori1') {
             const oriResp2 = await getBoard(oriBingoMeta.value.game, oriBingoMeta.value.boardID, "1");
@@ -74,14 +74,14 @@ async function oriBingoUpdate(): Promise<void> {
         const oriBoardRevealed: ExplorationOriField[] = [];
         const playerColor = boardMetaRep.value.playerColors[0] || 'red';
         let goalCount = 0;
+        const revealedSquares = getRevealedSquares(oriResp);
+        // console.log(revealedSquares);
         oriBoard.forEach((field, idx): void => {
-            const shouldBeRevealed = squareShouldBeRevealed(oriResp, idx);
-            if (!oldBoard || oldBoard[idx].name !== field.name || oldBoard[idx].revealed !== shouldBeRevealed) {
-                if (shouldBeRevealed) {
-                    boardRep.value.cells[idx].name = processStyling(field.name);
-                } else {
-                    boardRep.value.cells[idx].name = '';
-                }
+            const shouldBeRevealed = revealedSquares.has(idx)
+            if (shouldBeRevealed) {
+                boardRep.value.cells[idx].name = processStyling(field.name);
+            } else {
+                boardRep.value.cells[idx].name = '';
             }
             if (field.completed && shouldBeRevealed) {
                 boardRep.value.cells[idx].colors = playerColor;
@@ -115,7 +115,7 @@ function recover(): void {
     });
 }
 
-function squareShouldBeRevealed(apiResp: OriApiResponse, idx: number): boolean {
+function getRevealedSquares(apiResp: OriApiResponse): Set<number> {
     let completed: Set<number> = new Set<number>();
     for (let i = 0; i < apiResp.cards.length; i++) {
         if (apiResp.cards[i].completed) {
@@ -131,7 +131,7 @@ function squareShouldBeRevealed(apiResp: OriApiResponse, idx: number): boolean {
         lastSize = current.size
         current.forEach((square) => {
             if (completed.has(square)) {
-                if (square % 5 > 1)
+                if (square % 5 > 0)
                     current.add(square - 1)
                 if (square % 5 < 4)
                     current.add(square + 1)
@@ -140,9 +140,8 @@ function squareShouldBeRevealed(apiResp: OriApiResponse, idx: number): boolean {
             }
         });
     }
-    return current.has(idx);
+    return current;
 }
-
 
 nodecg.listenFor('oriBingo:activate', async (data, callback): Promise<void> => {
     try {
