@@ -83,7 +83,7 @@ async function oriBingoUpdate(): Promise<void> {
                     boardRep.value.cells[idx].name = '';
                 }
             }
-            if (field.completed /*|| oriResp2.cards[idx].completed*/) {
+            if (field.completed && shouldBeRevealed) {
                 boardRep.value.cells[idx].colors = playerColor;
                 goalCount++;
             } else {
