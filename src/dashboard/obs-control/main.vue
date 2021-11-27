@@ -53,8 +53,9 @@
                         <v-btn
                             :disabled="!canTriggerAudioFade(audio[1].fading)"
                             @click="toggleAudioFade(audio[0])"
+                            :title="isAudioUnmuted(audio[1].fading) ? 'currently unmuted' : 'currently muted'"
                         >
-                            <v-icon v-if="toggleAudioFadeText(audio[1].fading)">
+                            <v-icon v-if="isAudioUnmuted(audio[1].fading)">
                                 mdi-volume-off
                             </v-icon>
                             <v-icon v-else>
@@ -205,7 +206,7 @@ export default class OBSControl extends Vue {
         }
     }
 
-    toggleAudioFadeText(fade: string): boolean {
+    isAudioUnmuted(fade: string): boolean {
         switch (fade) {
             case 'fadein':
                 return true;
