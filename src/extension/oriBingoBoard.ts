@@ -142,7 +142,7 @@ function squareShouldBeRevealed(apiResp: OriApiResponse, apiResp2 : OriApiRespon
             }
         });
     }
-    return current;
+    return current.has(idx);
 }
 
 nodecg.listenFor('oriBingo:activate', async (data, callback): Promise<void> => {
