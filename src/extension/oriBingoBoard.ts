@@ -63,7 +63,7 @@ function init(): void {
 async function oriBingoUpdate(): Promise<void> {
     try {
         // eslint-disable-next-line max-len
-        console.log('update')
+        // console.log('update')
         const oriResp = await getBoard(oriBingoMeta.value.game, oriBingoMeta.value.boardID, oriBingoMeta.value.playerID);
         let oriResp2 : OriApiResponse;
         if (oriBingoMeta.value.game === 'ori1') {
@@ -133,7 +133,7 @@ function squareShouldBeRevealed(apiResp: OriApiResponse, apiResp2 : OriApiRespon
         lastSize = current.size
         current.forEach((square) => {
             if (completed.has(square)) {
-                if (square % 5 > 1)
+                if (square % 5 > 0)
                     current.add(square - 1)
                 if (square % 5 < 4)
                     current.add(square + 1)
@@ -142,9 +142,8 @@ function squareShouldBeRevealed(apiResp: OriApiResponse, apiResp2 : OriApiRespon
             }
         });
     }
-    return current.has(idx);
+    return current;
 }
-
 
 nodecg.listenFor('oriBingo:activate', async (data, callback): Promise<void> => {
     try {
