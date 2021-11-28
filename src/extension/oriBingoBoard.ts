@@ -65,25 +65,27 @@ async function oriBingoUpdate(): Promise<void> {
         // eslint-disable-next-line max-len
         console.log('update')
         const oriResp = await getBoard(oriBingoMeta.value.game, oriBingoMeta.value.boardID, oriBingoMeta.value.playerID);
-        /*if (oriBingoMeta.value.game === 'ori1') {
-            const oriResp2 = await getBoard(oriBingoMeta.value.game, oriBingoMeta.value.boardID, "1");
+        let oriResp2 : OriApiResponse;
+        if (oriBingoMeta.value.game === 'ori1') {
+            oriResp2 = await getBoard(oriBingoMeta.value.game, oriBingoMeta.value.boardID, "2");
         } else {
-            const oriResp2 = oriResp;
-        }*/
+            oriResp2 = oriResp;
+        }
         const oriBoard: OriField[] = oriResp.cards;
         const oriBoardRevealed: ExplorationOriField[] = [];
         const playerColor = boardMetaRep.value.playerColors[0] || 'red';
         let goalCount = 0;
         oriBoard.forEach((field, idx): void => {
-            const shouldBeRevealed = squareShouldBeRevealed(oriResp, idx);
-            if (!oldBoard || oldBoard[idx].name !== field.name || oldBoard[idx].revealed !== shouldBeRevealed) {
-                if (shouldBeRevealed) {
+            const shouldBeRevealed = squareShouldBeRevealed(oriResp, oriResp2, idx);
+            const shouldBeRevealed2 = squareShouldBeRevealed(oriResp2, oriResp, idx)
+            if (!oldBoard || oldBoard[idx].name !== field.name || oldBoard[idx].revealed !== shouldBeRevealed || oldBoard[idx].revealed !== shouldBeRevealed2) {
+                if (shouldBeRevealed || shouldBeRevealed2) {
                     boardRep.value.cells[idx].name = processStyling(field.name);
                 } else {
                     boardRep.value.cells[idx].name = '';
                 }
             }
-            if (field.completed && shouldBeRevealed) {
+            if ((field.completed || oriResp2.cards[idx].completed) && (shouldBeRevealed || shouldBeRevealed2)) {
                 boardRep.value.cells[idx].colors = playerColor;
                 goalCount++;
             } else {
@@ -115,10 +117,10 @@ function recover(): void {
     });
 }
 
-function squareShouldBeRevealed(apiResp: OriApiResponse, idx: number): boolean {
+function squareShouldBeRevealed(apiResp: OriApiResponse, apiResp2 : OriApiResponse, idx: number): boolean {
     let completed: Set<number> = new Set<number>();
     for (let i = 0; i < apiResp.cards.length; i++) {
-        if (apiResp.cards[i].completed) {
+        if (apiResp.cards[i].completed || apiResp2.cards[i].completed) {
             completed.add(i);
         }
     }
