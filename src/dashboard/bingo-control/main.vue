@@ -49,7 +49,7 @@
         <!-- Normal Bingosync Stuff -->
         <div v-if="showExtraBingosyncOptions">
             <div>
-                Room Code:
+                Room Code or URL:
                 <v-text-field v-model="roomCode" background-color="#455A64" clearable solo dark/>
             </div>
             <div>
