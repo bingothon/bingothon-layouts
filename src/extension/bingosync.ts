@@ -28,6 +28,14 @@ const bingosyncSiteUrl = 'https://bingosync.com';
 //  log.error(`Failed to recover connection to room ${socketRep.value.roomCode}:`, error);
 // });
 
+const BINGOSYNC_ROOM_URL_RE = /^(.+)\/room\/([0-9a-zA-Z_-]+)$/g;
+const BINGOSYNC_SLUG_RE = /^[0-9a-zA-Z_-]+$/g;
+
+const SOCKET_URLS: Record<string, string> = Object.freeze({
+  "https://bingosync.com": "wss://sockets.bingosync.com",
+  "https://bingosync.bingothon.com": "wss://bingosock.bingothon.com",
+});
+
 class BingosyncManager {
 
   private request = RequestPromise.defaults({ jar: true });
@@ -81,10 +89,10 @@ class BingosyncManager {
       this.socketRep.value.status = 'disconnected';
     }
     // Restore previous connection on startup
-    const { roomCode, passphrase } = this.socketRep.value;
-    if (roomCode && passphrase) {
+    const { roomCode, passphrase, siteUrl, socketUrl } = this.socketRep.value;
+    if (roomCode && passphrase && siteUrl) {
       log.info(`Recovering connection to room ${this.socketRep.value.roomCode}`);
-      this.joinRoom(roomCode, passphrase)
+      this.joinRoom(roomCode, siteUrl, socketUrl, passphrase)
         .then((): void => {
           log.info(`Successfully recovered connection to room ${this.socketRep.value.roomCode}`);
         })
@@ -95,9 +103,38 @@ class BingosyncManager {
     }
   }
 
-  public async joinRoom(roomCode: string, passphrase: string): Promise<void> {
+  public async joinRoomUrlOrCode(roomUrlOrCode: string, passphrase: string): Promise<void> {
+    let siteUrl = bingosyncSiteUrl;
+    let socketUrl: string | undefined = bingosyncSocketUrl;
+    let roomCode: string;
+    if (BINGOSYNC_SLUG_RE.test(roomUrlOrCode)) {
+      // this is only the code, assume standard bingosync
+      roomCode = roomUrlOrCode;
+    } else {
+      const match = BINGOSYNC_ROOM_URL_RE.exec(roomUrlOrCode);
+      if (match === null) {
+        throw new Error("can only join room with room code or url!!");
+      }
+      siteUrl = match[1];
+      // if the site is not one of the known urls, we get undefined
+      // that's fine, we try to get the socket url from the api
+      socketUrl = SOCKET_URLS[siteUrl];
+      roomCode = match[2];
+    }
+    await this.joinRoom(roomCode, siteUrl, socketUrl, passphrase);
+  }
+
+  /**
+   * connects to the room, sets up everything basically
+   * @param roomCode Can be only the roomcode or the entire url
+   * @param passphrase the password
+   */
+  public async joinRoom(roomCode: string, siteUrl: string, socketUrl: string | undefined,  passphrase: string): Promise<void> {
+    this.socketRep.value.siteUrl = siteUrl;
+    this.socketRep.value.socketUrl = socketUrl;
     this.socketRep.value.passphrase = passphrase;
     this.socketRep.value.roomCode = roomCode;
+    
     this.socketRep.value.status = 'connecting';
     if (this.fullUpdateInterval) {
       clearInterval(this.fullUpdateInterval);
@@ -106,7 +143,7 @@ class BingosyncManager {
 
     log.info('Fetching bingosync socket key...');
     const data = await this.request.post({
-      uri: `${bingosyncSiteUrl}/api/join-room`,
+      uri: `${siteUrl}/api/join-room`,
       followAllRedirects: true,
       json: {
         room: roomCode,
@@ -116,18 +153,26 @@ class BingosyncManager {
     });
 
     const socketKey = data.socket_key;
+    if (socketUrl === undefined) {
+      // see: https://github.com/kbuzsaki/bingosync/pull/180
+      socketUrl = data.sockets_url;
+      if (socketUrl === undefined) {
+        throw new Error("unknown bingosync instance, couldn't get sockets url!");
+      }
+    }
+    this.socketRep.value.socketUrl = socketUrl;
     log.info('Got bingosync socket key!');
 
     const thisInterval = setInterval((): void => {
-      this.fullUpdate(roomCode).catch((error): void => {
+      this.fullUpdate(siteUrl, roomCode).catch((error): void => {
         log.error('Failed to fullUpdate:', error);
       });
     }, 60 * 1000);
     this.fullUpdateInterval = thisInterval;
     this.tempFullUpdateInterval = thisInterval;
 
-    await this.fullUpdate(roomCode);
-    await this.createWebsocket(bingosyncSocketUrl, socketKey);
+    await this.fullUpdate(siteUrl, roomCode);
+    await this.createWebsocket(socketUrl, socketKey);
   }
 
   public async leaveRoom(): Promise<void> {
@@ -147,9 +192,9 @@ class BingosyncManager {
     }
   }
 
-  public async fullUpdate(roomCode: string): Promise<void> {
+  public async fullUpdate(siteUrl: string, roomCode: string): Promise<void> {
     const bingosyncBoard: BingosyncCell[] = await this.request.get({
-      uri: `${bingosyncSiteUrl}/room/${roomCode}/board`,
+      uri: `${siteUrl}/room/${roomCode}/board`,
       json: true,
     });
 
@@ -377,7 +422,7 @@ nodecg.listenFor('bingosync:joinRoom', async (data, callback): Promise<void> => 
         callback(new Error(`No Bingosync Manager with name ${data.name} found`));
       }
     } else {
-      await manager.joinRoom(
+      await manager.joinRoomUrlOrCode(
         data.roomCode,
         data.passphrase,
       );
