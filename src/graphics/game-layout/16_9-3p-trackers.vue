@@ -35,7 +35,7 @@ import PlayerTeamContainer from "../components/playerTeamContainer.vue";
 import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
 import {RunDataPlayer, RunDataTeam} from "../../../speedcontrol-types";
 import TwitchPlayer from "../components/twitchStreamPlaceholder.vue";
-import RotatingLogo from "../components/rotatingLogo.vue";
+import RotatingLogo from "../components/sponsorLogoRotation.vue";
 import Tracker from "../components/tracker.vue";
 
 @Component({

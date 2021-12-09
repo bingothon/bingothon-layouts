@@ -3,7 +3,7 @@
         <twitch-player id="stream1" streamIndex="0"></twitch-player>
         <twitch-player id="stream2" streamIndex="1"></twitch-player>
         <div id="fillbar" class="flexContainer"></div>
-        <rotating-logo logo-asset-type="wideSmallLogos" id="SponsorContainer"></rotating-logo>
+        <sponsor-logo-rotation logo-asset-type="wideSmallLogos" id="SponsorContainer"></sponsor-logo-rotation>
         <player-info id="pi1" playerIndex="0" height=45px></player-info>
         <player-info id="pi2" playerIndex="1" height=45px></player-info>
         <test-game-container id="game"></test-game-container>
@@ -29,11 +29,11 @@ import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
 import TwitchPlayer from "../components/twitchStreamPlaceholder.vue";
 import {RunDataPlayer, RunDataTeam} from "../../../speedcontrol-types";
 import RotatingLogos from "../omnibar/components/RotatingLogos.vue";
-import RotatingLogo from "../components/rotatingLogo.vue";
+import SponsorLogoRotation from "../components/sponsorLogoRotation.vue";
 
 @Component({
     components: {
-        RotatingLogo,
+        SponsorLogoRotation,
         RotatingLogos,
         BingoBoard,
         TestGameContainer,
