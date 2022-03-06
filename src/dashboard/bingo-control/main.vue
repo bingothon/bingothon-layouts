@@ -76,7 +76,7 @@
                 <v-text-field v-model="oriBoardID" background-color="#455A64" clearable solo single-line dark/>
             </div>
             <div>
-                PlayerID:
+                PlayerIDs (comma separated):
                 <v-text-field v-model="oriPlayerID" background-color="#455A64" clearable solo single-line dark/>
             </div>
             <v-radio-group
