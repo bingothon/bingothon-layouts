@@ -1,5 +1,5 @@
 <template>
-    <div id="App">
+    <div id="PlayerContainer">
         <video ref="VideoPlayer" id="player">
             <source ref="PlayerSrc">
         </video>
@@ -94,14 +94,23 @@ export default class VideoPlayer extends Vue {
 }
 </script>
 
-<style scoped>
+<style>
+
+#PlayerContainer {
+    height: 900px;
+    overflow: hidden;
+}
+
+body {
+    background: linear-gradient(var(--darker-main-color), var(--lighter-main-color) 80%, var(--darker-main-color));
+}
 
 #player {
     position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 1920px;
-    height: 1080px;
+    top: 30px;
+    left: 124px; /* (1920 - width) / 2 */
+    width: 1671px; /* height / 1080 * 1920 */
+    height: 940px; /* 1080 - (80 + 2*top) */
 }
 
 </style>
