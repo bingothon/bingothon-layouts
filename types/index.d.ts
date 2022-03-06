@@ -1,6 +1,7 @@
 export * from "./BoardColor";
 export * from "./BoardCell";
 export * from "./ChannelQuality";
+export * from "./ExplorationBingoboardCell";
 export * from "./TrackerDonation";
 export * from "./TrackerOpenBid";
 export * from "./TrackerPrize";

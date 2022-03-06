@@ -2,6 +2,7 @@ import * as RequestPromise from 'request-promise';
 
 import * as nodecgApiContext from './util/nodecg-api-context';
 import {OriBingoboard, OriBingoMeta, BingoboardMeta} from '../../schemas';
+import { ExplorationBingoboardCell } from '../../types';
 
 const nodecg = nodecgApiContext.get();
 const log = new nodecg.Logger(`${nodecg.bundleName}:oriBingo`);
@@ -60,41 +61,72 @@ function init(): void {
     }
 }
 
+function toBingosyncBoard(resp: OriApiResponse[], color: string): {cells: ExplorationBingoboardCell[], count: number} {
+    if (resp.length === 0) {
+        throw new Error("need a board pls");
+    }
+    const completed: boolean[] = new Array(25).fill(false);
+    resp.forEach(c => {
+        c.cards.forEach((square, index) => {
+            if (square.completed) {
+                completed[index] = true;
+            }
+        });
+    });
+    const current = new Set<number>();
+    resp.forEach(r => {
+        r.disc_squares.forEach((square) => {
+            current.add(square);
+        });
+    });
+    let lastSize = 0;
+    while (current.size !== lastSize) {
+        lastSize = current.size
+        current.forEach((square) => {
+            if (completed[square]) {
+                if (square % 5 > 0)
+                    current.add(square - 1)
+                if (square % 5 < 4)
+                    current.add(square + 1)
+                current.add(square - 5)
+                current.add(square + 5)
+            }
+        });
+    }
+    let goalCounts = 0;
+    const cells = resp[0].cards.map((card, index) => {
+        const revealed = current.has(index);
+        const processedName = processStyling(card.name);
+        const goalCompleted = revealed && completed[index];
+        if (goalCompleted) {
+            goalCounts++;
+        }
+        return {
+            name: revealed ? processedName : '',
+            hidden: !revealed,
+            hiddenName: processedName,
+            colors: goalCompleted ? color : 'blank',
+            slot: `slot${index}`
+        };
+    });
+    return {
+        cells,
+        count: goalCounts
+    };
+}
+
 async function oriBingoUpdate(): Promise<void> {
     try {
         // eslint-disable-next-line max-len
         // console.log('update')
-        const oriResp = await getBoard(oriBingoMeta.value.game, oriBingoMeta.value.boardID, oriBingoMeta.value.playerID);
-        let oriResp2 : OriApiResponse;
+        const responses = [await getBoard(oriBingoMeta.value.game, oriBingoMeta.value.boardID, oriBingoMeta.value.playerID)];
         if (oriBingoMeta.value.game === 'ori1') {
-            oriResp2 = await getBoard(oriBingoMeta.value.game, oriBingoMeta.value.boardID, "2");
-        } else {
-            oriResp2 = oriResp;
+            responses.push(await getBoard(oriBingoMeta.value.game, oriBingoMeta.value.boardID, "2"));
         }
-        const oriBoard: OriField[] = oriResp.cards;
-        const oriBoardRevealed: ExplorationOriField[] = [];
         const playerColor = boardMetaRep.value.playerColors[0] || 'red';
-        let goalCount = 0;
-        oriBoard.forEach((field, idx): void => {
-            const shouldBeRevealed = squareShouldBeRevealed(oriResp, oriResp2, idx);
-            const shouldBeRevealed2 = squareShouldBeRevealed(oriResp2, oriResp, idx)
-            if (!oldBoard || oldBoard[idx].name !== field.name || oldBoard[idx].revealed !== shouldBeRevealed || oldBoard[idx].revealed !== shouldBeRevealed2) {
-                if (shouldBeRevealed || shouldBeRevealed2) {
-                    boardRep.value.cells[idx].name = processStyling(field.name);
-                } else {
-                    boardRep.value.cells[idx].name = '';
-                }
-            }
-            if ((field.completed || oriResp2.cards[idx].completed) && (shouldBeRevealed || shouldBeRevealed2)) {
-                boardRep.value.cells[idx].colors = playerColor;
-                goalCount++;
-            } else {
-                boardRep.value.cells[idx].colors = 'blank';
-            }
-            oriBoardRevealed.push({name: field.name, completed: field.completed, revealed: shouldBeRevealed});
-        });
-        boardRep.value.colorCounts[playerColor] = goalCount;
-        oldBoard = oriBoardRevealed;
+        const {cells, count} = toBingosyncBoard(responses, playerColor);
+        boardRep.value.cells = cells;
+        boardRep.value.colorCounts[playerColor] = count;
     } catch (e) {
         log.error(e);
     }
@@ -115,34 +147,6 @@ function recover(): void {
             log.error('Can\'t recover connection to Ori Board!', e);
         }
     });
-}
-
-function squareShouldBeRevealed(apiResp: OriApiResponse, apiResp2 : OriApiResponse, idx: number): boolean {
-    let completed: Set<number> = new Set<number>();
-    for (let i = 0; i < apiResp.cards.length; i++) {
-        if (apiResp.cards[i].completed || apiResp2.cards[i].completed) {
-            completed.add(i);
-        }
-    }
-    let current = new Set<number>();
-    apiResp.disc_squares.forEach((square) => {
-        current.add(square)
-    });
-    let lastSize = 0;
-    while (current.size != lastSize) {
-        lastSize = current.size
-        current.forEach((square) => {
-            if (completed.has(square)) {
-                if (square % 5 > 0)
-                    current.add(square - 1)
-                if (square % 5 < 4)
-                    current.add(square + 1)
-                current.add(square - 5)
-                current.add(square + 5)
-            }
-        });
-    }
-    return current.has(idx);
 }
 
 nodecg.listenFor('oriBingo:activate', async (data, callback): Promise<void> => {

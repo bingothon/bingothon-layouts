@@ -1,5 +1,6 @@
 import * as nodecgApiContext from './util/nodecg-api-context';
 import { ExplorationBingoboard, BingoboardMeta } from '../../schemas';
+import { ExplorationBingoboardCell } from '../../types';
 
 const nodecg = nodecgApiContext.get();
 // const log = new nodecg.Logger(`${nodecg.bundleName}:explorationBingo`);
@@ -10,14 +11,6 @@ const bingoMetaRep = nodecg.Replicant<BingoboardMeta>('bingoboardMeta');
 const defaultEmptyColorCounts = {
   pink: 0, red: 0, orange: 0, brown: 0, yellow: 0, green: 0, teal: 0, blue: 0, navy: 0, purple: 0,
 };
-
-interface ExplorationBingoboardCell {
-  name: string;
-  hiddenName: string;
-  hidden: boolean;
-  slot: string;
-  colors: string;
-}
 
 function getNeighbors(idx: number): number[] {
   const result = [];
