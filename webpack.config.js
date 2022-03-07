@@ -133,7 +133,6 @@ const config = (name) => {
 							options: {
 								implementation: require('sass'),
 								sassOptions: {
-									fiber: require('fibers'),
 								},
 							},
 						},

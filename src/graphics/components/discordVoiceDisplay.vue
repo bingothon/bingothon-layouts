@@ -46,11 +46,14 @@ export default class DiscordVoiceDisplay extends Vue {
     voiceHighlightColor: string;
     @Prop({default: 4})
     maxUserCount: number;
+    @Prop({default: 0})
+    startingMember: number;
 
     get voiceActivityMembers(): VoiceActivityMember[] {
         const members = store.state.voiceActivity.members;
         if (members.length > this.maxUserCount) {
-            return members.slice(0, this.maxUserCount);
+            console.log(`start ${this.startingMember} length: ${this.maxUserCount}, total: ${this.startingMember + this.maxUserCount}`)
+            return members.slice(this.startingMember, parseInt(this.startingMember) + parseInt(this.maxUserCount));
         }
         return members;
     }

@@ -1,5 +1,7 @@
 <template>
-    <div class="Tracker">
+    <div class="Tracker"
+         :style="`grid-template-columns: ${alignment === 'horizontal' ? '40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px' : '40px 40px 40px 40px'}`"
+    >
         <div :class="`Sword ${!game.sword ? 'greyed' : ''}`">
             <img :src="`${basePath}sword_${game.sword || 0}_new.png`">
         </div>
@@ -138,6 +140,9 @@ export default class Tracker extends Vue {
     @Prop({required: true, default: 1})
     playerNumber: string;// actually a number but who cares about types? shrug
 
+    @Prop({default: 'vertical'})
+    alignment: string
+
     basePath = '/bundles/bingothon-layouts/static/tracker/skyward-sword/'
 
     mounted() {
@@ -192,7 +197,6 @@ export default class Tracker extends Vue {
 <style scoped>
 .Tracker {
     display: grid;
-    grid-template-columns: 40px 40px 40px 40px;
 }
 
 .greyed {

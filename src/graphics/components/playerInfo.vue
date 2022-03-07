@@ -50,7 +50,7 @@
             v-if="bingoColorShown === true"
             class="BingoColor FlexContainer"
             :class="`bingo-${bingoColor}`"
-            :style="{ 'width' : height, 'height': height }"
+            :style="{ 'width' : height, 'height': (height) }"
         >
             <span v-if="bingoCountShown === true">{{ bingoGoalCount }}</span>
         </div>
@@ -331,6 +331,7 @@ export default class PlayerInfo extends Vue {
     font-size: 40px;
     border-radius: 10%;
     border: 1px white solid;
+    box-sizing: content-box;
 }
 
 .PlayerInfoBox > .Sound > img {
