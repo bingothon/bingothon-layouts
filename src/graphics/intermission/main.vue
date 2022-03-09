@@ -1,6 +1,6 @@
 <template>
     <div id="Intermission">
-        <img src="../../../static/logo-winter-wide.png" id="logoWinter">
+        <img src="../../../static/bingothonUKRAINELOGO_colours.png" id="logoWinter">
 <!--        <img src="../../../static/logo-summer-wide.png" id="logoSummer">-->
         <div id="host-bingo-text">Host Blackout Bingo</div>
         <run-upcoming
@@ -104,7 +104,7 @@ export default class Intermission extends Vue {
 
 <style>
 #Intermission {
-    height: 900px;
+    height: 1080px;
     overflow: hidden;
 }
 
@@ -187,7 +187,7 @@ export default class Intermission extends Vue {
 }
 
 body {
-    background: linear-gradient(var(--darker-main-color), var(--lighter-main-color) 80%, var(--darker-main-color));
+    background: linear-gradient(0deg, var(--lighter-main-color) 0%, var(--darker-main-color) 100%);
     /*background-color: rgba(98, 127, 190, 0.5)*/
 }
 

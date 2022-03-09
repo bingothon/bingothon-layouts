@@ -8,6 +8,7 @@ import GameLayout from "./main.vue";
 Vue.use(VueRouter);
 
 const routes = [
+    {name: "4p 15:9 Layout", path: "/4p-15_9-layout", component: Layouts.Layout_15x9_4p},
     {name: "2p 15:9 Layout", path: "/2p-15_9-layout", component: Layouts.Layout_15x9_2p},
     {name: "2p DS Layout", path: "/2p-DS-layout", component: Layouts.Layout_DS_2p},
     {name: "2p 3:2 Layout", path: "./2p-3_2-layout", component: Layouts.Layout_3x2_2p},
