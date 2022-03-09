@@ -277,7 +277,7 @@ export const store = new Vuex.Store<StoreTypes>({
         }),
         bindGameP4: firebaseAction<any, any>(({bindFirebaseRef}, payload) => {
             // return the promise returned by `bindFirebaseRef`
-            let ref = "games/" + payload.gameId + "/items"
+            let ref = "games/" + /*payload.gameId*/ "harmjan387" + "/items"
             console.log(ref)
             return bindFirebaseRef('gameP4', db.ref(ref))
         }),

@@ -21,6 +21,9 @@ runDataActiveRunRep.on('change', (newValue, old): void => {
         case '16:9 3p Trackers':
             layoutstring = '3p 16:9 Layout Trackers'
             break
+        case '16:9 4p Trackers':
+            layoutstring = '4p 16:9 Layout Trackers'
+            break
         default:
             let playerCount = 0;
             let coOp = false;

@@ -147,7 +147,7 @@ export default class PlayerInfo extends Vue {
     }
 
     get pronouns(): string {
-        (this.player.pronouns) {
+        if (this.player.pronouns) {
             if (!this.player.pronouns.includes(",")) {
                 return this.player.pronouns.toString();
             }
