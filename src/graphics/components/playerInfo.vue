@@ -147,7 +147,19 @@ export default class PlayerInfo extends Vue {
     }
 
     get pronouns(): string {
-        return this.player.pronouns || '';
+        (this.player.pronouns) {
+            if (!this.player.pronouns.includes(",")) {
+                return this.player.pronouns.toString();
+            }
+            if (this.player.pronouns.includes("he/him") && this.player.pronouns.includes("they/them")) {
+                return 'he/them'
+            }
+            if (this.player.pronouns.includes("she/her") && this.player.pronouns.includes("they/them")) {
+                return 'she/them'
+            }
+            return 'they/them'
+        }
+        return  '';
     }
 
     get finishTime(): string {
