@@ -6,7 +6,7 @@
  */
 
 export interface BingoboardMode {
-  boardMode: "normal" | "lockout" | "invasion" | "rowcontrol" | "draft" | "draftlockout";
+  boardMode: "normal" | "lockout" | "invasion" | "rowcontrol" | "draft" | "draftlockout" | "jsrflockout";
   markerRedirects: [
     "pink" | "red" | "orange" | "brown" | "yellow" | "green" | "teal" | "blue" | "navy" | "purple",
     "pink" | "red" | "orange" | "brown" | "yellow" | "green" | "teal" | "blue" | "navy" | "purple"
