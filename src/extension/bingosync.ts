@@ -488,10 +488,12 @@ class BingosyncManager {
             }
         }
         //Diagonal Checks done by direct index reference
-        if (cells[0].colors.includes(color) && cells[6].colors.includes(color) && cells[12].colors.includes(color) && cells[18].colors.includes(color) && cells[24].colors.includes(color)) {
+        if (cells[0].colors.includes(color) && cells[6].colors.includes(color) && cells[12].colors.includes(color)
+            && cells[18].colors.includes(color) && cells[24].colors.includes(color)) {
             score += BINGOSCORE;
         }
-        if (cells[4].colors.includes(color) && cells[8].colors.includes(color) && cells[12].colors.includes(color) && cells[16].colors.includes(color) && cells[20].colors.includes(color)) {
+        if (cells[4].colors.includes(color) && cells[8].colors.includes(color) && cells[12].colors.includes(color)
+            && cells[16].colors.includes(color) && cells[20].colors.includes(color)) {
             score += BINGOSCORE;
         }
         this.boardRep.value.colorCounts[color] = score;
