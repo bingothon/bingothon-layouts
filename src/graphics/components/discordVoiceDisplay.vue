@@ -53,6 +53,7 @@ export default class DiscordVoiceDisplay extends Vue {
         const members = store.state.voiceActivity.members;
         if (members.length > this.maxUserCount) {
             console.log(`start ${this.startingMember} length: ${this.maxUserCount}, total: ${this.startingMember + this.maxUserCount}`)
+            // TS doesn't care and makes the props that are are supposed to be numbers strings
             // @ts-ignore
             return members.slice(this.startingMember, parseInt(this.startingMember) + parseInt(this.maxUserCount));
         }
