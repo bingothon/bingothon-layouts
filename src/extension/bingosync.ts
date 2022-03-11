@@ -246,12 +246,18 @@ class BingosyncManager {
             this.invasionCtx.setMarkers(newBoardState);
         }
 
+        let runDataRep = nodecg.Replicant<RunDataActiveRun>('runDataActiveRun', 'nodecg-speedcontrol');
+
         if (this.boardModeRep && this.boardModeRep.value.boardMode === "rowcontrol") {
             ALL_COLORS.forEach(color => {
                 this.updateRowControlScore(newBoardState, color);
             })
+        } else if (runDataRep.value && runDataRep.value.customData.Bingotype === 'jsrflockout') {
+            ALL_COLORS.forEach(color => {
+                this.updateJsrfLockoutScore(newBoardState, color);
+            })
         } else {
-            this.boardRep.value.colorCounts = goalCounts;
+                this.boardRep.value.colorCounts = goalCounts;
         }
 
         // Bail if nothing has changed.
@@ -461,9 +467,9 @@ class BingosyncManager {
 
     private updateJsrfLockoutScore(cells: BingoboardCell[], color: BoardColor) {
         let score = 0;
-        let BINGOSCORE = 3;
-        let GRAFFITISCORE = 3;
-        let SQUARESCORE = 1;
+        const BINGOSCORE = 3;
+        const GRAFFITISCORE = 3;
+        const SQUARESCORE = 1;
         for (let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
             if (cells[cellIndex].colors.includes(color)) {
                 if (cells[cellIndex].name.toLowerCase().includes("graffiti")) {
@@ -503,9 +509,10 @@ class BingosyncManager {
         let boardModeRep = nodecg.Replicant<BingoboardMode>('bingoboardMode');
         if (boardModeRep.value.boardMode === 'rowcontrol') {
             this.updateRowControlScore(this.boardRep.value.cells, json.color);
-        } else if (boardModeRep.value.boardMode === 'jsrflockout') {
+        } else if (runData.value?.customData.Bingotype === 'jsrflockout') {
             this.updateJsrfLockoutScore(this.boardRep.value.cells, json.color);
         } else {
+            console.log("normal count :(")
             //normal count
             if (json.remove) {
                 this.boardRep.value.colorCounts[json.color] -= 1;
