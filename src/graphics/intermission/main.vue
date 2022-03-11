@@ -2,7 +2,8 @@
     <div id="Intermission">
         <img src="../../../static/bingothonUKRAINELOGO_colours.png" id="logoWinter">
 <!--        <img src="../../../static/logo-summer-wide.png" id="logoSummer">-->
-        <div id="host-bingo-text">Host Blackout Bingo</div>
+<!--        <div id="host-bingo-text">Host Blackout Bingo</div>-->
+        <div id="host-bingo-text">Raising Money for</div>
         <run-upcoming
             v-if="nextRun"
             id="ComingUpNext"
@@ -20,8 +21,9 @@
             <music></music>
         </info-storage-box>
         <div class="HostingBingo">
-            <bingo-board class="BingoBoard" id="Bingo-board" bingoboardRep="hostingBingoboard" :alwaysShown="true"
-                         fontSize="20px"></bingo-board>
+<!--            <bingo-board class="BingoBoard" id="Bingo-board" bingoboardRep="hostingBingoboard" :alwaysShown="true"
+                         fontSize="20px"></bingo-board>-->
+            <img id="PHLogo" src="../../../static/ProjectHope_Hands_ICON_RGB_KO.png">
         </div>
         <div :class="'ImageView '+(showIntermissionImage?'PictureShown':'')">
             <img v-if="showIntermissionImage" :src="intermissionImageUrl">
@@ -203,14 +205,20 @@ body {
 .HostingBingo {
     position: absolute;
     color: #fff;
-    top: 300px;
+    top: 315px;
     height: 670px;
     width: 670px;
     font-size: 50px;
-    left: 33px;
+    left: 20px;
 }
 
 .HostingBingo > .BingoBoard {
+    height: 670px;
+    width: 670px;
+    position: relative;
+}
+
+#PHLogo {
     height: 670px;
     width: 670px;
     position: relative;

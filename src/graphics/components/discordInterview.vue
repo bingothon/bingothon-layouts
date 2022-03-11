@@ -104,11 +104,7 @@ export default class DiscordInterview extends Vue {
 
 .DiscordVoiceDisplay > .Member > div.NameContainer {
     font-size: 40px;
-    /*Currently OBS is still stuck on Chrome v75, at the time of writing this latest chrome is v88
-    Unfortunately there is a big where this does not render correctly.
-    Should OBS ever updates it Chrome version and this should break, add this back in:
-    margin-top: 250px;*/
-    margin-top: 140px;
+    margin-top: 250px;
     margin-left: 8px;
     color: white;
     width: calc(var(--name-width) + 50px);
@@ -123,12 +119,7 @@ export default class DiscordInterview extends Vue {
 
 .DiscordVoiceDisplay > .Member > div.Name {
     font-size: 40px;
-    /*Currently OBS is still stuck on Chrome v75, at the time of writing this latest chrome is v88
-    Unfortunately there is a big where this does not render correctly.
-    Should OBS ever updates it Chrome version and this should break, add this back in:
     margin-top: 250px;
-    The current code will probably break the layouts on all browsers that use an uptodate version of chrome*/
-    margin-top: 140px;
     margin-left: 8px;
     margin-right: 8px;
     color: white;

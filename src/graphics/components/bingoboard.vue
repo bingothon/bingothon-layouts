@@ -15,7 +15,7 @@
           </tbody>
       </table>
       <div class="bingo-board-hide" :hidden="!boardHidden">
-		  Bingo Board will be revealed soon&trade;
+		  <p id="soon">Bingo Board will be revealed soon&trade;</p>
 		  <!--<tbody>
 			  <tr :key="i" v-for="(column,i) in defaultBoard">
 				  <td class="square" :key="i+''+j" v-for="(cell,j) in column">
@@ -233,6 +233,14 @@ export default class BingoBoard extends Vue {
 		font-size: 45px;
 		text-align: center;
 		align-items: center;
+    }
+
+    #soon {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
     }
 
     .bingo-splash {
