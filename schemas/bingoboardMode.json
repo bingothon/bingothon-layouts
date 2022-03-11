@@ -7,7 +7,7 @@
         "boardMode": {
             "default": "normal",
             "type":"string",
-            "enum":["normal","lockout","invasion","rowcontrol","draft","draftlockout"]
+            "enum":["normal","lockout","invasion","rowcontrol","draft","draftlockout","jsrflockout"]
         },
         "markerRedirects": {
             "type":"array",

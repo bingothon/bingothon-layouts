@@ -459,10 +459,52 @@ class BingosyncManager {
         this.boardRep.value.colorCounts[color] = rowCounter;
     }
 
+    private updateJsrfLockoutScore(cells: BingoboardCell[], color: BoardColor) {
+        let score = 0;
+        let BINGOSCORE = 3;
+        let GRAFFITISCORE = 3;
+        let SQUARESCORE = 1;
+        for (let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
+            if (cells[cellIndex].colors.includes(color)) {
+                if (cells[cellIndex].name.toLowerCase().includes("graffiti")) {
+                    score += GRAFFITISCORE;
+                } else {
+                    score += SQUARESCORE;
+                }
+            }
+        }
+        for (let rowCol = 0; rowCol < 5; rowCol++) {
+            // Row Bingo Checks
+            if (cells[rowCol * 5 + 0].colors.includes(color) && cells[rowCol * 5 + 1].colors.includes(color)
+            && cells[rowCol * 5 + 2].colors.includes(color) && cells[rowCol * 5 + 3].colors.includes(color)
+            && cells[rowCol * 5 + 4].colors.includes(color)) {
+                score += BINGOSCORE;
+            }
+            // Col Bingo Checks
+            if (cells[0 + rowCol].colors.includes(color) && cells[5 + rowCol].colors.includes(color)
+            && cells[10 + rowCol].colors.includes(color) && cells[15 + rowCol].colors.includes(color)
+            && cells[20 + rowCol].colors.includes(color)) {
+                score += BINGOSCORE;
+            }
+        }
+        //Diagonal Checks done by direct index reference
+        if (cells[0].colors.includes(color) && cells[6].colors.includes(color) && cells[12].colors.includes(color)
+            && cells[18].colors.includes(color) && cells[24].colors.includes(color)) {
+            score += BINGOSCORE;
+        }
+        if (cells[4].colors.includes(color) && cells[8].colors.includes(color) && cells[12].colors.includes(color)
+            && cells[16].colors.includes(color) && cells[20].colors.includes(color)) {
+            score += BINGOSCORE;
+        }
+        this.boardRep.value.colorCounts[color] = score;
+    }
+
     private countScore(json: any) {
         let boardModeRep = nodecg.Replicant<BingoboardMode>('bingoboardMode');
         if (boardModeRep.value.boardMode === 'rowcontrol') {
             this.updateRowControlScore(this.boardRep.value.cells, json.color);
+        } else if (boardModeRep.value.boardMode === 'jsrflockout') {
+            this.updateJsrfLockoutScore(this.boardRep.value.cells, json.color);
         } else {
             //normal count
             if (json.remove) {
