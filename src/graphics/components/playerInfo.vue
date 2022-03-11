@@ -22,6 +22,9 @@
                 >
             </transition>
         </div>
+        <div>
+            <BestOfX v-if="boXEnabled" :player-index="playerIndex" id="boX" :height="height"></BestOfX>
+        </div>
         <div :class="medalClasses"></div>
         <div class="PlayerName">
             <transition name="fade">
@@ -62,6 +65,7 @@ import {Component, Prop, Vue} from "vue-property-decorator";
 import {store} from "../../browser-util/state";
 import {RunDataPlayer} from "../../../speedcontrol-types";
 import TextFit from "../helpers/text-fit.vue";
+import BestOfX from "./bestOfX.vue";
 
 const playerSoloImg = require('../_misc/player-solo.png');
 const twitchIconImg = require('../_misc/twitch-icon.png');
@@ -69,6 +73,7 @@ const twitchIconImg = require('../_misc/twitch-icon.png');
 @Component({
     components: {
         TextFit,
+        BestOfX,
     }
 })
 export default class PlayerInfo extends Vue {
@@ -261,6 +266,10 @@ export default class PlayerInfo extends Vue {
 
     getPlayerFlag(rawFlag: string | undefined): string {
         return `/bundles/bingothon-layouts/static/flags/${rawFlag}.png`
+    }
+
+    get boXEnabled(): boolean {
+        return store.state.bestOfX.enabled;
     }
 }
 </script>

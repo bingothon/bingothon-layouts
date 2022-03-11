@@ -170,6 +170,14 @@
         "headerColor": "#b92b36",
         "width": 2,
         "workspace": "Misc"
+      },
+      {
+        "name": "bestOfX-control",
+        "title": "Best Of X Control",
+        "file": "bestOfX-control.html",
+        "headerColor": "#b92b36",
+        "width": 2,
+        "workspace": "Misc"
       }
     ],
     "graphics": [
