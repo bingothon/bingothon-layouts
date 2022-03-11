@@ -10,4 +10,5 @@ export interface OriBingoMeta {
   game: "ori1" | "ori2";
   boardID: number;
   playerID: string;
+  coop: boolean;
 }

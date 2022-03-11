@@ -79,6 +79,14 @@
                 PlayerIDs (comma separated):
                 <v-text-field v-model="oriPlayerID" background-color="#455A64" clearable solo single-line dark/>
             </div>
+            <div>
+                Coop:
+                <v-checkbox
+                    dark
+                    v-model="oriCoop"
+                    label="Coop"
+                ></v-checkbox>
+            </div>
             <v-radio-group
                 v-model="oriGame"
                 :value="oriGame"
@@ -168,6 +176,8 @@ export default class BingoControl extends Vue {
     oriBoardID: string = '';
 
     oriPlayerID: string = '';
+
+    oriCoop: boolean = true;
 
     oriGame: string = 'ori1';
 
@@ -351,7 +361,7 @@ export default class BingoControl extends Vue {
         if (store.state.oriBingoMeta.active) {
             nodecg.sendMessage('oriBingo:deactivate');
         } else {
-            nodecg.sendMessage('oriBingo:activate', {boardID: this.oriBoardID, game: this.oriGame, playerID: this.oriPlayerID})
+            nodecg.sendMessage('oriBingo:activate', {boardID: this.oriBoardID, game: this.oriGame, playerID: this.oriPlayerID, coop: this.oriCoop})
                 .catch((error) => {
                     nodecg.log.error(error);
                     this.errorMessage = error.message;
