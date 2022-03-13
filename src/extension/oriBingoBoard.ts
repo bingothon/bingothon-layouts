@@ -136,7 +136,7 @@ function toRevealed(resp: OriApiResponse): RevealedSquare[] {
     while (current.size !== lastSize) {
         lastSize = current.size
         current.forEach((square) => {
-            if (resp.cards[square].completed) {
+            if (resp.cards[square]?.completed) {
                 if (square % 5 > 0)
                     current.add(square - 1)
                 if (square % 5 < 4)
