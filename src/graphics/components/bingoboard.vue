@@ -293,7 +293,7 @@ export default class BingoBoard extends Vue {
         width: 20px;
         height: 20px;
         opacity: 0.9;
-        border: 1px #0009 solid;
+        border: 3px #0009 solid;
         border-radius: 50%;
     }
     .marker0 {

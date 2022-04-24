@@ -305,11 +305,13 @@ class BingosyncManager {
             }
         });
         // if a cell has both a marker and is filled with the same color, drop the marker
-        markers.forEach((color, index) => {
-            if (color !== null && newColors.includes(color as BoardColor)) {
-                markers[index] = null;
-            }
-        });
+        if (!this.boardModeRep?.value.alwaysShowMarkers) {
+            markers.forEach((color, index) => {
+                if (color !== null && newColors.includes(color as BoardColor)) {
+                    markers[index] = null;
+                }
+            });
+        }
         cell.colors = newColors;
         cell.markers = markers;
     }
