@@ -12,6 +12,11 @@
         <div
             v-if="isNotInvasion"
         >
+            <v-checkbox
+                dark
+                v-model="alwaysShowMarkers"
+                label="Always show markers"
+            ></v-checkbox>
             Color to marker overrides
             <div
                 v-for="(markerRedirect, i) in markerRedirects"
@@ -168,6 +173,7 @@ export default class BingomodeControl extends Vue {
     //Object.freeze(['pink', 'red', 'orange', 'brown', 'yellow', 'green', 'teal', 'blue', 'navy', 'purple']);
     currentBingomode: string = 'invasion';
     markerRedirects: [string, string][] = [];
+    alwaysShowMarkers: boolean = false;
 
     get bingoboardModeRep(): BingoboardMode {
         return store.state.bingoboardMode;
@@ -177,12 +183,14 @@ export default class BingomodeControl extends Vue {
     reset(): void {
         this.currentBingomode = store.state.bingoboardMode.boardMode;
         this.markerRedirects = clone(store.state.bingoboardMode.markerRedirects);
+        this.alwaysShowMarkers = store.state.bingoboardMode.alwaysShowMarkers;
     }
 
     update(): void {
         nodecg.sendMessage('bingomode:setBingoboardMode', {
             boardMode: this.currentBingomode,
-            markerRedirects: this.markerRedirects
+            markerRedirects: this.markerRedirects,
+            alwaysShowMarkers: this.alwaysShowMarkers,
         });
     }
 
