@@ -164,6 +164,14 @@
         "workspace": "Misc"
       },
       {
+        "name": "omnibarMessage-control",
+        "title": "Omnibar Message Control",
+        "file": "omnibarMessage-control.html",
+        "headerColor": "#b92b36",
+        "width": 4,
+        "workspace": "Misc"
+      },
+      {
         "name": "tracker-control",
         "title": "Tracker Control",
         "file": "tracker-control.html",

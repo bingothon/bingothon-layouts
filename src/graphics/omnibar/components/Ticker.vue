@@ -22,6 +22,7 @@ import { store } from "../../../browser-util/state";
 import { TrackerDonations, TrackerOpenBids } from "../../../../schemas";
 import { TrackerDonation, TrackerOpenBid } from "../../../../types";
 import GenericMessage from './ticker/GenericMessage.vue';
+import DynamicMessage from './ticker/DynamicMessage.vue';
 import UpcomingRun from './ticker/UpcomingRun.vue';
 import Prize from './ticker/Prize.vue';
 import Bid from './ticker/Bid.vue';
@@ -35,6 +36,7 @@ interface TickerMessage {
 @Component({
     components: {
         GenericMessage,
+        DynamicMessage,
         UpcomingRun,
         Prize,
         Bid,
@@ -48,6 +50,7 @@ export default class Ticker extends Vue {
     currentState: number = 0;
     latestDonations: TrackerDonation[] = [];
     lastDonationIndex: number = 0;
+    latestDynamicMessage: number = 0;
 
     mounted() {
         this.staticMessages = [
@@ -71,6 +74,24 @@ export default class Ticker extends Vue {
         };
     }
 
+    dynamicMessage(): TickerMessage {
+        let messages = store.state.omnibarMessages;
+        if (!messages.length) {
+            return undefined;
+        }
+        if (this.latestDynamicMessage > messages.length - 1) {
+            this.latestDynamicMessage = 0;
+        }
+        let msg = messages[this.latestDynamicMessage].message;
+        this.latestDynamicMessage++;
+        return {
+            name: "DynamicMessage",
+            data: {
+                msg
+            }
+        }
+    }
+
     showNextMsg() {
         console.log("nextMsg");
         let currentComponent: TickerMessage;
@@ -79,9 +100,10 @@ export default class Ticker extends Vue {
             case 1: currentComponent = this.prize(); break;
             case 2: currentComponent = this.bid(); break;
             case 3: currentComponent = this.showLatestDonation(); break;
+            case 4: {let message = this.dynamicMessage(); if (!message) break; currentComponent = message; break;}
             default: currentComponent = this.staticMessages[Math.floor(Math.random() * this.staticMessages.length)]; break;
         }
-        this.currentState = (this.currentState + 1) % 5;
+        this.currentState = (this.currentState + 1) % 6;
         this.currentComponent = currentComponent;
         this.timestamp = Date.now();
     }
