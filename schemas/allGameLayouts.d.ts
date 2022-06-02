@@ -8,4 +8,5 @@
 export type AllGameLayouts = {
   name: string;
   path: string;
+  id: string;
 }[];

@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type":"object",
     "additionalProperties": false,
-    "required": ["name","path"],
+    "required": ["name","path", "id"],
     "properties": {
         "name": {
             "type":"string",
@@ -11,6 +11,10 @@
         "path": {
             "type":"string",
             "default": "/test-layout"
+        },
+        "id": {
+            "type": "string",
+            "default": "test-layout"
         }
     }
 }

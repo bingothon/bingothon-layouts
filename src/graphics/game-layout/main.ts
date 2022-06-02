@@ -39,7 +39,7 @@ const routes = [
 
 // put all of the game layouts in the replicant
 const allGameLayouts = routes.map(r => {
-    return {name: r.name || "", path: r.path || ""}
+    return {name: r.name || "", path: r.path || "", id: r.path.replace('/', '')};
 }).filter(r => !!r.name);
 getReplicant<AllGameLayouts>('allGameLayouts').value = allGameLayouts;
 

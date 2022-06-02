@@ -25,7 +25,7 @@
             >
                 <v-radio
                     v-for="layout in allGameLayouts"
-                    :id="`layout-${layout.path}`"
+                    :id="`layout-${layout.id}`"
                     :key="layout.path"
                     :value="layout.path"
                     :label="layout.name"
@@ -42,7 +42,6 @@ import {
     AllGameLayouts, CurrentGameLayout,
 } from '../../../schemas';
 import {store, getReplicant} from '../../browser-util/state';
-import goTo from 'vuetify/es5/services/goto';
 
 
 @Component({})
@@ -75,9 +74,10 @@ export default class LayoutControl extends Vue {
         try {
             await Vue.nextTick();
             if (this.currentGameLayout) {
-                goTo(`#layout-${this.currentGameLayout.path}`, {container: '#LayoutList', offset: 25});
+                console.log(`Going to #layout-${this.currentGameLayout.id}`);
+                this.$vuetify.goTo(`#layout-${this.currentGameLayout.id}`, {container: '#LayoutList', offset: 25});
             } else {
-                goTo(0, {container: '#LayoutList'});
+                this.$vuetify.goTo(0, {container: '#LayoutList'});
             }
         } catch (err) {
             // Not sure if this can error, but better be safe

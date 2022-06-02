@@ -8,4 +8,5 @@
 export interface CurrentGameLayout {
   name: string;
   path: string;
+  id: string;
 }
