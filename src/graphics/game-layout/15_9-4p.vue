@@ -6,10 +6,10 @@
         <twitch-player id="stream4" streamIndex="3"></twitch-player>
         <div id="fillbar" class="flexContainer"></div>
         <div id="fillvoice" class="flexContainer"></div>
-        <player-info id="pi1" playerIndex="0" height=45px></player-info>
-        <player-info id="pi2" playerIndex="1" height=45px></player-info>
-        <player-info id="pi3" playerIndex="2" height=45px></player-info>
-        <player-info id="pi4" playerIndex="3" height=45px></player-info>
+        <player-info id="pi1" playerIndex="0" height=60px></player-info>
+        <player-info id="pi2" playerIndex="1" height=60px></player-info>
+        <player-info id="pi3" playerIndex="2" height=60px></player-info>
+        <player-info id="pi4" playerIndex="3" height=60px></player-info>
         <test-game-container id="game"></test-game-container>
         <test-timer-container id="timer"></test-timer-container>
         <div id="SponsorContainer">
@@ -134,7 +134,8 @@ export default class GameLayout extends Vue {
     top: 0px;
     left: 0px;
     border: 2px var(--container-border-color) solid;
-    width: 719px;
+    width: 737px;
+    box-sizing: border-box;
 }
 
 #pi2 {
@@ -142,7 +143,8 @@ export default class GameLayout extends Vue {
     top: 0px;
     left: 1187px;
     border: 2px var(--container-border-color) solid;
-    width: 719px;
+    width: 737px;
+    box-sizing: border-box;
 }
 
 #pi3 {
@@ -150,7 +152,8 @@ export default class GameLayout extends Vue {
     top: 940px;
     left: 0px;
     border: 2px var(--container-border-color) solid;
-    width: 719px;
+    width: 737px;
+    box-sizing: border-box;
 }
 
 #pi4 {
@@ -158,7 +161,8 @@ export default class GameLayout extends Vue {
     top: 940px;
     left: 1187px;
     border: 2px var(--container-border-color) solid;
-    width: 719px;
+    width: 737px;
+    box-sizing: border-box;
 }
 
 #Bingo-board {

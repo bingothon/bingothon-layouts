@@ -3,8 +3,8 @@
 		<twitch-player id="stream1" streamIndex="0"></twitch-player>
 		<twitch-player id="stream2" streamIndex="1"></twitch-player>
     <div id="fillbar" class="flexContainer"></div>
-    <player-info id="pi1" playerIndex="0" height=45px></player-info>
-    <player-info id="pi2" playerIndex="1" height=45px></player-info>
+    <player-info id="pi1" playerIndex="0" height=60px></player-info>
+    <player-info id="pi2" playerIndex="1" height=60px></player-info>
 		<test-game-container id="game"></test-game-container>
     <test-timer-container id="timer"></test-timer-container>
     <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
@@ -87,14 +87,16 @@
     top: 576px;
     left: 0px;
     border: 2px var(--container-border-color) solid;
-    width: 625px;
+    width: 643px;
+    box-sizing: border-box;
   }
   #pi2 {
     position: absolute;
     top: 576px;
-    left: 1280px;
+    left: 1281px;
     border: 2px var(--container-border-color) solid;
-    width: 625px;
+    width: 643px;
+    box-sizing: border-box;
   }
   #Bingo-board {
     position: absolute;

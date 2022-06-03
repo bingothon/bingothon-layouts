@@ -53,7 +53,7 @@
             v-if="bingoColorShown === true"
             class="BingoColor FlexContainer"
             :class="`bingo-${bingoColor}`"
-            :style="{ 'width' : height * 0.75, 'height': (height * 0.75) }"
+            :style="{width: height.replace('px', '') * 0.75 + 'px', height: height.replace('px', '') * 0.75 + 'px'}"
         >
             <span v-if="bingoCountShown === true">{{ bingoGoalCount }}</span>
         </div>
@@ -319,7 +319,7 @@ export default class PlayerInfo extends Vue {
     flex-shrink: 0;
     height: 100%;
     margin-left: 10px;
-    margin-right: 10px;
+    margin-right: -25px;
     justify-content: flex-start;
     position: relative;
 }

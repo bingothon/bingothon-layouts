@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div id="GameLayout">
         <div id="fillur" class="flexContainer"></div>
         <div id="fillbar" class="flexContainer"></div>
-        <player-info id="pi1" playerIndex="0" height=45px hideSoundIcon="true"></player-info>
+        <player-info id="pi1" playerIndex="0" height=60px hideSoundIcon="true"></player-info>
         <test-game-container id="game"></test-game-container>
         <test-timer-container id="timer"></test-timer-container>
         <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
@@ -53,6 +53,16 @@ export default class GameLayout extends Vue {
 </script>
 
 <style scoped>
+
+#GameLayout {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1920px;
+    height: 1080px;
+    background: linear-gradient(-128deg, #f39200 0, var(--lighter-main-color) 100%) 100% no-repeat fixed;
+}
+
 #fillur {
     position: absolute;
     top: 0px;
@@ -78,7 +88,7 @@ export default class GameLayout extends Vue {
     left: 0px;
     width: 400px;
     height: 292px;
-    background-image: url("../../../static/middle-info-background.png");
+    /*background-image: url("../../../static/middle-info-background.png");*/
     border: 2px var(--container-border-color) solid;
 }
 
@@ -87,7 +97,8 @@ export default class GameLayout extends Vue {
     top: 0px;
     left: 0px;
     border: 2px var(--container-border-color) solid;
-    width: 385px;
+    width: 400px;
+    box-sizing: border-box;
 }
 
 #Bingo-board {
@@ -100,7 +111,7 @@ export default class GameLayout extends Vue {
 }
 
 #game {
-    background-image: url("../../../static/middle-info-background.png");
+    /*background-image: url("../../../static/middle-info-background.png");*/
     position: absolute;
     top: 855px;
     left: 400px;
@@ -113,7 +124,7 @@ export default class GameLayout extends Vue {
     position: absolute;
     top: 855px;
     left: 1160px;
-    background-image: url("../../../static/middle-info-background.png");
+    /*background-image: url("../../../static/middle-info-background.png");*/
     width: 760px;
     border: 2px var(--container-border-color) solid;
     height: 145px;
@@ -129,7 +140,7 @@ export default class GameLayout extends Vue {
 }
 
 #SponsorContainer {
-    background-image: url("../../../static/middle-info-background.png");
+    /*background-image: url("../../../static/middle-info-background.png");*/
     position: absolute;
     top: 855px;
     left: 0px;

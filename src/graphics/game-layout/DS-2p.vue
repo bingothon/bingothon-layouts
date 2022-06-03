@@ -4,8 +4,8 @@
         <twitch-player id="stream2" streamIndex="1"></twitch-player>
         <div id="fillbar" class="flexContainer"></div>
         <sponsor-logo-rotation logo-asset-type="wideSmallLogos" id="SponsorContainer"></sponsor-logo-rotation>
-        <player-info id="pi1" playerIndex="0" height=45px></player-info>
-        <player-info id="pi2" playerIndex="1" height=45px></player-info>
+        <player-info id="pi1" playerIndex="0" height=60px></player-info>
+        <player-info id="pi2" playerIndex="1" height=60px></player-info>
         <test-game-container id="game"></test-game-container>
         <test-timer-container id="timer"></test-timer-container>
         <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
@@ -108,7 +108,8 @@ ouchscreen aspect ratio: 533x400*/
     top: 600px;
     left: 533px;
     border: 2px var(--container-border-color) solid;
-    width: 410px;
+    width: 428px;
+    box-sizing: border-box;
 }
 
 #pi2 {
@@ -116,7 +117,8 @@ ouchscreen aspect ratio: 533x400*/
     top: 600px;
     left: 960px;
     border: 2px var(--container-border-color) solid;
-    width: 410px;
+    width: 428px;
+    box-sizing: border-box;
 }
 
 #Bingo-board {
