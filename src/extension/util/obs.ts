@@ -206,6 +206,16 @@ class OBSUtility extends obsWebsocketJs {
       sourceName: source,
     }).catch((e: any) => logger.error('could not refresh browser source', e));
   }
+
+  public async takeSourceScreenshot(source: string): Promise<string> {
+    const response = await this.send("TakeSourceScreenshot", {
+      embedPictureFormat: "jpeg",
+      sourceName: source,
+      height: 300,
+    });
+
+    return response.img;
+  }
 }
 
 const obsConnectionRep = nodecg.Replicant<ObsConnection>('obsConnection');

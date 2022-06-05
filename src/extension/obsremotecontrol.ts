@@ -5,7 +5,7 @@ import { Configschema } from '../../configschema';
 import {
   ObsDashboardAudioSources, ObsAudioSources, ObsConnection, DiscordDelayInfo,
   TwitchStreams, ObsStreamMode, CurrentGameLayout,
-  CurrentInterview, HostsSpeakingDuringIntermission, LastIntermissionTimestamp, AllGameLayouts, AllInterviews,
+  CurrentInterview, HostsSpeakingDuringIntermission, LastIntermissionTimestamp, AllGameLayouts, AllInterviews, ObsPreviewImg,
 } from '../../schemas';
 import {RunDataActiveRun, TwitchCommercialTimer} from '../../speedcontrol-types';
 import obs from './util/obs';
@@ -34,6 +34,9 @@ const streamsReplicant = nodecg.Replicant <TwitchStreams>('twitchStreams', { def
 const soundOnTwitchStream = nodecg.Replicant<number>('soundOnTwitchStream', { defaultValue: -1 });
 const hostDiscordDuringIntermissionRep = nodecg.Replicant<HostsSpeakingDuringIntermission>('hostsSpeakingDuringIntermission');
 const lastIntermissionTimestampRep = nodecg.Replicant<LastIntermissionTimestamp>('lastIntermissionTimestamp');
+const obsPreviewImgRep = nodecg.Replicant<ObsPreviewImg>('obsPreviewImg');
+
+let screenshotTimer: ReturnType<typeof setInterval> | undefined = undefined;
 
 // intermission (ads or no), VideoPlayer
 function isIntermissionLikeScene(name: string): boolean {
@@ -130,9 +133,62 @@ waitTillConnected().then((): void => {
     setTimeout(doFadeOut, 100);
   });
 
+  async function doTakeSourceScreenshot() {
+    if (!obsPreviewImgRep.value.active || !obsPreviewImgRep.value.source) return;
+    try {
+      const imgData = await obs.takeSourceScreenshot(obsPreviewImgRep.value.source);
+      obsPreviewImgRep.value.screenshot = imgData;
+    } catch (e) {
+      logger.error("error taking screenshot: ", e);
+    }
+  }
+
+  obsPreviewImgRep.on('change', (newVal, oldVal) => {
+    if (!oldVal || oldVal.active !== newVal.active) {
+      // clear even before activating, just to be sure
+      if (screenshotTimer) {
+        clearInterval(screenshotTimer);
+      }
+      if (newVal.active) {
+        screenshotTimer = setInterval(doTakeSourceScreenshot, 1000);
+      }
+    }
+  });
+
+  nodecg.listenFor('obsremotecontrol:setPreviewImgActive', (data, cb) => {
+    const { active } = data || {};
+    if (active !== undefined) {
+      obsPreviewImgRep.value.active = !!active;
+      if (cb && !cb.handled) {
+        cb();
+        return;
+      }
+    } else {
+      if (cb && !cb.handled) {
+        cb('active has to be a boolean!');
+        return;
+      }
+    }
+  });
+
+  nodecg.listenFor('obsremotecontrol:setPreviewImgSource', (data, cb) => {
+    const { source } = data || {};
+    if (source !== undefined && typeof source === 'string') {
+      obsPreviewImgRep.value.source = source;
+      if (cb && !cb.handled) {
+        cb();
+        return;
+      }
+    } else {
+      if (cb && !cb.handled) {
+        cb('source has to be a string!');
+        return;
+      }
+    }
+  });
+
   nodecg.listenFor('obsRemotecontrol:fadeInAudio', (data, callback): void => {
-    data = data || {}; // eslint-disable-line no-param-reassign
-    const { source } = data;
+    const { source } = data || {};
     if (!source) {
       if (callback && !callback.handled) {
         callback('No source given!');

@@ -13,7 +13,7 @@
 		</div>
 		<div v-if="obsConnectionStatus === 'connected'">
 			Current Scene: {{ currentScene }}
-			<v-select v-model="previewScene" :items="sceneNameList">
+			<v-select v-model="previewScene" :items="sceneNameList" label="Preview Scene">
 			</v-select>
 			<v-btn @click="doTransition" :disabled="adTimer > 0">
 				{{ transitionText }}
@@ -65,6 +65,19 @@
                     </v-col>
                 </v-row>
             </div>
+            <div class="previewImgContainer">
+                <v-checkbox
+                    dark
+                    v-model="obsPreviewImgActive"
+                    label="Activate Preview"
+                ></v-checkbox>
+                <v-select
+                    v-model="obsPreviewImgSource"
+                    label="Preview Img Scene"
+                    :items="sceneNameList">
+                </v-select>
+                <img :style="{ width: '100%' }" v-if="obsPreviewImgData" :src="obsPreviewImgData" />
+            </div>
         </div>
         <v-text-field v-model="discordDisplayDelay" type="number" label="Discord Display Delay (ms)"></v-text-field>
     </v-app>
@@ -74,10 +87,11 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {nodecg} from '../../browser-util/nodecg';
 import {
-	ObsDashboardAudioSources, DiscordDelayInfo, ObsStreamMode,
+	ObsDashboardAudioSources, DiscordDelayInfo, ObsStreamMode, ObsPreviewImg,
 } from '../../../schemas';
 import twitchCommercialTimer from '../../../speedcontrol-types'
 import {store, getReplicant} from '../../browser-util/state';
+import { ReplicantBrowser } from 'nodecg/types/browser';
 
 const bundleName = 'bingothon-layouts';
 
@@ -181,6 +195,26 @@ export default class OBSControl extends Vue {
     // set discordDisplayDelaySync(sync: boolean) {
     //     getReplicant<DiscordDelayInfo>('discordDelayInfo').value.discordDisplayDelaySyncStreamLeader = sync;
     // }
+
+    get obsPreviewImgData(): string | undefined {
+        return store.state.obsPreviewImg.screenshot;
+    }
+
+    get obsPreviewImgActive(): boolean {
+        return store.state.obsPreviewImg.active;
+    }
+
+    set obsPreviewImgActive(val: boolean) {
+        NodeCG.sendMessageToBundle('obsremotecontrol:setPreviewImgActive', bundleName, {active: val});
+    }
+
+    get obsPreviewImgSource(): string {
+        return store.state.obsPreviewImg.source ?? 'game';
+    }
+
+    set obsPreviewImgSource(val: string) {
+        NodeCG.sendMessageToBundle('obsremotecontrol:setPreviewImgSource', bundleName, {source: val});
+    }
 
     get obsStreamMode(): ObsStreamMode {
         return store.state.obsStreamMode;
