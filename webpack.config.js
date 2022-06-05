@@ -3,7 +3,6 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const LiveReloadPlugin = require('webpack-livereload-plugin');
 const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -23,7 +22,7 @@ const config = (name) => {
 	const miniCSSOpts = {
 		loader: MiniCssExtractPlugin.loader,
 		options: {
-			hmr: !isProd,
+			// hmr: !isProd,
 			publicPath: '../',
 		},
 	};
@@ -39,7 +38,6 @@ const config = (name) => {
 	}
 	plugins = plugins.concat(
 		[
-			new HardSourceWebpackPlugin(),
 			new VueLoaderPlugin(),
 			...Object.keys(entry).map(
 				(entryName) =>
@@ -132,8 +130,6 @@ const config = (name) => {
 							loader: 'sass-loader',
 							options: {
 								implementation: require('sass'),
-								sassOptions: {
-								},
 							},
 						},
 					],
