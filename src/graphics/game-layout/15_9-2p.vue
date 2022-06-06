@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div id="GameLayout">
 		<twitch-player id="stream1" streamIndex="0"></twitch-player>
 		<twitch-player id="stream2" streamIndex="1"></twitch-player>
     <div id="fillbar" class="flexContainer"></div>
@@ -8,6 +8,9 @@
 		<test-game-container id="game"></test-game-container>
     <test-timer-container id="timer"></test-timer-container>
     <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
+        <div id="SponsorContainer">
+            <rotating-logo logo-asset-type="wideSmallLogos"></rotating-logo>
+        </div>
     <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px"/>
 	</div>
 </template>
@@ -26,6 +29,7 @@
   import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
   import { RunDataPlayer, RunDataTeam } from "../../../speedcontrol-types";
   import TwitchPlayer from "../components/twitchStreamPlaceholder.vue";
+  import RotatingLogo from "../components/sponsorLogoRotation.vue";
 
 	@Component({
 		components: {
@@ -36,7 +40,8 @@
       PlayerTeamContainer,
       TestTimerContainer,
       DiscordVoiceDisplay,
-			TwitchPlayer
+			TwitchPlayer,
+            RotatingLogo,
 		}
 	})
 
@@ -48,6 +53,15 @@
 </script>
 
 <style scoped>
+#GameLayout {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1920px;
+    height: 1080px;
+    background-image: url("../../../static/bg-new.jpg");
+}
+
   #stream1 {
     position: absolute;
     top: 0px;
@@ -79,8 +93,6 @@
     left: 1280px;
     width: 250px;
     height: 364px;
-    background-image: url("../../../static/middle-info-background.png");
-    border: 2px var(--container-border-color) solid;
   }
   #pi1 {
     position: absolute;
@@ -107,21 +119,28 @@
     height: 424px;
   }
   #game {
-    background-image: url("../../../static/middle-info-background.png");
     position: absolute;
-    top: 636px;
+    top: 818px;
     left: 0px;
     width: 640px;
     border: 2px var(--container-border-color) solid;
-    height: 364px;
+    height: 182px;
   }
   #timer{
     position: absolute;
     top: 636px;
     left: 1530px;
-    background-image: url("../../../static/middle-info-background.png");
     width: 390px;
     border: 2px var(--container-border-color) solid;
     height: 364px;
   }
+
+#SponsorContainer {
+    position: absolute;
+    top: 636px;
+    left: 0px;
+    width: 640px;
+    border: 2px var(--container-border-color) solid;
+    height: 182px;
+}
 </style>
