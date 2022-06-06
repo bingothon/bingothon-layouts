@@ -1,15 +1,15 @@
 <template>
-    <div>
+    <div id="GameLayout">
         <twitch-player id="stream1" streamIndex="0"></twitch-player>
         <twitch-player id="stream2" streamIndex="1"></twitch-player>
         <twitch-player id="stream3" streamIndex="2"></twitch-player>
         <div id="fillbar" class="flexContainer"></div>
         <div id="fillvoice" class="flexContainer"></div>
-        <player-info id="pi1" playerIndex="0" height=45px></player-info>
-        <player-info id="pi2" playerIndex="1" height=45px></player-info>
-        <player-info id="pi3" playerIndex="2" height=45px></player-info>
+        <player-info id="pi1" playerIndex="0" height=60px></player-info>
+        <player-info id="pi2" playerIndex="1" height=60px></player-info>
+        <player-info id="pi3" playerIndex="2" height=60px></player-info>
         <div id="SponsorContainer">
-            <img src="../../../static/logo-winter.png" style="height: 100%; width: 100%; object-fit: contain">
+            <rotating-logo logo-asset-type="wideLargeLogos"></rotating-logo>
         </div>
         <test-game-container id="game"></test-game-container>
         <test-timer-container id="timer"></test-timer-container>
@@ -33,6 +33,7 @@ import PlayerTeamContainer from "../components/playerTeamContainer.vue";
 import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
 import {RunDataPlayer, RunDataTeam} from "../../../speedcontrol-types";
 import TwitchPlayer from "../components/twitchStreamPlaceholder.vue";
+import RotatingLogo from "../components/sponsorLogoRotation.vue";
 
 @Component({
     components: {
@@ -43,7 +44,8 @@ import TwitchPlayer from "../components/twitchStreamPlaceholder.vue";
         PlayerTeamContainer,
         TestTimerContainer,
         DiscordVoiceDisplay,
-        TwitchPlayer
+        TwitchPlayer,
+        RotatingLogo
     }
 })
 
@@ -55,6 +57,15 @@ export default class GameLayout extends Vue {
 </script>
 
 <style scoped>
+#GameLayout {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1920px;
+    height: 1080px;
+    background-image: url("../../../static/bg-new.jpg");
+}
+
 #stream1 {
     position: absolute;
     top: 0px;
@@ -98,7 +109,6 @@ export default class GameLayout extends Vue {
     left: 1280px;
     width: 640px;
     height: 227px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 
@@ -108,7 +118,6 @@ export default class GameLayout extends Vue {
     left: 0px;
     width: 640px;
     height: 227px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 
@@ -117,7 +126,8 @@ export default class GameLayout extends Vue {
     top: 427px;
     left: 0px;
     border: 2px var(--container-border-color) solid;
-    width: 625px;
+    width: 641px;
+    box-sizing: border-box;
 }
 
 #pi2 {
@@ -125,7 +135,8 @@ export default class GameLayout extends Vue {
     top: 427px;
     left: 640px;
     border: 2px var(--container-border-color) solid;
-    width: 625px;
+    width: 641px;
+    box-sizing: border-box;
 }
 
 #pi3 {
@@ -133,7 +144,8 @@ export default class GameLayout extends Vue {
     top: 427px;
     left: 1280px;
     border: 2px var(--container-border-color) solid;
-    width: 625px;
+    width: 641px;
+    box-sizing: border-box;
 }
 
 #Bingo-board {
@@ -146,7 +158,6 @@ export default class GameLayout extends Vue {
 }
 
 #game {
-    background-image: url("../../../static/middle-info-background.png");
     position: absolute;
     top: 714px;
     left: 0px;
@@ -159,7 +170,6 @@ export default class GameLayout extends Vue {
     position: absolute;
     top: 714px;
     left: 1280px;
-    background-image: url("../../../static/middle-info-background.png");
     width: 640px;
     border: 2px var(--container-border-color) solid;
     height: 286px;

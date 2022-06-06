@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="GameLayout">
         <twitch-player id="stream1" streamIndex="0"></twitch-player>
         <twitch-player id="stream2" streamIndex="1"></twitch-player>
         <div id="fillbar" class="flexContainer"></div>
@@ -52,6 +52,15 @@ export default class GameLayout extends Vue {
 </script>
 
 <style scoped>
+#GameLayout {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1920px;
+    height: 1080px;
+    background-image: url("../../../static/bg-new.jpg");
+}
+
 /* taking a different appraoch here, laying streams under the rest of the layout: Topscreen aaspect ratio 800x600
 ouchscreen aspect ratio: 533x400*/
 #stream1 {
@@ -90,7 +99,6 @@ ouchscreen aspect ratio: 533x400*/
     left: 800px;
     width: 320px;
     height: 198px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 
@@ -131,7 +139,6 @@ ouchscreen aspect ratio: 533x400*/
 }
 
 #game {
-    background-image: url("../../../static/middle-info-background.png");
     position: absolute;
     top: 0px;
     left: 800px;
@@ -144,7 +151,6 @@ ouchscreen aspect ratio: 533x400*/
     position: absolute;
     top: 150px;
     left: 800px;
-    background-image: url("../../../static/middle-info-background.png");
     width: 320px;
     border: 2px var(--container-border-color) solid;
     height: 150px;
@@ -156,7 +162,6 @@ ouchscreen aspect ratio: 533x400*/
     left: 800px;
     width: 320px;
     height: 100px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 

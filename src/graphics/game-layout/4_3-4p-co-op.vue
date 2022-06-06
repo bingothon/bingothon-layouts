@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="GameLayout">
         <div id="fillbar" class="flexContainer"></div>
         <twitch-player id="stream1" streamIndex="0"
                        :style="{'border': '2px var(--border-color-' + teamColor1 + ') solid'}"></twitch-player>
@@ -29,7 +29,7 @@
             id="pi1"
             show-color="false"
             class="PlayerInfo"
-            height="45px"
+            height="69px"
             :style="{'border': '5px var(--border-color-' + teamColor1 + ') solid'}"
         ></player-info>
         <player-info
@@ -38,7 +38,7 @@
             id="pi2"
             class="PlayerInfo"
             show-color="false"
-            height="45px"
+            height="69px"
             :style="{'border': '5px var(--border-color-' + teamColor1 + ') solid'}"
         ></player-info>
         <team-info
@@ -54,7 +54,7 @@
             id="pi3"
             show-color="false"
             class="PlayerInfo"
-            height="45px"
+            height="69px"
             :style="{'border': '5px var(--border-color-' + teamColor2 + ') solid'}"
         ></player-info>
         <player-info
@@ -63,7 +63,7 @@
             id="pi4"
             class="PlayerInfo"
             show-color="false"
-            height="45px"
+            height="69px"
             :style="{'border': '5px var(--border-color-' + teamColor2 + ') solid'}"
         ></player-info>
     </div>
@@ -113,6 +113,15 @@ export default class GameLayout extends Vue {
 </script>
 
 <style scoped>
+#GameLayout {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1920px;
+    height: 1080px;
+    background-image: url("../../../static/bg-new.jpg");
+}
+
 #stream1 {
     position: absolute;
     top: 69px;
@@ -155,7 +164,6 @@ export default class GameLayout extends Vue {
     left: 1029px;
     width: 309px;
     height: 302px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 
@@ -204,7 +212,8 @@ export default class GameLayout extends Vue {
 
 .PlayerInfo {
     position: absolute;
-    width: 554px;
+    width: 578px;
+    box-sizing: border-box;
 }
 
 #Bingo-board {
@@ -216,7 +225,6 @@ export default class GameLayout extends Vue {
 }
 
 #game {
-    background-image: url("../../../static/middle-info-background.png");
     position: absolute;
     top: 0px;
     left: 578px;
@@ -231,7 +239,6 @@ export default class GameLayout extends Vue {
     left: 578px;
     width: 760px;
     height: 164px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 
@@ -239,7 +246,6 @@ export default class GameLayout extends Vue {
     position: absolute;
     top: 157px;
     left: 578px;
-    background-image: url("../../../static/middle-info-background.png");
     width: 449px;
     border: 2px var(--container-border-color) solid;
     height: 145px;
