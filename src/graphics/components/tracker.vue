@@ -221,6 +221,7 @@ export default class Tracker extends Vue {
     align-content: center;
     text-align: center;
     font-size: 14pt;
+    font-weight: bold;
 }
 
 .Name {
@@ -235,7 +236,8 @@ export default class Tracker extends Vue {
     transform: translate(-50%, -60%);
     left: 50%;
     top: 50%;
-    -webkit-text-stroke: 1px white;
+    /*-webkit-text-stroke: 1px white;*/
+    font-weight: bold;
 }
 
 img {

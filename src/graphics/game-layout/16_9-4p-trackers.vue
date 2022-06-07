@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="GameLayout">
         <twitch-player id="stream1" :streamIndex="0"></twitch-player>
         <twitch-player id="stream2" :streamIndex="1"></twitch-player>
         <twitch-player id="stream3" :streamIndex="2"></twitch-player>
@@ -66,6 +66,15 @@ export default class GameLayout extends Vue {
 </script>
 
 <style scoped>
+#GameLayout {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1920px;
+    height: 1080px;
+    background-image: url("../../../static/bg-new.jpg");
+}
+
 #stream1 {
     position: absolute;
     top: 60px;
@@ -114,7 +123,6 @@ export default class GameLayout extends Vue {
     position: absolute;
     width: 165px;
     height: 438px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
     box-sizing: border-box;
 }
@@ -156,7 +164,6 @@ export default class GameLayout extends Vue {
     left: 0px;
     width: 593px;
     height: 124px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
     box-sizing: border-box;
 }
@@ -167,7 +174,6 @@ export default class GameLayout extends Vue {
     left: 1327px;
     width: 593px;
     height: 124px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
     box-sizing: border-box;
 }
@@ -219,7 +225,6 @@ export default class GameLayout extends Vue {
 }
 
 #game {
-    background-image: url("../../../static/middle-info-background.png");
     position: absolute;
     top: 0px;
     left: 837px;
@@ -233,7 +238,6 @@ export default class GameLayout extends Vue {
     position: absolute;
     top: 438px;
     left: 593px;
-    background-image: url("../../../static/middle-info-background.png");
     width: 367px;
     border: 2px var(--container-border-color) solid;
     height: 124px;
@@ -246,7 +250,6 @@ export default class GameLayout extends Vue {
     left: 960px;
     width: 367px;
     height: 124px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
     box-sizing: border-box;
 }

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="GameLayout">
         <twitch-player id="stream1" streamIndex="0"
                        :style="{'border': '2px var(--border-color-' + teamColor1 + ') solid'}"></twitch-player>
         <twitch-player id="stream2" streamIndex="1"
@@ -108,6 +108,15 @@ export default class GameLayout extends Vue {
 </script>
 
 <style scoped>
+#GameLayout {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1920px;
+    height: 1080px;
+    background-image: url("../../../static/bg-new.jpg");
+}
+
 #stream1 {
     position: absolute;
     top: 69px;
@@ -160,7 +169,6 @@ export default class GameLayout extends Vue {
     left: 961px;
     width: 259px;
     height: 222px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 
@@ -224,7 +232,6 @@ export default class GameLayout extends Vue {
 }
 
 #game {
-    background-image: url("../../../static/middle-info-background.png");
     position: absolute;
     top: 0px;
     left: 701px;
@@ -237,7 +244,6 @@ export default class GameLayout extends Vue {
     position: absolute;
     top: 118px;
     left: 701px;
-    background-image: url("../../../static/middle-info-background.png");
     width: 519px;
     border: 2px var(--container-border-color) solid;
     height: 155px;
@@ -249,7 +255,6 @@ export default class GameLayout extends Vue {
     left: 701px;
     width: 257px;
     height: 221px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 
