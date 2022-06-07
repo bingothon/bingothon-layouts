@@ -16,14 +16,17 @@ runDataActiveRunRep.on('change', (newValue, old): void => {
     let layoutstring: string;
     switch (newValue?.customData.Layout) {
         case '16:9 2p 2v2':
-            layoutstring = '2p 16:9 Layout 2v2'
-            break
+            layoutstring = '2p 16:9 Layout 2v2';
+            break;
         case '16:9 3p Trackers':
-            layoutstring = '3p 16:9 Layout Trackers'
-            break
+            layoutstring = '3p 16:9 Layout Trackers';
+            break;
         case '16:9 4p Trackers':
-            layoutstring = '4p 16:9 Layout Trackers'
+            layoutstring = '4p 16:9 Layout Trackers';
             break
+        case '16:9 4p Trackers Co-Op':
+            layoutstring = '4p 16:9 co-op Layout Trackers';
+            break;
         default:
             let playerCount = 0;
             let coOp = false;

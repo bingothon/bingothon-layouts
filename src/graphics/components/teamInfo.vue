@@ -67,15 +67,15 @@ export default class TeamInfo extends Vue {
     }
 
     get bingoColor(): string {
-        return store.state.bingoboardMeta.playerColors[this.playerIndex] || "red";
+        return store.state.bingoboardMeta.playerColors[this.playerIndex * 2] || "red";
     }
 
     get bingoGoalCount(): number {
         const bingoboard = store.state[store.state.currentMainBingoboard.boardReplicant];
         if (!store.state.bingoboardMeta.manualScoreOverride) {
-            return <number>bingoboard.colorCounts[store.state.bingoboardMeta.playerColors[this.playerIndex] || "red"];
+            return <number>bingoboard.colorCounts[store.state.bingoboardMeta.playerColors[this.playerIndex * 2] || "red"];
         } else {
-            return store.state.bingoboardMeta.manualScores[this.playerIndex];
+            return store.state.bingoboardMeta.manualScores[this.playerIndex * 2];
         }
     }
 

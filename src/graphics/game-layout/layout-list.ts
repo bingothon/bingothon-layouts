@@ -2,10 +2,12 @@
 import Layout_4x3_4p_CoOp from "./4_3-4p-co-op.vue";
 import Layout_16x9_4p from "./16_9-4p.vue";
 import Layout_16x9_4p_CoOp from "./16_9-4p-co-op.vue"
+import Layout_16x9_4p_CoOp_Trackers from "./16_9-4p-co-op-trackers.vue";
 import Layout_16x9_4p_Trackers from "./16_9-4p-trackers.vue"
 import Layout_10x9_4p_CoOp from "./10_9-4p-co-op.vue";
 import Layout_10x9_4p from "./10_9-4p.vue";
-import Layout_10x9_2p from "./10_9-2p.vue"
+import Layout_10x9_2p from "./10_9-2p.vue";
+import Layout_10x9_1p from "./10_9-1p.vue";
 import Layout_3x2_3p from "./3_2-3p.vue";
 import Layout_4x3_3p from "./4_3-3p.vue";
 import Layout_16x9_3p from "./16_9-3p.vue";
@@ -28,10 +30,10 @@ import Layout_Discord from "./discord-overlay.vue";
 
 export { Layout_16x9_4p,
 	Layout_16x9_4p_CoOp,
+    Layout_16x9_4p_CoOp_Trackers,
     Layout_16x9_4p_Trackers,
-    Layout_10x9_2p,
 	Layout_10x9_4p_CoOp,
-	Layout_10x9_4p,
+    Layout_10x9_4p,
 	Layout_4x3_4p_CoOp,
 	Layout_4x3_4p,
     Layout_16x9_3p,
@@ -45,9 +47,11 @@ export { Layout_16x9_4p,
     Layout_16x9_2p,
     Layout_16x9_2p_2v2,
 	Layout_16x10_2p,
+    Layout_10x9_2p,
 	Layout_4x3_2p,
     Layout_16x9_1p,
 	Layout_16x10_1p,
+    Layout_10x9_1p,
 	Layout_4x3_1p,
     Layout_4x3_16x9,
 	Layout_Host_Bingo,
