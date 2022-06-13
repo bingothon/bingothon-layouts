@@ -1,6 +1,6 @@
 <template>
 	<div class="Interview">
-		<img src="../../../static/bingothonUKRAINELOGO_colours.png" id="logo">
+		<img src="../../../static/logo-summer-wide.png" id="logo">
 		<div id="fillvoice" class="flexContainer"></div>
 		<div id="team-container" v-if="playerCount.length===4 && teamCount.length===2">
 			<player-team-container v-for="teamIndex in teamCount" :key="teamIndex" class="team" :teamIndex="teamIndex"
@@ -92,7 +92,8 @@ export default class Interview extends Vue {
     top: 0px;
     width: 1920px;
     height: 1080px;
-    background-image: linear-gradient(var(--darker-main-color), var(--lighter-main-color))
+    /*background-image: linear-gradient(var(--darker-main-color), var(--lighter-main-color))*/
+    background-image: url("../../../static/bg-new.jpg");
 }
 
 #discord-voice {
@@ -108,7 +109,8 @@ export default class Interview extends Vue {
     left: 60px;
     top: 60px;
     /*width: 568px;*/
-    height: 140px;
+    /*height: 140px; winter*/
+    height: 210px;
 }
 #Bingo-board {
     position: absolute;

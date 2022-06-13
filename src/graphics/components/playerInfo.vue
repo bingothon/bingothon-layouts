@@ -319,7 +319,7 @@ export default class PlayerInfo extends Vue {
     flex-shrink: 0;
     height: 100%;
     margin-left: 10px;
-    margin-right: -25px;
+    margin-right: 10px;
     justify-content: flex-start;
     position: relative;
 }

@@ -103,7 +103,8 @@ export default class VideoPlayer extends Vue {
 }
 
 body {
-    background: linear-gradient(var(--darker-main-color), var(--lighter-main-color) 80%, var(--darker-main-color));
+    /*background: linear-gradient(var(--darker-main-color), var(--lighter-main-color) 80%, var(--darker-main-color));*/
+    background-image: url("../../../static/bg-new.jpg");
 }
 
 #player {

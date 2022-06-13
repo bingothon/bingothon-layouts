@@ -24,7 +24,7 @@ runDataActiveRunRep.on('change', (newValue, old): void => {
         case '16:9 4p Trackers':
             layoutstring = '4p 16:9 Layout Trackers';
             break
-        case '16:9 4p Trackers Co-Op':
+        case '16:9 4P Trackers Co-Op':
             layoutstring = '4p 16:9 co-op Layout Trackers';
             break;
         default:
@@ -40,7 +40,7 @@ runDataActiveRunRep.on('change', (newValue, old): void => {
             if (playerCount === 4 && newValue.teams.length === 2) {
                 coOp = true;
             }
-            layoutstring = `${playerCount}p ${coOp ? 'co-op ' : ''}${newValue.customData.Layout} Layout`;
+            layoutstring = `${playerCount}p ${newValue.customData.Layout} ${coOp ? 'co-op ' : ''}Layout`;
     }
     const foundLayout = allGameLayoutsRep.value?.find(l => l.name == layoutstring);
     foundLayout ? currentGameLayoutRep.value = clone(foundLayout) : logger.error('did not find game layout ' + layoutstring);

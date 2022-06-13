@@ -1,9 +1,9 @@
 <template>
     <div id="Intermission">
-        <img src="../../../static/bingothonUKRAINELOGO_colours.png" id="logoWinter">
-<!--        <img src="../../../static/logo-summer-wide.png" id="logoSummer">-->
-<!--        <div id="host-bingo-text">Host Blackout Bingo</div>-->
-        <div id="host-bingo-text">Raising Money for</div>
+<!--        <img src="../../../static/bingothonUKRAINELOGO_colours.png" id="logoWinter">-->
+        <img src="../../../static/logo-summer-wide.png" id="logoSummer">
+        <div id="host-bingo-text">Host Blackout Bingo</div>
+<!--        <div id="host-bingo-text">Raising Money for</div>-->
         <run-upcoming
             v-if="nextRun"
             id="ComingUpNext"
@@ -21,9 +21,9 @@
             <music></music>
         </info-storage-box>
         <div class="HostingBingo">
-<!--            <bingo-board class="BingoBoard" id="Bingo-board" bingoboardRep="hostingBingoboard" :alwaysShown="true"
-                         fontSize="20px"></bingo-board>-->
-            <img id="PHLogo" src="../../../static/ProjectHope_Hands_ICON_RGB_KO.png">
+            <bingo-board class="BingoBoard" id="Bingo-board" bingoboardRep="hostingBingoboard" :alwaysShown="true"
+                         fontSize="20px"></bingo-board>
+<!--            <img id="PHLogo" src="../../../static/ProjectHope_Hands_ICON_RGB_KO.png">-->
         </div>
         <div :class="'ImageView '+(showIntermissionImage?'PictureShown':'')">
             <img v-if="showIntermissionImage" :src="intermissionImageUrl">
@@ -42,9 +42,6 @@ import InfoStorageBox from "../_misc/components/InfoStorageBox.vue";
 import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
 import BingoBoard from "../components/bingoboard.vue";
 import Music from './components/Music.vue';
-/*import CutBackground from '../_misc/cut_bg';
-import Reader from './components/Reader.vue';
-*/
 
 @Component({
     components: {
@@ -54,9 +51,7 @@ import Reader from './components/Reader.vue';
         InfoStorageBox,
         Music,
         DiscordVoiceDisplay,
-        BingoBoard,
-        /*
-        AdTimer,*/
+        BingoBoard
     },
 })
 
@@ -189,8 +184,8 @@ export default class Intermission extends Vue {
 }
 
 body {
-    background: linear-gradient(0deg, var(--lighter-main-color) 0%, var(--darker-main-color) 100%);
-    /*background-color: rgba(98, 127, 190, 0.5)*/
+    /*background: linear-gradient(0deg, var(--lighter-main-color) 0%, var(--darker-main-color) 100%);*/
+    background-image: url("../../../static/bg-new.jpg");
 }
 
 .CardPlaceholder {
