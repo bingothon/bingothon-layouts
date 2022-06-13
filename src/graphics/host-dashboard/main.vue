@@ -147,7 +147,7 @@
 </template>
 
 <script lang="ts">
-const BINGOTHON_BLURBS = 'Did you know that Bingothon Winter 2021 is being streamed on both the SpeedRunsLive channel as well as our ' +
+const BINGOTHON_BLURBS = 'Did you know that Bingothon Summer 2022 is being streamed on both the SpeedRunsLive channel as well as our ' +
     'own Twitch channel? If you are enjoying this marathon, then do know that there is even more content on the Bingothon Twitch channel,' +
     ' including for example The Legend of Zelda: Breath of the Wild weekly bingo matches, and more!\n' +
     'Are you interested in featuring a bingo-related event on the Bingothon Twitch channel? Then do not hesitate to contact the Main Organizers' +
@@ -164,13 +164,15 @@ const BINGOTHON_BLURBS = 'Did you know that Bingothon Winter 2021 is being strea
     'that happen! If you are interested in volunteering as a restreamer, then do not hesitate to join our Discord server and talk to a Main Organizer ' +
     'about it!';
 
-const CHARITY_BLURBS = 'Due to the ongoing situation in Ukraine, there is a widespread shortage in medicine and food, as well as other medical supplies for hospitals and other health facilities. As such, Project Hope responds by shipping essential supplies to affected areas as to help the people affected.\n' +
-    'Project Hope has dispatched emergency teams within Ukraine as well as in Poland, Romania and in Moldova in order to provide as much help as possible both to those that are stuck in the country as well as refugees.\n' +
-    'Project Hope dispatches kits to Ukraine known as IEHKs, or Interagency Emergency Health Kits, which can each support up to 10,000 people for three months. Each kit contains one ton of supplies, such as medical devices, medical supplies, topical medicines and oral medicines.\n' +
-    'The Project Hope website, which you can find at projecthope.org, provides regular updates on their response to the current crisis, allowing a greater insight on what is happening on the ground.\n' +
-    'Project HOPE began working in Ukraine in 2002 with a life-skills program focused on drug use prevention, HIV prevention, and education for children in primary schools. In 2007, Project HOPE began a five-year, USAID-funded HIV/AIDS Service Capacity project in Ukraine focused on community mobilization for the country’s most at-risk populations.\n' +
-    'Project HOPE is working with the WHO Health Cluster and Logistics Cluster as well as the Ukrainian Ministry of Health and other authorities in order to keep expanding towards areas that are the most in need of immediate health and humanitarian relief\n' +
-    'Beyond the critical help they provide for the current crisis in Ukraine, Project Hope has a history of responding to every major disaster since the 2004 Indonesian tsunami. Since then, HOPE has responded to disasters in Nepal, Haiti, Japan, China, the Philippines, and Indonesia, and they often stay behind to support communities as they recover with long-term support.\n';
+const CHARITY_BLURBS = 'Doctors Without Borders is an organization that offers medical humanitarian assistance to people based solely on need, irrespective of race, religion, gender or political affiliation. Their frontline workers including doctors, nurses and logisticians are often among the first on the scene when people\'s lives are upended by conflict, disease outbreak and other disasters.\n' +
+    'Doctors Without Borders is active in many countries worldwide. They were involved in key support movements such as with COVID-19 emergency responses in various countries back in 2020, as well as key refugee work in Mexico, Central African Republic, Sudan and Syria.\n' +
+    'Doctors Without Borders has been working in many countries with serious refugee crisis that have lasted many years, which to this day is still considered emergency work because the crisis has been ongoing for so long, and therefore need resources at all times to provide the best help they can.\n' +
+    'As part of their medical work, Doctors Without Borders is involved in worldwide lifesaving responses including of course COVID-19, but also Cholera, Ebola, Hepatitis, HIV, Malaria, and more.\n' +
+    'Funds raised during Bingothon Summer 2022 will be going towards Doctors Without Borders\' Emergency Relief Fund, which directly funds emergency relief operations worldwide. This includes operations in Ukraine and surrounding countries to assist people in the ongoing crisis, as well as other emergencies that may not be getting the same amount of attention or funding.\n' +
+    'In eastern Ukraine, access to medical care is particularly difficult, so Doctors Without Borders teams are providing care through mobile clinics where they can.\n' +
+    'Doctors Without Borders psychologists were deployed in Ukraine in order to support displaced people\'s mental health, and the organization is calling for more mental health support in the country as a whole.\n' +
+    'Over the years, Doctors Without Borders have helped tremendous amounts of people in various ways. In 2020 alone, the organization has had almost 10 million outpatient consultations worldwide, more than 110,000 of those being for COVID-19. You can find more such statistics Doctors Without Borders\' website.\n' +
+    'Doctors Without Borders still works hard to provide as much as they can in Syria, which remains one of the countries with one of the highest number of internally displaced people in the world, with a count of 6.7 million such people as of February 2022.';
 
 const SPONSOR_BLURBS = 'Bingothon is sponsored by Team17, who currently have a huge Black Friday Sale on Steam across their vast library of indie titles, from 20% up to 90% off selected titles\n' +
     'Bingothon is sponsored by Team17 who recently launched their quirky, culinary adventure game Epic Chef across PC, Switch, Xbox and PS4\n' +
