@@ -283,7 +283,6 @@ waitTillConnected().then((): void => {
     // music only during intermission
     if (nextSceneName.includes('intermission')) {
       // updates the next run panels
-      nodecg.sendMessage('forceRefreshIntermission');
       nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.mpdAudio }, (err): void => {
         logger.warn(`Problem fading in mpd during transition: ${err.error}`);
       });
@@ -374,6 +373,10 @@ waitTillConnected().then((): void => {
     if (isIntermissionLikeScene(nextScene)) {
       // update last intermission time
       lastIntermissionTimestampRep.value = new Date().getTime() / 1000;
+    }
+    logger.info(`going to ${nextScene}`);
+    if (nextScene === 'game') {
+      nodecg.sendMessage('forceRefreshIntermission');
     }
     handleScreenStreamModeChange(obsStreamModeRep.value, nextScene);
   });
