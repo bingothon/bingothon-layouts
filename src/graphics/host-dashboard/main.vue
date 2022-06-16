@@ -174,15 +174,20 @@ const CHARITY_BLURBS = 'Doctors Without Borders is an organization that offers m
     'Over the years, Doctors Without Borders have helped tremendous amounts of people in various ways. In 2020 alone, the organization has had almost 10 million outpatient consultations worldwide, more than 110,000 of those being for COVID-19. You can find more such statistics Doctors Without Borders\' website.\n' +
     'Doctors Without Borders still works hard to provide as much as they can in Syria, which remains one of the countries with one of the highest number of internally displaced people in the world, with a count of 6.7 million such people as of February 2022.';
 
-const SPONSOR_BLURBS = 'Bingothon is sponsored by Team17, who currently have a huge Black Friday Sale on Steam across their vast library of indie titles, from 20% up to 90% off selected titles\n' +
-    'Bingothon is sponsored by Team17 who recently launched their quirky, culinary adventure game Epic Chef across PC, Switch, Xbox and PS4\n' +
-    'Bingothon is sponsored by Team17 who launched their colourful, dwarven mining simulator Hammerting on PC earlier this month\n' +
-    'Bingothon is sponsored by Team17 who this week unleashed a new hero into their dark fantasy strategy game Age of Darkness currently in Steam Early' +
-    ' Access\n' +
-    'Bingothon is sponsored by Team17 who also provide a bunch of prizes for Bingothon Winter 2021. If you would like to learn more about them, type ' +
+const SPONSOR_BLURBS = 'Bingothon is sponsored by Team17, who recently announced their tactical diesel-punk looter shooter Marauders\n' +
+    'Bingothon is sponsored by Team17 who recently announced the release date of 9th August for the visceral souls-borne Thymesia\n' +
+    'Bingothon is sponsored by Team17 who recently announced the Dark Fantasy RTS Gord\n' +
+    'Bingothon is sponsored by Team17 who recently announced their brand new Metroidvania, The Knight Witch, coming to Steam, PlayStation, Xbox and Switch later this year.\n' +
+    'Bingothon is sponsored by Team17 who also provide a bunch of prizes for Bingothon Summer 2022. If you would like to learn more about them, type ' +
     '!prizes in the chat\n' +
-    'We would like to thank Indiethon for providing prizes for Bingothon Winter 2021. Submissions for Indiethon are open until the 19th of December and' +
-    ' will be live on their Twitch channel on the weekend of the 15th of January 2022. You may find more information about it on their Oengus page.'
+    'Bingothon is sponsored by Team17 who recently announced that Sweet Transit, the unique rail-focused city-builder is coming out July 28th, with a limited-time demo now available on Steam!\n' +
+    'Bingothon is sponsored by Team17 who recently launched the update for their 60\'s cult simulator - Honey, I Joined a Cult.\n' +
+    'Bingothon is sponsored by Team17 who recently launched a new demo for their Roguelite action-RPG - The Unliving.\n' +
+    'Bingothon is sponsored by Team17 who recently launched their botanical action-adventure game - The Serpent Rogue\n' +
+    'Bingothon is sponsored by Team17 who recently announced the new first-person horror adventure game, coming to VR and Steam flat screen - Killer Frequency.\n' +
+    'Bingothon is sponsored by Team17, who recently announced that Ship of Fools coming to console! This co-op crazed roguelike will have you on the edge of your seat reconsidering friendships! Wishlist now on Steam!\n' +
+    'Bingothon is sponsored by Team17, who recently announced that Autopsy Simulator, the story-driven, horror-sim hybrid, will launch in November 2022.'
+
 
 import {Component, Vue} from "vue-property-decorator";
 import {store, getReplicant} from "../../browser-util/state";
