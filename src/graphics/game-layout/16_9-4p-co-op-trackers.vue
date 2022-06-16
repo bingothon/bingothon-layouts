@@ -251,7 +251,6 @@ export default class GameLayout extends Vue {
     position: absolute;
     top: 0px;
     left: 0px;
-    border: 2px var(--container-border-color) solid;
     width: 672px;
     box-sizing: border-box;
 }
@@ -276,7 +275,6 @@ export default class GameLayout extends Vue {
     position: absolute;
     top: 0px;
     left: 1248px;
-    border: 2px var(--container-border-color) solid;
     width: 672px;
     box-sizing: border-box;
 }
@@ -285,7 +283,6 @@ export default class GameLayout extends Vue {
     position: absolute;
     top: 940px;
     left: 0px;
-    border: 2px var(--container-border-color) solid;
     width: 672px;
     box-sizing: border-box;
 }
@@ -294,7 +291,6 @@ export default class GameLayout extends Vue {
     position: absolute;
     top: 940px;
     left: 1248px;
-    border: 2px var(--container-border-color) solid;
     width: 672px;
     box-sizing: border-box;
 }

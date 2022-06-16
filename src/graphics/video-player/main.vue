@@ -41,9 +41,8 @@ export default class VideoPlayer extends Vue {
     onOBSSceneChanged(newVal : string){
         this.$nextTick(() => {
             if (newVal === 'videoPlayer') {
-                // no charity videos for UAR
-                this.videoType = "sponsor";
-                this.playNextVideo("sponsor")
+                this.videoType = "charity";
+                this.playNextVideo(this.videoType)
             }
         });
     }
