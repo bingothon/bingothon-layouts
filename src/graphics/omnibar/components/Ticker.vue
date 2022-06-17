@@ -77,7 +77,7 @@ export default class Ticker extends Vue {
     dynamicMessage(): TickerMessage {
         let messages = store.state.omnibarMessages;
         if (!messages.length) {
-            return undefined;
+            return this.noalert();
         }
         if (this.latestDynamicMessage > messages.length - 1) {
             this.latestDynamicMessage = 0;
@@ -100,7 +100,7 @@ export default class Ticker extends Vue {
             case 1: currentComponent = this.prize(); break;
             case 2: currentComponent = this.bid(); break;
             case 3: currentComponent = this.showLatestDonation(); break;
-            case 4: {let message = this.dynamicMessage(); if (!message) break; currentComponent = message; break;}
+            case 4: currentComponent = this.dynamicMessage(); break;
             default: currentComponent = this.staticMessages[Math.floor(Math.random() * this.staticMessages.length)]; break;
         }
         this.currentState = (this.currentState + 1) % 6;
