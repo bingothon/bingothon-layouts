@@ -430,8 +430,10 @@ adsTimerReplicant.on('change', (newVal): void => {
 });
 
 nodecg.listenFor('videoPlayerFinished', (): void => {
+  if (obsCurrentSceneRep.value?.toLowerCase() === 'videoplayer') {
     obs.changeScene('intermission')
     nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.mpdAudio }, (err): void => {
         logger.warn(`Problem fading in mpd during transition: ${err.error}`);
     });
+  }
 });
