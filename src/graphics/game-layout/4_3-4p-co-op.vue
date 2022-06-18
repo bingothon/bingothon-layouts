@@ -25,7 +25,7 @@
         ></team-info>
         <player-info
             playerIndex="0"
-            hide-finish-time
+            hide-finish-time="true"
             id="pi1"
             show-color="false"
             class="PlayerInfo"
@@ -34,7 +34,7 @@
         ></player-info>
         <player-info
             playerIndex="1"
-            hide-finish-time
+            hide-finish-time="true"
             id="pi2"
             class="PlayerInfo"
             show-color="false"
@@ -50,7 +50,7 @@
         ></team-info>
         <player-info
             playerIndex="2"
-            hide-finish-time
+            hide-finish-time="true"
             id="pi3"
             show-color="false"
             class="PlayerInfo"
@@ -59,7 +59,7 @@
         ></player-info>
         <player-info
             playerIndex="3"
-            hide-finish-time
+            hide-finish-time="true"
             id="pi4"
             class="PlayerInfo"
             show-color="false"
