@@ -54,8 +54,8 @@ export default class Ticker extends Vue {
 
     mounted() {
         this.staticMessages = [
-			this.genericMessage('This is Bingothon Ukraine Emergency Relief, enjoy your stay!'),
-			this.genericMessage('#Bingothon Ukraine Emergency Relief benefits Project HOPE!'),
+			this.genericMessage('This is Bingothon Summer 2022, enjoy your stay!'),
+			this.genericMessage('#Bingothon Summer 2022 benefits Doctors without Borders!'),
 			this.genericMessage('Donate @ donate.bingothon.com'),
 			this.genericMessage("Can't get enough of Bingothon? Join the Bingothon Discord at discord.bingothon.com"),
 		];
@@ -77,7 +77,7 @@ export default class Ticker extends Vue {
     dynamicMessage(): TickerMessage {
         let messages = store.state.omnibarMessages;
         if (!messages.length) {
-            return undefined;
+            return this.noalert();
         }
         if (this.latestDynamicMessage > messages.length - 1) {
             this.latestDynamicMessage = 0;
@@ -100,7 +100,7 @@ export default class Ticker extends Vue {
             case 1: currentComponent = this.prize(); break;
             case 2: currentComponent = this.bid(); break;
             case 3: currentComponent = this.showLatestDonation(); break;
-            case 4: {let message = this.dynamicMessage(); if (!message) break; currentComponent = message; break;}
+            case 4: currentComponent = this.dynamicMessage(); break;
             default: currentComponent = this.staticMessages[Math.floor(Math.random() * this.staticMessages.length)]; break;
         }
         this.currentState = (this.currentState + 1) % 6;

@@ -4,7 +4,7 @@
             v-for="(stream, i) in twitchStreams"
             :key="i"
         >
-            <span class="stream-label">Player {{ i }}:</span>
+            <div class="stream-label">{{ getStreamLabel(i, playerNames, twitchStreams) }}:</div>
             <v-btn
                 class="stream-mute"
                 dark
@@ -92,6 +92,18 @@ export default class TwitchControl extends Vue {
         return store.state.soundOnTwitchStream;
     }
 
+    get playerNames(): string[] {
+        let idx = 0;
+        let arr = [];
+        store.state.runDataActiveRun.teams.forEach(t => {
+            t.players.forEach(p => {
+                arr.push(p.name);
+                idx++;
+            });
+        });
+        return arr;
+    }
+
     volumeChange(id: number, newVal: number) {
         const newVolume = newVal / 100;
         nodecg.sendMessageToBundle('streams:setStreamVolume', bingothonBundleName, {id, volume: newVolume});
@@ -119,6 +131,10 @@ export default class TwitchControl extends Vue {
 
     overrideChannelName(id: number) {
         getReplicant<TwitchStreams>('twitchStreams').value[id].channel = this.twitchChannelOverrides[id];
+    }
+
+    getStreamLabel(idx: number, playerNames: string[], twitchStreams: TwitchStreams): string {
+        return `${idx}: ${playerNames[idx]} (${twitchStreams[idx]?.channel})`
     }
 }
 </script>

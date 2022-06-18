@@ -11,6 +11,9 @@
         >
             <span v-if="bingoCountShown">{{ bingoGoalCount }}</span>
         </div>
+        <div>
+            <BestOfX v-if="boXEnabled" :player-index="teamIndex" id="boX" :height="height"></BestOfX>
+        </div>
         <div :class="medalClasses"></div>
         <div class="TeamNameContainer">
             <text-fit :text="`${finishTime} ${name || ''}`" :align="reverseOrder?'right':'left'">
@@ -24,10 +27,12 @@ import {Component, Prop, Vue} from "vue-property-decorator";
 import {RunDataTeam} from "../../../speedcontrol-types";
 import {store} from "../../browser-util/state";
 import TextFit from "../helpers/text-fit.vue";
+import BestOfX from "./bestOfX.vue";
 
 @Component({
     components: {
         TextFit,
+        BestOfX,
     }
 })
 export default class TeamInfo extends Vue {
@@ -144,6 +149,10 @@ export default class TeamInfo extends Vue {
             }
         }
         return '';
+    }
+
+    get boXEnabled(): boolean {
+        return store.state.bestOfX.enabled;
     }
 }
 </script>

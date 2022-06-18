@@ -22,8 +22,8 @@
                 >
             </transition>
         </div>
-        <div>
-            <BestOfX v-if="boXEnabled" :player-index="playerIndex" id="boX" :height="height"></BestOfX>
+        <div v-if="!hideFinishTime">
+            <BestOfX v-if="boXEnabled" :player-index="teamIndex" id="boX" :height="height"></BestOfX>
         </div>
         <div :class="medalClasses"></div>
         <div class="PlayerName">
@@ -201,6 +201,22 @@ export default class PlayerInfo extends Vue {
             });
         });
         return theTeamID;
+    }
+
+    get teamIndex(): number {
+        // use 0 as a default in case this teamindex isn't found
+        // which shouldn't happen
+        let theTeamIdx = 0;
+        let playerNum = 0;
+        store.state.runDataActiveRun.teams.forEach((t, teamdIdx) => {
+            t.players.forEach(p => {
+                if (playerNum == this.playerIndex) {
+                    theTeamIdx = teamdIdx;
+                }
+                playerNum++;
+            });
+        });
+        return theTeamIdx;
     }
 
     get bingoColor(): string {
