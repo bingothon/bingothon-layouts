@@ -411,8 +411,8 @@ waitTillConnected().then((): void => {
 
 //triggers ads when switching to Ad scene
 const adsTimerReplicant = nodecg.Replicant<TwitchCommercialTimer>('twitchCommercialTimer', 'nodecg-speedcontrol');
-obs.on('SwitchScenes', async (data) => {
-	if (data['scene-name'].startsWith('(ads) intermission')
+obs.on('CurrentProgramSceneChanged', async ({sceneName}) => {
+	if (sceneName.startsWith('(ads) intermission')
 		&& adsTimerReplicant.value && adsTimerReplicant.value.secondsRemaining <= 0) {
 		//play ads
 		nodecg.sendMessageToBundle('twitchStartCommercial', 'nodecg-speedcontrol', {duration: 180})

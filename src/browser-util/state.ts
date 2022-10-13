@@ -45,7 +45,7 @@ import {
     VoiceActivity
 } from "../../schemas";
 import {RunDataActiveRun, RunDataArray, Timer, TwitchCommercialTimer} from "../../speedcontrol-types";
-import {Scene} from 'obs-websocket-js';
+// import { Scene } from "../extension/util/obs" TODO: set types for sccenes 
 import {Games} from "../../types";
 
 Vue.use(Vuex);
@@ -139,7 +139,7 @@ interface StoreTypes {
     obsPreviewScene: null | string,
     obsCurrentScene: null | string,
     obsPreviewImg: ObsPreviewImg,
-    obsSceneList: null | Scene[],
+    obsSceneList: null | any, // sorry i had to do it to test any was Scene[]
     obsStreamMode: ObsStreamMode,
     omnibarMessages: OmnibarMessages,
     oriBingoboard: OriBingoboard,
@@ -204,7 +204,7 @@ export const store = new Vuex.Store<StoreTypes>({
         obsPreviewImg: {} as ObsPreviewImg,
         obsPreviewScene: null as null | string,
         obsCurrentScene: null as null | string,
-        obsSceneList: null as null | Scene[],
+        obsSceneList: null as null | any, // sorry i had to do it to test any was Scene[]
         obsStreamMode: '' as ObsStreamMode,
         omnibarMessages: [] as OmnibarMessages,
         oriBingoboard: {} as OriBingoboard,

@@ -161,7 +161,7 @@ export default class OBSControl extends Vue {
     }
 
     get sceneNameList(): string[] {
-        return store.state.obsSceneList.map(s => s.name);
+        return store.state.obsSceneList.map(s => s.sceneName);
     }
 
     // get discordAudioDelay(): string {

@@ -1,4 +1,4 @@
-import obsWebsocketJs from 'obs-websocket-js';
+import OBSWebSocket, { OBSResponseTypes } from 'obs-websocket-js';
 import * as nodecgApiContext from './nodecg-api-context';
 import { Configschema } from '../../../configschema';
 import { CapturePositions, CurrentGameLayout, ObsAudioSources, ObsConnection, SoundOnTwitchStream, TwitchStreams } from '../../../schemas';
@@ -26,6 +26,9 @@ interface OBSTransformParams {
   visible?: boolean,
 };
 
+
+
+
 function getStreamSrcName(idx: number): string {
   return `twitch-stream-${idx}`;
 }
@@ -34,14 +37,14 @@ function handleStreamPosChange(obs: OBSUtility, stream: TwitchStream, streamIdx:
   const layoutName = currentGameLayout.path.slice(1); // leading slash we don't want
   const captureLayout = capturePositions[layoutName];
   if (captureLayout === undefined) {
-      logger.error(`capture layout ${layoutName} not found!`);
-      return;
+    logger.error(`capture layout ${layoutName} not found!`);
+    return;
   }
   const capturePos = captureLayout[`stream${streamIdx + 1}`];
   if (capturePos === undefined) {
-    obs.setSourceBoundsAndCrop(getStreamSrcName(streamIdx), {visible: false});
-      logger.error(`capture pos for index ${streamIdx} not found on ${layoutName}!`);
-      return;
+    obs.setSourceBoundsAndCrop(getStreamSrcName(streamIdx), { visible: false });
+    logger.error(`capture pos for index ${streamIdx} not found on ${layoutName}!`);
+    return;
   }
   // calculate cropping, the browser source is fixed to 1920x1080
   const cropLeft = 1920 * -stream.leftPercent / 100;
@@ -50,7 +53,8 @@ function handleStreamPosChange(obs: OBSUtility, stream: TwitchStream, streamIdx:
   const cropBottom = 1080 * (1 - 100 / stream.heightPercent) - cropTop;
   // fire and forget
   obs.setSourceBoundsAndCrop(getStreamSrcName(streamIdx),
-    {cropLeft, cropTop, cropRight, cropBottom, visible: true,
+    {
+      cropLeft, cropTop, cropRight, cropBottom, visible: true,
       x: capturePos.x,
       y: capturePos.y,
       width: capturePos.width,
@@ -67,14 +71,14 @@ function handleSoundChange(obs: OBSUtility, soundOnTwitchStream: SoundOnTwitchSt
 }
 
 // Extending the OBS library with some of our own functions.
-class OBSUtility extends obsWebsocketJs {
+class OBSUtility extends OBSWebSocket {
   /**
    * Change to this OBS scene.
    * @param name Name of the scene.
    */
   public changeScene(name: string): Promise<void> {
     return new Promise((resolve, reject): void => {
-      this.send('SetCurrentScene', { 'scene-name': name }).then(resolve).catch((err): void => {
+      this.call('SetCurrentSceneTransition', { transitionName: name }).then(resolve).catch((err): void => {
         logger.warn(`Cannot change OBS scene [${name}]: ${err.error}`);
         reject();
       });
@@ -87,8 +91,8 @@ class OBSUtility extends obsWebsocketJs {
    */
   public getAudioVolume(source: string): Promise<number> {
     return new Promise((resolve, reject): void => {
-      this.send('GetVolume', { source }).then((resp): void => {
-        resolve(resp.volume);
+      this.call('GetInputVolume', { inputName: source }).then((resp): void => {
+        resolve(resp.inputVolumeMul);
       }).catch((err): void => {
         reject(err);
       });
@@ -102,18 +106,24 @@ class OBSUtility extends obsWebsocketJs {
    */
   public setAudioVolume(source: string, volume: number): Promise<void> {
     return new Promise((resolve, reject): void => {
-      this.send('SetVolume', { source, volume }).then(resolve).catch((err): void => {
+      this.call('SetInputVolume', { inputName: source, inputVolumeMul: volume }).then(resolve).catch((err): void => {
         // logger.warn(`Cannot set volume [${source}]: ${err.error}`);
         reject(err);
       });
     });
   }
 
-  public setAudioMute(source: string, mute: boolean): Promise<void> {
-    return new Promise((resolve, reject): void => {
-      this.send('SetMute', { source, mute }).then(resolve).catch((err): void => {
+  /**
+   * Set volume for a source
+   * @param source Source which volume is muted/unmuted
+   * @param mute boolean
+   */
+  public setAudioMute(source: string, mute: boolean): Promise<{ inputMuted: boolean }> {
+    return new Promise(async (resolve, reject): Promise<void> => {
+      await this.call('SetInputMute', { inputName: source, inputMuted: mute }).catch((err): void => {
         reject(err);
       })
+
     });
   }
 
@@ -123,10 +133,10 @@ class OBSUtility extends obsWebsocketJs {
    * @param url link to the stream that ffmpeg can handle, get from streamlink
    */
   public async setMediasourceUrl(source: string, url: string): Promise<void> {
-    await this.send("SetSourceSettings", {
-      sourceName: source,
-      sourceType: "ffmpeg_source", // just to make sure
-      sourceSettings: {
+    await this.call("SetInputSettings", {
+      inputName: source,
+      //sourceType: "ffmpeg_source", // just to make sure
+      inputSettings: {
         input: url,
         is_local_file: false,
       }
@@ -138,83 +148,120 @@ class OBSUtility extends obsWebsocketJs {
    * @param source name of the media source
    * @param pause whether the source should be paused now, false starts the source
    */
+
   public async setMediasourcePlayPause(source: string, pause: boolean): Promise<void> {
     // TODO: remove this garbage once obs-websocket-js updates to proper bindings
-    await (this as any).send("PlayPauseMedia", {
-      sourceName: source,
-      playPause: pause,
-    }).catch((e: any) => logger.error('could not set play pause', e));
+    const mediaStatus = await obs.call('GetMediaInputStatus', {inputName: source}) 
+    logger.warn(mediaStatus)
+    if (pause) {
+      logger.warn(`setting ${source} to paused`)
+      await (this as any).call("TriggerMediaInputAction", {
+        inputName: source,
+        mediaAction: 'OBS_MEDIA_PAUSE_PLAY',
+      }).catch((e: any) => logger.error('could not set play pause', e));
+    }
   }
+
 
   public async refreshMediasource(source: string): Promise<void> {
     // TODO: remove this garbage once obs-websocket-js updates to proper bindings
+    console.log(`triggered refresh for source ${source}`)
     await (this as any).send("RestartMedia", {
       sourceName: source,
     }).catch((e: any) => logger.error('could not restart media', e));
   }
 
   public async setSourceBoundsAndCrop(source: string, params: OBSTransformParams): Promise<void> {
-      logger.info(`updating source ${source}: `+JSON.stringify(params));
-      await this.send("SetSceneItemProperties", {
-        "scene-name": bundleConfig.obs.gameScene || 'game',
-        item: {name: source},
-        position: {
-          x: params.x,
-          y: params.y,
-        },
-        bounds: {
-          type: "OBS_BOUNDS_STRETCH", //"OBS_BOUNDS_SCALE_INNER", // TODO: test
-          x: params.width,
-          y: params.height,
-        },
-        scale: {},
-        visible: params.visible,
-        crop: {
-          bottom: params.cropBottom,
-          left: params.cropLeft,
-          right: params.cropRight,
-          top: params.cropTop,
-        },
-      }).catch(e => logger.error('could not set source settings', e));
+    logger.info(`updating source ${source}: ` + JSON.stringify(params));
+    const sceneItem = await this.call("GetSceneItemId", {
+      sceneName: bundleConfig.obs.gameScene || 'game',
+      sourceName: source
+    }).catch(e => logger.error('could not get GetSceneItemId', e))
+    //const sceneTransform = await obs.call('GetSceneItemTransform', { sceneName: bundleConfig.obs.gameScene || 'game', sceneItemId: sceneItem!.sceneItemId })
+    //logger.warn(sceneTransform) 
+    if (params.visible) {
+      await this.call("SetSceneItemEnabled", { sceneName: bundleConfig.obs.gameScene || 'game', sceneItemId: sceneItem!.sceneItemId, sceneItemEnabled: true })
+    } else {
+      await this.call("SetSceneItemEnabled", { sceneName: bundleConfig.obs.gameScene || 'game', sceneItemId: sceneItem!.sceneItemId, sceneItemEnabled: false })
     }
+    await this.call("SetSceneItemTransform", {
+      sceneName: bundleConfig.obs.gameScene || 'game',
+      sceneItemId: sceneItem!.sceneItemId, // TO DO GET THE CORRECT SCENEITEMID see why sceneItem is not there
+
+      sceneItemTransform: {
+        boundsHeight: params.height,
+        boundsType: 'OBS_BOUNDS_SCALE_INNER',
+        boundsWidth: params.width,
+        cropBottom: params.cropBottom,
+        cropLeft: params.cropLeft,
+        cropRight: params.cropRight,
+        cropTop: params.cropTop,
+        positionX: params.x,
+        positionY: params.y,
+        scaleX: 1,
+        scaleY: 1,
+      }
+      // sceneItemTransform: {
+      //   position: {
+      //     x: params.x,
+      //     y: params.y,
+      //   },
+      //   bounds: {
+      //     type: "OBS_BOUNDS_SCALE_INNER", // TODO: test
+      //     x: params.width,
+      //     y: params.height,
+      //   },
+      //   scale: {},
+      //   visible: params.visible,
+      //   crop: {
+      //     bottom: params.cropBottom,
+      //     left: params.cropLeft,
+      //     right: params.cropRight,
+      //     top: params.cropTop,
+      //   },
+      // }
+    }).catch(e => logger.error('could not set source settings', e));
+  }
 
   public async setDefaultBrowserSettings(source: string): Promise<void> {
-    await this.send("SetSourceSettings", {
-      sourceName: source,
-      sourceSettings: {
+    const inputList = await this.call("GetInputList")
+    //logger.warn(`the inputlist`, inputList)
+    await this.call("SetInputSettings", {
+      inputName: source,
+      inputSettings: {
         height: 1080,
         width: 1920,
         fps: 30, // TODO: maybe 60?
         reroute_audio: true,
       }
-    })
+    }).catch(e => logger.error('could not set browser defaults', e))
   }
 
   public async setBrowserSourceUrl(source: string, url: string): Promise<void> {
     // browser settings: "fps":28,"height":1080,"url":"https://obsproject.com/browser-source2","width":1920
-    await this.send("SetSourceSettings", {
-      sourceName: source,
-      sourceSettings: {
+    await this.call("SetInputSettings", {
+      inputName: source,
+      inputSettings: {
         url,
-      }
+      } // not good
     }).catch(e => logger.error('could not set browser source settings', e));
   }
 
   public async refreshBrowserSource(source: string): Promise<void> {
-    // outdating typings :(
-    await (this as any).send("RefreshBrowserSource", {
-      sourceName: source,
+    logger.info(`triggered refresh for source ${source}`)
+    await this.call("PressInputPropertiesButton", {
+      inputName: source,
+      propertyName: "refreshnocache"
     }).catch((e: any) => logger.error('could not refresh browser source', e));
   }
-
   public async takeSourceScreenshot(source: string): Promise<string> {
-    const response = await this.send("TakeSourceScreenshot", {
-      embedPictureFormat: "jpeg",
+    const response = await this.call("GetSourceScreenshot", {
+      imageFormat: "jpeg",
       sourceName: source,
-      height: 300,
-    });
+      imageHeight: 300,
+    }).catch(e => logger.error(`Could not make source screenshot from source: ${source}`, e));
 
-    return response.img;
+    return response!.imageData;
   }
 }
 
@@ -228,7 +275,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
   const obsAudioSourcesRep = nodecg.Replicant<ObsAudioSources>('obsAudioSources');
   const obsPreviewSceneRep = nodecg.Replicant<string | null>('obsPreviewScene', { defaultValue: null });
   const obsCurrentSceneRep = nodecg.Replicant<string | null>('obsCurrentScene', { defaultValue: null });
-  const obsSceneListRep = nodecg.Replicant<obsWebsocketJs.Scene[] | null>('obsSceneList', { defaultValue: null });
+  const obsSceneListRep = nodecg.Replicant<any | null>('obsSceneList', { defaultValue: null }); // TODO: create a type Scene and replace 'any' with 'Scene[]'
   const capturePositionsRep = nodecg.Replicant<CapturePositions>('capturePositions');
   const currentGameLayoutRep = nodecg.Replicant<CurrentGameLayout>('currentGameLayout');
   const soundOnTwitchStreamRep = nodecg.Replicant<SoundOnTwitchStream>('soundOnTwitchStream');
@@ -236,7 +283,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
   const twitchStreams = nodecg.Replicant<TwitchStreams>('twitchStreams');
 
   const settings = {
-    address: bundleConfig.obs.address,
+    url: bundleConfig.obs.address,
     password: bundleConfig.obs.password,
   };
   logger.info('Setting up OBS connection.');
@@ -244,45 +291,51 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
 
   // eslint-disable-next-line no-inner-declarations
   function connect(): void {
-    obs.connect(settings).then((): void => {
+    obs.connect(settings.url, settings.password).then((): void => {
       logger.info('OBS connection successful.');
       obsConnectionRep.value.status = 'connected';
 
       // we need studio mode
-      obs.send('EnableStudioMode').catch((e): void => {
-        logger.error("Can't set studio mode", e);
+      obs.call('GetStudioModeEnabled').then((enabled) => {
+        if (!enabled) {
+          obs.call('SetStudioModeEnabled').catch((e): void => {
+            logger.error("Can't set studio mode", e);
+          });
+        }
       });
 
       // default if they somehow not exist
       [bundleConfig.obs.discordAudio, bundleConfig.obs.mpdAudio, bundleConfig.obs.streamsAudio]
         .forEach((audioSource): void => {
           if (!Object.getOwnPropertyNames(obsAudioSourcesRep.value).includes(audioSource)) {
-            obsAudioSourcesRep.value[audioSource] = { volume: 0.5, muted: false, delay: 0, volumeMultiplier: 1};
+            obsAudioSourcesRep.value[audioSource] = { volume: 0.5, muted: false, delay: 0, volumeMultiplier: 1 };
           }
         });
 
-      obs.send('GetPreviewScene').then((scene): void => {
-        obsPreviewSceneRep.value = scene.name;
-        logger.info('init update preview scene');
+      obs.call('GetCurrentPreviewScene').then((scene): void => {
+        obsPreviewSceneRep.value = scene.currentPreviewSceneName;
+        logger.info('init update preview scene', scene.currentPreviewSceneName);
       }).catch((err): void => {
         logger.warn(`Cannot get preview scene: ${err.error}`);
       });
 
-      obs.send('GetCurrentScene').then((scene): void => {
-        obsCurrentSceneRep.value = scene.name;
-        logger.info('init current scene');
+      obs.call('GetCurrentProgramScene').then((scene): void => {
+        obsCurrentSceneRep.value = scene.currentProgramSceneName;
+        logger.info('init current scene', scene.currentProgramSceneName);
       }).catch((err): void => {
         logger.warn(`Cannot get current scene: ${err.error}`);
       });
 
-      obs.send('GetSceneList').then((sceneList): void => {
+      obs.call('GetSceneList').then((sceneList): void => {
+        //        const scenes = sceneList.scenes.map(x => ({ sceneIndex: x.sceneIndex as number, sceneName: x.sceneName as string})) // hax to get TS back correctly across all layouts
         obsSceneListRep.value = sceneList.scenes;
+        logger.warn("the scenes it finds", sceneList.scenes)
       }).catch((err): void => {
         logger.warn(`Cannot get current scene list: ${err.error}`);
       });
 
       // obs default browser sources
-      for(let i = 0; i < 4; i++) {
+      for (let i = 0; i < 4; i++) {
         obs.setDefaultBrowserSettings(getStreamSrcName(i));
       }
 
@@ -290,6 +343,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         if (!old) return;
         for (let i = 0; i < 4; i++) {
           const stream = newValue[i];
+          logger.warn(stream)
           const oldStream = old[i] || {}; // old stream might be undefined
           if (stream === undefined) {
             // this stream should not be displayed
@@ -303,18 +357,20 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
             if (stream.channel !== oldStream.channel) {
               // fire and forget
               obs.setBrowserSourceUrl(getStreamSrcName(i), `https://player.twitch.tv/?channel=${stream.channel}&enableExtensions=true&muted=false&parent=twitch.tv&player=popout&volume=1`);
+              obs.setMediasourcePlayPause(getStreamSrcName(i), stream.paused)
             }
             // check if the cropping changed
             if (stream.widthPercent !== oldStream.widthPercent ||
-                stream.heightPercent !== oldStream.heightPercent ||
-                stream.leftPercent !== oldStream.leftPercent ||
-                stream.topPercent !== oldStream.topPercent) {
+              stream.heightPercent !== oldStream.heightPercent ||
+              stream.leftPercent !== oldStream.leftPercent ||
+              stream.topPercent !== oldStream.topPercent) {
               handleStreamPosChange(obs, stream, i, currentGameLayoutRep.value, capturePositionsRep.value);
             } else {
               // since this channel exists, make it visible
-              obs.setSourceBoundsAndCrop(getStreamSrcName(i), {visible: true});
+              obs.setSourceBoundsAndCrop(getStreamSrcName(i), { visible: true });
             }
             handleSoundChange(obs, soundOnTwitchStreamRep.value, i, stream, oldStream);
+            //TODO: use this when switching to streamlink method, obs.setMediasourcePlayPause(getStreamSrcName(i), stream.paused)
           }
         }
       });
@@ -322,7 +378,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
       capturePositionsRep.on('change', (newVal, old) => {
         if (!old) return;
 
-        for(let i = 0; i < 4; i++) {
+        for (let i = 0; i < 4; i++) {
           const stream = twitchStreams.value[i];
           if (stream === undefined) continue;
           handleStreamPosChange(obs, stream, i, currentGameLayoutRep.value, newVal);
@@ -332,7 +388,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
       currentGameLayoutRep.on('change', (newVal, old) => {
         if (!old) return;
 
-        for(let i = 0; i < 4; i++) {
+        for (let i = 0; i < 4; i++) {
           const stream = twitchStreams.value[i];
           if (stream === undefined) continue;
           handleStreamPosChange(obs, stream, i, newVal, capturePositionsRep.value);
@@ -342,7 +398,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
       soundOnTwitchStreamRep.on('change', (newVal, old) => {
         if (old === undefined) return;
 
-        for(let i = 0; i < 4; i++) {
+        for (let i = 0; i < 4; i++) {
           const stream = twitchStreams.value[i];
           if (stream === undefined) continue;
           handleSoundChange(obs, newVal, i, stream, stream);
@@ -355,9 +411,11 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
           callback();
         }
       });
+
+
     }).catch((err): void => {
       logger.warn('OBS connection error.');
-      logger.debug('OBS connection error:', err);
+      logger.warn('OBS connection error:', err);
     });
   }
   connect();
@@ -401,17 +459,22 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     }
   }) */
 
-  obs.on('PreviewSceneChanged', (data): void => {
-    obsPreviewSceneRep.value = data['scene-name'];
+  obs.on('CurrentPreviewSceneChanged', (data): void => {
+    obsPreviewSceneRep.value = data.sceneName;
   });
 
-  obs.on('SwitchScenes', (data): void => {
-    obsCurrentSceneRep.value = data['scene-name'];
+  obs.on('CurrentProgramSceneChanged', (data): void => { // not sure if you also need to know if the preview screen has changed
+    obsCurrentSceneRep.value = data.sceneName;
   });
+  //some tests
+  obs.on('SceneItemTransformChanged', (scene) => {
+    logger.warn(`the scene has changed to`, scene)
+  })
 
-  obs.on('ScenesChanged', (): void => {
-    obs.send('GetSceneList').then((sceneList): void => {
-      obsSceneListRep.value = sceneList.scenes;
+  obs.on('SceneListChanged', (): void => {
+    obs.call('GetSceneList').then((sceneList): void => {
+      const scenes = sceneList.scenes.map(x => ({ sceneIndex: x.sceneIndex as number, sceneName: x.sceneName as string }))
+      obsSceneListRep.value = scenes;
     }).catch((err): void => {
       logger.warn(`Cannot get current scene list: ${err.error}`);
     });
@@ -423,18 +486,18 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     }
     Object.entries(newVal).forEach(([source, sound]): void => {
       const oldSound = old[source];
-      if (!oldSound || oldSound.volume !== sound.volume || oldSound.volumeMultiplier !== sound.volumeMultiplier) {
-        obs.setAudioVolume(source, sound.volume * sound.volumeMultiplier).catch((e): void => {
-          logger.warn(`Error setting Volume for [${source}] to ${sound.volume} * ${sound.volumeMultiplier}: ${e.error}`);
+      if (!oldSound || oldSound.volume !== sound.volume) {
+        obs.setAudioVolume(source, sound.volume).catch((e): void => {
+          logger.warn(`Error setting Volume for [${source}] to ${sound.volume}: ${e.error}`);
         });
       }
       if (!oldSound || oldSound.muted !== sound.muted) {
-        obs.send('SetMute', { source, mute: sound.muted }).catch((e): void => {
+        obs.call('SetInputMute', { inputName: source, inputMuted: sound.muted }).catch((e): void => {
           logger.warn(`Error setting mute for [${source}] to ${sound.muted}: ${e.error}`);
         });
       }
       if (!oldSound || oldSound.delay !== sound.delay) {
-        obs.send('SetSyncOffset', { source, offset: sound.delay * 1000000 }).catch((e): void => {
+        obs.call('SetInputAudioSyncOffset', { inputName: source, inputAudioSyncOffset: sound.delay * 1000000 }).catch((e): void => {
           logger.warn(`Error setting audio delay for [${source}] to ${sound.delay}ms: ${e.error}`);
         });
       }
@@ -445,7 +508,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     if (old === undefined || newVal === null || newVal === old) {
       return;
     }
-    obs.send('SetPreviewScene', { 'scene-name': newVal }).catch((e): void => {
+    obs.call('SetCurrentPreviewScene', { sceneName: newVal }).catch((e): void => {
       logger.warn(`Error setting preview scene to ${newVal}: ${e.error}`);
     });
   });
@@ -453,7 +516,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
   nodecg.listenFor('obs:transition', (_data, callback): void => {
     logger.info('transitioning...');
     nodecg.sendMessage('obs:startingTransition', { scene: obsPreviewSceneRep.value });
-    obs.send('TransitionToProgram', {}).then((): void => {
+    obs.call('SetCurrentProgramScene', { sceneName: obsPreviewSceneRep.value! }).then((): void => { // might have fucked up here setting ! on which scene to change to
       if (callback && !callback.handled) {
         logger.info('transitioned!');
         callback();
