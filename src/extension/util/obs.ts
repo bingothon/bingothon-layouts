@@ -151,13 +151,13 @@ class OBSUtility extends OBSWebSocket {
 
   public async setMediasourcePlayPause(source: string, pause: boolean): Promise<void> {
     // TODO: remove this garbage once obs-websocket-js updates to proper bindings
-    const mediaStatus = await obs.call('GetMediaInputStatus', { inputName: source })
-    logger.warn(mediaStatus)
+    // const mediaStatus = await obs.call('GetMediaInputStatus', { inputName: source })
+    // logger.warn(mediaStatus)
     if (pause) {
-      logger.warn(`setting ${source} to paused`)
+      //logger.warn(`setting ${source} to paused`)
       await (this as any).call("TriggerMediaInputAction", {
         inputName: source,
-        mediaAction: 'OBS_MEDIA_PAUSE_PLAY',
+        mediaAction: 'OBS_MEDIA_PAUSE_PLAY', // TODO: Might not be a correct media action..
       }).catch((e: any) => logger.error('could not set play pause', e));
     }
   }
@@ -201,6 +201,7 @@ class OBSUtility extends OBSWebSocket {
         scaleX: 1,
         scaleY: 1,
       }
+      // example of the old object can be removed
       // sceneItemTransform: {
       //   position: {
       //     x: params.x,
@@ -356,7 +357,6 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
             if (stream.channel !== oldStream.channel) {
               // fire and forget
               obs.setBrowserSourceUrl(getStreamSrcName(i), `https://player.twitch.tv/?channel=${stream.channel}&enableExtensions=true&muted=false&parent=twitch.tv&player=popout&volume=1`);
-              obs.setMediasourcePlayPause(getStreamSrcName(i), stream.paused)
             }
             // check if the cropping changed
             if (stream.widthPercent !== oldStream.widthPercent ||
@@ -515,7 +515,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
   nodecg.listenFor('obs:transition', (_data, callback): void => {
     logger.info('transitioning...');
     nodecg.sendMessage('obs:startingTransition', { scene: obsPreviewSceneRep.value });
-    obs.call('SetCurrentProgramScene', { sceneName: obsPreviewSceneRep.value! }).then((): void => { // might have fucked up here setting ! on which scene to change to
+    obs.call('SetCurrentProgramScene', { sceneName: obsPreviewSceneRep.value! }).then((): void => { // setting ! on obsPreviewSceneRep.value! 
       if (callback && !callback.handled) {
         logger.info('transitioned!');
         callback();
