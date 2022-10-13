@@ -16,6 +16,10 @@
     "lepelog",
     "floha258"
   ],
+  "engines": {
+    "npm": ">=8.0.0 <9.0.0",
+    "node": ">=16.0.0 <17.0.0"
+  },
   "scripts": {
     "autofix": "run-s autofix:*",
     "autofix:browser": "eslint --fix --ext .ts,.vue src/dashboard && eslint --fix --ext .ts,.vue src/graphics && eslint --fix --ext .ts src/browser_shared",
@@ -298,13 +302,13 @@
     "d3": "^3.5.17",
     "deep-equal": "^1.0.1",
     "discord.js": "^12.5.3",
-    "gsap": "^3.6.0",
     "firebase": "^8.7.0",
     "firebase-app": "^0.0.1",
     "firebase-auth": "^0.1.2",
+    "gsap": "^3.6.0",
     "moment": "^2.29.1",
     "mpc-js": "^1.2.1",
-    "obs-websocket-js": "^4.0.2",
+    "obs-websocket-js": "^5.0.2",
     "request-promise": "^4.2.4",
     "sass": "^1.52.2",
     "sass-loader": "^13.0.0",
