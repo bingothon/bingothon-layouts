@@ -151,7 +151,7 @@ class OBSUtility extends OBSWebSocket {
 
   public async setMediasourcePlayPause(source: string, pause: boolean): Promise<void> {
     // TODO: remove this garbage once obs-websocket-js updates to proper bindings
-    const mediaStatus = await obs.call('GetMediaInputStatus', {inputName: source}) 
+    const mediaStatus = await obs.call('GetMediaInputStatus', { inputName: source })
     logger.warn(mediaStatus)
     if (pause) {
       logger.warn(`setting ${source} to paused`)
@@ -243,7 +243,7 @@ class OBSUtility extends OBSWebSocket {
       inputName: source,
       inputSettings: {
         url,
-      } // not good
+      }
     }).catch(e => logger.error('could not set browser source settings', e));
   }
 
@@ -343,7 +343,6 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         if (!old) return;
         for (let i = 0; i < 4; i++) {
           const stream = newValue[i];
-          logger.warn(stream)
           const oldStream = old[i] || {}; // old stream might be undefined
           if (stream === undefined) {
             // this stream should not be displayed
@@ -463,10 +462,10 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     obsPreviewSceneRep.value = data.sceneName;
   });
 
-  obs.on('CurrentProgramSceneChanged', (data): void => { // not sure if you also need to know if the preview screen has changed
+  obs.on('CurrentProgramSceneChanged', (data): void => {
     obsCurrentSceneRep.value = data.sceneName;
   });
-  //some tests
+
   obs.on('SceneItemTransformChanged', (scene) => {
     logger.warn(`the scene has changed to`, scene)
   })
