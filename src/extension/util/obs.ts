@@ -315,22 +315,18 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
 
       obs.call('GetCurrentPreviewScene').then((scene): void => {
         obsPreviewSceneRep.value = scene.currentPreviewSceneName;
-        logger.info('init update preview scene', scene.currentPreviewSceneName);
       }).catch((err): void => {
         logger.warn(`Cannot get preview scene: ${err.error}`);
       });
 
       obs.call('GetCurrentProgramScene').then((scene): void => {
         obsCurrentSceneRep.value = scene.currentProgramSceneName;
-        logger.info('init current scene', scene.currentProgramSceneName);
       }).catch((err): void => {
         logger.warn(`Cannot get current scene: ${err.error}`);
       });
 
       obs.call('GetSceneList').then((sceneList): void => {
-        //        const scenes = sceneList.scenes.map(x => ({ sceneIndex: x.sceneIndex as number, sceneName: x.sceneName as string})) // hax to get TS back correctly across all layouts
         obsSceneListRep.value = sceneList.scenes;
-        logger.warn("the scenes it finds", sceneList.scenes)
       }).catch((err): void => {
         logger.warn(`Cannot get current scene list: ${err.error}`);
       });
