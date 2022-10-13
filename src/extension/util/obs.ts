@@ -78,10 +78,14 @@ class OBSUtility extends OBSWebSocket {
    */
   public changeScene(name: string): Promise<void> {
     return new Promise((resolve, reject): void => {
-      this.call('SetCurrentSceneTransition', { transitionName: name }).then(resolve).catch((err): void => {
-        logger.warn(`Cannot change OBS scene [${name}]: ${err.error}`);
-        reject();
-      });
+      try {
+        this.call('SetCurrentProgramScene', { sceneName: name }).then(resolve).catch((err): void => {
+          logger.warn(`Cannot change OBS scene [${name}]: ${err}`);
+          reject(err);
+        });
+      } catch (error) {
+        logger.warn(error)
+      }
     });
   }
 
@@ -280,8 +284,8 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
   const capturePositionsRep = nodecg.Replicant<CapturePositions>('capturePositions');
   const currentGameLayoutRep = nodecg.Replicant<CurrentGameLayout>('currentGameLayout');
   const soundOnTwitchStreamRep = nodecg.Replicant<SoundOnTwitchStream>('soundOnTwitchStream');
-
   const twitchStreams = nodecg.Replicant<TwitchStreams>('twitchStreams');
+  const obsAudioLevels = nodecg.Replicant<any | null>('obsAudioLevels')
 
   const settings = {
     url: bundleConfig.obs.address,
@@ -506,6 +510,11 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     obs.call('SetCurrentPreviewScene', { sceneName: newVal }).catch((e): void => {
       logger.warn(`Error setting preview scene to ${newVal}: ${e.error}`);
     });
+  });
+
+  obs.on('InputVolumeMeters', ({ inputs }): void => {
+    obsAudioLevels.value = inputs;
+    console.log(inputs)
   });
 
   nodecg.listenFor('obs:transition', (_data, callback): void => {
