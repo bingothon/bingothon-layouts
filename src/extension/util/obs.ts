@@ -118,7 +118,7 @@ class OBSUtility extends OBSWebSocket {
    * @param source Source which volume is muted/unmuted
    * @param mute boolean
    */
-  public setAudioMute(source: string, mute: boolean): Promise<{ inputMuted: boolean }> {
+  public setAudioMute(source: string, mute: boolean): Promise<void> {
     return new Promise(async (resolve, reject): Promise<void> => {
       await this.call('SetInputMute', { inputName: source, inputMuted: mute }).catch((err): void => {
         reject(err);
