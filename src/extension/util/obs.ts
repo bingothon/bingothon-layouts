@@ -1,7 +1,7 @@
-import OBSWebSocket, { OBSResponseTypes } from 'obs-websocket-js';
+import OBSWebSocket, { EventSubscription, EventTypes, OBSResponseTypes } from 'obs-websocket-js';
 import * as nodecgApiContext from './nodecg-api-context';
 import { Configschema } from '../../../configschema';
-import { CapturePositions, CurrentGameLayout, ObsAudioSources, ObsConnection, SoundOnTwitchStream, TwitchStreams } from '../../../schemas';
+import { CapturePositions, CurrentGameLayout, ObsDashboardAudioLevels, ObsTwitchAudioLevels, ObsAudioSources, ObsConnection, SoundOnTwitchStream, TwitchStreams } from '../../../schemas';
 import { TwitchStream } from 'types';
 
 // this module is used to communicate directly with OBS
@@ -78,14 +78,10 @@ class OBSUtility extends OBSWebSocket {
    */
   public changeScene(name: string): Promise<void> {
     return new Promise((resolve, reject): void => {
-      try {
-        this.call('SetCurrentProgramScene', { sceneName: name }).then(resolve).catch((err): void => {
-          logger.warn(`Cannot change OBS scene [${name}]: ${err}`);
-          reject(err);
-        });
-      } catch (error) {
-        logger.warn(error)
-      }
+      this.call('SetCurrentProgramScene', { sceneName: name }).then(resolve).catch((err): void => {
+        logger.warn(`Cannot change OBS scene [${name}]: ${err}`);
+        reject(err);
+      });
     });
   }
 
@@ -229,8 +225,6 @@ class OBSUtility extends OBSWebSocket {
   }
 
   public async setDefaultBrowserSettings(source: string): Promise<void> {
-    const inputList = await this.call("GetInputList")
-    //logger.warn(`the inputlist`, inputList)
     await this.call("SetInputSettings", {
       inputName: source,
       inputSettings: {
@@ -268,6 +262,40 @@ class OBSUtility extends OBSWebSocket {
 
     return response!.imageData;
   }
+
+  public async setAudioLevels(audioSource: string, data: EventTypes['InputVolumeMeters'], repository: any): Promise<void> {
+    const matchAudioSource = data.inputs.filter((matchAudioSource): boolean => matchAudioSource.inputName === audioSource)[0];
+    if (matchAudioSource) {
+      //@ts-ignore
+      if (matchAudioSource.inputLevelsMul.length > 0) {
+        //@ts-ignore
+        const dBlevel = 100 + 20. / 2.302585092994 * Math.log(matchAudioSource.inputLevelsMul[0][1])
+        //@ts-ignore
+        if (matchAudioSource.inputLevelsMul[0][1] > 0) {
+          //logger.warn(`dBlevel: ${dBlevel}`)
+          repository.value[audioSource] = {
+            // .inputLevelsMul[0][0] is the average of the left and right channels
+            // .inputLevelsMul[0][1] is the peak of the left and right channels
+            // .inputLevelsMul[0][2] is the peak of input audio
+            volume: dBlevel,
+          }
+        } else {
+          repository.value[audioSource] = {
+            volume: 0
+          };
+        }
+      } else {
+        repository.value[audioSource] = {
+          volume: 0
+        };
+      }
+    } else {
+      repository.value[audioSource] = {
+        volume: 0
+      };
+    }
+
+  }
 }
 
 const obsConnectionRep = nodecg.Replicant<ObsConnection>('obsConnection');
@@ -285,7 +313,9 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
   const currentGameLayoutRep = nodecg.Replicant<CurrentGameLayout>('currentGameLayout');
   const soundOnTwitchStreamRep = nodecg.Replicant<SoundOnTwitchStream>('soundOnTwitchStream');
   const twitchStreams = nodecg.Replicant<TwitchStreams>('twitchStreams');
-  const obsAudioLevels = nodecg.Replicant<any | null>('obsAudioLevels')
+  const obsDashboardAudioLevelsRep = nodecg.Replicant<ObsDashboardAudioLevels>('obsDashboardAudioLevels', { defaultValue: {} });
+  const obsTwitchAudioLevelsRep = nodecg.Replicant<ObsTwitchAudioLevels>('obsTwitchAudioLevels', { defaultValue: {} });
+  // load the intermission audio source
 
   const settings = {
     url: bundleConfig.obs.address,
@@ -296,7 +326,10 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
 
   // eslint-disable-next-line no-inner-declarations
   function connect(): void {
-    obs.connect(settings.url, settings.password).then((): void => {
+    obs.connect(settings.url, settings.password, {
+      eventSubscriptions: EventSubscription.All | EventSubscription.InputVolumeMeters,
+      rpcVersion: 1
+    }).then((): void => {
       logger.info('OBS connection successful.');
       obsConnectionRep.value.status = 'connected';
 
@@ -458,6 +491,33 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     }
   }) */
 
+  obs.on('InputVolumeMeters', (data): void => {
+    // configure and set audio levels for dashboard audio sources
+    [bundleConfig.obs.discordAudio, bundleConfig.obs.mpdAudio, bundleConfig.obs.streamsAudio]
+      .forEach((audioSource): void => {
+        obs.setAudioLevels(audioSource, data, obsDashboardAudioLevelsRep);
+
+      });
+    // configure and set audio levels for twitch audio sources
+    ['twitch-stream-0', 'twitch-stream-1', 'twitch-stream-2', 'twitch-stream-3']
+      .forEach((audioSource): void => {
+        obs.setAudioLevels(audioSource, data, obsTwitchAudioLevelsRep);
+      });
+
+    // Limiter for the intermission music
+    const mpdAudio = data.inputs.filter((input) => input.inputName === bundleConfig.obs.mpdAudio)[0];
+    if (mpdAudio) {
+      //@ts-ignore
+      if (mpdAudio.inputLevelsMul.length > 0) {
+        //@ts-ignore
+        if (mpdAudio.inputLevelsMul[0][0] > 0.25) {
+          //@ts-ignore
+          obs.call('SetInputVolume', { inputName: bundleConfig.obs.mpdAudio, inputVolumeMul: mpdAudio.inputLevelsMul[0][1] - 0.01 });
+        }
+      }
+    }
+  });
+
   obs.on('CurrentPreviewSceneChanged', (data): void => {
     obsPreviewSceneRep.value = data.sceneName;
   });
@@ -510,11 +570,6 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     obs.call('SetCurrentPreviewScene', { sceneName: newVal }).catch((e): void => {
       logger.warn(`Error setting preview scene to ${newVal}: ${e.error}`);
     });
-  });
-
-  obs.on('InputVolumeMeters', ({ inputs }): void => {
-    obsAudioLevels.value = inputs;
-    console.log(inputs)
   });
 
   nodecg.listenFor('obs:transition', (_data, callback): void => {

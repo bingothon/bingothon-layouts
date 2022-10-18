@@ -1,80 +1,60 @@
 <template>
     <v-app>
-		<span v-if="hostsSpeakingDuringIntermission">Hosts are currently speaking!</span>
-		<span>Last intermission: {{ timeSinceLastIntermission }}</span>
-		<div v-if="obsConnectionStatus === 'disconnected'">
-			Currently disconnected :(
-		</div>
-		<div v-if="obsConnectionStatus === 'error'">
-			OBS connection error monkaS
-		</div>
-		<div v-if="obsConnectionStatus === 'disabled'">
-			OBS is disabled, nothing to see here
-		</div>
-		<div v-if="obsConnectionStatus === 'connected'">
-			Current Scene: {{ currentScene }}
-			<v-select v-model="previewScene" :items="sceneNameList" label="Preview Scene">
-			</v-select>
-			<v-btn @click="doTransition" :disabled="adTimer > 0">
-				{{ transitionText }}
-			</v-btn>
-			<div>
-				Audio Preset:
-				<v-row>
-					<v-radio-group
-						v-model="obsStreamMode"
-						:value="obsStreamMode"
-					>
-						<v-col v-for="(mode, i) in obsStreamModes" :key="i">
-							<v-radio
-                                :id="`mode-${mode}`"
-                                :key="mode"
-                                :value="mode"
-                                :label="mode"
-                                @change="changeOBSStreamMode(mode)"
-                            />
+        <span v-if="hostsSpeakingDuringIntermission">Hosts are currently speaking!</span>
+        <span>Last intermission: {{ timeSinceLastIntermission }}</span>
+        <div v-if="obsConnectionStatus === 'disconnected'">
+            Currently disconnected :(
+        </div>
+        <div v-if="obsConnectionStatus === 'error'">
+            OBS connection error monkaS
+        </div>
+        <div v-if="obsConnectionStatus === 'disabled'">
+            OBS is disabled, nothing to see here
+        </div>
+        <div v-if="obsConnectionStatus === 'connected'">
+            Current Scene: {{ currentScene }}
+            <v-select v-model="previewScene" :items="sceneNameList" label="Preview Scene">
+            </v-select>
+            <v-btn @click="doTransition" :disabled="adTimer > 0">
+                {{ transitionText }}
+            </v-btn>
+            <div>
+                Audio Preset:
+                <v-row>
+                    <v-radio-group v-model="obsStreamMode" :value="obsStreamMode">
+                        <v-col v-for="(mode, i) in obsStreamModes" :key="i">
+                            <v-radio :id="`mode-${mode}`" :key="mode" :value="mode" :label="mode"
+                                @change="changeOBSStreamMode(mode)" />
                         </v-col>
                     </v-radio-group>
                 </v-row>
             </div>
-            <div
-                v-for="(audio, i) in obsAudioSources"
-                :key="i"
-            >
+            <div v-for="(audio, i) in obsAudioSources" :key="i">
                 {{ audio[0] }}:
                 <v-row>
                     <v-col>
-                        <v-slider
-                            :value="audio[1].baseVolume*100"
-                            @change="updateAudioSourceBaseVolume(audio[0], $event)"
-                        />
+                        <v-slider :value="audio[1].baseVolume*100"
+                            @change="updateAudioSourceBaseVolume(audio[0], $event)" />
+                        <v-progress-linear :color="obsDashboardAudioLevels[i][1].volume > 95 ? 'red' : 'green'"
+                            class="stream-volume-multiplier" min="0" max="100"
+                            :value="obsDashboardAudioLevels[i][1].volume" />
                     </v-col>
                     <v-col>
-                        <v-btn
-                            :disabled="!canTriggerAudioFade(audio[1].fading)"
-                            @click="toggleAudioFade(audio[0])"
-                            :title="isAudioUnmuted(audio[1].fading) ? 'currently unmuted' : 'currently muted'"
-                        >
+                        <v-btn :disabled="!canTriggerAudioFade(audio[1].fading)" @click="toggleAudioFade(audio[0])"
+                            :title="isAudioUnmuted(audio[1].fading) ? 'currently unmuted' : 'currently muted'">
                             <v-icon v-if="isAudioUnmuted(audio[1].fading)">
-                                mdi-volume-off
+                                mdi-volume-high
                             </v-icon>
                             <v-icon v-else>
-                                mdi-volume-high
+                                mdi-volume-off
                             </v-icon>
                         </v-btn>
                     </v-col>
                 </v-row>
             </div>
             <div class="previewImgContainer">
-                <v-checkbox
-                    dark
-                    v-model="obsPreviewImgActive"
-                    label="Activate Preview"
-                ></v-checkbox>
-                <v-select
-                    v-model="obsPreviewImgSource"
-                    label="Preview Img Scene"
-                    :items="sceneNameList">
+                <v-checkbox dark v-model="obsPreviewImgActive" label="Activate Preview"></v-checkbox>
+                <v-select v-model="obsPreviewImgSource" label="Preview Img Scene" :items="sceneNameList">
                 </v-select>
                 <img :style="{ width: '100%' }" v-if="obsPreviewImgData" :src="obsPreviewImgData" />
             </div>
@@ -84,13 +64,13 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
-import {nodecg} from '../../browser-util/nodecg';
+import { Component, Vue } from 'vue-property-decorator';
+import { nodecg } from '../../browser-util/nodecg';
 import {
-	ObsDashboardAudioSources, DiscordDelayInfo, ObsStreamMode, ObsPreviewImg,
+    ObsDashboardAudioSources, DiscordDelayInfo, ObsStreamMode, ObsPreviewImg, ObsDashboardAudioLevels,
 } from '../../../schemas';
 import twitchCommercialTimer from '../../../speedcontrol-types'
-import {store, getReplicant} from '../../browser-util/state';
+import { store, getReplicant } from '../../browser-util/state';
 import { ReplicantBrowser } from 'nodecg/types/browser';
 
 const bundleName = 'bingothon-layouts';
@@ -106,37 +86,37 @@ export default class OBSControl extends Vue {
             const totalS = ((new Date().getTime() / 1000) - store.state.lastIntermissionTimestamp);
             const mins = (totalS / 60).toFixed(0);
             const secs = (totalS % 60).toFixed(0);
-			this.timeSinceLastIntermission = mins + ":" + secs.padStart(2, "0");
-		}, 1000);
-	}
+            this.timeSinceLastIntermission = mins + ":" + secs.padStart(2, "0");
+        }, 1000);
+    }
 
-	destroyed() {
-		if (this.lastIntermissionInterval) {
-			clearInterval(this.lastIntermissionInterval);
-			this.lastIntermissionInterval = null;
-		}
-	}
+    destroyed() {
+        if (this.lastIntermissionInterval) {
+            clearInterval(this.lastIntermissionInterval);
+            this.lastIntermissionInterval = null;
+        }
+    }
 
-	get transitionText(): string {
-		if (this.adTimer > 0) {
-			return 'Playing ' + this.adTimer + 's Twitch ads';
-		}
-		return 'Transition'
-	}
+    get transitionText(): string {
+        if (this.adTimer > 0) {
+            return 'Playing ' + this.adTimer + 's Twitch ads';
+        }
+        return 'Transition'
+    }
 
-	get adTimer(): number {
-		return store.state.twitchCommercialTimer.secondsRemaining;
-	}
+    get adTimer(): number {
+        return store.state.twitchCommercialTimer.secondsRemaining;
+    }
 
-	get obsStreamModes(): ObsStreamMode[] {
-		return ['external-commentary', 'runner-commentary', 'racer-audio-only'];
-	}
+    get obsStreamModes(): ObsStreamMode[] {
+        return ['external-commentary', 'runner-commentary', 'racer-audio-only'];
+    }
 
-	get hostsSpeakingDuringIntermission(): boolean {
-		return store.state.hostsSpeakingDuringIntermission.speaking;
-	}
+    get hostsSpeakingDuringIntermission(): boolean {
+        return store.state.hostsSpeakingDuringIntermission.speaking;
+    }
 
-	get obsConnectionStatus(): string {
+    get obsConnectionStatus(): string {
         return store.state.obsConnection.status;
     }
 
@@ -150,6 +130,10 @@ export default class OBSControl extends Vue {
 
     set previewScene(scene: string) {
         getReplicant('obsPreviewScene').value = scene;
+    }
+
+    get obsDashboardAudioLevels(): [string, any][] {
+        return Object.entries(store.state.obsDashboardAudioLevels);
     }
 
     get obsAudioSources(): [string, any][] {
@@ -205,7 +189,7 @@ export default class OBSControl extends Vue {
     }
 
     set obsPreviewImgActive(val: boolean) {
-        NodeCG.sendMessageToBundle('obsremotecontrol:setPreviewImgActive', bundleName, {active: val});
+        NodeCG.sendMessageToBundle('obsremotecontrol:setPreviewImgActive', bundleName, { active: val });
     }
 
     get obsPreviewImgSource(): string {
@@ -213,7 +197,7 @@ export default class OBSControl extends Vue {
     }
 
     set obsPreviewImgSource(val: string) {
-        NodeCG.sendMessageToBundle('obsremotecontrol:setPreviewImgSource', bundleName, {source: val});
+        NodeCG.sendMessageToBundle('obsremotecontrol:setPreviewImgSource', bundleName, { source: val });
     }
 
     get obsStreamMode(): ObsStreamMode {
@@ -234,9 +218,9 @@ export default class OBSControl extends Vue {
 
     toggleAudioFade(source: string) {
         if (store.state.obsDashboardAudioSources[source].fading === 'muted') {
-            nodecg.sendMessageToBundle('obsRemotecontrol:fadeInAudio', bundleName, {source});
+            nodecg.sendMessageToBundle('obsRemotecontrol:fadeInAudio', bundleName, { source });
         } else {
-            nodecg.sendMessageToBundle('obsRemotecontrol:fadeOutAudio', bundleName, {source});
+            nodecg.sendMessageToBundle('obsRemotecontrol:fadeOutAudio', bundleName, { source });
         }
     }
 
@@ -265,5 +249,9 @@ export default class OBSControl extends Vue {
 .error-warning {
     color: red;
     font-size: small;
+}
+
+.stream-volume-multiplier {
+    margin-top: -28px;
 }
 </style>
