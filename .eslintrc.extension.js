@@ -15,6 +15,6 @@ module.exports = {
     'plugin:import/typescript',
   ],
   rules: {
-    '@typescript-eslint/indent': ['error', 2],
+    '@typescript-eslint/indent': ['error', 4],
   },
 };
