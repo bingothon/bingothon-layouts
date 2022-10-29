@@ -3,6 +3,16 @@
         <video ref="VideoPlayer" id="player">
             <source ref="PlayerSrc">
         </video>
+        <div v-if="nextRun" id="upcoming">
+            <div id="next">
+                Coming Up Next:
+            </div>
+            <div id="run">
+                <div id="fit">
+                    <text-fit :text="`${nextRun.game} - ${nextRun.category}`"></text-fit>
+                </div>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -11,13 +21,20 @@
 import {Component, Ref, Vue, Watch} from "vue-property-decorator";
 import {Asset, CurrentGameLayout, IntermissionVideos} from "../../../schemas";
 import {getReplicant, store} from "../../browser-util/state";
+import {RunData} from "../../../speedcontrol-types";
+import TextFit from "../helpers/text-fit.vue";
 
 type VideoTypeEnum = ("charity" | "sponsor")
 
-@Component({})
+@Component({
+    components: {
+        TextFit
+    }
+})
 export default class VideoPlayer extends Vue {
     video: Asset;
     videoType : VideoTypeEnum = "charity";
+    nextRun: RunData = store.state.runDataActiveRun;
     @Ref('VideoPlayer') player: HTMLVideoElement;
     @Ref('PlayerSrc') playerSrc: HTMLSourceElement;
 
@@ -41,6 +58,7 @@ export default class VideoPlayer extends Vue {
     onOBSSceneChanged(newVal : string){
         this.$nextTick(() => {
             if (newVal === 'videoPlayer') {
+                this.nextRun = store.state.runDataActiveRun;
                 this.videoType = "charity";
                 this.playNextVideo(this.videoType)
             }
@@ -64,7 +82,7 @@ export default class VideoPlayer extends Vue {
                 this.player.volume = 0.5;
             }
             this.player.load();
-            this.player.play();
+            await this.player.play();
         } else {
             //something went wrong, play next video
             if (type === "charity") {
@@ -72,7 +90,7 @@ export default class VideoPlayer extends Vue {
             } else {
                 getReplicant<IntermissionVideos>('intermissionVideos').value.sponsorVideoIndex = (store.state.intermissionVideos.sponsorVideoIndex + 1) % this.sponsorVideos.length;
             }
-            this.playNextVideo(type);
+            await this.playNextVideo(type);
         }
     }
 
@@ -112,6 +130,42 @@ body {
     left: 124px; /* (1920 - width) / 2 */
     width: 1671px; /* height / 1080 * 1920 */
     height: 940px; /* 1080 - (80 + 2*top) */
+}
+
+#upcoming {
+    position: absolute;
+    top: 1000px;
+    left: 124px;
+    width: 1000px;
+    height: 100px;
+    font-weight: 500;
+    line-height: 60px;
+    color: #fff;
+    font-size: 41px;
+    text-transform: uppercase;
+}
+
+#next {
+    padding-left: 10px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5) 0%, #b92b36 33%, #b92b36 66%, rgba(0, 0, 0, 0.5) 100%);
+    width: 410px;
+}
+
+#run {
+    position: absolute;
+    padding-left: 10px;
+    padding-right: 10px;
+    top: 0px;
+    left: 410px;
+    background-image: linear-gradient(#b92b36 0%, rgba(0, 0, 0, 0.5) 50%, #b92b36 100%);
+    width: 1240px;
+    /* Don't ask why, text fit does weird things*/
+    height: 60px;
+}
+
+#fit {
+    top: 20px;
+    height: 100px;
 }
 
 </style>
