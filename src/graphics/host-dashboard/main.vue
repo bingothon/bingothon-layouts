@@ -138,7 +138,7 @@
             </div>
             <div id="column4" class="column">
                 <div id="HostingBingo">
-                    <HostBingo fontSize="25px"></HostBingo>
+                    <HostBingo fontSize="25px" dashboard="true"></HostBingo>
                 </div>
             </div>
         </div>
