@@ -5,15 +5,10 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface HostingBingoboard {
-  colorCounts: {
-    [k: string]: number;
-  };
-  cells: {
-    name: string;
-    slot: string;
-    colors: ("pink" | "red" | "orange" | "brown" | "yellow" | "green" | "teal" | "blue" | "navy" | "purple")[];
-    rawColors: string;
-    markers: (string | null)[];
-  }[];
+export type HostingBingoboard = HostBingoCell[][];
+
+export interface HostBingoCell {
+  goal: string;
+  description: string;
+  marked?: boolean;
 }

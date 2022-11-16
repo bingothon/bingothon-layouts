@@ -6,5 +6,5 @@
  */
 
 export interface CurrentMainBingoboard {
-  boardReplicant: "bingoboard" | "oriBingoboard" | "hostingBingoboard" | "explorationBingoboard";
+  boardReplicant: "bingoboard" | "oriBingoboard" | "explorationBingoboard";
 }

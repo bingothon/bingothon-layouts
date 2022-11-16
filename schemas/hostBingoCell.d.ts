@@ -5,14 +5,8 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type TrackerDonations = {
-  id: number;
-  donor: string;
-  comment: string;
-  amount: number;
-  bids?:
-    | {
-        [k: string]: unknown;
-      }[]
-    | null;
-}[];
+export interface HostBingoCell {
+  goal: string;
+  description: string;
+  marked?: boolean;
+}
