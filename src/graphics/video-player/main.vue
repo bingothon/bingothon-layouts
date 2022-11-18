@@ -121,7 +121,9 @@ export default class VideoPlayer extends Vue {
 
 body {
     /*background: linear-gradient(var(--darker-main-color), var(--lighter-main-color) 80%, var(--darker-main-color));*/
-    background-image: url("../../../static/bg-new.jpg");
+    /* background-image: url("../../../static/bg-new.jpg"); */
+    background: linear-gradient(-128deg, var(--gradient-light) 0, var(--gradient-dark) 100%) 100% no-repeat fixed;
+
 }
 
 #player {
@@ -147,8 +149,9 @@ body {
 
 #next {
     padding-left: 10px;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5) 0%, #b92b36 33%, #b92b36 66%, rgba(0, 0, 0, 0.5) 100%);
-    width: 410px;
+    background-image: linear-gradient(var(--darker-main-color) 0%, var(--darker-main-color) 50%, rgba(0, 0, 0, 0.5) 100%);
+    /* background-image: linear-gradient(rgba(0, 0, 0, 0.5) 0%, var(--darker-main-color) 33%, var(--darker-main-color) 66%, rgba(0, 0, 0, 0.5) 100%); */
+    width: 400px;
 }
 
 #run {
@@ -157,7 +160,7 @@ body {
     padding-right: 10px;
     top: 0px;
     left: 410px;
-    background-image: linear-gradient(#b92b36 0%, rgba(0, 0, 0, 0.5) 50%, #b92b36 100%);
+    background-image: linear-gradient(var(--darker-main-color) 0%, var(--darker-main-color) 50%, rgba(0, 0, 0, 0.5) 100%);
     width: 1240px;
     /* Don't ask why, text fit does weird things*/
     height: 60px;

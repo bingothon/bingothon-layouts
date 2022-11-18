@@ -63,7 +63,8 @@ export default class GameLayout extends Vue {
     left: 0px;
     width: 1920px;
     height: 1080px;
-    background-image: url("../../../static/bg-new.jpg");
+    /* background: linear-gradient(-128deg, #627fbe 0, #050a1b 100%) 100% no-repeat fixed; */
+    background: linear-gradient(-128deg, var(--darker-main-color) 0, var(--lighter-main-color) 100%) 100% no-repeat fixed;
 }
 
 
