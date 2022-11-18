@@ -1,0 +1,102 @@
+[
+    {
+        "goal": "\"0\"",
+        "description": "\"Goal #0\""
+    },
+    {
+        "goal": "\"1\"",
+        "description": "\"Goal #1\""
+    },
+    {
+        "goal": "\"2\"",
+        "description": "\"Goal #2\""
+    },
+    {
+        "goal": "\"3\"",
+        "description": "\"Goal #3\""
+    },
+    {
+        "goal": "\"4\"",
+        "description": "\"Goal #4\""
+    },
+    {
+        "goal": "\"5\"",
+        "description": "\"Goal #5\""
+    },
+    {
+        "goal": "\"6\"",
+        "description": "\"Goal #6\""
+    },
+    {
+        "goal": "\"7\"",
+        "description": "\"Goal #7\""
+    },
+    {
+        "goal": "\"8\"",
+        "description": "\"Goal #8\""
+    },
+    {
+        "goal": "\"9\"",
+        "description": "\"Goal #9\""
+    },
+    {
+        "goal": "\"10\"",
+        "description": "\"Goal #10\""
+    },
+    {
+        "goal": "\"11\"",
+        "description": "\"Goal #11\""
+    },
+    {
+        "goal": "\"12\"",
+        "description": "\"Goal #12\""
+    },
+    {
+        "goal": "\"13\"",
+        "description": "\"Goal #13\""
+    },
+    {
+        "goal": "\"14\"",
+        "description": "\"Goal #14\""
+    },
+    {
+        "goal": "\"15\"",
+        "description": "\"Goal #15\""
+    },
+    {
+        "goal": "\"16\"",
+        "description": "\"Goal #16\""
+    },
+    {
+        "goal": "\"17\"",
+        "description": "\"Goal #17\""
+    },
+    {
+        "goal": "\"18\"",
+        "description": "\"Goal #18\""
+    },
+    {
+        "goal": "\"19\"",
+        "description": "\"Goal #19\""
+    },
+    {
+        "goal": "\"20\"",
+        "description": "This is a very long description for Goal#20 to see how long it can go and to see what it will look like. After all things have to be tested and this thins proves to be just right hopefully. In the end I'm sure one of our hosts can come up with an even longer text, but this should suffice for now"
+    },
+    {
+        "goal": "\"21\"",
+        "description": "\"Goal #21\""
+    },
+    {
+        "goal": "\"22\"",
+        "description": "\"Goal #22\""
+    },
+    {
+        "goal": "\"23\"",
+        "description": "\"Goal #23\""
+    },
+    {
+        "goal": "\"24\"",
+        "description": "\"Goal #24\""
+    }
+]

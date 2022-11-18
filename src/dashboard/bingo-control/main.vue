@@ -161,7 +161,7 @@ import {BingoboardMeta, CurrentMainBingoboard,} from '../../../schemas';
 import {getReplicant, store} from '../../browser-util/state';
 
 type ColorEnum = ('pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple');
-type BingoRepEnum = ('bingoboard' | 'oriBingoboard' | 'hostingBingoboard' | 'explorationBingoboard');
+type BingoRepEnum = ('bingoboard' | 'oriBingoboard' | 'explorationBingoboard');
 
 const BOARD_TO_SOCKET_REP = {bingoboard: 'bingosyncSocket', hostingBingoboard: 'hostingBingosocket'};
 
@@ -187,7 +187,7 @@ export default class BingoControl extends Vue {
 
     allColors = Object.freeze(['pink', 'red', 'orange', 'brown', 'yellow', 'green', 'teal', 'blue', 'navy', 'purple']);
 
-    allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'oriBingoboard', 'hostingBingoboard']);//add back when need  'explorationBingoboard'
+    allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'oriBingoboard']);//add back when need  'explorationBingoboard'
 
     mounted() {
         store.watch(state => state.currentMainBingoboard, (newVal) => {

@@ -44,10 +44,10 @@ import {
     TrackerPrizes,
     TwitchChatBotData,
     TwitchStreams,
-    VoiceActivity
+    VoiceActivity, HostBingoCell
 } from "../../schemas";
 import {RunDataActiveRun, RunDataArray, Timer, TwitchCommercialTimer} from "../../speedcontrol-types";
-// import { Scene } from "../extension/util/obs" TODO: set types for sccenes 
+// import { Scene } from "../extension/util/obs" TODO: set types for sccenes
 import {Games} from "../../types";
 
 Vue.use(Vuex);
@@ -132,7 +132,7 @@ interface StoreTypes {
     discordDelayInfo: DiscordDelayInfo,
     donationTotal: DonationTotal,
     explorationBingoboard: ExplorationBingoboard,
-    hostingBingoboard: HostingBingoboard,
+    hostingBingoboard: HostBingoCell[][],
     hostingBingosocket: HostingBingosocket,
     hostsSpeakingDuringIntermission: HostsSpeakingDuringIntermission,
     intermissionVideos: IntermissionVideos,
@@ -199,7 +199,7 @@ export const store = new Vuex.Store<StoreTypes>({
         discordDelayInfo: {} as DiscordDelayInfo,
         donationTotal: 0 as DonationTotal,
         explorationBingoboard: {} as ExplorationBingoboard,
-        hostingBingoboard: {} as HostingBingoboard,
+        hostingBingoboard: [] as HostBingoCell[][],
         hostingBingosocket: {} as HostingBingosocket,
         hostsSpeakingDuringIntermission: {} as HostsSpeakingDuringIntermission,
         intermissionVideos: {} as IntermissionVideos,

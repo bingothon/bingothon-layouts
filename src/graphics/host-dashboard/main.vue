@@ -138,8 +138,7 @@
             </div>
             <div id="column4" class="column">
                 <div id="HostingBingo">
-                    <bingo-board class="BingoBoard" id="Bingo-board" bingoboardRep="hostingBingoboard"
-                                 :alwaysShown="true" fontSize="25px"></bingo-board>
+                    <HostBingo fontSize="25px" dashboard="true"></HostBingo>
                 </div>
             </div>
         </div>
@@ -195,12 +194,12 @@ import {TrackerPrize} from "../../../types";
 import moment from 'moment';
 import fs from "fs";
 import {RunData} from "../../../speedcontrol-types";
-import BingoBoard from "../components/bingoboard.vue";
+import HostBingo from "../components/hostBingo.vue";
 import {HostsSpeakingDuringIntermission, ShowPictureDuringIntermission} from "../../../schemas";
 
 @Component({
     components: {
-        BingoBoard
+        HostBingo
     }
 })
 
