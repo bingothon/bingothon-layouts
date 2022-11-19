@@ -52,7 +52,7 @@
 			"@/*": [
 				"src/*",
 				"src/graphics/*",
-				"src/dashboard/*"
+				"src/dashboard/*",
 			],
 			"@/schemas": [
 				"schemas"
@@ -90,7 +90,7 @@
 		"forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
 	},
 	"include": [
-		"src/browser_shared/**/*.ts",
+		"src/browser-util/**/*.ts",
 		"src/dashboard/**/*.ts",
 		"src/dashboard/**/*.vue",
 		"src/graphics/**/*.ts",

@@ -1,103 +1,104 @@
 <template>
-	<div id="ExplorationBingo">
+    <div id="ExplorationBingo">
         <table id="Board">
-           <tr :key="i" v-for="(column,i) in bingoCells">
+            <tr :key="i" v-for="(column, i) in bingoCells">
                 <td
                     class="square"
-                    :class="cell.colors+'square'+(cell.hidden?'':' shown')"
-                    :key="i+''+j"
-                    v-for="(cell,j) in column"
+                    :class="cell.colors + 'square' + (cell.hidden ? '' : ' shown')"
+                    :key="i + '' + j"
+                    v-for="(cell, j) in column"
                     @click="squareClicked(cell)"
                 >
-                    {{cell.name}}
+                    {{ cell.name }}
                 </td>
-           </tr>
+            </tr>
         </table>
-	</div>
+    </div>
 </template>
 
 <script lang="ts">
-	import {Component, Vue} from "vue-property-decorator";
-    import {store} from "../../browser-util/state";
-    import {TrackerPrize} from "../../../types";
-    import moment from 'moment';
-    import {TrackerOpenBids, ExplorationBingoboard} from "../../../schemas";
+    import { Component, Vue } from 'vue-property-decorator'
+    import { store } from '../../browser-util/state'
+    import { TrackerPrize } from '../../../types'
+    import moment from 'moment'
+    import { TrackerOpenBids, ExplorationBingoboard } from '../../../schemas'
 
     interface BingoCell {
-        name: string,
-        hidden: boolean,
-        colors: string,
-        row: number,
-        column: number,
+        name: string
+        hidden: boolean
+        colors: string
+        row: number
+        column: number
     }
 
-
     function defaultBingoBoard(): BingoCell[][] {
-        var result = [];
+        var result = []
         for (let i = 0; i < 5; i++) {
-            var cur: BingoCell[] = [];
+            var cur: BingoCell[] = []
             for (let j = 0; j < 5; j++) {
-                cur.push({name: "", colors: "blank", row: i, column: j, hidden: true});
+                cur.push({ name: '', colors: 'blank', row: i, column: j, hidden: true })
             }
-            result.push(cur);
+            result.push(cur)
         }
-        return result;
+        return result
     }
 
     @Component({})
     export default class ExplorationBingo extends Vue {
-        bingoCells: BingoCell[][] = defaultBingoBoard();
+        bingoCells: BingoCell[][] = defaultBingoBoard()
 
         mounted() {
-            console.log(this.bingoCells);
-            store.watch(state => state.explorationBingoboard, this.onBingoBoardUpdate, {immediate: true});
+            console.log(this.bingoCells)
+            store.watch((state) => state.explorationBingoboard, this.onBingoBoardUpdate, { immediate: true })
         }
 
         onBingoBoardUpdate(newGoals: ExplorationBingoboard, oldGoals?: ExplorationBingoboard | undefined) {
-            let idx = 0;
-            this.bingoCells.forEach((row, rowIndex)=>{
-                row.forEach((cell,columnIndex)=>{
+            let idx = 0
+            this.bingoCells.forEach((row, rowIndex) => {
+                row.forEach((cell, columnIndex) => {
                     // update cell with goal name, if changed
-                    const newCell = newGoals.cells[idx];
+                    const newCell = newGoals.cells[idx]
                     if (!oldGoals || !oldGoals.cells.length || newCell.name != oldGoals.cells[idx].name) {
-                        Vue.set(this.bingoCells[rowIndex][columnIndex],'name', newCell.name);
+                        Vue.set(this.bingoCells[rowIndex][columnIndex], 'name', newCell.name)
                     }
                     // update cell with color background, if changed
                     if (!oldGoals || !oldGoals.cells.length || newCell.colors != oldGoals.cells[idx].colors) {
-                        Vue.set(this.bingoCells[rowIndex][columnIndex],'colors', newCell.colors);
+                        Vue.set(this.bingoCells[rowIndex][columnIndex], 'colors', newCell.colors)
                     }
-                    Vue.set(this.bingoCells[rowIndex][columnIndex],'hidden', newCell.hidden);
-                    idx++;
-                });
-            });
+                    Vue.set(this.bingoCells[rowIndex][columnIndex], 'hidden', newCell.hidden)
+                    idx++
+                })
+            })
         }
 
         generateCellClasses(color: string, hidden: boolean): string {
-            let classes = color+'square';
+            let classes = color + 'square'
             if (!hidden) {
-                classes = classes + ' shown';
+                classes = classes + ' shown'
             }
-            return classes;
+            return classes
         }
 
         squareClicked(cell: BingoCell) {
             if (!cell.hidden) {
-                nodecg.sendMessageToBundle('exploration:goalClicked','bingothon-layouts',{index: cell.row * 5 + cell.column})
-                    .catch(e => {
-                        console.error(e);
-                    });
+                nodecg
+                    .sendMessageToBundle('exploration:goalClicked', 'bingothon-layouts', {
+                        index: cell.row * 5 + cell.column,
+                    })
+                    .catch((e) => {
+                        console.error(e)
+                    })
             }
         }
     }
 </script>
 
 <style>
-
-	body {
-		/*height: 100%;
+    body {
+        /*height: 100%;
 		width: 100%;
 		background-color: black;*/
-	}
+    }
 
     table#Board {
         height: 800px;
@@ -117,19 +118,19 @@
     }
 
     .greensquare {
-        background-image: linear-gradient(#31D814, #00B500 60%, #20A00A);
+        background-image: linear-gradient(#31d814, #00b500 60%, #20a00a);
     }
 
     .redsquare {
-        background-image: linear-gradient(#FF4944, #DA4440 60%, #CE302C);
+        background-image: linear-gradient(#ff4944, #da4440 60%, #ce302c);
     }
 
     .orangesquare {
-        background-image: linear-gradient(#FF9C12, #F98E1E 60%, #D0800F);
+        background-image: linear-gradient(#ff9c12, #f98e1e 60%, #d0800f);
     }
 
     .bluesquare {
-        background-image: linear-gradient(#409CFF, #37A1DE 60%, #088CBD);
+        background-image: linear-gradient(#409cff, #37a1de 60%, #088cbd);
     }
 
     .purplesquare {

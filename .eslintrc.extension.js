@@ -1,20 +1,20 @@
+const path = require('path')
+
 module.exports = {
-  root: true,
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: 'tsconfig.extension.json',
-  },
-  plugins: [
-    '@typescript-eslint',
-  ],
-  extends: [
-    'airbnb-base',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:import/errors',
-    'plugin:import/warnings',
-    'plugin:import/typescript',
-  ],
-  rules: {
-    '@typescript-eslint/indent': ['error', 4],
-  },
-};
+    root: true,
+    parser: '@typescript-eslint/parser',
+    parserOptions: {
+        project: path.join(__dirname, 'tsconfig.extension.json'),
+    },
+    plugins: ['@typescript-eslint'],
+    extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:import/warnings',
+        'plugin:import/typescript',
+        'prettier',
+    ],
+    rules: {
+        '@typescript-eslint/indent': ['error', 4],
+        '@typescript-eslint/ban-ts-comment': ['warn']
+    },
+}

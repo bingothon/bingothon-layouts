@@ -1,3 +1,3 @@
-import { NodeCGBrowser, NodeCGStaticBrowser } from 'nodecg/types/browser';
+import { NodeCGBrowser, NodeCGStaticBrowser } from 'nodecg/types/browser'
 
-export const { nodecg, NodeCG }: { nodecg: NodeCGBrowser, NodeCG: NodeCGStaticBrowser } = window;
+export const { nodecg, NodeCG }: { nodecg: NodeCGBrowser; NodeCG: NodeCGStaticBrowser } = window

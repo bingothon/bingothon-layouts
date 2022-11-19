@@ -1,63 +1,60 @@
 <template>
     <div>
-    <transition
-      name="fade"
-      mode="in-out"
-    >
-        <img v-if="currentLogo" :src="currentLogo.url" :key="currentLogo.url">
-    </transition>
+        <transition name="fade" mode="in-out">
+            <img v-if="currentLogo" :src="currentLogo.url" :key="currentLogo.url" />
+        </transition>
     </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+    import { Vue, Component, Prop } from 'vue-property-decorator'
 
-import PlayerInfo from "./playerInfo.vue";
-import TeamInfo from "./teamInfo.vue";
-import { store } from "../../browser-util/state";
-import { Asset } from "schemas";
+    import PlayerInfo from './playerInfo.vue'
+    import TeamInfo from './teamInfo.vue'
+    import { store } from '../../browser-util/state'
+    import { Asset } from 'schemas'
 
-const ROTATION_INTERVAL_SECS = 15;
+    const ROTATION_INTERVAL_SECS = 15
 
-export enum LogoAssetType {
-    wideSmallLogos = "wideSmallLogos",
-    wideLargeLogos = "wideLargeLogos",
-    squareLogos = "squareLogos",
-}
-
-@Component({
-    components:{
-        PlayerInfo,
-        TeamInfo,
-    }
-})
-export default class SponsorLogoRotation extends Vue {
-    @Prop({required: true, default: LogoAssetType.wideSmallLogos})
-    logoAssetType: LogoAssetType;
-
-    currentIdx = 0;
-    changeInterval: NodeJS.Timeout;
-
-    mounted() {
-        this.changeInterval = setInterval(() => {
-            if (this.logoAssets.length > 0) {
-                this.currentIdx = (this.currentIdx + 1) % this.logoAssets.length;
-            }
-        }, ROTATION_INTERVAL_SECS * 1000);
+    export enum LogoAssetType {
+        wideSmallLogos = 'wideSmallLogos',
+        wideLargeLogos = 'wideLargeLogos',
+        squareLogos = 'squareLogos',
     }
 
-    unmount() {
-        clearInterval(this.changeInterval);
-    }
+    @Component({
+        components: {
+            PlayerInfo,
+            TeamInfo,
+        },
+    })
+    export default class SponsorLogoRotation extends Vue {
+        @Prop({ required: true, default: LogoAssetType.wideSmallLogos })
+        logoAssetType: LogoAssetType
 
-    get currentLogo(): Asset {
-        return this.logoAssets[this.currentIdx];
-    }
+        currentIdx = 0
+        changeInterval: NodeJS.Timeout
 
-    get logoAssets(): Asset[] {
-        return store.state[`assets:${this.logoAssetType}`];
+        mounted() {
+            this.changeInterval = setInterval(() => {
+                if (this.logoAssets.length > 0) {
+                    this.currentIdx = (this.currentIdx + 1) % this.logoAssets.length
+                }
+            }, ROTATION_INTERVAL_SECS * 1000)
+        }
+
+        unmount() {
+            clearInterval(this.changeInterval)
+        }
+
+        get currentLogo(): Asset {
+            return this.logoAssets[this.currentIdx]
+        }
+
+        get logoAssets(): Asset[] {
+            return store.state[`assets:${this.logoAssetType}`]
+        }
     }
-}
 </script>
 
 <style scoped>
@@ -72,10 +69,12 @@ export default class SponsorLogoRotation extends Vue {
     }
 
     /* local animation stuff */
-    .fade-enter-active, .fade-leave-active {
+    .fade-enter-active,
+    .fade-leave-active {
         transition: opacity 0.25s;
     }
-    .fade-enter, .fade-leave-to {
+    .fade-enter,
+    .fade-leave-to {
         opacity: 0;
     }
 </style>

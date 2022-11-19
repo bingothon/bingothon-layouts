@@ -144,7 +144,7 @@
 
 .chat-input {
     flex: 1 1 auto;
-    color: #DDD;
+    color: #ddd;
     background-color: #222;
     border-color: #444;
 }
@@ -157,7 +157,8 @@
     padding-right: 5px;
 }
 
-#room-settings .panel-body, #chat-settings .panel-body {
+#room-settings .panel-body,
+#chat-settings .panel-body {
     font-size: 90%;
 }
 
@@ -169,7 +170,7 @@
 /* plain old square */
 .square {
     color: #fff;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
     padding: 0 5px;
     cursor: pointer;
     width: 105px;
@@ -192,7 +193,8 @@
     white-space: nowrap;
 }
 
-.square .bg-color, .square .shadow {
+.square .bg-color,
+.square .shadow {
     height: inherit;
     position: absolute;
     left: -2px;
@@ -291,7 +293,7 @@
 .board-cover:hover,
 .board-cover.hover {
     cursor: pointer;
-    background: #05132E;
+    background: #05132e;
     box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.6);
     -moz-box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.6);
     -webkit-box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.6);
@@ -444,7 +446,9 @@
     color: #888;
 }
 
-.new-card-message .game-title,.new-card-message .seed, .new-card-message .seed-hidden {
+.new-card-message .game-title,
+.new-card-message .seed,
+.new-card-message .seed-hidden {
     font-weight: bold;
     color: #c8c8c8;
 }
