@@ -9,3 +9,4 @@ export * from "./TwtichChatBotCommands";
 export * from "./TwitchStream";
 export * from "./VoiceActivityMember";
 export * from "./Games";
+export * from "./Ori2";

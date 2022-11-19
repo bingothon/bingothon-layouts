@@ -1,0 +1,11 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["active", "token"],
+    "properties": {
+        "active": {"type":"boolean", "default":false},
+        "token": {"description": "The sync token, obtained through the Rando launcher or web interface", "type":"string"},
+        "host": {"description": "The Rando server host", "type":"string", "default": "wotw.orirando.com"}
+    }
+}

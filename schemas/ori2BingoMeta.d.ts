@@ -5,10 +5,14 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface OriBingoMeta {
+export interface Ori2BingoMeta {
   active: boolean;
-  game: "ori1" | "ori2";
-  boardID: number;
-  playerID: string;
-  coop: boolean;
+  /**
+   * The sync token, obtained through the Rando launcher or web interface
+   */
+  token: string;
+  /**
+   * The Rando server host
+   */
+  host?: string;
 }

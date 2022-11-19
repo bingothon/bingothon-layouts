@@ -11,7 +11,8 @@ export = (nodecg: NodeCG): void => {
     const {bundleConfig} = nodecg;
     require('./bingosync');
     require('./bingoColors');
-    require('./oriBingoBoard');
+    require('./ori1BingoBoard');
+    require('./ori2BingoBoard');
     require('./explorationBingo');
     if (nodecg.bundleConfig.discord) {
         if (!nodecg.bundleConfig.discord.test) {
