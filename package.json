@@ -61,7 +61,7 @@
     "fork-ts-checker-webpack-plugin": "^7.2.11",
     "globby": "^11.0.1",
     "html-webpack-plugin": "^5.5.0",
-    "json-schema-to-typescript": "^9.1.1",
+    "json-schema-to-typescript": "^11.0.2",
     "mini-css-extract-plugin": "^2.6.0",
     "moment": "^2.29.1",
     "nodecg": "^1.7.0",

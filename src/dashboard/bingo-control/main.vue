@@ -69,47 +69,66 @@
                 </v-btn>
             </div>
         </div>
-        <!-- Ori Stuff -->
-        <div v-if="showExtraOriOptions">
+        <!-- External board -->
+        <div v-if="showExtraExternBoardOptions">
             <div>
-                BoardID:
-                <v-text-field v-model="oriBoardID" background-color="#455A64" clearable solo single-line dark/>
-            </div>
-            <div>
-                PlayerIDs (comma separated):
-                <v-text-field v-model="oriPlayerID" background-color="#455A64" clearable solo single-line dark/>
-            </div>
-            <div>
-                Coop:
-                <v-checkbox
-                    dark
-                    v-model="oriCoop"
-                    label="Coop"
-                ></v-checkbox>
+                Currently active: {{ storeExternalBingoboardMeta.game }}
             </div>
             <v-radio-group
-                v-model="oriGame"
-                :value="oriGame"
+                v-model="externalBingoboardMeta.game"
+                :value="externalBingoboardMeta.game"
             >
+                <v-radio
+                    value="none"
+                    label="None"
+                    @change="updateExternalGame"
+                />
                 <v-radio
                     value="ori1"
                     label="Ori and the Blind Forest"
-                    @change="updateOriGame('ori1')"
+                    @change="updateExternalGame"
                 />
                 <v-radio
                     value="ori2"
                     label="Ori and the Will of the Wisps"
-                    @change="updateOriGame('ori2')"
+                    @change="updateExternalGame"
                 />
             </v-radio-group>
+            <div v-if="externalBingoboardMeta.game == 'ori1'">
+                <div>
+                    BoardID:
+                    <v-text-field v-model="externalBingoboardMeta.boardID" background-color="#455A64" clearable solo single-line dark/>
+                </div>
+                <div>
+                    PlayerIDs (comma separated):
+                    <v-text-field v-model="externalBingoboardMeta.playerID" background-color="#455A64" clearable solo single-line dark/>
+                </div>
+                <div>
+                    Coop:
+                    <v-checkbox
+                        dark
+                        v-model="externalBingoboardMeta.coop"
+                        label="Coop"
+                    ></v-checkbox>
+                </div>
+            </div>
+            <div v-if="externalBingoboardMeta.game == 'ori2'">
+                <div>
+                    Host (leave blank if unsure):
+                    <v-text-field v-model="externalBingoboardMeta.host" background-color="#455A64" clearable solo single-line dark/>
+                </div>
+                <div>
+                    Token:
+                    <v-text-field v-model="externalBingoboardMeta.token" background-color="#455A64" clearable solo single-line dark/>
+                </div>
+            </div>
             <v-btn
-                :disabled="!oriCanActivate"
-                @click="toggleOriActivate"
+                @click="externalBingoboardUpdate"
                 class="button"
                 small
                 :style="'width: 100%'"
             >
-                {{ toggleOriText }}
+                Set external bingoboard config
             </v-btn>
         </div>
 
@@ -155,13 +174,13 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
+import {Component, Vue, Watch} from 'vue-property-decorator';
 import {nodecg} from '../../browser-util/nodecg';
-import {BingoboardMeta, CurrentMainBingoboard,} from '../../../schemas';
+import {BingoboardMeta, CurrentMainBingoboard, ExternalBingoboardMeta,} from '../../../schemas';
 import {getReplicant, store} from '../../browser-util/state';
 
 type ColorEnum = ('pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple');
-type BingoRepEnum = ('bingoboard' | 'oriBingoboard' | 'explorationBingoboard');
+type BingoRepEnum = ('bingoboard' | 'externalBingoboard' | 'explorationBingoboard');
 
 const BOARD_TO_SOCKET_REP = {bingoboard: 'bingosyncSocket', hostingBingoboard: 'hostingBingosocket'};
 
@@ -181,18 +200,25 @@ export default class BingoControl extends Vue {
 
     oriGame: string = 'ori1';
 
+    externalBingoboardMeta: ExternalBingoboardMeta = {"game": "none"};
+
     explorationCustomBoard: string = ''
 
     errorMessage: string = '';
 
     allColors = Object.freeze(['pink', 'red', 'orange', 'brown', 'yellow', 'green', 'teal', 'blue', 'navy', 'purple']);
 
-    allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'oriBingoboard']);//add back when need  'explorationBingoboard'
+    allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard']);//add back when need  'explorationBingoboard'
 
     mounted() {
         store.watch(state => state.currentMainBingoboard, (newVal) => {
             this.currentBoardRep = newVal.boardReplicant;
         }, {immediate: true});
+    }
+
+    @Watch("storeExternalBingoboardMeta", {immediate: true})
+    watchExternalBingoboard(meta: ExternalBingoboardMeta) {
+        this.externalBingoboardMeta = meta;
     }
 
     // --- computed properties
@@ -246,17 +272,6 @@ export default class BingoControl extends Vue {
         return store.state.bingoboardMeta.manualScoreOverride;
     }
 
-    get toggleOriText(): string {
-        if (store.state.oriBingoMeta.active) {
-            return 'Deactivate';
-        }
-        return 'Activate';
-    }
-
-    get oriCanActivate(): boolean {
-        return store.state.oriBingoMeta.active ? true : (!!this.oriBoardID && !!this.oriPlayerID);
-    }
-
     get playerColors(): Array<ColorEnum> {
         return store.state.bingoboardMeta.playerColors;
     }
@@ -282,8 +297,8 @@ export default class BingoControl extends Vue {
         return ['bingoboard', 'hostingBingoboard'].includes(this.currentBoardRep);
     }
 
-    get showExtraOriOptions(): boolean {
-        return this.currentBoardRep === 'oriBingoboard';
+    get showExtraExternBoardOptions(): boolean {
+        return this.currentBoardRep === 'externalBingoboard';
     }
 
     get showExtraExplorationOptions(): boolean {
@@ -296,6 +311,10 @@ export default class BingoControl extends Vue {
 
     get manualScore(): string[] {
         return store.state.bingoboardMeta.manualScores.map(i => `${i}`);
+    }
+
+    get storeExternalBingoboardMeta() {
+        return store.state.externalBingoboardMeta;
     }
 
     // test
@@ -356,19 +375,6 @@ export default class BingoControl extends Vue {
         }
     }
 
-    toggleOriActivate() {
-        console.log(this.oriGame)
-        if (store.state.oriBingoMeta.active) {
-            nodecg.sendMessage('oriBingo:deactivate');
-        } else {
-            nodecg.sendMessage('oriBingo:activate', {boardID: this.oriBoardID, game: this.oriGame, playerID: this.oriPlayerID, coop: this.oriCoop})
-                .catch((error) => {
-                    nodecg.log.error(error);
-                    this.errorMessage = error.message;
-                });
-        }
-    }
-
     updateExploration() {
         try {
             const goals = JSON.parse(this.explorationCustomBoard);
@@ -409,6 +415,41 @@ export default class BingoControl extends Vue {
 
     toggleManualScoreOverride() {
         getReplicant<BingoboardMeta>('bingoboardMeta').value.manualScoreOverride = !store.state.bingoboardMeta.manualScoreOverride;
+    }
+
+    updateExternalGame() {
+        switch (this.externalBingoboardMeta.game) {
+            case "ori1": {
+                this.externalBingoboardMeta = {
+                    game: "ori1",
+                    boardID: "",
+                    playerID: "",
+                    coop: false,
+                };
+                break;
+            }
+            case "ori2": {
+                this.externalBingoboardMeta = {
+                    game: "ori2",
+                    token: "",
+                    host: "",
+                };
+            }
+            default: {
+                this.externalBingoboardMeta = {
+                    game: "none"
+                }
+            }
+        }
+    }
+
+    externalBingoboardUpdate() {
+            nodecg.sendMessageToBundle('externalBingoboard:configure', 'bingothon-layouts', this.externalBingoboardMeta)
+                .catch((error) => {
+                    nodecg.log.error(error);
+                    this.errorMessage = error.message;
+                });
+                
     }
 
     updateOriGame(game: string) {
