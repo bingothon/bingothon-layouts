@@ -35,9 +35,9 @@
                     <v-col>
                         <v-slider :value="audio[1].baseVolume*100"
                             @change="updateAudioSourceBaseVolume(audio[0], $event)" />
-                        <v-progress-linear :color="obsDashboardAudioLevels[i][1].volume > 95 ? 'red' : 'green'"
+                        <v-progress-linear :color="(obsDashboardAudioLevels[audio[0]] || {}).volume > 95 ? 'red' : 'green'"
                             class="stream-volume-multiplier" min="0" max="100"
-                            :value="obsDashboardAudioLevels[i][1].volume" />
+                            :value="(obsDashboardAudioLevels[audio[0]] || {}).volume" />
                     </v-col>
                     <v-col>
                         <v-btn :disabled="!canTriggerAudioFade(audio[1].fading)" @click="toggleAudioFade(audio[0])"
@@ -132,8 +132,9 @@ export default class OBSControl extends Vue {
         getReplicant('obsPreviewScene').value = scene;
     }
 
-    get obsDashboardAudioLevels(): [string, any][] {
-        return Object.entries(store.state.obsDashboardAudioLevels);
+    get obsDashboardAudioLevels() {
+        console.log(store.state.obsDashboardAudioLevels);
+        return store.state.obsDashboardAudioLevels;
     }
 
     get obsAudioSources(): [string, any][] {
