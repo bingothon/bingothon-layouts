@@ -99,7 +99,6 @@ export class Ori2ExternalBingoboard implements ExternalBingoboardManager {
   }
 
   async updateBingoBoard(): Promise<void> {
-    log.info("updating ori2");
     if (!this.meta) {
       log.error("meta is undefined!");
       return;
@@ -120,8 +119,6 @@ export class Ori2ExternalBingoboard implements ExternalBingoboardManager {
       // will produce incorrect results. Fine for now.
       squareCountByColor[color] = universe.squares;
     }
-
-    log.info(colorByUniverseId);
 
     // Update color counts
     for (const color of ALL_COLORS) {

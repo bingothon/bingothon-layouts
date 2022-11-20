@@ -157,6 +157,7 @@ export class Ori1ExternalBingoboard implements ExternalBingoboardManager {
         if (!meta.boardID || !meta.playerID) {
             throw new Error("invalid config!");
         }
+        log.info("updating ori1 meta", this.meta);
         this.meta = meta;
         await this.oriBingoUpdate();
         if (!this.updateLoopTimer) {
@@ -171,7 +172,6 @@ export class Ori1ExternalBingoboard implements ExternalBingoboardManager {
     }
 
     async oriBingoUpdate(): Promise<void> {
-        log.info("update", this.meta);
         if (!this.meta) return;
         try {
             // eslint-disable-next-line max-len
