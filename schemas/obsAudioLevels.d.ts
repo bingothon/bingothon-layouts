@@ -5,7 +5,7 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface ObsTwitchAudioLevels {
+export interface ObsAudioLevels {
   [k: string]: {
     volume: number;
   };

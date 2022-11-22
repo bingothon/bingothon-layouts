@@ -5,7 +5,7 @@ import { Configschema } from '../../configschema';
 import {
   ObsDashboardAudioSources, ObsAudioSources, ObsConnection, DiscordDelayInfo,
   TwitchStreams, ObsStreamMode, CurrentGameLayout,
-  CurrentInterview, HostsSpeakingDuringIntermission, LastIntermissionTimestamp, AllGameLayouts, AllInterviews, ObsPreviewImg, ObsDashboardAudioLevels, ObsTwitchAudioLevels
+  CurrentInterview, HostsSpeakingDuringIntermission, LastIntermissionTimestamp, AllGameLayouts, AllInterviews, ObsPreviewImg
 } from '../../schemas';
 import { RunDataActiveRun, TwitchCommercialTimer } from '../../speedcontrol-types';
 import obs from './util/obs';
@@ -25,8 +25,6 @@ const bundleConfig = nodecg.bundleConfig as Configschema;
 const obsCurrentSceneRep = nodecg.Replicant<string | null>('obsCurrentScene');
 const obsDashboardAudioSourcesRep = nodecg.Replicant<ObsDashboardAudioSources>('obsDashboardAudioSources');
 const obsAudioSourcesRep = nodecg.Replicant<ObsAudioSources>('obsAudioSources');
-const obsDashboardAudioLevelsRep = nodecg.Replicant<ObsDashboardAudioLevels>('obsDashboardAudioLevels');
-const obsTwitchAudioLevelsRep = nodecg.Replicant<ObsTwitchAudioLevels>('obsTwitchAudioLevels');
 const obsConnectionRep = nodecg.Replicant<ObsConnection>('obsConnection');
 const obsStreamModeRep = nodecg.Replicant<ObsStreamMode>('obsStreamMode');
 const discordDelayInfoRep = nodecg.Replicant<DiscordDelayInfo>('discordDelayInfo');
@@ -65,22 +63,6 @@ waitTillConnected().then((): void => {
     .forEach((audioSource): void => {
       if (!Object.getOwnPropertyNames(obsDashboardAudioSourcesRep.value).includes(audioSource)) {
         obsDashboardAudioSourcesRep.value[audioSource] = { baseVolume: 0.5, fading: 'unmuted' };
-      }
-    });
-
-  // default if they somehow not exist
-  [bundleConfig.obs.discordAudio, bundleConfig.obs.mpdAudio, bundleConfig.obs.streamsAudio]
-    .forEach((audioSource): void => {
-      if (!Object.getOwnPropertyNames(obsDashboardAudioLevelsRep.value).includes(audioSource)) {
-        obsDashboardAudioLevelsRep.value[audioSource] = { volume: 0 };
-      }
-    });
-
-  // default if they somehow not exist
-  ['twitch-stream-0', 'twitch-stream-1', 'twitch-stream-2', 'twitch-stream-3']
-    .forEach((audioSource): void => {
-      if (!Object.getOwnPropertyNames(obsTwitchAudioLevelsRep.value).includes(audioSource)) {
-        obsTwitchAudioLevelsRep.value[audioSource] = { volume: 0 };
       }
     });
 

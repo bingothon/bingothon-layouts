@@ -1,7 +1,7 @@
 import OBSWebSocket, { EventSubscription, EventTypes, OBSResponseTypes } from 'obs-websocket-js';
 import * as nodecgApiContext from './nodecg-api-context';
 import { Configschema } from '../../../configschema';
-import { CapturePositions, CurrentGameLayout, ObsDashboardAudioLevels, ObsTwitchAudioLevels, ObsAudioSources, ObsConnection, SoundOnTwitchStream, TwitchStreams } from '../../../schemas';
+import { CapturePositions, CurrentGameLayout, ObsAudioSources, ObsConnection, SoundOnTwitchStream, TwitchStreams, ObsAudioLevels } from '../../../schemas';
 import { TwitchStream } from 'types';
 
 // this module is used to communicate directly with OBS
@@ -313,8 +313,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
   const currentGameLayoutRep = nodecg.Replicant<CurrentGameLayout>('currentGameLayout');
   const soundOnTwitchStreamRep = nodecg.Replicant<SoundOnTwitchStream>('soundOnTwitchStream');
   const twitchStreams = nodecg.Replicant<TwitchStreams>('twitchStreams');
-  const obsDashboardAudioLevelsRep = nodecg.Replicant<ObsDashboardAudioLevels>('obsDashboardAudioLevels', { defaultValue: {} });
-  const obsTwitchAudioLevelsRep = nodecg.Replicant<ObsTwitchAudioLevels>('obsTwitchAudioLevels', { defaultValue: {} });
+  const obsAudioLevels = nodecg.Replicant<ObsAudioLevels>('obsAudioLevels', { defaultValue: {}, persistent: false });
   // load the intermission audio source
 
   const settings = {
@@ -334,9 +333,9 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
       obsConnectionRep.value.status = 'connected';
 
       // we need studio mode
-      obs.call('GetStudioModeEnabled').then((enabled) => {
-        if (!enabled) {
-          obs.call('SetStudioModeEnabled').catch((e): void => {
+      obs.call('GetStudioModeEnabled').then((resp) => {
+        if (!resp.studioModeEnabled) {
+          obs.call('SetStudioModeEnabled', {studioModeEnabled: true}).catch((e): void => {
             logger.error("Can't set studio mode", e);
           });
         }
@@ -492,17 +491,23 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
   }) */
 
   obs.on('InputVolumeMeters', (data): void => {
-    // configure and set audio levels for dashboard audio sources
-    [bundleConfig.obs.discordAudio, bundleConfig.obs.mpdAudio, bundleConfig.obs.streamsAudio]
-      .forEach((audioSource): void => {
-        obs.setAudioLevels(audioSource, data, obsDashboardAudioLevelsRep);
+    interface InputVolumeMeterChangedItem {
+      inputName: string,
+      inputLevelsMul: number[][],
+    }
 
-      });
-    // configure and set audio levels for twitch audio sources
-    ['twitch-stream-0', 'twitch-stream-1', 'twitch-stream-2', 'twitch-stream-3']
-      .forEach((audioSource): void => {
-        obs.setAudioLevels(audioSource, data, obsTwitchAudioLevelsRep);
-      });
+    // TODO: their typings are broken
+    const newObsAudioLevels: ObsAudioLevels = {};
+    for (const input of (data.inputs as unknown as  InputVolumeMeterChangedItem[])) {
+      const inputLevel = input.inputLevelsMul?.[0]?.[1];
+      if (inputLevel && inputLevel > 0) {
+        const dBlevel = 100 + 20. / 2.302585092994 * Math.log(inputLevel);
+        newObsAudioLevels[input.inputName] = {volume: dBlevel};
+      } else {
+        newObsAudioLevels[input.inputName] = {volume: 0};
+      }
+    }
+    obsAudioLevels.value = newObsAudioLevels;
 
     // Limiter for the intermission music
     const mpdAudio = data.inputs.filter((input) => input.inputName === bundleConfig.obs.mpdAudio)[0];

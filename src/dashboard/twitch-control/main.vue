@@ -28,8 +28,8 @@
                 <span>Vol: </span>
                 <v-slider class="stream-volume" min="0" max="100" :value="stream.volume*100"
                     @change="volumeChange(i,$event)" />
-                <v-progress-linear :color="obsTwitchAudioLevels[i][1].volume > 95 ? 'red' : 'green'"
-                    class="stream-volume-multiplier" min="0" max="100" :value="obsTwitchAudioLevels[i][1].volume" />
+                <v-progress-linear :color="obsAudioLevel(i) > 95 ? 'red' : 'green'"
+                    class="stream-volume-multiplier" min="0" max="100" :value="obsAudioLevel(i)" />
             </div>
             <div>
                 <v-text-field v-model="twitchChannelOverrides[i]" label="Channel override" hide-details filled dark
@@ -79,8 +79,12 @@ export default class TwitchControl extends Vue {
         return arr;
     }
 
-    get obsTwitchAudioLevels(): [string, any][] {
-        return Object.entries(store.state.obsTwitchAudioLevels);
+    get obsAudioLevels() {
+        return store.state.obsAudioLevels;
+    }
+
+    obsAudioLevel(stream: number): number {
+        return this.obsAudioLevels?.[`twitch-stream-${stream}`]?.volume ?? 0;
     }
 
     volumeChange(id: number, newVal: number) {

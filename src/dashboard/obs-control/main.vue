@@ -35,9 +35,9 @@
                     <v-col>
                         <v-slider :value="audio[1].baseVolume*100"
                             @change="updateAudioSourceBaseVolume(audio[0], $event)" />
-                        <v-progress-linear :color="(obsDashboardAudioLevels[audio[0]] || {}).volume > 95 ? 'red' : 'green'"
+                        <v-progress-linear :color="obsAudioLevel(audio[0]) > 95 ? 'red' : 'green'"
                             class="stream-volume-multiplier" min="0" max="100"
-                            :value="(obsDashboardAudioLevels[audio[0]] || {}).volume" />
+                            :value="obsAudioLevel(audio[0])" />
                     </v-col>
                     <v-col>
                         <v-btn :disabled="!canTriggerAudioFade(audio[1].fading)" @click="toggleAudioFade(audio[0])"
@@ -67,7 +67,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { nodecg } from '../../browser-util/nodecg';
 import {
-    ObsDashboardAudioSources, DiscordDelayInfo, ObsStreamMode, ObsPreviewImg, ObsDashboardAudioLevels,
+    ObsDashboardAudioSources, DiscordDelayInfo, ObsStreamMode, ObsPreviewImg,
 } from '../../../schemas';
 import twitchCommercialTimer from '../../../speedcontrol-types'
 import { store, getReplicant } from '../../browser-util/state';
@@ -132,9 +132,12 @@ export default class OBSControl extends Vue {
         getReplicant('obsPreviewScene').value = scene;
     }
 
-    get obsDashboardAudioLevels() {
-        console.log(store.state.obsDashboardAudioLevels);
-        return store.state.obsDashboardAudioLevels;
+    get obsAudioLevels() {
+        return store.state.obsAudioLevels;
+    }
+
+    obsAudioLevel(sourceName: string): number {
+        return this.obsAudioLevels?.[sourceName]?.volume ?? 0;
     }
 
     get obsAudioSources(): [string, any][] {
