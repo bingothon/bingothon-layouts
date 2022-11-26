@@ -1,20 +1,20 @@
 <template>
-	<div>
-    <div id="fillleft" class="flexContainer"></div>
-    <div id="fillright" class="flexContainer"></div>
-		<twitch-player id="stream1" streamIndex="1"></twitch-player>
-		<twitch-player id="stream2" streamIndex="0"></twitch-player>
-		<twitch-player id="stream3" streamIndex="3"></twitch-player>
-		<twitch-player id="stream4" streamIndex="2"></twitch-player>
-    <div id="fillbar" class="flexContainer"></div>
-    <div id="fillvoice" class="flexContainer"></div>
-		<player-team-container id="ptc1" team-index="0" height="40px" margin="100px"></player-team-container>
-		<player-team-container id="ptc2" team-index="1" height="40px" margin="100px"></player-team-container>
-		<test-game-container id="game"></test-game-container>
-    <test-timer-container id="timer"></test-timer-container>
-    <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
+	<div id="GameLayout">
+		<div id="fillleft" class="flexContainer"></div>
+		<div id="fillright" class="flexContainer"></div>
+			<twitch-player id="stream1" streamIndex="1"></twitch-player>
+			<twitch-player id="stream2" streamIndex="0"></twitch-player>
+			<twitch-player id="stream3" streamIndex="3"></twitch-player>
+			<twitch-player id="stream4" streamIndex="2"></twitch-player>
+		<div id="fillbar" class="flexContainer"></div>
+		<div id="fillvoice" class="flexContainer"></div>
+			<player-team-container id="ptc1" team-index="0" height="40px" margin="100px"></player-team-container>
+			<player-team-container id="ptc2" team-index="1" height="40px" margin="100px"></player-team-container>
+			<test-game-container id="game"></test-game-container>
+		<test-timer-container id="timer"></test-timer-container>
+		<bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
 
-    <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="125px" maxUserCount="6"></discord-voice-display>
+		<discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="125px" maxUserCount="6"></discord-voice-display>
 	</div>
 </template>
 
@@ -52,6 +52,14 @@
 </script>
 
 <style scoped>
+#GameLayout {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 1920px;
+	height: 1080px;
+	background: linear-gradient(-128deg, var(--gradient-light) 0, var(--gradient-dark) 100%) 100% no-repeat fixed;
+}
   #stream1 {
     position: absolute;
     top: 0px;

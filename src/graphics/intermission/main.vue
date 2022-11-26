@@ -185,7 +185,7 @@ export default class Intermission extends Vue {
 }
 
 body {
-    background: linear-gradient(0deg, var(--lighter-main-color) 0%, var(--darker-main-color) 100%);
+	background: linear-gradient(-128deg, var(--gradient-light) 0, var(--gradient-dark) 100%) 100% no-repeat fixed;
     /* background-image: url("../../../static/bg-new.jpg"); */
 }
 

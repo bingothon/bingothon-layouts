@@ -41,7 +41,7 @@
 
 <style scoped>
 	body{
-		background: linear-gradient(var(--darker-main-color), var(--lighter-main-color));
+		background: linear-gradient(-128deg, var(--gradient-light) 0, var(--gradient-dark) 100%) 100% no-repeat fixed;
 	}
 
     #discord{

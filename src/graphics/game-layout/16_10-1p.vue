@@ -1,13 +1,13 @@
 <template>
-	<div>
-    <div id="fillur" class="flexContainer"></div>
-    <div id="fillbar" class="flexContainer"></div>
-    <player-info id="pi1" playerIndex="0" height=45px hideSoundIcon="true"></player-info>
-		<test-game-container id="game"></test-game-container>
-    <test-timer-container id="timer"></test-timer-container>
-    <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
-    <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px" maxUserCount="20"></discord-voice-display>
-    <twitch-player id="stream1" streamIndex="0"></twitch-player>
+	<div id="GameLayout">
+		<div id="fillur" class="flexContainer"></div>
+		<div id="fillbar" class="flexContainer"></div>
+		<player-info id="pi1" playerIndex="0" height=45px hideSoundIcon="true"></player-info>
+			<test-game-container id="game"></test-game-container>
+		<test-timer-container id="timer"></test-timer-container>
+		<bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
+		<discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="114px" maxUserCount="20"></discord-voice-display>
+		<twitch-player id="stream1" streamIndex="0"></twitch-player>
 	</div>
 </template>
 
@@ -47,6 +47,14 @@
 </script>
 
 <style scoped>
+#GameLayout {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1920px;
+    height: 1080px;
+	background: linear-gradient(-128deg, var(--gradient-light) 0, var(--gradient-dark) 100%) 100% no-repeat fixed;
+}
   #fillur {
     position: absolute;
     top: 0px;
@@ -61,7 +69,6 @@
     left: 0px;
     width: 1920px;
     height: 80px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #discord-voice {
@@ -70,7 +77,6 @@
     left: 0px;
     width: 552px;
     height: 440px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
   }
   #pi1 {
@@ -89,7 +95,6 @@
     height: 500px;
   }
   #game {
-    background-image: url("../../../static/middle-info-background.png");
     position: absolute;
     top: 855px;
     left: 552px;
@@ -101,7 +106,6 @@
     position: absolute;
     top: 855px;
     left: 1236px;
-    background-image: url("../../../static/middle-info-background.png");
     width: 684px;
     border: 2px var(--container-border-color) solid;
     height: 145px;

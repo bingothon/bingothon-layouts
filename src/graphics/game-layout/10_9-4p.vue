@@ -1,22 +1,22 @@
 <template>
-	<div>
-    <div id="fillleft" class="flexContainer"></div>
-    <div id="fillright" class="flexContainer"></div>
-		<twitch-player id="stream1" streamIndex="0"></twitch-player>
-		<twitch-player id="stream2" streamIndex="1"></twitch-player>
-		<twitch-player id="stream3" streamIndex="2"></twitch-player>
-		<twitch-player id="stream4" streamIndex="3"></twitch-player>
-    <div id="fillbar" class="flexContainer"></div>
-    <div id="fillvoice" class="flexContainer"></div>
-		<player-info id="pi1" playerIndex="0" height=45px></player-info>
-		<player-info id="pi2" playerIndex="1" height=45px></player-info>
-		<player-info id="pi3" playerIndex="2" height=45px></player-info>
-		<player-info id="pi4" playerIndex="3" height=45px></player-info>
-		<test-game-container id="game"></test-game-container>
-    <test-timer-container id="timer"></test-timer-container>
-    <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
+	<div id="GameLayout">
+		<div id="fillleft" class="flexContainer"></div>
+		<div id="fillright" class="flexContainer"></div>
+			<twitch-player id="stream1" streamIndex="0"></twitch-player>
+			<twitch-player id="stream2" streamIndex="1"></twitch-player>
+			<twitch-player id="stream3" streamIndex="2"></twitch-player>
+			<twitch-player id="stream4" streamIndex="3"></twitch-player>
+		<div id="fillbar" class="flexContainer"></div>
+		<div id="fillvoice" class="flexContainer"></div>
+			<player-info id="pi1" playerIndex="0" height=45px></player-info>
+			<player-info id="pi2" playerIndex="1" height=45px></player-info>
+			<player-info id="pi3" playerIndex="2" height=45px></player-info>
+			<player-info id="pi4" playerIndex="3" height=45px></player-info>
+			<test-game-container id="game"></test-game-container>
+		<test-timer-container id="timer"></test-timer-container>
+		<bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
 
-    <discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="125px" maxUserCount="9"></discord-voice-display>
+		<discord-voice-display id="discord-voice" iconHeight="40px" nameWidth="125px" maxUserCount="9"></discord-voice-display>
 	</div>
 </template>
 
@@ -54,6 +54,14 @@
 </script>
 
 <style scoped>
+#GameLayout {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1920px;
+    height: 1080px;
+	background: linear-gradient(-128deg, var(--gradient-light) 0, var(--gradient-dark) 100%) 100% no-repeat fixed;
+}
   #stream1 {
     position: absolute;
     top: 0px;

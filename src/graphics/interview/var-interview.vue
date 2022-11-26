@@ -107,9 +107,9 @@ export default class Interview extends Vue {
     position: absolute;
     left: 60px;
     top: 60px;
-    /*width: 568px;*/
-    /*height: 140px; winter*/
-    height: 210px;
+    width: 568px;
+    height: 140px;
+    /* height: 210px; summer*/
 }
 #Bingo-board {
     position: absolute;

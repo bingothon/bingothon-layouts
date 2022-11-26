@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="GameLayout">
         <twitch-player id="stream1" :streamIndex="0"></twitch-player>
         <twitch-player id="stream2" :streamIndex="1"></twitch-player>
         <twitch-player id="stream3" :streamIndex="2"></twitch-player>
@@ -61,6 +61,14 @@ export default class GameLayout extends Vue {
 </script>
 
 <style scoped>
+#GameLayout {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1920px;
+    height: 1080px;
+	background: linear-gradient(-128deg, var(--gradient-light) 0, var(--gradient-dark) 100%) 100% no-repeat fixed;
+}
 #stream1 {
     position: absolute;
     top: 60px;
@@ -95,7 +103,6 @@ export default class GameLayout extends Vue {
     position: absolute;
     width: 160px;
     height: 447px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 
@@ -120,7 +127,6 @@ export default class GameLayout extends Vue {
     left: 0px;
     width: 1920px;
     height: 80px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 
@@ -130,7 +136,6 @@ export default class GameLayout extends Vue {
     left: 0px;
     width: 1920px;
     height: 100px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 
@@ -168,7 +173,6 @@ export default class GameLayout extends Vue {
 }
 
 #game {
-    background-image: url("../../../static/middle-info-background.png");
     position: absolute;
     top: 0px;
     left: 860px;
@@ -181,7 +185,6 @@ export default class GameLayout extends Vue {
     position: absolute;
     top: 749px;
     left: 860px;
-    background-image: url("../../../static/middle-info-background.png");
     width: 363px;
     border: 2px var(--container-border-color) solid;
     height: 250px;
@@ -193,7 +196,6 @@ export default class GameLayout extends Vue {
     left: 860px;
     width: 363px;
     height: 196px;
-    background-image: url("../../../static/middle-info-background.png");
     border: 2px var(--container-border-color) solid;
 }
 </style>
