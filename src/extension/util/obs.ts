@@ -76,27 +76,17 @@ class OBSUtility extends OBSWebSocket {
    * Change to this OBS scene.
    * @param name Name of the scene.
    */
-  public changeScene(name: string): Promise<void> {
-    return new Promise((resolve, reject): void => {
-      this.call('SetCurrentProgramScene', { sceneName: name }).then(resolve).catch((err): void => {
-        logger.warn(`Cannot change OBS scene [${name}]: ${err}`);
-        reject(err);
-      });
-    });
+  public async changeScene(name: string): Promise<void> {
+    await this.call('SetCurrentProgramScene', { sceneName: name });
   }
 
   /**
    * Get the Volume for a source
    * @param source Name of the source which volume should be changed
    */
-  public getAudioVolume(source: string): Promise<number> {
-    return new Promise((resolve, reject): void => {
-      this.call('GetInputVolume', { inputName: source }).then((resp): void => {
-        resolve(resp.inputVolumeMul);
-      }).catch((err): void => {
-        reject(err);
-      });
-    });
+  public async getAudioVolume(source: string): Promise<number> {
+    const resp = await this.call('GetInputVolume', { inputName: source });
+    return resp.inputVolumeMul;
   }
 
   /**
@@ -104,13 +94,8 @@ class OBSUtility extends OBSWebSocket {
    * @param source Source which volume is changed
    * @param volume Volume from 0.0 to 1.0 (inclusive)
    */
-  public setAudioVolume(source: string, volume: number): Promise<void> {
-    return new Promise((resolve, reject): void => {
-      this.call('SetInputVolume', { inputName: source, inputVolumeMul: volume }).then(resolve).catch((err): void => {
-        // logger.warn(`Cannot set volume [${source}]: ${err.error}`);
-        reject(err);
-      });
-    });
+  public async setAudioVolume(source: string, volume: number): Promise<void> {
+    await this.call('SetInputVolume', { inputName: source, inputVolumeMul: volume });
   }
 
   /**
@@ -118,13 +103,8 @@ class OBSUtility extends OBSWebSocket {
    * @param source Source which volume is muted/unmuted
    * @param mute boolean
    */
-  public setAudioMute(source: string, mute: boolean): Promise<void> {
-    return new Promise(async (resolve, reject): Promise<void> => {
-      await this.call('SetInputMute', { inputName: source, inputMuted: mute }).catch((err): void => {
-        reject(err);
-      })
-
-    });
+  public async setAudioMute(source: string, mute: boolean): Promise<void> {
+    await this.call('SetInputMute', { inputName: source, inputMuted: mute });
   }
 
   /**
