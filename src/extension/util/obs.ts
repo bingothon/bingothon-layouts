@@ -368,13 +368,13 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
       });
 
       // obs default browser sources
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 6; i++) {
         obs.setDefaultBrowserSettings(getStreamSrcName(i));
       }
 
       twitchStreams.on('change', (newValue, old) => {
         if (!old) return;
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 6; i++) {
           const stream = newValue[i];
           const oldStream = old[i] || {}; // old stream might be undefined
           if (stream === undefined) {
@@ -409,31 +409,25 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
       capturePositionsRep.on('change', (newVal, old) => {
         if (!old) return;
 
-        for (let i = 0; i < 4; i++) {
-          const stream = twitchStreams.value[i];
-          if (stream === undefined) continue;
+        twitchStreams.value.forEach((stream, i) => {
           handleStreamPosChange(obs, stream, i, currentGameLayoutRep.value, newVal);
-        }
+        });
       });
 
       currentGameLayoutRep.on('change', (newVal, old) => {
         if (!old) return;
 
-        for (let i = 0; i < 4; i++) {
-          const stream = twitchStreams.value[i];
-          if (stream === undefined) continue;
+        twitchStreams.value.forEach((stream, i) => {
           handleStreamPosChange(obs, stream, i, newVal, capturePositionsRep.value);
-        }
+        });
       });
 
       soundOnTwitchStreamRep.on('change', (newVal, old) => {
         if (old === undefined) return;
 
-        for (let i = 0; i < 4; i++) {
-          const stream = twitchStreams.value[i];
-          if (stream === undefined) continue;
+        twitchStreams.value.forEach((stream, i) => {
           handleSoundChange(obs, newVal, i, stream, stream);
-        }
+        });
       });
 
       nodecg.listenFor('streams:refreshStream', (index, callback) => {
