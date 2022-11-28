@@ -66,6 +66,7 @@ function toBingosyncBoard(resp: OriApiResponse[], color: string): {cells: Explor
             }
         });
     });
+    /* reactivate if it's exploration again
     const current = new Set<number>();
     resp.forEach(r => {
         r.disc_squares.forEach((square) => {
@@ -85,10 +86,10 @@ function toBingosyncBoard(resp: OriApiResponse[], color: string): {cells: Explor
                 current.add(square + 5)
             }
         });
-    }
+    }*/
     let goalCounts = 0;
     const cells = resp[0].cards.map((card, index) => {
-        const revealed = current.has(index);
+        const revealed = true ;//current.has(index);
         const processedName = processStyling(card.name);
         const goalCompleted = revealed && completed[index];
         if (goalCompleted) {
@@ -157,7 +158,6 @@ export class Ori1ExternalBingoboard implements ExternalBingoboardManager {
         if (!meta.boardID || !meta.playerID) {
             throw new Error("invalid config!");
         }
-        log.info("updating ori1 meta", this.meta);
         this.meta = meta;
         await this.oriBingoUpdate();
         if (!this.updateLoopTimer) {
