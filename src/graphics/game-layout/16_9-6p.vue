@@ -1,12 +1,11 @@
 <template>
     <div id="GameLayout">
-        <div id="fillbar" class="flexContainer"></div>
-        <div id="stream1" class="flexContainer"></div>
-        <div id="stream2" class="flexContainer"></div>
-        <div id="stream3" class="flexContainer"></div>
-        <div id="stream4" class="flexContainer"></div>
-        <div id="stream5" class="flexContainer"></div>
-        <div id="stream6" class="flexContainer"></div>
+        <twitch-player id="stream1" streamIndex="0"></twitch-player>
+        <twitch-player id="stream2" streamIndex="1"></twitch-player>
+        <twitch-player id="stream3" streamIndex="2"></twitch-player>
+        <twitch-player id="stream4" streamIndex="3"></twitch-player>
+        <twitch-player id="stream5" streamIndex="4"></twitch-player>
+        <twitch-player id="stream6" streamIndex="5"></twitch-player>
         <div id="fillvoice" class="flexContainer"></div>
         <timer-container id="timer"></timer-container>
         <discord-voice-display id="discord-voice" iconHeight="40px" maxUserCount="5"
@@ -42,7 +41,7 @@ import PlayerInfo from "../components/playerInfo.vue";
 import TeamInfo from "../components/teamInfo.vue";
 import PlayerTeamContainer from "../components/playerTeamContainer.vue";
 import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
-import TwitchPlayer from "../components/twitchPlayer.vue";
+import TwitchPlayer from "../components/twitchStreamPlaceholder.vue";
 import {RunDataTeam} from "../../../speedcontrol-types";
 import RotatingLogo from "../components/sponsorLogoRotation.vue";
 

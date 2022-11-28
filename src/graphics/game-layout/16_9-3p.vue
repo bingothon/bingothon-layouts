@@ -78,7 +78,7 @@ export default class GameLayout extends Vue {
 #stream2 {
     position: absolute;
     top: 60px;
-    left: 1138px;
+    left: 1140px;
     width: 782px;
     height: 440px;
     border: 2px var(--container-border-color) solid;

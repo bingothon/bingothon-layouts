@@ -18,10 +18,8 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue, Watch, Prop} from "vue-property-decorator";
-import {nodecg, NodeCG} from "../../browser-util/nodecg";
-import {Bingoboard, BingosyncSocket, BingoboardMeta} from "../../../schemas";
-import {store, getReplicant} from "../../browser-util/state";
+import {Component, Vue} from "vue-property-decorator";
+import {store} from "../../browser-util/state";
 import TestTimerContainer from "../components/timerContainer.vue";
 import TestGameContainer from "../components/gameContainer.vue";
 import BingoBoard from "../components/bingoboard.vue";
@@ -30,7 +28,7 @@ import TeamInfo from "../components/teamInfo.vue";
 import PlayerTeamContainer from "../components/playerTeamContainer.vue";
 import DiscordVoiceDisplay from "../components/discordVoiceDisplay.vue";
 import TwitchPlayer from "../components/twitchStreamPlaceholder.vue";
-import {RunDataPlayer, RunDataTeam} from "../../../speedcontrol-types";
+import {RunDataTeam} from "../../../speedcontrol-types";
 import RotatingLogo from "../components/sponsorLogoRotation.vue";
 
 @Component({
@@ -71,6 +69,7 @@ export default class GameLayout extends Vue {
     width: 960px;
     height: 640px;
     border: 2px var(--container-border-color) solid;
+    background-color: aqua;
 }
 
 #stream2 {
@@ -80,6 +79,7 @@ export default class GameLayout extends Vue {
     width: 960px;
     height: 640px;
     border: 2px var(--container-border-color) solid;
+    background-color: blue;
 }
 
 #fillbar {
@@ -153,21 +153,5 @@ export default class GameLayout extends Vue {
     width: 390px;
     border: 2px var(--container-border-color) solid;
     height: 300px;
-}
-
-#player0 {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 960px;
-    height: 640px;
-}
-
-#player1 {
-    position: absolute;
-    top: 0px;
-    left: 961px;
-    width: 960px;
-    height: 640px;
 }
 </style>
