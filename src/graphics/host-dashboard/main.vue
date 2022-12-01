@@ -1,12 +1,12 @@
 <template>
     <div id="HostDashboard">
-        <div id="intermission-ad-warning" v-if="adTimer > 0">Currently playing ads for {{ adTimer }} more seconds</div>
-        <div id="intermission-live-warning" v-if="hostsSpeakingDuringIntermission">You are currently live on stream
+        <div v-if="adTimer > 0" id="intermission-ad-warning">Currently playing ads for {{ adTimer }} more seconds</div>
+        <div v-if="hostsSpeakingDuringIntermission" id="intermission-live-warning">You are currently live on stream
         </div>
         <button
-            @click="toggleHostsSpeakingDuringIntermission"
-            :disabled="!hostsCanGoLive"
             id="Go-Live-Button"
+            :disabled="!hostsCanGoLive"
+            @click="toggleHostsSpeakingDuringIntermission"
         >
             {{ hostsSpeakingToggleButtonText }}
         </button>
@@ -28,9 +28,9 @@
                 <div id="bidsHeader">Upcoming Goals/Bidwars:</div>
                 <div id="bidsContainer">
                     <div
-                        class="bid"
                         v-for="(bid,i) in openBids"
                         :key="i"
+                        class="bid"
                     >
                         {{ bid.game }} - {{ bid.bid }}
                         <div
@@ -47,9 +47,9 @@
                         <div v-else>
                             <div v-if="bid.options.length">
                                 <div
-                                    class="bidOption"
                                     v-for="(option, j) in bid.options"
                                     :key="i + ' ' + j"
+                                    class="bidOption"
                                 >
                                     {{ option.name }} - {{ formatDollarAmount(option.amount_raised, true) }}
                                 </div>
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="comingUpInfo" class="run" v-if="comingUpRun">
+                    <div v-if="comingUpRun" id="comingUpInfo" class="run">
                         Coming Up:
                         <div>
                             {{ comingUpRun.game }} - {{ comingUpRun.category }}
@@ -83,7 +83,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="afterThatInfo" class="run" v-if="afterThatRun">
+                    <div v-if="afterThatRun" id="afterThatInfo" class="run">
                         And next:
                         <div>
                             {{ afterThatRun.game }} - {{ afterThatRun.category }}
@@ -117,9 +117,9 @@
                 <div id="prizesHeader">Currently Available Prizes:</div>
                 <div id="prizesContainer">
                     <div
-                        class="prize"
                         v-for="(prize,k) in prizes"
                         :key="k"
+                        class="prize"
                     >
                         <div class="prizeName">
                             {{ prize.name }}
@@ -138,7 +138,7 @@
             </div>
             <div id="column4" class="column">
                 <div id="HostingBingo">
-                    <HostBingo fontSize="25px" dashboard="true"></HostBingo>
+                    <HostBingo dashboard="true" fontSize="25px"></HostBingo>
                 </div>
             </div>
         </div>
@@ -146,14 +146,14 @@
 </template>
 
 <script lang="ts">
-const BINGOTHON_BLURBS = 'Did you know that Bingothon Summer 2022 is being streamed on both the SpeedRunsLive channel as well as our ' +
-    'own Twitch channel? If you are enjoying this marathon, then do know that there is even more content on the Bingothon Twitch channel,' +
-    ' including for example The Legend of Zelda: Breath of the Wild weekly bingo matches, and more!\n' +
-    'Are you interested in featuring a bingo-related event on the Bingothon Twitch channel? Then do not hesitate to contact the Main Organizers' +
-    ' on the Bingothon Discord server and we can certainly can discuss an arrangement to make it happen!\n' +
-    'Bingothon has a Teepublic store where you can buy some cool merch, including the mugs you can win as a prize in this marathon! Revenue ' +
-    'gained from the store would be used to further improve the marathon in many ways.\n' +
-    'If you are watching on the Bingothon Twitch channel, why not subscribe? You can get access to some cool emotes, after all! Revenue made from ' +
+const BINGOTHON_BLURBS = 'If you are enjoying this marathon, then do know that there is even more content on the Bingothon Twitch channel, including for games' +
+    'such as The Legend of Zelda: Breath of the Wild or Super Mario Sunshine!\n' +
+    'Are you interested in featuring a bingo-related event on the Bingothon Twitch channel? Then do not hesitate to contact the Main Organizers ' +
+    'on the Bingothon Discord server and we can certainly discuss an arrangement to make it happen!\n' +
+    'Bingothon has a store where you can buy some cool merch, including Bingothon PJs, Bingothon hoodies and the Bingothon mugs you can win as a prize in this marathon! ' +
+    'You can find it at store.bingothon.com, and you can have a 10% discount with the code WINTER22. Revenue gained from the store would be used ' +
+    'to further improve the marathon in many ways. ' +
+    'Why not consider subscribing to the Bingothon Twitch channel? You can get access to some cool emotes, after all! Revenue made from ' +
     'subscribing does NOT go to the charity, but is used to improve Bingothon\'s marathons and other events, so your support is appreciated!\n' +
     'Do you wonder how people come up with bingo cards for their speedgames? What is the process behind it all? Well we do have the Beyond the ' +
     'Board monthly series that you can find on our YouTube channel, where we sit down with various bingo runners and interview them about their ' +
@@ -163,36 +163,22 @@ const BINGOTHON_BLURBS = 'Did you know that Bingothon Summer 2022 is being strea
     'that happen! If you are interested in volunteering as a restreamer, then do not hesitate to join our Discord server and talk to a Main Organizer ' +
     'about it!';
 
-const CHARITY_BLURBS = 'Doctors Without Borders is an organization that offers medical humanitarian assistance to people based solely on need, irrespective of race, religion, gender or political affiliation. Their frontline workers including doctors, nurses and logisticians are often among the first on the scene when people\'s lives are upended by conflict, disease outbreak and other disasters.\n' +
-    'Doctors Without Borders is active in many countries worldwide. They were involved in key support movements such as with COVID-19 emergency responses in various countries back in 2020, as well as key refugee work in Mexico, Central African Republic, Sudan and Syria.\n' +
-    'Doctors Without Borders has been working in many countries with serious refugee crisis that have lasted many years, which to this day is still considered emergency work because the crisis has been ongoing for so long, and therefore need resources at all times to provide the best help they can.\n' +
-    'As part of their medical work, Doctors Without Borders is involved in worldwide lifesaving responses including of course COVID-19, but also Cholera, Ebola, Hepatitis, HIV, Malaria, and more.\n' +
-    'Funds raised during Bingothon Summer 2022 will be going towards Doctors Without Borders\' Emergency Relief Fund, which directly funds emergency relief operations worldwide. This includes operations in Ukraine and surrounding countries to assist people in the ongoing crisis, as well as other emergencies that may not be getting the same amount of attention or funding.\n' +
-    'In eastern Ukraine, access to medical care is particularly difficult, so Doctors Without Borders teams are providing care through mobile clinics where they can.\n' +
-    'Doctors Without Borders psychologists were deployed in Ukraine in order to support displaced people\'s mental health, and the organization is calling for more mental health support in the country as a whole.\n' +
-    'Over the years, Doctors Without Borders have helped tremendous amounts of people in various ways. In 2020 alone, the organization has had almost 10 million outpatient consultations worldwide, more than 110,000 of those being for COVID-19. You can find more such statistics Doctors Without Borders\' website.\n' +
-    'Doctors Without Borders still works hard to provide as much as they can in Syria, which remains one of the countries with one of the highest number of internally displaced people in the world, with a count of 6.7 million such people as of February 2022.';
+const CHARITY_BLURBS = 'Fred Hutch is a cancer research center where world-renowned scientists and humanitarians work together to prevent, diagnose and treat cancer, HIV and many other diseases. With three Novel laureates among their researchers, they are at the front of the battle against those illnesses.\n' +
+    'Fred Hutch have earned a global reputation for their track record of discoveries in cancer, infectious disease and basic research, including important advances in bone marrow transplantation, HIV/AIDS prevention, immunotherapy and COVID-19 vaccines.\n' +
+    'Fred Hutch is the birthplace of the bone marrow transplant, one of the most important medical advances in cancer treatment that has saved the lives of hundreds of thousands of patients around the world. Their Nobel Prize-winning bone marrow transplants have boosted survival rates from nearly zero to 90 percent for certain types of leukemia. Any physician who has peformed one, was either trained there or trained by someone who trained there.\n' +
+    'Beyond their research, Fred Hutch are rethinking the patient experience so it is best-of-class: seamless, fully integrated across teams, with consistent, informed providers and services considerate of the whole person… and their families.\n' +
+    'Fred Hutch is the home of the HIV Vaccine Trials Network, the world’s largest publicly funded international collaboration conducting clinical trials of HIV vaccines and treatments.\n' +
+    'One of Fred Hutch\'s researchers, Keith Jerome is leading research to find a cure for Herpes simplex viruses. The goal is start human clinical trials by the end of 2023.\n' +
+    'Researchers from Fred Hutch have won the Nobel Prize in physiology or medicine three times: in 1990, 2001 and 2004. Dr E. Donnal Thomas was awarded in 1990 for his work on the bone marrow and blood stem cell transplantation. Dr Leland Hartwell was awared in 2001 for discovering the universal mechanism that controls cell division in all eukaryotic, or nucleated, organisms. And finally, Dr. Linda Buck was awared in 2004 for her work on odorant receptors and the organization of the olfactory system — the network responsible for our sense of smell.'
 
-const SPONSOR_BLURBS = 'Bingothon is sponsored by Team17, who recently announced their tactical diesel-punk looter shooter Marauders\n' +
-    'Bingothon is sponsored by Team17 who recently announced the release date of 9th August for the visceral souls-borne Thymesia\n' +
-    'Bingothon is sponsored by Team17 who recently announced the Dark Fantasy RTS Gord\n' +
-    'Bingothon is sponsored by Team17 who recently announced their brand new Metroidvania, The Knight Witch, coming to Steam, PlayStation, Xbox and Switch later this year.\n' +
-    'Bingothon is sponsored by Team17 who also provide a bunch of prizes for Bingothon Summer 2022. If you would like to learn more about them, type ' +
-    '!prizes in the chat\n' +
-    'Bingothon is sponsored by Team17 who recently announced that Sweet Transit, the unique rail-focused city-builder is coming out July 28th, with a limited-time demo now available on Steam!\n' +
-    'Bingothon is sponsored by Team17 who recently launched the update for their 60\'s cult simulator - Honey, I Joined a Cult.\n' +
-    'Bingothon is sponsored by Team17 who recently launched a new demo for their Roguelite action-RPG - The Unliving.\n' +
-    'Bingothon is sponsored by Team17 who recently launched their botanical action-adventure game - The Serpent Rogue\n' +
-    'Bingothon is sponsored by Team17 who recently announced the new first-person horror adventure game, coming to VR and Steam flat screen - Killer Frequency.\n' +
-    'Bingothon is sponsored by Team17, who recently announced that Ship of Fools coming to console! This co-op crazed roguelike will have you on the edge of your seat reconsidering friendships! Wishlist now on Steam!\n' +
-    'Bingothon is sponsored by Team17, who recently announced that Autopsy Simulator, the story-driven, horror-sim hybrid, will launch in November 2022.'
+const SPONSOR_BLURBS = 'We would like to thank Team17 for sponsoring Bingothon Winter 2022, and for their continuous support within the past few events.\n' +
+    'We would like to thank our sponsor Team17 for providing a multitude of prizes for this event. Find out more about what they\'ve offered by typing !prizes in the chat!\n';
 
 
 import {Component, Vue} from "vue-property-decorator";
-import {store, getReplicant} from "../../browser-util/state";
+import {getReplicant, store} from "../../browser-util/state";
 import {TrackerPrize} from "../../../types";
 import moment from 'moment';
-import fs from "fs";
 import {RunData} from "../../../speedcontrol-types";
 import HostBingo from "../components/hostBingo.vue";
 import {HostsSpeakingDuringIntermission, ShowPictureDuringIntermission} from "../../../schemas";
@@ -204,28 +190,11 @@ import {HostsSpeakingDuringIntermission, ShowPictureDuringIntermission} from "..
 })
 
 export default class HostDashboard extends Vue {
+    timeSinceLastIntermission: string = '';
+    lastIntermissionInterval: NodeJS.Timeout | null = null;
     private charityIndex: number = 0;
     private bingothonIndex: number = 0;
     private sponsorIndex: number = 0;
-
-    timeSinceLastIntermission: string = '';
-    lastIntermissionInterval: NodeJS.Timeout | null = null;
-
-    mounted() {
-        this.lastIntermissionInterval = setInterval(() => {
-            const totalS = ((new Date().getTime() / 1000) - store.state.lastIntermissionTimestamp);
-            const mins = (totalS / 60).toFixed(0);
-            const secs = (totalS % 60).toFixed(0);
-            this.timeSinceLastIntermission = mins + ":" + secs.padStart(2, "0");
-        }, 1000);
-    }
-
-    destroyed() {
-        if (this.lastIntermissionInterval) {
-            clearInterval(this.lastIntermissionInterval);
-            this.lastIntermissionInterval = null;
-        }
-    }
 
     get adTimer(): number {
         return store.state.twitchCommercialTimer.secondsRemaining;
@@ -274,6 +243,42 @@ export default class HostDashboard extends Vue {
         }
     }
 
+    get charityTexts(): String[] {
+        return CHARITY_BLURBS.split('\n');
+    }
+
+    get bingothonTexts(): String[] {
+        return BINGOTHON_BLURBS.split('\n');
+    }
+
+    get sponsorTexts(): String[] {
+        return SPONSOR_BLURBS.split('\n');
+    }
+
+    get pictureDuringIntermissionUrl(): string {
+        return store.state.showPictureDuringIntermission.imageUrl;
+    }
+
+    set pictureDuringIntermissionUrl(url: string) {
+        getReplicant<ShowPictureDuringIntermission>('showPictureDuringIntermission').value.imageUrl = url;
+    }
+
+    mounted() {
+        this.lastIntermissionInterval = setInterval(() => {
+            const totalS = ((new Date().getTime() / 1000) - store.state.lastIntermissionTimestamp);
+            const mins = (totalS / 60).toFixed(0);
+            const secs = (totalS % 60).toFixed(0);
+            this.timeSinceLastIntermission = mins + ":" + secs.padStart(2, "0");
+        }, 1000);
+    }
+
+    destroyed() {
+        if (this.lastIntermissionInterval) {
+            clearInterval(this.lastIntermissionInterval);
+            this.lastIntermissionInterval = null;
+        }
+    }
+
     toggleHostsSpeakingDuringIntermission() {
         getReplicant<HostsSpeakingDuringIntermission>('hostsSpeakingDuringIntermission').value.speaking = !store.state.hostsSpeakingDuringIntermission.speaking;
     }
@@ -314,18 +319,6 @@ export default class HostDashboard extends Vue {
         return '$' + amount.toFixed(2);
     }
 
-    get charityTexts(): String[] {
-        return CHARITY_BLURBS.split('\n');
-    }
-
-    get bingothonTexts(): String[] {
-        return BINGOTHON_BLURBS.split('\n');
-    }
-
-    get sponsorTexts(): String[] {
-        return SPONSOR_BLURBS.split('\n');
-    }
-
     updateCharityIndex() {
         this.charityIndex = (this.charityIndex + 1) % (this.charityTexts.length);
     }
@@ -361,14 +354,6 @@ export default class HostDashboard extends Vue {
             }
         }
         return indexOfRun;
-    }
-
-    get pictureDuringIntermissionUrl(): string {
-        return store.state.showPictureDuringIntermission.imageUrl;
-    }
-
-    set pictureDuringIntermissionUrl(url: string) {
-        getReplicant<ShowPictureDuringIntermission>('showPictureDuringIntermission').value.imageUrl = url;
     }
 
     // calculate the time until the prize period ends and render it as a human readable string ("an hour", "20 minutes")
