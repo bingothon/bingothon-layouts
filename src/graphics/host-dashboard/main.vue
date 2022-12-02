@@ -172,7 +172,7 @@ const CHARITY_BLURBS = 'Fred Hutch is a cancer research center where world-renow
     'Researchers from Fred Hutch have won the Nobel Prize in physiology or medicine three times: in 1990, 2001 and 2004. Dr E. Donnal Thomas was awarded in 1990 for his work on the bone marrow and blood stem cell transplantation. Dr Leland Hartwell was awared in 2001 for discovering the universal mechanism that controls cell division in all eukaryotic, or nucleated, organisms. And finally, Dr. Linda Buck was awared in 2004 for her work on odorant receptors and the organization of the olfactory system — the network responsible for our sense of smell.'
 
 const SPONSOR_BLURBS = 'We would like to thank Team17 for sponsoring Bingothon Winter 2022, and for their continuous support within the past few events.\n' +
-    'We would like to thank our sponsor Team17 for providing a multitude of prizes for this event. Find out more about what they\'ve offered by typing !prizes in the chat!\n';
+    'We would like to thank our sponsor Team17 for providing a multitude of prizes for this event. Find out more about what they\'ve offered by typing !prizes in the chat!';
 
 
 import {Component, Vue} from "vue-property-decorator";
