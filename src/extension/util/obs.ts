@@ -170,7 +170,7 @@ class OBSUtility extends OBSWebSocket {
 
       sceneItemTransform: {
         boundsHeight: params.height,
-        boundsType: 'OBS_BOUNDS_SCALE_INNER',
+        boundsType: 'OBS_BOUNDS_STRETCH',
         boundsWidth: params.width,
         cropBottom: params.cropBottom,
         cropLeft: params.cropLeft,
