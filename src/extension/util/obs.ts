@@ -47,10 +47,10 @@ function handleStreamPosChange(obs: OBSUtility, stream: TwitchStream, streamIdx:
     return;
   }
   // calculate cropping, the browser source is fixed to 1920x1080
-  const cropLeft = 1920 * -stream.leftPercent / 100;
-  const cropTop = 1080 * -stream.topPercent / 100;
-  const cropRight = 1920 * (1 - 100 / stream.widthPercent) - cropLeft;
-  const cropBottom = 1080 * (1 - 100 / stream.heightPercent) - cropTop;
+  const cropLeft = Math.max(0, 1920 * -stream.leftPercent / 100);
+  const cropTop = Math.max(0, 1080 * -stream.topPercent / 100);
+  const cropRight = Math.max(0, 1920 * (1 - 100 / stream.widthPercent) - cropLeft);
+  const cropBottom = Math.max(0, 1080 * (1 - 100 / stream.heightPercent) - cropTop);
   // fire and forget
   obs.setSourceBoundsAndCrop(getStreamSrcName(streamIdx),
     {
