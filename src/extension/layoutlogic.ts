@@ -13,6 +13,8 @@ const logger = new nodecg.Logger(`${nodecg.bundleName}:layoutlogic`);
 runDataActiveRunRep.on('change', (newValue, old): void => {
     // bail on server restart
     if (!newValue || !old) return;
+    // bail if run id is not changing
+    if (newValue.id === old.id) return;
     let layoutstring: string;
     switch (newValue?.customData.Layout) {
         case '16:9 2p 2v2':
