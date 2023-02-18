@@ -90,6 +90,7 @@
     import { BingoboardMode } from '../../../schemas'
     import { store } from '../../browser-util/state'
     import clone from 'clone'
+
     @Component({})
     export default class BingomodeControl extends Vue {
         ALL_BINGO_MODES = Object.freeze(['invasion', 'normal'])

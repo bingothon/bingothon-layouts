@@ -33,7 +33,7 @@
 <script lang="ts">
     import { Component, Vue, Watch } from 'vue-property-decorator'
     import { TwitchStreams } from '../../../schemas'
-    import { store, getReplicant } from '../../browser-util/state'
+    import { getReplicant, store } from '../../browser-util/state'
 
     declare const Twitch: any
 

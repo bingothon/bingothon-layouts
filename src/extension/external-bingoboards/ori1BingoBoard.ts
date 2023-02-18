@@ -1,13 +1,13 @@
-import * as RequestPromise from 'request-promise';
+import * as RequestPromise from 'request-promise'
 
-import * as nodecgApiContext from '../util/nodecg-api-context';
-import {ExternalBingoboard, BingoboardMeta, ExternalBingoboardMeta} from '../../../schemas';
-import { BoardColor, ExplorationBingoboardCell } from '../../../types';
-import { ExternalBingoboardManager } from '../externalBingoboards';
-import { ReplicantBrowser, ReplicantServer } from 'nodecg/types/server';
-import { clearInterval } from 'timers';
+import * as nodecgApiContext from '../util/nodecg-api-context'
+import { BingoboardMeta, ExternalBingoboard, ExternalBingoboardMeta } from '../../../schemas'
+import { ExplorationBingoboardCell } from '../../../types'
+import { ExternalBingoboardManager } from '../externalBingoboards'
+import { ReplicantServer } from 'nodecg/types/server'
+import { clearInterval } from 'timers'
 
-const nodecg = nodecgApiContext.get();
+const nodecg = nodecgApiContext.get()
 const log = new nodecg.Logger(`${nodecg.bundleName}:oriBingo`);
 const request = RequestPromise.defaults({jar: true});
 const boardMetaRep = nodecg.Replicant<BingoboardMeta>('bingoboardMeta');

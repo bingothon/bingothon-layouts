@@ -1,10 +1,10 @@
-import { ExternalBingoboard, ExternalBingoboardMeta,  } from "../../schemas";
-import { Ori1ExternalBingoboard } from "./external-bingoboards/ori1BingoBoard";
-import { Ori2ExternalBingoboard } from "./external-bingoboards/ori2BingoBoard";
+import { ExternalBingoboard, ExternalBingoboardMeta } from '../../schemas'
+import { Ori1ExternalBingoboard } from './external-bingoboards/ori1BingoBoard'
+import { Ori2ExternalBingoboard } from './external-bingoboards/ori2BingoBoard'
 
-import * as nodecgApiContext from './util/nodecg-api-context';
+import * as nodecgApiContext from './util/nodecg-api-context'
 
-const nodecg = nodecgApiContext.get();
+const nodecg = nodecgApiContext.get()
 const log = new nodecg.Logger(`${nodecg.bundleName}:externalBingo`);
 
 export interface ExternalBingoboardManager {

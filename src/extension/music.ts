@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
-import { MPC, MPDError } from 'mpc-js'
+import {MPC, MPDError} from 'mpc-js'
 import * as nodecgApiContext from './util/nodecg-api-context'
-import { SongData } from '../../schemas'
+import {SongData} from '../../schemas'
 
 const nodecg = nodecgApiContext.get()
 const logger = new nodecg.Logger(`${nodecg.bundleName}:mpd`)

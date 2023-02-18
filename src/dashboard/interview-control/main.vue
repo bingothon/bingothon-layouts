@@ -13,7 +13,7 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator'
     import { AllInterviews, CurrentInterview } from '../../../schemas'
-    import { store, getReplicant } from '../../browser-util/state'
+    import { getReplicant, store } from '../../browser-util/state'
 
     @Component({})
     export default class InterviewControl extends Vue {

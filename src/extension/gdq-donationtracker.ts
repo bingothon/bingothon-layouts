@@ -5,10 +5,9 @@
 
 import * as RequestPromise from 'request-promise'
 import * as nodecgApiContext from './util/nodecg-api-context'
-import { TrackerOpenBids, TrackerDonations, DonationTotal, TrackerPrizes } from '../../schemas'
-import { Configschema } from '../../configschema'
+import {DonationTotal, TrackerDonations, TrackerOpenBids, TrackerPrizes} from '../../schemas'
+import {Configschema} from '../../configschema'
 import { TrackerDonation } from '../../types'
-
 import equal = require('deep-equal')
 
 const nodecg = nodecgApiContext.get()

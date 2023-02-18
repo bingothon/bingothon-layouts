@@ -1,5 +1,3 @@
-import { BingoboardMeta, Bingoboard, BingosyncSocket, BingoboardMode } from '../../../schemas'
-
 import { BingoboardCell } from '../../../types'
 
 export enum InvasionStart {

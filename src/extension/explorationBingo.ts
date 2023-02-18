@@ -1,5 +1,5 @@
 import * as nodecgApiContext from './util/nodecg-api-context'
-import { ExplorationBingoboard, BingoboardMeta } from '../../schemas'
+import { BingoboardMeta, ExplorationBingoboard } from '../../schemas'
 import { ExplorationBingoboardCell } from '../../types'
 
 const nodecg = nodecgApiContext.get()

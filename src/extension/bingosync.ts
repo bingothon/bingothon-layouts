@@ -4,15 +4,15 @@ import * as RequestPromise from 'request-promise'
 import WebSocket from 'ws'
 
 // Ours
-import { Replicant } from 'nodecg/types/server' // eslint-disable-line import/no-extraneous-dependencies
+import {Replicant} from 'nodecg/types/server' // eslint-disable-line import/no-extraneous-dependencies
 import * as nodecgApiContext from './util/nodecg-api-context'
-import { BingoboardMeta, Bingoboard, BingosyncSocket, BingoboardMode } from '../../schemas'
+import {Bingoboard, BingoboardMeta, BingoboardMode, BingosyncSocket} from '../../schemas'
 
 import equal from 'deep-equal'
 import clone from 'clone'
-import { InvasionContext } from './util/invasion'
-import { BingoboardCell, BoardColor, BingosyncCell } from '../../types'
-import { RunDataActiveRun, RunDataPlayer, RunDataTeam } from '../../speedcontrol-types'
+import {InvasionContext} from './util/invasion'
+import {BingoboardCell, BingosyncCell, BoardColor} from '../../types'
+import {RunDataActiveRun, RunDataPlayer, RunDataTeam} from '../../speedcontrol-types'
 
 const nodecg = nodecgApiContext.get()
 const log = new nodecg.Logger(`${nodecg.bundleName}:bingosync`)

@@ -5,10 +5,10 @@
 
 // Imports
 import * as Discord from 'discord.js'
-import { Readable } from 'stream'
+import {Readable} from 'stream'
 import * as nodecgApiContext from './util/nodecg-api-context'
-import { VoiceActivity } from '../../schemas'
-import { Configschema } from '../../configschema'
+import {VoiceActivity} from '../../schemas'
+import {Configschema} from '../../configschema'
 
 const nodecg = nodecgApiContext.get()
 

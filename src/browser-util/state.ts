@@ -1,9 +1,9 @@
-import clone from 'clone';
-import {ReplicantBrowser} from 'nodecg/types/browser'; // eslint-disable-line
-import Vue from 'vue';
-import { vuexfireMutations, firebaseAction } from "vuexfire";
-import Vuex from 'vuex';
-import {db} from "./firebase";
+import clone from 'clone'
+import { ReplicantBrowser } from 'nodecg/types/browser' // eslint-disable-line
+import Vue from 'vue'
+import { firebaseAction, vuexfireMutations } from 'vuexfire'
+import { Store } from 'vuex'
+import { db } from './firebase'
 import {
     AllCamNames,
     AllGameLayouts,
@@ -23,7 +23,7 @@ import {
     ExplorationBingoboard,
     ExternalBingoboard,
     ExternalBingoboardMeta,
-    HostingBingoboard,
+    HostBingoCell,
     HostingBingosocket,
     HostsSpeakingDuringIntermission,
     IntermissionVideos,
@@ -37,19 +37,20 @@ import {
     OmnibarMessages,
     ShowPictureDuringIntermission,
     SongData,
-    SoundOnTwitchStream, TrackerData,
+    SoundOnTwitchStream,
+    TrackerData,
     TrackerDonations,
     TrackerOpenBids,
     TrackerPrizes,
     TwitchChatBotData,
     TwitchStreams,
-    VoiceActivity, HostBingoCell
-} from "../../schemas";
-import {RunDataActiveRun, RunDataArray, Timer, TwitchCommercialTimer} from "../../speedcontrol-types";
+    VoiceActivity,
+} from '../../schemas'
+import { RunDataActiveRun, RunDataArray, Timer, TwitchCommercialTimer } from '../../speedcontrol-types'
 // import { Scene } from "../extension/util/obs" TODO: set types for sccenes
-import {Games} from "../../types";
+import { Games } from '../../types'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 const replicantNames = [
     'allGameLayouts',
@@ -93,92 +94,81 @@ const replicantNames = [
     'twitchStreams',
     'voiceActivity',
     'voiceDelay',
-    'songData'
-];
-const nodecgSpeedcontrolReplicantNames = [
-    'runDataActiveRun',
-    'runDataArray',
-    'timer',
-    'twitchCommercialTimer'
-];
+    'songData',
+]
+const nodecgSpeedcontrolReplicantNames = ['runDataActiveRun', 'runDataArray', 'timer', 'twitchCommercialTimer']
 
-const assetNames = [
-    'assets:charityVideos',
-    'assets:sponsorVideos',
-    'assets:wideLargeLogos',
-    'assets:wideSmallLogos',
-    'assets:squareLogos'
-];
-const replicants: Map<string, ReplicantBrowser<any>> = new Map();
+const assetNames = ['assets:charityVideos', 'assets:sponsorVideos', 'assets:wideLargeLogos', 'assets:wideSmallLogos', 'assets:squareLogos']
+const replicants: Map<string, ReplicantBrowser<any>> = new Map()
 
-var playerAlternateInterval: NodeJS.Timeout | null = null;
+var playerAlternateInterval: NodeJS.Timeout | null = null
 
 interface StoreTypes {
     // bingothon
-    allGameLayouts: AllGameLayouts,
-    allInterviews: AllInterviews,
-    allCamNames: AllCamNames,
-    bestOfX: BestOfX,
-    bingoboard: Bingoboard,
-    bingoboardMeta: BingoboardMeta,
-    bingoboardMode: BingoboardMode,
-    bingosyncSocket: BingosyncSocket,
-    currentGameLayout: CurrentGameLayout,
-    currentInterview: CurrentInterview,
-    currentCamNames: CurrentCamNames,
-    currentMainBingoboard: CurrentMainBingoboard,
-    discordDelayInfo: DiscordDelayInfo,
-    donationTotal: DonationTotal,
-    explorationBingoboard: ExplorationBingoboard,
-    externalBingoboardMeta: ExternalBingoboardMeta,
-    hostingBingoboard: HostBingoCell[][],
-    hostingBingosocket: HostingBingosocket,
-    hostsSpeakingDuringIntermission: HostsSpeakingDuringIntermission,
-    intermissionVideos: IntermissionVideos,
-    lastIntermissionTimestamp: LastIntermissionTimestamp,
-    obsAudioSources: ObsAudioSources,
-    obsConnection: ObsConnection,
-    obsDashboardAudioSources: ObsDashboardAudioSources,
-    obsAudioLevels: ObsAudioLevels,
-    obsPreviewScene: null | string,
-    obsCurrentScene: null | string,
-    obsPreviewImg: ObsPreviewImg,
-    obsSceneList: null | any, // sorry i had to do it to test any was Scene[]
-    obsStreamMode: ObsStreamMode,
-    omnibarMessages: OmnibarMessages,
-    externalBingoboard: ExternalBingoboard,
-    showPictureDuringIntermission: ShowPictureDuringIntermission,
-    soundOnTwitchStream: SoundOnTwitchStream,
-    trackerData: TrackerData,
-    trackerDonations: TrackerDonations,
-    trackerOpenBids: TrackerOpenBids,
-    trackerPrizes: TrackerPrizes,
-    twitchChatBotData: TwitchChatBotData,
-    twitchStreams: TwitchStreams,
-    voiceActivity: VoiceActivity,
-    voiceDelay: 0,
-    songData: SongData,
+    allGameLayouts: AllGameLayouts
+    allInterviews: AllInterviews
+    allCamNames: AllCamNames
+    bestOfX: BestOfX
+    bingoboard: Bingoboard
+    bingoboardMeta: BingoboardMeta
+    bingoboardMode: BingoboardMode
+    bingosyncSocket: BingosyncSocket
+    currentGameLayout: CurrentGameLayout
+    currentInterview: CurrentInterview
+    currentCamNames: CurrentCamNames
+    currentMainBingoboard: CurrentMainBingoboard
+    discordDelayInfo: DiscordDelayInfo
+    donationTotal: DonationTotal
+    explorationBingoboard: ExplorationBingoboard
+    externalBingoboardMeta: ExternalBingoboardMeta
+    hostingBingoboard: HostBingoCell[][]
+    hostingBingosocket: HostingBingosocket
+    hostsSpeakingDuringIntermission: HostsSpeakingDuringIntermission
+    intermissionVideos: IntermissionVideos
+    lastIntermissionTimestamp: LastIntermissionTimestamp
+    obsAudioSources: ObsAudioSources
+    obsConnection: ObsConnection
+    obsDashboardAudioSources: ObsDashboardAudioSources
+    obsAudioLevels: ObsAudioLevels
+    obsPreviewScene: null | string
+    obsCurrentScene: null | string
+    obsPreviewImg: ObsPreviewImg
+    obsSceneList: null | any // sorry i had to do it to test any was Scene[]
+    obsStreamMode: ObsStreamMode
+    omnibarMessages: OmnibarMessages
+    externalBingoboard: ExternalBingoboard
+    showPictureDuringIntermission: ShowPictureDuringIntermission
+    soundOnTwitchStream: SoundOnTwitchStream
+    trackerData: TrackerData
+    trackerDonations: TrackerDonations
+    trackerOpenBids: TrackerOpenBids
+    trackerPrizes: TrackerPrizes
+    twitchChatBotData: TwitchChatBotData
+    twitchStreams: TwitchStreams
+    voiceActivity: VoiceActivity
+    voiceDelay: 0
+    songData: SongData
     // nodecg-speedcontrol
-    runDataActiveRun: RunDataActiveRun,
-    runDataArray: RunDataArray,
-    timer: Timer,
-    twitchCommercialTimer: TwitchCommercialTimer,
+    runDataActiveRun: RunDataActiveRun
+    runDataArray: RunDataArray
+    timer: Timer
+    twitchCommercialTimer: TwitchCommercialTimer
     // assets
-    "assets:charityVideos": Asset[],
-    "assets:sponsorVideos": Asset[],
-    'assets:wideLargeLogos': Asset[],
-    'assets:wideSmallLogos': Asset[],
-    'assets:squareLogos': Asset[],
+    'assets:charityVideos': Asset[]
+    'assets:sponsorVideos': Asset[]
+    'assets:wideLargeLogos': Asset[]
+    'assets:wideSmallLogos': Asset[]
+    'assets:squareLogos': Asset[]
     // timer
-    playerAlternate: true,
+    playerAlternate: true
     //firebase
-    gameP1: Games,
-    gameP2: Games,
-    gameP3: Games,
-    gameP4: Games,
+    gameP1: Games
+    gameP2: Games
+    gameP3: Games
+    gameP4: Games
 }
 
-export const store = new Vuex.Store<StoreTypes>({
+export const store = new Store<StoreTypes>({
     state: {
         // bingothon
         allGameLayouts: [] as AllGameLayouts,
@@ -230,8 +220,8 @@ export const store = new Vuex.Store<StoreTypes>({
         timer: {} as Timer,
         twitchCommercialTimer: {} as TwitchCommercialTimer,
         // assets
-        "assets:charityVideos": [] as Asset[],
-        "assets:sponsorVideos": [] as Asset[],
+        'assets:charityVideos': [] as Asset[],
+        'assets:sponsorVideos': [] as Asset[],
         'assets:wideLargeLogos': [] as Asset[],
         'assets:wideSmallLogos': [] as Asset[],
         'assets:squareLogos': [] as Asset[],
@@ -244,116 +234,116 @@ export const store = new Vuex.Store<StoreTypes>({
         gameP4: {} as Games,
     },
     mutations: {
-        updateReplicant(state, {name, value}) {
-            Vue.set(state, name, value);
+        updateReplicant(state, { name, value }) {
+            Vue.set(state, name, value)
         },
         startPlayerAlternateInterval(state, interval) {
             if (playerAlternateInterval) {
-                clearInterval(playerAlternateInterval);
+                clearInterval(playerAlternateInterval)
             }
             playerAlternateInterval = setInterval(() => {
-                Vue.set(state, 'playerAlternate', !state.playerAlternate);
-            }, interval);
+                Vue.set(state, 'playerAlternate', !state.playerAlternate)
+            }, interval)
         },
-        stopPlayerAlternateInterval(state) {
+        stopPlayerAlternateInterval() {
             if (playerAlternateInterval) {
-                clearInterval(playerAlternateInterval);
+                clearInterval(playerAlternateInterval)
             }
-            playerAlternateInterval = null;
+            playerAlternateInterval = null
         },
-        ...vuexfireMutations
+        ...vuexfireMutations,
     },
     actions: {
-        bindGameP1: firebaseAction<any, any>(({bindFirebaseRef}, payload) => {
+        bindGameP1: firebaseAction<any, any>(({ bindFirebaseRef }) => {
             // return the promise returned by `bindFirebaseRef` hardcoded for now
-            let ref = "games/" + /*payload.gameId*/ "floha258" + "/items"
+            let ref = 'games/' + /*payload.gameId*/ 'floha258' + '/items'
             console.log(ref)
             return bindFirebaseRef('gameP1', db.ref(ref))
         }),
         unbindGameP1: firebaseAction<any, any>(({ unbindFirebaseRef }) => {
             unbindFirebaseRef('gameP1')
         }),
-        bindGameP2: firebaseAction<any, any>(({bindFirebaseRef}, payload) => {
+        bindGameP2: firebaseAction<any, any>(({ bindFirebaseRef }) => {
             // return the promise returned by `bindFirebaseRef`
-            let ref = "games/" + /*payload.gameId*/ "lepelog" + "/items"
+            let ref = 'games/' + /*payload.gameId*/ 'lepelog' + '/items'
             console.log(ref)
             return bindFirebaseRef('gameP2', db.ref(ref))
         }),
         unbindGameP2: firebaseAction<any, any>(({ unbindFirebaseRef }) => {
             unbindFirebaseRef('gameP2')
         }),
-        bindGameP3: firebaseAction<any, any>(({bindFirebaseRef}, payload) => {
+        bindGameP3: firebaseAction<any, any>(({ bindFirebaseRef }) => {
             // return the promise returned by `bindFirebaseRef`
-            let ref = "games/" + /*payload.gameId*/ "cjs07" + "/items"
+            let ref = 'games/' + /*payload.gameId*/ 'cjs07' + '/items'
             console.log(ref)
             return bindFirebaseRef('gameP3', db.ref(ref))
         }),
         unbindGameP3: firebaseAction<any, any>(({ unbindFirebaseRef }) => {
             unbindFirebaseRef('gameP3')
         }),
-        bindGameP4: firebaseAction<any, any>(({bindFirebaseRef}, payload) => {
+        bindGameP4: firebaseAction<any, any>(({ bindFirebaseRef }) => {
             // return the promise returned by `bindFirebaseRef`
-            let ref = "games/" + /*payload.gameId*/ "harmjan387" + "/items"
+            let ref = 'games/' + /*payload.gameId*/ 'harmjan387' + '/items'
             console.log(ref)
             return bindFirebaseRef('gameP4', db.ref(ref))
         }),
         unbindGameP4: firebaseAction<any, any>(({ unbindFirebaseRef }) => {
             unbindFirebaseRef('gameP4')
         }),
-    }
-});
+    },
+})
 
-store.commit('startPlayerAlternateInterval', 10000);
+store.commit('startPlayerAlternateInterval', 10000)
 
 /**
  * Gets the raw replicant, only intended for modifications, to use values use state
  * @param replicant name of the replicant, throws an error if it isn't found
  */
 export function getReplicant<T>(replicant: string): ReplicantBrowser<T> {
-    const rep = replicants.get(replicant);
+    const rep = replicants.get(replicant)
     if (!rep) {
-        throw new Error("invalid replicant!");
+        throw new Error('invalid replicant!')
     }
-    return rep;
+    return rep
 }
 
 replicantNames.forEach((name) => {
-    const replicant = nodecg.Replicant(name);
+    const replicant = nodecg.Replicant(name)
 
     replicant.on('change', (newVal) => {
         store.commit('updateReplicant', {
             name: replicant.name,
             value: clone(newVal),
-        });
-    });
+        })
+    })
 
-    replicants.set(name, replicant);
-});
+    replicants.set(name, replicant)
+})
 
-nodecgSpeedcontrolReplicantNames.forEach(name => {
-    const rep = nodecg.Replicant(name, 'nodecg-speedcontrol');
+nodecgSpeedcontrolReplicantNames.forEach((name) => {
+    const rep = nodecg.Replicant(name, 'nodecg-speedcontrol')
 
-    rep.on('change', newVal => {
+    rep.on('change', (newVal) => {
         store.commit('updateReplicant', {
             name: rep.name,
             value: clone(newVal),
-        });
-    });
+        })
+    })
 
-    replicants.set(name, rep);
+    replicants.set(name, rep)
 })
 
 assetNames.forEach((name) => {
     const rep = nodecg.Replicant(name)
-    rep.on('change', newValue => {
+    rep.on('change', (newValue) => {
         store.commit('updateReplicant', {
             name: rep.name,
             value: clone(newValue),
-        });
-    });
-    replicants.set(name, rep);
-});
+        })
+    })
+    replicants.set(name, rep)
+})
 
 export async function create() {
-    return NodeCG.waitForReplicants(...Array.from(replicants.values())).then(() => store);
+    return NodeCG.waitForReplicants(...Array.from(replicants.values())).then(() => store)
 }

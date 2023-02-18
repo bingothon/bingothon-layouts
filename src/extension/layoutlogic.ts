@@ -1,9 +1,9 @@
-import clone from "clone";
-import {AllGameLayouts, CurrentGameLayout} from "../../schemas";
-import {RunDataActiveRun} from "../../speedcontrol-types";
-import * as nodecgApiContext from "./util/nodecg-api-context";
+import clone from 'clone'
+import { AllGameLayouts, CurrentGameLayout } from '../../schemas'
+import { RunDataActiveRun } from '../../speedcontrol-types'
+import * as nodecgApiContext from './util/nodecg-api-context'
 
-const nodecg = nodecgApiContext.get();
+const nodecg = nodecgApiContext.get()
 
 const allGameLayoutsRep = nodecg.Replicant<AllGameLayouts>('allGameLayouts');
 const currentGameLayoutRep = nodecg.Replicant<CurrentGameLayout>('currentGameLayout');

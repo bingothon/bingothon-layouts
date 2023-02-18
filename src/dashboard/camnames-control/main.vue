@@ -34,7 +34,7 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator'
     import { AllCamNames, CurrentCamNames } from '../../../schemas'
-    import { store, getReplicant } from '../../browser-util/state'
+    import { getReplicant, store } from '../../browser-util/state'
 
     @Component({})
     export default class InterviewControl extends Vue {
