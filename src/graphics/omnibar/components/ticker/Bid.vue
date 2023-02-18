@@ -32,13 +32,13 @@
 
 <script lang="ts">
     import clone from 'clone'
-    import { Prop, Component, Vue } from 'vue-property-decorator'
+    import { Component, Prop, Vue } from 'vue-property-decorator'
     import { gsap } from 'gsap'
     import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
-    gsap.registerPlugin(ScrollToPlugin)
-
     import { store } from '../../../../browser-util/state'
     import { TrackerOpenBid } from '../../../../../types'
+
+    gsap.registerPlugin(ScrollToPlugin)
 
     @Component({})
     export default class Bid extends Vue {

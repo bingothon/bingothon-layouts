@@ -10,10 +10,10 @@
                         v-on:click="updateCell(cell, i, j)"
                         :title="cell.description"
                     >
-                        <div v-if="cell.marked" class="bg-color marked"></div>
-                        <div class="shadow"></div>
+                        <div v-if="cell.marked" class="bg-color marked" />
+                        <div class="shadow" />
                         <div class="CellTextFitContainer">
-                            <CellTextFit :text="cell.goal" :fontSize="fontSize" />
+                            <CellTextFit :text="cell.goal" :fontSize="fontSize"></CellTextFit>
                         </div>
                     </td>
                 </tr>
@@ -24,10 +24,9 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
-    import { nodecg, NodeCG } from '../../browser-util/nodecg'
+    import { Component, Prop, Vue } from 'vue-property-decorator'
     import { HostBingoCell } from '../../../schemas'
-    import { store, getReplicant } from '../../browser-util/state'
+    import { getReplicant, store } from '../../browser-util/state'
     import CellTextFit from '../helpers/cell-text-fit.vue'
 
     const goals = require('../../../static/hostBingo.json')

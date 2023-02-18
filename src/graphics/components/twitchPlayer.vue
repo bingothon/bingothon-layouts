@@ -9,13 +9,13 @@
                 width: `${playerWidth}px`,
                 height: `${playerHeight}px`,
             }"
-        ></div>
+        />
     </div>
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
-    import { store, getReplicant } from '../../browser-util/state'
+    import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+    import { getReplicant, store } from '../../browser-util/state'
     import { TwitchStream } from '../../../types'
     import { TwitchStreams } from '../../../schemas'
     // included in the main html

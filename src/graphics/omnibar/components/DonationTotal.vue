@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+    import { Component, Vue, Watch } from 'vue-property-decorator'
     import { TweenLite } from 'gsap'
     import { store } from '../../../browser-util/state'
 

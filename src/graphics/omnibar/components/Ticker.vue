@@ -12,10 +12,9 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Watch } from 'vue-property-decorator'
+    import { Component, Vue } from 'vue-property-decorator'
     import { store } from '../../../browser-util/state'
-    import { TrackerDonations, TrackerOpenBids } from '../../../../schemas'
-    import { TrackerDonation, TrackerOpenBid } from '../../../../types'
+    import { TrackerDonation } from '../../../../types'
     import GenericMessage from './ticker/GenericMessage.vue'
     import DynamicMessage from './ticker/DynamicMessage.vue'
     import UpcomingRun from './ticker/UpcomingRun.vue'

@@ -9,11 +9,11 @@
                             v-for="color in cell.colors"
                             :class="'bg-color ' + color.color + 'square'"
                             :style="color.style"
-                        ></div>
-                        <div class="shadow"></div>
-                        <div :class="getMarkerClasses(marker, k)" :key="k" v-for="(marker, k) in cell.markers"></div>
+                        />
+                        <div class="shadow" />
+                        <div :class="getMarkerClasses(marker, k)" :key="k" v-for="(marker, k) in cell.markers" />
                         <div class="CellTextFitContainer">
-                            <CellTextFit :text="cell.name" :fontSize="fontSize" />
+                            <CellTextFit :text="cell.name" :fontSize="fontSize"></CellTextFit>
                         </div>
                     </td>
                 </tr>
@@ -39,14 +39,12 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
-    import { nodecg, NodeCG } from '../../browser-util/nodecg'
-    import { Bingoboard, BingosyncSocket, BingoboardMeta } from '../../../schemas'
+    import { Component, Prop, Vue } from 'vue-property-decorator'
+    import { nodecg } from '../../browser-util/nodecg'
+    import { Bingoboard } from '../../../schemas'
     import equals from 'deep-equal'
-    import { store, getReplicant } from '../../browser-util/state'
+    import { store } from '../../browser-util/state'
     import CellTextFit from '../helpers/cell-text-fit.vue'
-
-    type ColorEnum = 'pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple'
 
     interface BingoCell {
         name: string

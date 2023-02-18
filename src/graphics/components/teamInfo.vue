@@ -11,7 +11,7 @@
         <div>
             <BestOfX v-if="boXEnabled" :player-index="teamIndex" id="boX" :height="height"></BestOfX>
         </div>
-        <div :class="medalClasses"></div>
+        <div :class="medalClasses" />
         <div class="TeamNameContainer">
             <text-fit :text="`${finishTime} ${name || ''}`" :align="reverseOrder ? 'right' : 'left'"> </text-fit>
         </div>
@@ -20,7 +20,6 @@
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator'
-    import { RunDataTeam } from '../../../speedcontrol-types'
     import { store } from '../../browser-util/state'
     import TextFit from '../helpers/text-fit.vue'
     import BestOfX from './bestOfX.vue'

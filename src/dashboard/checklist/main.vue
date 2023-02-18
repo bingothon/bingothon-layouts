@@ -4,7 +4,7 @@
         <div v-if="hostsSpeaking">Hosts are currently speaking, don't transition yet</div>
         <div class="checkbox-container">
             <div v-for="(check, i) in actionsChecked" :key="i">
-                <v-checkbox v-model="check[1]" :label="check[0]" />
+                <v-checkbox v-model="check[1]" :label="check[0]"></v-checkbox>
             </div>
         </div>
     </v-app>

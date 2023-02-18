@@ -1,11 +1,11 @@
 <template>
     <div id="container">
-        <div id="fittedContent" :style="{ transform, top, 'font-size': optimizedFontSize }" v-html="text"></div>
+        <div id="fittedContent" :style="{ transform, top, 'font-size': optimizedFontSize }" v-html="text" />
     </div>
 </template>
 
 <script lang="ts">
-    import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
+    import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 
     // stub cause fonts isn't known
     declare namespace document {

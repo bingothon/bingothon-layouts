@@ -1,7 +1,7 @@
 <template>
     <div class="Interview">
         <img src="../../../static/logo-summer-wide.png" id="logo" />
-        <div id="fillvoice" class="flexContainer"></div>
+        <div id="fillvoice" class="flexContainer" />
         <player-info id="pi1" playerIndex="0" height="45px"></player-info>
         <player-info id="pi2" playerIndex="1" height="45px"></player-info>
         <player-info id="pi3" playerIndex="2" height="45px"></player-info>

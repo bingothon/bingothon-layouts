@@ -25,7 +25,7 @@
                     :value="camnames.path"
                     :label="camnames.name"
                     @change="updateCurrentCamNames(camnames)"
-                />
+                ></v-radio>
             </v-radio-group>
         </div>
     </v-app>
@@ -33,7 +33,7 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator'
-    import { AllCamNames, CurrentCamNames, CurrentGameLayout } from '../../../schemas'
+    import { AllCamNames, CurrentCamNames } from '../../../schemas'
     import { store, getReplicant } from '../../browser-util/state'
 
     @Component({})

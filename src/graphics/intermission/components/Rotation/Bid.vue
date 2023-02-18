@@ -34,7 +34,7 @@
                 <div v-else-if="bid.allow_custom_options">No options submitted yet, be the first!</div>
             </div>
             <div v-else class="BidAmount">
-                <div class="bid-graphics"></div>
+                <div class="bid-graphics" />
             </div>
         </div>
     </div>
@@ -46,6 +46,7 @@
     import { Component, Vue } from 'vue-property-decorator'
     import { store } from '../../../../browser-util/state'
     import * as d3 from 'd3'
+
     @Component({})
     export default class Bid extends Vue {
         bid: TrackerOpenBid = null
@@ -154,15 +155,13 @@
                     }),
                 )
 
-            //make y axis to show bar names
-            var yAxis = this.d3any.svg
+            // make y-axis to show bar names
+            this.d3any.svg
                 .axis()
                 .scale(y)
                 //no tick marks
                 .tickSize(0)
                 .orient('left')
-
-            var gy = svg.append('g').attr('class', 'y axis').call(yAxis)
 
             var bars = svg.selectAll('.bar').data(data).enter().append('g')
 

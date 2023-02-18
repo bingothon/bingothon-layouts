@@ -17,7 +17,7 @@
     import clone from 'clone'
     import { TrackerPrize } from '../../../../../types'
     import { store } from '../../../../browser-util/state'
-    import { Prop, Vue, Component } from 'vue-property-decorator'
+    import { Component, Prop, Vue } from 'vue-property-decorator'
 
     @Component({})
     export default class Prize extends Vue {

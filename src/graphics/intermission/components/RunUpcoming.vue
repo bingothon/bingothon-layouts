@@ -30,7 +30,7 @@
 <script lang="ts">
     import moment from 'moment'
     import { RunData } from 'speedcontrol-types'
-    import { Prop, Vue, Component } from 'vue-property-decorator'
+    import { Component, Prop, Vue } from 'vue-property-decorator'
 
     @Component({})
     export default class RunUpcoming extends Vue {

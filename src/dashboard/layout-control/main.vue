@@ -25,7 +25,7 @@
                     :value="layout.path"
                     :label="layout.name"
                     @change="updateCurrentLayout(layout)"
-                />
+                ></v-radio>
             </v-radio-group>
         </div>
     </v-app>

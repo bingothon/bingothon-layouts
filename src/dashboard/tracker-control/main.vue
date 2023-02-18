@@ -9,7 +9,7 @@
                 solo
                 single-line
                 dark
-            />
+            ></v-text-field>
         </div>
         <!--:value="trackerData[player.index]"-->
         <v-btn @click="updateTrackerData" class="button" small :style="'width: 100%'"> Update Tracker Data </v-btn>
@@ -17,9 +17,9 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue, Watch } from 'vue-property-decorator'
+    import { Component, Vue } from 'vue-property-decorator'
     import { getReplicant, store } from '../../browser-util/state'
-    import { RunDataActiveRun, RunDataPlayer, RunDataTeam } from '../../../speedcontrol-types'
+    import { RunDataActiveRun } from '../../../speedcontrol-types'
     import { TrackerData } from '../../../schemas'
 
     interface IndexedPlayer {

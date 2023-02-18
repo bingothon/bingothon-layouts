@@ -33,8 +33,6 @@
     import { store } from '../../browser-util/state'
     import clone from 'clone'
 
-    const bundleName = 'bingothon-layouts'
-
     @Component({})
     export default class OBSControl extends Vue {
         messages: OmnibarMessages = []

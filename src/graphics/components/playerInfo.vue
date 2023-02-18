@@ -15,7 +15,7 @@
         <div v-if="!hideFinishTime">
             <BestOfX v-if="boXEnabled" :player-index="teamIndex" id="boX" :height="height"></BestOfX>
         </div>
-        <div :class="medalClasses"></div>
+        <div :class="medalClasses" />
         <div class="PlayerName">
             <transition name="fade">
                 <text-fit :key="text" :text="finishTime + text" :align="reverseOrder ? 'right' : 'left'"> </text-fit>
@@ -176,7 +176,7 @@
             let theTeamID = null
             let playerNum = 0
             store.state.runDataActiveRun.teams.forEach((t) => {
-                t.players.forEach((p) => {
+                t.players.forEach(() => {
                     if (playerNum == this.playerIndex) {
                         theTeamID = t.id
                     }
@@ -192,7 +192,7 @@
             let theTeamIdx = 0
             let playerNum = 0
             store.state.runDataActiveRun.teams.forEach((t, teamdIdx) => {
-                t.players.forEach((p) => {
+                t.players.forEach(() => {
                     if (playerNum == this.playerIndex) {
                         theTeamIdx = teamdIdx
                     }

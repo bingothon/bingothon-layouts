@@ -7,8 +7,7 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator'
-    import { getReplicant, store } from '../../browser-util/state'
-    import { RunDataTeam } from '../../../speedcontrol-types'
+    import { store } from '../../browser-util/state'
 
     @Component({})
     export default class ChatBotControl extends Vue {

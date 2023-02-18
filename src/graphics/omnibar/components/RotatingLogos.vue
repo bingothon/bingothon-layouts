@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Prop } from 'vue-property-decorator'
+    import { Component, Vue } from 'vue-property-decorator'
 
     const wide = require('../../../../static/logo-winter-wide.png')
     const fhLogo = require('../BingothonWinterNewFredHutch.png')

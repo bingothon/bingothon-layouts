@@ -19,7 +19,8 @@
 <script lang="ts">
     import { gsap } from 'gsap'
     import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
-    import { Prop, Vue, Component } from 'vue-property-decorator'
+    import { Component, Prop, Vue } from 'vue-property-decorator'
+
     gsap.registerPlugin(ScrollToPlugin)
 
     @Component({})

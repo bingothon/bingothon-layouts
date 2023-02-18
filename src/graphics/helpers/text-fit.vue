@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue, Watch, Prop } from 'vue-property-decorator'
+    import { Component, Prop, Vue } from 'vue-property-decorator'
 
     // stub cause fonts isn't known
     declare namespace document {

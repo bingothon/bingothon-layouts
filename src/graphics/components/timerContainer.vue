@@ -1,14 +1,14 @@
 <template>
     <!-- eslint-disable vue/no-v-html -->
     <div v-if="show" class="TimerContainer RunInfoBox FlexContainer">
-        <div class="TimerBox RunInfoBox FlexContainer" :class="timerStateClass" v-html="time"></div>
+        <div class="TimerBox RunInfoBox FlexContainer" :class="timerStateClass" v-html="time" />
         <div class="EstimateBox FlexContainer">Est: {{ estimate }}</div>
     </div>
     <!-- eslint-enable -->
 </template>
 
 <script lang="ts">
-    import { Vue, Component } from 'vue-property-decorator'
+    import { Component, Vue } from 'vue-property-decorator'
     import { store } from '../../browser-util/state'
     import { Timer } from '../../../speedcontrol-types'
 

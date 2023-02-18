@@ -22,11 +22,12 @@
                     >
                         <template slot="selection" slot-scope="data">
                             <v-list-content v-bind:id="data.item.colorId">
-                                <div style="height: 10px; width: 45px"></div>
+                                <div style="height: 10px; width: 45px" />
                             </v-list-content>
                         </template>
                         <template slot="item" slot-scope="data">
                             <template v-if="typeof data.item !== 'object'">
+                                <!-- eslint-disable-next-line vue/no-v-text-v-html-on-component -->
                                 <v-list-tile-content v-text="data.item"></v-list-tile-content>
                             </template>
                             <template v-else>
@@ -47,11 +48,12 @@
                     >
                         <template slot="selection" slot-scope="data">
                             <v-list-content v-bind:id="data.item.colorId">
-                                <div style="height: 10px; width: 45px"></div>
+                                <div style="height: 10px; width: 45px" />
                             </v-list-content>
                         </template>
                         <template slot="item" slot-scope="data">
                             <template v-if="typeof data.item !== 'object'">
+                                <!-- eslint-disable-next-line vue/no-v-text-v-html-on-component -->
                                 <v-list-tile-content v-text="data.item"></v-list-tile-content>
                             </template>
                             <template v-else>
@@ -88,9 +90,6 @@
     import { BingoboardMode } from '../../../schemas'
     import { store } from '../../browser-util/state'
     import clone from 'clone'
-
-    type ColorEnum = 'pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple'
-
     @Component({})
     export default class BingomodeControl extends Vue {
         ALL_BINGO_MODES = Object.freeze(['invasion', 'normal'])

@@ -11,17 +11,17 @@
             :key="i"
         >
             <div v-if="i <= score" class="Score Counter" :style="{ height: height }">
-                <div class="ScoreIndicator" :style="{ height: height }"></div>
+                <div class="ScoreIndicator" :style="{ height: height }" />
             </div>
             <div v-else class="NoScore Counter" :style="{ height: height }">
-                <div class="ScoreIndicator grey" :style="{ height: height }"></div>
+                <div class="ScoreIndicator grey" :style="{ height: height }" />
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-    import { Prop, Component, Vue } from 'vue-property-decorator'
+    import { Component, Prop, Vue } from 'vue-property-decorator'
     import { store } from '../../browser-util/state'
 
     @Component({

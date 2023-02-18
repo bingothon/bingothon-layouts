@@ -5,11 +5,8 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator'
     import { nodecg } from '../../browser-util/nodecg'
-    import { ObsDashboardAudioSources, DiscordDelayInfo, ObsStreamMode, CapturePositions } from '../../../schemas'
-    import { store, getReplicant } from '../../browser-util/state'
+    import { CapturePositions } from '../../../schemas'
     import { Route } from 'vue-router/types/router'
-
-    const bundleName = 'bingothon-layouts'
 
     @Component({})
     export default class GameLayout extends Vue {

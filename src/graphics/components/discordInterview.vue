@@ -16,10 +16,10 @@
             <div class="AvatarContainer">
                 <img :src="member.avatar" />
                 <div class="MicIcon FlexContainer">
-                    <font-awesome-icon :icon="micIcon" :style="{ color: 'white' }" />
+                    <font-awesome-icon :icon="micIcon" :style="{ color: 'white' }"></font-awesome-icon>
                 </div>
             </div>
-            <div class="NameContainer"></div>
+            <div class="NameContainer" />
             <div class="Name">
                 <text-fit :text="member.name" align="center"></text-fit>
             </div>

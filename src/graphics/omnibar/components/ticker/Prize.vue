@@ -14,6 +14,7 @@
     import { TrackerPrize } from '../../../../../types'
     import clone from 'clone'
     import moment from 'moment'
+
     @Component({})
     export default class Prize extends Vue {
         @Prop({ default: null })

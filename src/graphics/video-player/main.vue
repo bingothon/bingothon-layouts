@@ -16,7 +16,7 @@
 
 <script lang="ts">
     import { Component, Ref, Vue, Watch } from 'vue-property-decorator'
-    import { Asset, CurrentGameLayout, IntermissionVideos } from '../../../schemas'
+    import { Asset, IntermissionVideos } from '../../../schemas'
     import { getReplicant, store } from '../../browser-util/state'
     import { RunData } from '../../../speedcontrol-types'
     import TextFit from '../helpers/text-fit.vue'

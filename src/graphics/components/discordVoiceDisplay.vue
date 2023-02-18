@@ -16,7 +16,7 @@
             <div class="AvatarContainer">
                 <img :src="member.avatar" />
                 <div class="MicIcon FlexContainer">
-                    <font-awesome-icon :icon="micIcon" :style="{ color: 'white' }" />
+                    <font-awesome-icon :icon="micIcon" :style="{ color: 'white' }"></font-awesome-icon>
                 </div>
             </div>
             <div class="Name">
@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Prop } from 'vue-property-decorator'
+    import { Component, Prop, Vue } from 'vue-property-decorator'
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
     import { faMicrophone } from '@fortawesome/free-solid-svg-icons'
 
