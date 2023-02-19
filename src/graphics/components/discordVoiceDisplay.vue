@@ -1,76 +1,84 @@
 <template>
     <div
         class="DiscordVoiceDisplay FlexContainer"
-        :style="{'--icon-height':iconHeight, '--name-width':nameWidth, '--voice-highlight-color': voiceHighlightColor}"
+        :style="{
+            '--icon-height': iconHeight,
+            '--name-width': nameWidth,
+            '--voice-highlight-color': voiceHighlightColor,
+        }"
     >
         <div
             class="Member FlexContainer"
             v-for="member in voiceActivityMembers"
-            :class="{'Active':member.isSpeaking}"
+            :class="{ Active: member.isSpeaking }"
             :key="member.id"
         >
             <div class="AvatarContainer">
-                <img :src="member.avatar">
+                <img :src="member.avatar" />
                 <div class="MicIcon FlexContainer">
-                    <font-awesome-icon :icon="micIcon" :style="{ color: 'white' }" />
+                    <font-awesome-icon :icon="micIcon" :style="{ color: 'white' }"></font-awesome-icon>
                 </div>
             </div>
             <div class="Name">
-				<text-fit :text="member.name"></text-fit>
+                <text-fit :text="member.name"></text-fit>
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
+    import { Component, Prop, Vue } from 'vue-property-decorator'
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+    import { faMicrophone } from '@fortawesome/free-solid-svg-icons'
 
-import { store } from '../../browser-util/state';
-import TextFit from "../helpers/text-fit.vue";
-import { VoiceActivityMember } from '../../../types';
+    import { store } from '../../browser-util/state'
+    import TextFit from '../helpers/text-fit.vue'
+    import { VoiceActivityMember } from '../../../types'
 
-@Component({
-    components: {
-        FontAwesomeIcon,
-        TextFit,
-    }
-})
-export default class DiscordVoiceDisplay extends Vue {
-    @Prop({default: "40px"})
-    iconHeight: string;
-    @Prop({default: "100px"})
-    nameWidth: string;
-    @Prop({default: "blue"})
-    voiceHighlightColor: string;
-    @Prop({default: 4})
-    maxUserCount: number;
-    @Prop({default: 0})
-    startingMember: number;
+    @Component({
+        components: {
+            FontAwesomeIcon,
+            TextFit,
+        },
+    })
+    export default class DiscordVoiceDisplay extends Vue {
+        @Prop({ default: '40px' })
+        iconHeight: string
+        @Prop({ default: '100px' })
+        nameWidth: string
+        @Prop({ default: 'blue' })
+        voiceHighlightColor: string
+        @Prop({ default: 4 })
+        maxUserCount: number
+        @Prop({ default: 0 })
+        startingMember: number
 
-    get voiceActivityMembers(): VoiceActivityMember[] {
-        const members = store.state.voiceActivity.members;
-        if (members.length > this.maxUserCount) {
-            console.log(`start ${this.startingMember} length: ${this.maxUserCount}, total: ${this.startingMember + this.maxUserCount}`)
-            // TS doesn't care and makes the props that are are supposed to be numbers strings
-            // @ts-ignore
-            return members.slice(this.startingMember, parseInt(this.startingMember) + parseInt(this.maxUserCount));
+        get voiceActivityMembers(): VoiceActivityMember[] {
+            const members = store.state.voiceActivity.members
+            if (members.length > this.maxUserCount) {
+                console.log(
+                    `start ${this.startingMember} length: ${this.maxUserCount}, total: ${
+                        this.startingMember + this.maxUserCount
+                    }`,
+                )
+                // TS doesn't care and makes the props that are are supposed to be numbers strings
+                // @ts-ignore
+                return members.slice(this.startingMember, parseInt(this.startingMember) + parseInt(this.maxUserCount))
+            }
+            return members
         }
-        return members;
-    }
 
-    get micIcon() {
-        return faMicrophone;
+        get micIcon() {
+            return faMicrophone
+        }
     }
-}
 </script>
 
 <style>
     .DiscordVoiceDisplay {
         justify-content: center;
-		align-content: center;
-		text-align: center;
+        align-content: center;
+        text-align: center;
         flex-wrap: wrap;
     }
 

@@ -1,15 +1,15 @@
-import { BoardColor } from "./BoardColor";
+import { BoardColor } from './BoardColor'
 
 export interface BingoboardCell {
-    name: string;
-    slot: string;
-    colors: BoardColor[];
-    rawColors: string;
-    markers: [string | null, string | null, string | null, string | null];
+    name: string
+    slot: string
+    colors: BoardColor[]
+    rawColors: string
+    markers: [string | null, string | null, string | null, string | null]
 }
 
 export interface BingosyncCell {
-    name: string;
-    slot: string;
-    colors: string;
+    name: string
+    slot: string
+    colors: string
 }

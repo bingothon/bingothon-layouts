@@ -1,64 +1,63 @@
 <template>
     <div class="GameContainer FlexContainer">
-        <div class="GameName FlexContainer">{{gameName}}</div>
-        <div class="GameExtra FlexContainer">{{gameCategory}} | {{gameSystem}}</div>
+        <div class="GameName FlexContainer">{{ gameName }}</div>
+        <div class="GameExtra FlexContainer">{{ gameCategory }} | {{ gameSystem }}</div>
     </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import { store } from '../../browser-util/state';
+    import { Component, Vue } from 'vue-property-decorator'
+    import { store } from '../../browser-util/state'
 
-@Component({})
-export default class TestGameContainer extends Vue {
-    get gameName(): string {
-        return store.state.runDataActiveRun.game;
-    }
+    @Component({})
+    export default class TestGameContainer extends Vue {
+        get gameName(): string {
+            return store.state.runDataActiveRun.game
+        }
 
-    get gameCategory(): string {
-        return store.state.runDataActiveRun.category;
-    }
+        get gameCategory(): string {
+            return store.state.runDataActiveRun.category
+        }
 
-    get gameSystem(): string {
-        return store.state.runDataActiveRun.system;
-    }
+        get gameSystem(): string {
+            return store.state.runDataActiveRun.system
+        }
 
-    get gameEstimate(): string {
-        return store.state.runDataActiveRun.estimate;
+        get gameEstimate(): string {
+            return store.state.runDataActiveRun.estimate
+        }
     }
-}
 </script>
 
 <style>
-.GameContainer {
-    align-content: center;
-    align-items: center;
-    flex-direction: column;
-}
+    .GameContainer {
+        align-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
 
-.GameContainer > .GameName {
-    font-weight: 500;
-    font-size: 30px;
-    align-content: center;
-    align-items: center;
-    color: white;
-    text-align: center;
-    margin: 5px;
-}
+    .GameContainer > .GameName {
+        font-weight: 500;
+        font-size: 30px;
+        align-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+        margin: 5px;
+    }
 
-.GameContainer > .GameExtra {
-    font-size: 18px;
-    font-weight: thin;
-    align-content: center;
-    color: #eccfcf;
-    text-align: center;
-}
+    .GameContainer > .GameExtra {
+        font-size: 18px;
+        font-weight: thin;
+        align-content: center;
+        color: #eccfcf;
+        text-align: center;
+    }
 
-/*#est {
+    /*#est {
     font-size: 20px;
     align-content: center;
     color: white;
     text-align: center;
 }*/
-
 </style>
