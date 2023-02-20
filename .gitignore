@@ -72,3 +72,6 @@ typings/
 
 # videos
 static/intermissionVideos/*.mp4
+
+# JetBrains IDEs
+.idea
