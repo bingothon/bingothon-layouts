@@ -1,5 +1,5 @@
-import firebase from 'firebase'
-import 'firebase/database'
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/database'
 import { Configschema } from '../../configschema'
 
 const config = nodecg.bundleConfig as Configschema
