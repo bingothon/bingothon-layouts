@@ -1,33 +1,23 @@
 <template>
     <v-app>
-        <span
-            class="error-warning"
-            @click="errorMessage=''"
-        > {{ errorMessage }}</span>
+        <span class="error-warning" @click="errorMessage = ''"> {{ errorMessage }}</span>
         <div class="d-flex justify-center line-buttons">
-            <v-btn id="override-button"
-                   class="button"
-                   dark
-                   small
-                   @click="toggleManualScoreOverride"
-                   :style="`width: 100%`"
+            <v-btn
+                id="override-button"
+                class="button"
+                dark
+                small
+                @click="toggleManualScoreOverride"
+                :style="`width: 100%`"
             >
                 {{ manualScoreOverrideText }}
             </v-btn>
         </div>
-        <div
-            v-for="(color,i) in playerColors"
-            :key="i"
-        >
+        <div v-for="(color, i) in playerColors" :key="i">
             P{{ i }}:
             <v-row>
                 <v-col>
-                    <v-select
-                        :value="color"
-                        @input="updatePlayerColor(i, $event)"
-                        :items="allColors"
-                    >
-                    </v-select>
+                    <v-select :value="color" @input="updatePlayerColor(i, $event)" :items="allColors"> </v-select>
                 </v-col>
                 <v-col v-show="isManualScoreOverride">
                     <v-text-field
@@ -43,18 +33,16 @@
             </v-row>
         </div>
         Select Board:
-        <v-select v-model="currentBoardRep"
-                  :items="allBingoReps">
-        </v-select>
+        <v-select v-model="currentBoardRep" :items="allBingoReps"> </v-select>
         <!-- Normal Bingosync Stuff -->
         <div v-if="showExtraBingosyncOptions">
             <div>
                 Room Code or URL:
-                <v-text-field v-model="roomCode" background-color="#455A64" clearable solo dark/>
+                <v-text-field v-model="roomCode" background-color="#455A64" clearable solo dark />
             </div>
             <div>
                 Passphrase:
-                <v-text-field v-model="passphrase" background-color="#455A64" clearable solo dark/>
+                <v-text-field v-model="passphrase" background-color="#455A64" clearable solo dark />
             </div>
             <div class="d-flex justify-center line-buttons">
                 <v-btn
@@ -69,85 +57,82 @@
                 </v-btn>
             </div>
         </div>
-        <!-- Ori Stuff -->
-        <div v-if="showExtraOriOptions">
-            <div>
-                BoardID:
-                <v-text-field v-model="oriBoardID" background-color="#455A64" clearable solo single-line dark/>
-            </div>
-            <div>
-                PlayerIDs (comma separated):
-                <v-text-field v-model="oriPlayerID" background-color="#455A64" clearable solo single-line dark/>
-            </div>
-            <div>
-                Coop:
-                <v-checkbox
-                    dark
-                    v-model="oriCoop"
-                    label="Coop"
-                ></v-checkbox>
-            </div>
-            <v-radio-group
-                v-model="oriGame"
-                :value="oriGame"
-            >
-                <v-radio
-                    value="ori1"
-                    label="Ori and the Blind Forest"
-                    @change="updateOriGame('ori1')"
-                />
-                <v-radio
-                    value="ori2"
-                    label="Ori and the Will of the Wisps"
-                    @change="updateOriGame('ori2')"
-                />
+        <!-- External board -->
+        <div v-if="showExtraExternBoardOptions">
+            <div>Currently active: {{ storeExternalBingoboardMeta.game }}</div>
+            <v-radio-group v-model="externalBingoboardMeta.game" :value="externalBingoboardMeta.game">
+                <v-radio value="none" label="None" @change="updateExternalGame" />
+                <v-radio value="ori1" label="Ori and the Blind Forest" @change="updateExternalGame" />
+                <v-radio value="ori2" label="Ori and the Will of the Wisps" @change="updateExternalGame" />
             </v-radio-group>
-            <v-btn
-                :disabled="!oriCanActivate"
-                @click="toggleOriActivate"
-                class="button"
-                small
-                :style="'width: 100%'"
-            >
-                {{ toggleOriText }}
+            <div v-if="externalBingoboardMeta.game == 'ori1'">
+                <div>
+                    BoardID:
+                    <v-text-field
+                        v-model="externalBingoboardMeta.boardID"
+                        background-color="#455A64"
+                        clearable
+                        solo
+                        single-line
+                        dark
+                    />
+                </div>
+                <div>
+                    PlayerIDs (comma separated):
+                    <v-text-field
+                        v-model="externalBingoboardMeta.playerID"
+                        background-color="#455A64"
+                        clearable
+                        solo
+                        single-line
+                        dark
+                    />
+                </div>
+                <div>
+                    Coop:
+                    <v-checkbox dark v-model="externalBingoboardMeta.coop" label="Coop"></v-checkbox>
+                </div>
+            </div>
+            <div v-if="externalBingoboardMeta.game == 'ori2'">
+                <div>
+                    Host (leave blank if unsure):
+                    <v-text-field
+                        v-model="externalBingoboardMeta.host"
+                        background-color="#455A64"
+                        clearable
+                        solo
+                        single-line
+                        dark
+                    />
+                </div>
+                <div>
+                    Token:
+                    <v-text-field
+                        v-model="externalBingoboardMeta.token"
+                        background-color="#455A64"
+                        clearable
+                        solo
+                        single-line
+                        dark
+                    />
+                </div>
+            </div>
+            <v-btn @click="externalBingoboardUpdate" class="button" small :style="'width: 100%'">
+                Set external bingoboard config
             </v-btn>
         </div>
 
         <div class="boardOptions">
-			<v-btn
-				:disabled="currentBoardActive"
-				@click="switchAction"
-				small
-				class="button"
-				:style="`width: 100%`"
-			>
-				{{ currentBoardActive ? "[Active] " : "" }}Switch
-			</v-btn>
-			<v-btn
-				class="button"
-				dark
-				small
-				@click="toggleCard"
-				:style="`width: 43%`"
-			>
-				{{ toggleCardText }}
-			</v-btn>
-			<v-btn
-                class="button"
-                dark
-                small
-                @click="toggleColors"
-                :style="`width: 43%`"
-            >
+            <v-btn :disabled="currentBoardActive" @click="switchAction" small class="button" :style="`width: 100%`">
+                {{ currentBoardActive ? '[Active] ' : '' }}Switch
+            </v-btn>
+            <v-btn class="button" dark small @click="toggleCard" :style="`width: 43%`">
+                {{ toggleCardText }}
+            </v-btn>
+            <v-btn class="button" dark small @click="toggleColors" :style="`width: 43%`">
                 {{ toggleColorsText }}
             </v-btn>
-            <v-btn
-                class="button"
-                dark
-                small
-                @click="toggleCount"
-                :style="`width: 100%`"
-            >
+            <v-btn class="button" dark small @click="toggleCount" :style="`width: 100%`">
                 {{ toggleCountText }}
             </v-btn>
         </div>
@@ -155,151 +140,166 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
-import {nodecg} from '../../browser-util/nodecg';
-import {BingoboardMeta, CurrentMainBingoboard,} from '../../../schemas';
-import {getReplicant, store} from '../../browser-util/state';
+    import { Component, Vue, Watch } from 'vue-property-decorator'
+    import { nodecg } from '../../browser-util/nodecg'
+    import { BingoboardMeta, CurrentMainBingoboard, ExternalBingoboardMeta } from '../../../schemas'
+    import { getReplicant, store } from '../../browser-util/state'
 
-type ColorEnum = ('pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple');
-type BingoRepEnum = ('bingoboard' | 'oriBingoboard' | 'explorationBingoboard');
+    type ColorEnum = 'pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple'
+    type BingoRepEnum = 'bingoboard' | 'externalBingoboard' | 'explorationBingoboard'
 
-const BOARD_TO_SOCKET_REP = {bingoboard: 'bingosyncSocket', hostingBingoboard: 'hostingBingosocket'};
+    const BOARD_TO_SOCKET_REP = { bingoboard: 'bingosyncSocket', hostingBingoboard: 'hostingBingosocket' }
 
-@Component({})
-export default class BingoControl extends Vue {
-    roomCode: string = '';
+    @Component({})
+    export default class BingoControl extends Vue {
+        roomCode: string = ''
 
-    passphrase: string = '';
+        passphrase: string = ''
 
-    currentBoardRep: BingoRepEnum = 'bingoboard';
+        currentBoardRep: BingoRepEnum = 'bingoboard'
 
-    oriBoardID: string = '';
+        oriBoardID: string = ''
 
-    oriPlayerID: string = '';
+        oriPlayerID: string = ''
 
-    oriCoop: boolean = true;
+        oriCoop: boolean = true
 
-    oriGame: string = 'ori1';
+        oriGame: string = 'ori1'
 
-    explorationCustomBoard: string = ''
+        externalBingoboardMeta: ExternalBingoboardMeta = { game: 'none' }
 
-    errorMessage: string = '';
+        explorationCustomBoard: string = ''
 
-    allColors = Object.freeze(['pink', 'red', 'orange', 'brown', 'yellow', 'green', 'teal', 'blue', 'navy', 'purple']);
+        errorMessage: string = ''
 
-    allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'oriBingoboard']);//add back when need  'explorationBingoboard'
+        allColors = Object.freeze([
+            'pink',
+            'red',
+            'orange',
+            'brown',
+            'yellow',
+            'green',
+            'teal',
+            'blue',
+            'navy',
+            'purple',
+        ])
 
-    mounted() {
-        store.watch(state => state.currentMainBingoboard, (newVal) => {
-            this.currentBoardRep = newVal.boardReplicant;
-        }, {immediate: true});
-    }
+        allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard']) //add back when need  'explorationBingoboard'
 
-    // --- computed properties
-    get connectActionText(): string {
-        const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
-        if (!socketRepName) {
-            return 'invalid';
+        mounted() {
+            store.watch(
+                (state) => state.currentMainBingoboard,
+                (newVal) => {
+                    this.currentBoardRep = newVal.boardReplicant
+                },
+                { immediate: true },
+            )
         }
-        switch (store.state[socketRepName].status) {
-            case 'connected':
-                return 'disconnect';
-            case 'disconnected':
-            case 'error':
-                return 'connect';
-            case 'connecting':
-                return 'connecting...';
-            default:
-                return 'invalid';
+
+        @Watch('storeExternalBingoboardMeta', { immediate: true })
+        watchExternalBingoboard(meta: ExternalBingoboardMeta) {
+            this.externalBingoboardMeta = meta
         }
-    }
 
-    get toggleCardText(): string {
-        if (store.state.bingoboardMeta.boardHidden) {
-            return 'Show Card';
+        // --- computed properties
+        get connectActionText(): string {
+            const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep]
+            if (!socketRepName) {
+                return 'invalid'
+            }
+            switch (store.state[socketRepName].status) {
+                case 'connected':
+                    return 'disconnect'
+                case 'disconnected':
+                case 'error':
+                    return 'connect'
+                case 'connecting':
+                    return 'connecting...'
+                default:
+                    return 'invalid'
+            }
         }
-        return 'Hide Card';
-    }
 
-    get toggleColorsText(): string {
-        if (store.state.bingoboardMeta.colorShown) {
-            return 'Hide Colors';
+        get toggleCardText(): string {
+            if (store.state.bingoboardMeta.boardHidden) {
+                return 'Show Card'
+            }
+            return 'Hide Card'
         }
-        return 'Show Colors';
-    }
 
-    get toggleCountText(): string {
-        if (store.state.bingoboardMeta.countShown) {
-            return 'Hide Goalcount';
+        get toggleColorsText(): string {
+            if (store.state.bingoboardMeta.colorShown) {
+                return 'Hide Colors'
+            }
+            return 'Show Colors'
         }
-        return 'Show Goalcount';
-    }
 
-    get manualScoreOverrideText(): string {
-        if (store.state.bingoboardMeta.manualScoreOverride) {
-            return 'Disable Manual Score Override';
+        get toggleCountText(): string {
+            if (store.state.bingoboardMeta.countShown) {
+                return 'Hide Goalcount'
+            }
+            return 'Show Goalcount'
         }
-        return 'Enable Manual Score Override';
-    }
 
-    get isManualScoreOverride(): boolean {
-        return store.state.bingoboardMeta.manualScoreOverride;
-    }
-
-    get toggleOriText(): string {
-        if (store.state.oriBingoMeta.active) {
-            return 'Deactivate';
+        get manualScoreOverrideText(): string {
+            if (store.state.bingoboardMeta.manualScoreOverride) {
+                return 'Disable Manual Score Override'
+            }
+            return 'Enable Manual Score Override'
         }
-        return 'Activate';
-    }
 
-    get oriCanActivate(): boolean {
-        return store.state.oriBingoMeta.active ? true : (!!this.oriBoardID && !!this.oriPlayerID);
-    }
-
-    get playerColors(): Array<ColorEnum> {
-        return store.state.bingoboardMeta.playerColors;
-    }
-
-    get canDoConnectAction(): boolean {
-        const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
-        if (!socketRepName) {
-            return false;
+        get isManualScoreOverride(): boolean {
+            return store.state.bingoboardMeta.manualScoreOverride
         }
-        switch (store.state[socketRepName].status) {
-            case 'connected':
-                return true;
-            case 'disconnected':
-            case 'error':
-                return (!!this.roomCode && !!this.passphrase);
-            case 'connecting':
-            default:
-                return false;
+
+        get playerColors(): Array<ColorEnum> {
+            return store.state.bingoboardMeta.playerColors
         }
-    }
 
-    get showExtraBingosyncOptions(): boolean {
-        return ['bingoboard', 'hostingBingoboard'].includes(this.currentBoardRep);
-    }
+        get canDoConnectAction(): boolean {
+            const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep]
+            if (!socketRepName) {
+                return false
+            }
+            switch (store.state[socketRepName].status) {
+                case 'connected':
+                    return true
+                case 'disconnected':
+                case 'error':
+                    return !!this.roomCode && !!this.passphrase
+                case 'connecting':
+                default:
+                    return false
+            }
+        }
 
-    get showExtraOriOptions(): boolean {
-        return this.currentBoardRep === 'oriBingoboard';
-    }
+        get showExtraBingosyncOptions(): boolean {
+            return ['bingoboard', 'hostingBingoboard'].includes(this.currentBoardRep)
+        }
 
-    get showExtraExplorationOptions(): boolean {
-        return this.currentBoardRep === 'explorationBingoboard';
-    }
+        get showExtraExternBoardOptions(): boolean {
+            return this.currentBoardRep === 'externalBingoboard'
+        }
 
-    get currentBoardActive(): boolean {
-        return this.currentBoardRep === store.state.currentMainBingoboard.boardReplicant;
-    }
+        get showExtraExplorationOptions(): boolean {
+            return this.currentBoardRep === 'explorationBingoboard'
+        }
 
-    get manualScore(): string[] {
-        return store.state.bingoboardMeta.manualScores.map(i => `${i}`);
-    }
+        get currentBoardActive(): boolean {
+            return this.currentBoardRep === store.state.currentMainBingoboard.boardReplicant
+        }
 
-    // test
-    /* get colorCounts(): Array<{color: string, count: number}> {
+        get manualScore(): string[] {
+            return store.state.bingoboardMeta.manualScores.map((i) => `${i}`)
+        }
+
+        get storeExternalBingoboardMeta() {
+            return store.state.externalBingoboardMeta
+        }
+
+        // test
+        /* get colorCounts(): Array<{color: string, count: number}> {
       const counts = store.state.bingoboardMeta.colorCounts;
       const countArray = [];
       for (const key in counts) {
@@ -313,149 +313,173 @@ export default class BingoControl extends Vue {
       return countArray;
     } */
 
-    // --- handlers
+        // --- handlers
 
-    updateManualScore() {
-        this.manualScore.forEach((score: string, idx: number) => {
-            getReplicant<BingoboardMeta>('bingoboardMeta').value.manualScores[idx] = parseInt(score, 10);
-        });
-    }
+        updateManualScore() {
+            this.manualScore.forEach((score: string, idx: number) => {
+                getReplicant<BingoboardMeta>('bingoboardMeta').value.manualScores[idx] = parseInt(score, 10)
+            })
+        }
 
-    connectAction() {
-        // only expanded options for the bingosync connection,
-        // otherwise something else is there to handle the board
-        if (this.showExtraBingosyncOptions) {
-            const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
-            if (!socketRepName) {
-                throw new Error('unreachable');
-            }
-            switch (store.state[socketRepName].status) {
-                case 'connected':
-                    nodecg.sendMessage('bingosync:leaveRoom', {name: this.currentBoardRep})
-                        .catch((error) => {
-                            nodecg.log.error(error);
-                            this.errorMessage = error.message;
-                        });
-                    break;
-                case 'disconnected':
-                case 'error':
-                    getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this.currentBoardRep as BingoRepEnum;
-                    nodecg.sendMessage('bingosync:joinRoom', {
-                        roomCode: this.roomCode,
-                        passphrase: this.passphrase,
-                        name: this.currentBoardRep
-                    })
-                        .catch((error) => {
-                            nodecg.log.error(error);
-                            this.errorMessage = error.message;
-                        });
-                    break;
-                default:
-                    break;
+        connectAction() {
+            // only expanded options for the bingosync connection,
+            // otherwise something else is there to handle the board
+            if (this.showExtraBingosyncOptions) {
+                const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep]
+                if (!socketRepName) {
+                    throw new Error('unreachable')
+                }
+                switch (store.state[socketRepName].status) {
+                    case 'connected':
+                        nodecg.sendMessage('bingosync:leaveRoom', { name: this.currentBoardRep }).catch((error) => {
+                            nodecg.log.error(error)
+                            this.errorMessage = error.message
+                        })
+                        break
+                    case 'disconnected':
+                    case 'error':
+                        getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this
+                            .currentBoardRep as BingoRepEnum
+                        nodecg
+                            .sendMessage('bingosync:joinRoom', {
+                                roomCode: this.roomCode,
+                                passphrase: this.passphrase,
+                                name: this.currentBoardRep,
+                            })
+                            .catch((error) => {
+                                nodecg.log.error(error)
+                                this.errorMessage = error.message
+                            })
+                        break
+                    default:
+                        break
+                }
             }
         }
-    }
 
-    toggleOriActivate() {
-        console.log(this.oriGame)
-        if (store.state.oriBingoMeta.active) {
-            nodecg.sendMessage('oriBingo:deactivate');
-        } else {
-            nodecg.sendMessage('oriBingo:activate', {boardID: this.oriBoardID, game: this.oriGame, playerID: this.oriPlayerID, coop: this.oriCoop})
+        updateExploration() {
+            try {
+                const goals = JSON.parse(this.explorationCustomBoard)
+                const onlyNames = goals.map((g) => g.name)
+                nodecg.sendMessageToBundle('exploration:newGoals', 'bingothon-layouts', onlyNames).catch((e) => {
+                    this.errorMessage = e.message
+                    nodecg.log.error(e)
+                })
+            } catch (e) {
+                this.errorMessage = "Couldn't parse the board"
+            }
+        }
+
+        resetExploration() {
+            nodecg.sendMessageToBundle('exploration:resetBoard', 'bingothon-layouts')
+        }
+
+        switchAction() {
+            getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this
+                .currentBoardRep as BingoRepEnum
+        }
+
+        updatePlayerColor(idx: number, val: any) {
+            getReplicant<BingoboardMeta>('bingoboardMeta').value.playerColors[idx] = val
+        }
+
+        toggleCard() {
+            getReplicant<BingoboardMeta>('bingoboardMeta').value.boardHidden = !store.state.bingoboardMeta.boardHidden
+        }
+
+        toggleColors() {
+            getReplicant<BingoboardMeta>('bingoboardMeta').value.colorShown = !store.state.bingoboardMeta.colorShown
+        }
+
+        toggleCount() {
+            getReplicant<BingoboardMeta>('bingoboardMeta').value.countShown = !store.state.bingoboardMeta.countShown
+        }
+
+        toggleManualScoreOverride() {
+            getReplicant<BingoboardMeta>('bingoboardMeta').value.manualScoreOverride =
+                !store.state.bingoboardMeta.manualScoreOverride
+        }
+
+        updateExternalGame() {
+            switch (this.externalBingoboardMeta.game) {
+                case 'ori1': {
+                    this.externalBingoboardMeta = {
+                        game: 'ori1',
+                        boardID: '',
+                        playerID: '',
+                        coop: false,
+                    }
+                    break
+                }
+                case 'ori2': {
+                    this.externalBingoboardMeta = {
+                        game: 'ori2',
+                        token: '',
+                        host: '',
+                    }
+                }
+                default: {
+                    this.externalBingoboardMeta = {
+                        game: 'none',
+                    }
+                }
+            }
+        }
+
+        externalBingoboardUpdate() {
+            nodecg
+                .sendMessageToBundle('externalBingoboard:configure', 'bingothon-layouts', this.externalBingoboardMeta)
                 .catch((error) => {
-                    nodecg.log.error(error);
-                    this.errorMessage = error.message;
-                });
+                    nodecg.log.error(error)
+                    this.errorMessage = error.message
+                })
+        }
+
+        updateOriGame(game: string) {
+            this.oriGame = game
+            console.log(game)
+            console.log(this.oriGame)
         }
     }
-
-    updateExploration() {
-        try {
-            const goals = JSON.parse(this.explorationCustomBoard);
-            const onlyNames = goals.map(g => g.name);
-            nodecg.sendMessageToBundle('exploration:newGoals', 'bingothon-layouts', onlyNames)
-                .catch((e) => {
-                    this.errorMessage = e.message;
-                    nodecg.log.error(e);
-                });
-        } catch (e) {
-            this.errorMessage = "Couldn't parse the board";
-        }
-    }
-
-    resetExploration() {
-        nodecg.sendMessageToBundle('exploration:resetBoard', 'bingothon-layouts');
-    }
-
-    switchAction() {
-        getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this.currentBoardRep as BingoRepEnum;
-    }
-
-    updatePlayerColor(idx: number, val: any) {
-        getReplicant<BingoboardMeta>('bingoboardMeta').value.playerColors[idx] = val;
-    }
-
-    toggleCard() {
-        getReplicant<BingoboardMeta>('bingoboardMeta').value.boardHidden = !store.state.bingoboardMeta.boardHidden;
-    }
-
-    toggleColors() {
-        getReplicant<BingoboardMeta>('bingoboardMeta').value.colorShown = !store.state.bingoboardMeta.colorShown;
-    }
-
-    toggleCount() {
-        getReplicant<BingoboardMeta>('bingoboardMeta').value.countShown = !store.state.bingoboardMeta.countShown;
-    }
-
-    toggleManualScoreOverride() {
-        getReplicant<BingoboardMeta>('bingoboardMeta').value.manualScoreOverride = !store.state.bingoboardMeta.manualScoreOverride;
-    }
-
-    updateOriGame(game: string) {
-        this.oriGame = game;
-        console.log(game)
-        console.log(this.oriGame)
-    }
-}
 </script>
 
 <style>
-.v-app {
-    width: 100%;
-}
+    .v-app {
+        width: 100%;
+    }
 
-#app {
-    width: 100%;
-}
+    #app {
+        width: 100%;
+    }
 
-.error-warning {
-    color: red;
-    font-size: small;
-}
+    .error-warning {
+        color: red;
+        font-size: small;
+    }
 
-input.manual-score {
-    width: 3em;
-}
+    input.manual-score {
+        width: 3em;
+    }
 
-.override {
-    width: 100%;
-}
+    .override {
+        width: 100%;
+    }
 
-.lineButton >>> .v-btn {
-    width: 100%;
-    margin-bottom: 4px;
-    margin-top: 4px;
-}
+    .lineButton >>> .v-btn {
+        width: 100%;
+        margin-bottom: 4px;
+        margin-top: 4px;
+    }
 
-.v-btn:not(.v-btn--round).v-size--x-small {
-    margin: 2px;
-}
+    .v-btn:not(.v-btn--round).v-size--x-small {
+        margin: 2px;
+    }
 
-.halfLine >>> .v-btn {
-    width: 49%;
-}
+    .halfLine >>> .v-btn {
+        width: 49%;
+    }
 
-.v-btn {
-    margin: 5px;
-}
+    .v-btn {
+        margin: 5px;
+    }
 </style>

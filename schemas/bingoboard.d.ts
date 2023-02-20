@@ -14,6 +14,10 @@ export interface Bingoboard {
     slot: string;
     colors: ("pink" | "red" | "orange" | "brown" | "yellow" | "green" | "teal" | "blue" | "navy" | "purple")[];
     rawColors: string;
+    /**
+     * @minItems 4
+     * @maxItems 4
+     */
     markers: [string | null, string | null, string | null, string | null];
   }[];
 }

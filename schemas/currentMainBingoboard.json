@@ -6,7 +6,7 @@
     "properties": {
         "boardReplicant": {
             "type": "string",
-            "enum": ["bingoboard","oriBingoboard","explorationBingoboard"],
+            "enum": ["bingoboard","externalBingoboard","explorationBingoboard"],
             "default":"bingoboard"
         }
     }

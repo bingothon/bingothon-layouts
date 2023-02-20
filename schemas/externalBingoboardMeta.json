@@ -1,0 +1,32 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type":"object",
+    "default": {
+        "game": "none"
+    },
+    "anyOf": [
+        {
+            "required": ["game","boardID","playerID","coop"],
+            "properties": {
+                "game": {"const": "ori1"},
+                "boardID": {"type":"string", "default":"0"},
+                "playerID": {"type":"string", "default":"0"},
+                "coop": {"type":"boolean", "default": true}
+            }
+        },
+        {
+            "required": ["game","token"],
+            "properties": {
+                "game": {"const": "ori2"},
+                "token": {"description": "The sync token, obtained through the Rando launcher or web interface", "type":"string"},
+                "host": {"description": "The Rando server host", "type":"string", "default": "wotw.orirando.com"}
+            }
+        },
+        {
+            "required": ["game"],
+            "properties": {
+                "game": {"const": "none"}
+            }
+        }
+    ]
+}

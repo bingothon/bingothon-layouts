@@ -1,9 +1,9 @@
-import clone from "clone";
-import {AllGameLayouts, CurrentGameLayout} from "../../schemas";
-import {RunDataActiveRun} from "../../speedcontrol-types";
-import * as nodecgApiContext from "./util/nodecg-api-context";
+import clone from 'clone'
+import { AllGameLayouts, CurrentGameLayout } from '../../schemas'
+import { RunDataActiveRun } from '../../speedcontrol-types'
+import * as nodecgApiContext from './util/nodecg-api-context'
 
-const nodecg = nodecgApiContext.get();
+const nodecg = nodecgApiContext.get()
 
 const allGameLayoutsRep = nodecg.Replicant<AllGameLayouts>('allGameLayouts');
 const currentGameLayoutRep = nodecg.Replicant<CurrentGameLayout>('currentGameLayout');
@@ -13,6 +13,8 @@ const logger = new nodecg.Logger(`${nodecg.bundleName}:layoutlogic`);
 runDataActiveRunRep.on('change', (newValue, old): void => {
     // bail on server restart
     if (!newValue || !old) return;
+    // bail if run id is not changing
+    if (newValue.id === old.id) return;
     let layoutstring: string;
     switch (newValue?.customData.Layout) {
         case '16:9 2p 2v2':

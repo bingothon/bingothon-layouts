@@ -1,8 +1,6 @@
-import {NodeCG} from 'nodecg/types/server'; // eslint-disable-line
-import * as nodecgApiContext from './util/nodecg-api-context';
-import {VoiceActivity, SongData, ShowPictureDuringIntermission, CapturePositions, Asset } from '../../schemas';
-import obs from "./util/obs";
-import {TwitchCommercialTimer} from "../../speedcontrol-types";
+import {NodeCG} from 'nodecg/types/server' // eslint-disable-line
+import * as nodecgApiContext from './util/nodecg-api-context'
+import {Asset, CapturePositions, ShowPictureDuringIntermission, SongData, VoiceActivity} from '../../schemas'
 /* eslint-disable global-require */
 
 export = (nodecg: NodeCG): void => {
@@ -11,7 +9,7 @@ export = (nodecg: NodeCG): void => {
     const {bundleConfig} = nodecg;
     require('./bingosync');
     require('./bingoColors');
-    require('./oriBingoBoard');
+    require('./externalBingoboards');
     require('./explorationBingo');
     if (nodecg.bundleConfig.discord) {
         if (!nodecg.bundleConfig.discord.test) {

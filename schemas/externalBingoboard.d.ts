@@ -5,7 +5,7 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface OriBingoboard {
+export interface ExternalBingoboard {
   colorCounts: {
     [k: string]: unknown;
   };

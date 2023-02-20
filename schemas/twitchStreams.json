@@ -13,19 +13,19 @@
 			},
 			"widthPercent": {
 				"type": "number",
-				"default": "100"
+				"default": 100
 			},
 			"heightPercent": {
 				"type": "number",
-				"default": "100"
+				"default": 100
 			},
 			"topPercent": {
 				"type": "number",
-				"default": "0"
+				"default": 0
 			},
 			"leftPercent": {
 				"type": "number",
-				"default": "0"
+				"default": 0
 			},
 			"quality": {
 				"type": "string",
@@ -33,11 +33,11 @@
 			},
 			"volume": {
 				"type": "number",
-				"default": "0.5"
+				"default": 0.5
 			},
 			"paused": {
 				"type": "boolean",
-				"default": "false"
+				"default": false
 			},
 			"delay": {
 				"type":"number",

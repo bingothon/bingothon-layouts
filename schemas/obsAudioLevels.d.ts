@@ -5,10 +5,8 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface OriBingoMeta {
-  active: boolean;
-  game: "ori1" | "ori2";
-  boardID: number;
-  playerID: string;
-  coop: boolean;
+export interface ObsAudioLevels {
+  [k: string]: {
+    volume: number;
+  };
 }
