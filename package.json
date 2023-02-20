@@ -296,7 +296,7 @@
     "runtimeCompiler": true
   },
   "dependencies": {
-    "@discordjs/opus": "^0.5.0",
+    "@discordjs/opus": "^0.8.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.22",
     "@fortawesome/free-solid-svg-icons": "^5.10.2",
     "@fortawesome/vue-fontawesome": "^0.1.6",
