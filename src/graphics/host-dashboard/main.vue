@@ -24,17 +24,17 @@
                         {{ bid.game }} - {{ bid.bid }}
                         <div v-if="bid.goal">
                             <div class="bidRaised">
-                                {{ formatDollarAmount(bid.amount_raised, true) }} /
-                                {{ formatDollarAmount(bid.goal, true) }}
+                                {{ formatDollarAmount(bid.amount_raised) }} /
+                                {{ formatDollarAmount(bid.goal) }}
                             </div>
                             <div class="bidLeft">
-                                {{ formatDollarAmount(bid.goal - bid.amount_raised, true) }} left to go!
+                                {{ formatDollarAmount(bid.goal - bid.amount_raised) }} left to go!
                             </div>
                         </div>
                         <div v-else>
                             <div v-if="bid.options.length">
                                 <div v-for="(option, j) in bid.options" :key="i + ' ' + j" class="bidOption">
-                                    {{ option.name }} - {{ formatDollarAmount(option.amount_raised, true) }}
+                                    {{ option.name }} - {{ formatDollarAmount(option.amount_raised) }}
                                 </div>
                                 <div v-if="bid.allow_custom_options" class="customOptions">
                                     Users can submit their own options
@@ -104,7 +104,7 @@
                             {{ prize.name }}
                         </div>
                         <div class="prizeInfo">Provided by {{ prize.provider }}</div>
-                        <div class="prizeInfo">Minimum Donation: {{ formatDollarAmount(prize.minDonation, true) }}</div>
+                        <div class="prizeInfo">Minimum Donation: {{ formatDollarAmount(prize.minDonation) }}</div>
                         <div class="prizeInfo">
                             {{ getPrizeTimeUntilString(prize) }}
                         </div>
@@ -168,16 +168,16 @@
     export default class HostDashboard extends Vue {
         timeSinceLastIntermission: string = ''
         lastIntermissionInterval: NodeJS.Timeout | null = null
-        private charityIndex: number = 0
-        private bingothonIndex: number = 0
-        private sponsorIndex: number = 0
+        charityIndex: number = 0
+        bingothonIndex: number = 0
+        sponsorIndex: number = 0
 
         get adTimer(): number {
             return store.state.twitchCommercialTimer.secondsRemaining
         }
 
         get donationTotal() {
-            return this.formatDollarAmount(store.state.donationTotal, true)
+            return this.formatDollarAmount(store.state.donationTotal)
         }
 
         get prizes() {

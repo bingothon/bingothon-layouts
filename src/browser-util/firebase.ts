@@ -9,14 +9,13 @@ const logger = new nodecg.Logger(`${nodecg.bundleName}:firebase`)
 
 firebase.initializeApp(firebaseConfig)
 
-firebase
-    .auth()
-    .signInAnonymously()
-    .then(() => {
-        logger.info('Signed in to Firebase')
-    })
-    .catch((error) => {
-        logger.error('Failed to login to Firebase', error)
-    })
-nodecg.log.warn(`the loaded firebase database`, firebase.database())
+// .auth()
+// .signInAnonymously()
+// .then(() => {
+//     logger.info('Signed in to Firebase')
+// })
+// .catch((error) => {
+//     logger.error('Failed to login to Firebase', error)
+// })
+logger.warn(`the loaded firebase database`, firebase.database())
 export const db = firebase.database()
