@@ -2,7 +2,7 @@ import clone from 'clone'
 import { ReplicantBrowser } from 'nodecg/types/browser' // eslint-disable-line
 import Vue from 'vue'
 import { firebaseAction, vuexfireMutations } from 'vuexfire'
-import { Store } from 'vuex'
+import Vuex from 'vuex'
 import { db } from './firebase'
 import {
     AllCamNames,
@@ -101,7 +101,7 @@ const nodecgSpeedcontrolReplicantNames = ['runDataActiveRun', 'runDataArray', 't
 const assetNames = ['assets:charityVideos', 'assets:sponsorVideos', 'assets:wideLargeLogos', 'assets:wideSmallLogos', 'assets:squareLogos']
 const replicants: Map<string, ReplicantBrowser<any>> = new Map()
 
-var playerAlternateInterval: NodeJS.Timeout | null = null
+let playerAlternateInterval: NodeJS.Timeout | null = null
 
 interface StoreTypes {
     // bingothon
@@ -168,7 +168,7 @@ interface StoreTypes {
     gameP4: Games
 }
 
-export const store = new Store<StoreTypes>({
+export const store = new Vuex.Store<StoreTypes>({
     state: {
         // bingothon
         allGameLayouts: [] as AllGameLayouts,
