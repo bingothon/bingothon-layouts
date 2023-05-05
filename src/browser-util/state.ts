@@ -1,8 +1,8 @@
 import clone from 'clone'
 import { ReplicantBrowser } from 'nodecg/types/browser' // eslint-disable-line
-import Vue from 'vue'
+import Vue, { set } from 'vue'
 import { firebaseAction, vuexfireMutations } from 'vuexfire'
-import Vuex from 'vuex'
+import Vuex, { Store } from 'vuex'
 import { db } from './firebase'
 import {
     AllCamNames,
@@ -168,7 +168,7 @@ interface StoreTypes {
     gameP4: Games
 }
 
-export const store = new Vuex.Store<StoreTypes>({
+export const store = new Store<StoreTypes>({
     state: {
         // bingothon
         allGameLayouts: [] as AllGameLayouts,
@@ -235,14 +235,14 @@ export const store = new Vuex.Store<StoreTypes>({
     },
     mutations: {
         updateReplicant(state, { name, value }) {
-            Vue.set(state, name, value)
+            set(state, name, value)
         },
         startPlayerAlternateInterval(state, interval) {
             if (playerAlternateInterval) {
                 clearInterval(playerAlternateInterval)
             }
             playerAlternateInterval = setInterval(() => {
-                Vue.set(state, 'playerAlternate', !state.playerAlternate)
+                set(state, 'playerAlternate', !state.playerAlternate)
             }, interval)
         },
         stopPlayerAlternateInterval() {
