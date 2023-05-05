@@ -6,9 +6,10 @@
     "properties": {
         "members": {
             "type": "array",
-            "items": {
-                "additionalProperties": false,
+			"items": {
+				"type": "object",
                 "required": ["id","name","avatar","isSpeaking"],
+				"additionalProperties": false,
                 "properties": {
                     "id": {
                         "type":"string",

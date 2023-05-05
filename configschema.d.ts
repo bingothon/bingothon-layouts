@@ -47,6 +47,7 @@ export interface Configschema {
     port: number;
   };
   firebaseConfig: {
+    enable?: boolean;
     apiKey: string;
     authDomain: string;
     databaseURL: string;

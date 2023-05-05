@@ -12,7 +12,6 @@
         "cells": {
             "type": "array",
             "default": [],
-            "additionalProperties": false,
             "items": {
                 "type":"object",
                 "required": ["name","slot","colors","hiddenName","hidden"],
