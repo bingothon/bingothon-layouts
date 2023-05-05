@@ -53,7 +53,7 @@ function getTwitchAccessToken(): string {
 }
 
 function waitForEverythingReady(): Promise<void> {
-    return new Promise((resolve, _) => {
+    return new Promise((resolve) => {
         waitForReplicants([twichAPIDataRep, runDataActiveRunRep], () => {
             twichAPIDataRep.on('change', (val) => {
                 if (val.state == 'on') {
@@ -308,7 +308,7 @@ if (bundleConfig.twitch && bundleConfig.twitch.enable && bundleConfig.twitch.cha
     waitForEverythingReady().then((): void => {
         log.info('Twitch chat bot is enabled.')
 
-        const bot = new TwitchBotWrapper()
+        new TwitchBotWrapper()
 
         setTimeout(() => {
             nodecg.sendMessageToBundle('twitchGetAccessToken', 'nodecg-speedcontrol', null, (err, args) => {

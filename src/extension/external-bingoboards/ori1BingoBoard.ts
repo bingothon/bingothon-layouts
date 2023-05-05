@@ -21,11 +21,11 @@ interface OriField {
 }
 
 // used to track last state
-interface ExplorationOriField {
+/*interface ExplorationOriField {
     name: string
     completed: boolean
     revealed: boolean
-}
+}*/
 
 interface OriApiResponse {
     cards: OriField[] // length 25

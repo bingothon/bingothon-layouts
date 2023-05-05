@@ -4,15 +4,15 @@ import * as RequestPromise from 'request-promise'
 import WebSocket from 'ws'
 
 // Ours
-import {Replicant} from 'nodecg/types/server' // eslint-disable-line import/no-extraneous-dependencies
+import { Replicant } from 'nodecg/types/server' // eslint-disable-line import/no-extraneous-dependencies
 import * as nodecgApiContext from './util/nodecg-api-context'
-import {Bingoboard, BingoboardMeta, BingoboardMode, BingosyncSocket} from '../../schemas'
+import { Bingoboard, BingoboardMeta, BingoboardMode, BingosyncSocket } from '@/schemas'
 
 import equal from 'deep-equal'
 import clone from 'clone'
-import {InvasionContext} from './util/invasion'
-import {BingoboardCell, BingosyncCell, BoardColor} from '../../types'
-import {RunDataActiveRun, RunDataPlayer, RunDataTeam} from '../../speedcontrol-types'
+import { InvasionContext } from './util/invasion'
+import { BingoboardCell, BingosyncCell, BoardColor } from '../../types'
+import { RunDataActiveRun, RunDataPlayer, RunDataTeam } from '../../speedcontrol-types'
 
 const nodecg = nodecgApiContext.get()
 const log = new nodecg.Logger(`${nodecg.bundleName}:bingosync`)
@@ -222,7 +222,7 @@ class BingosyncManager {
         }
 
         const newBoardState = bingosyncBoard.map((cell): BingoboardCell => {
-            // remove blank cause thats not a color
+            // remove blank cause that's not a color
             // count all the color occurences
             const newCell: BingoboardCell = {
                 name: cell.name,
@@ -479,7 +479,7 @@ class BingosyncManager {
         for (let rowCol = 0; rowCol < 5; rowCol++) {
             // Row Bingo Checks
             if (
-                cells[rowCol * 5 + 0].colors.includes(color) &&
+                cells[rowCol * 5].colors.includes(color) &&
                 cells[rowCol * 5 + 1].colors.includes(color) &&
                 cells[rowCol * 5 + 2].colors.includes(color) &&
                 cells[rowCol * 5 + 3].colors.includes(color) &&
@@ -489,7 +489,7 @@ class BingosyncManager {
             }
             // Col Bingo Checks
             if (
-                cells[0 + rowCol].colors.includes(color) &&
+                cells[rowCol].colors.includes(color) &&
                 cells[5 + rowCol].colors.includes(color) &&
                 cells[10 + rowCol].colors.includes(color) &&
                 cells[15 + rowCol].colors.includes(color) &&
@@ -520,6 +520,7 @@ class BingosyncManager {
         this.boardRep.value.colorCounts[color] = score
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private countScore(json: any) {
         const boardModeRep = nodecg.Replicant<BingoboardMode>('bingoboardMode')
         if (boardModeRep.value.boardMode === 'rowcontrol') {
@@ -668,7 +669,7 @@ nodecg.listenFor('bingomode:setBingoboardMode', (data: BingoboardMode, callback)
     }
 })
 
-nodecg.listenFor('bingomode:forceRefreshInvasion', (_data: any, callback): void => {
+nodecg.listenFor('bingomode:forceRefreshInvasion', (_data: unknown, callback): void => {
     bingosyncInstances.get('bingoboard')?.forceRefreshInvasionCtx()
     if (callback && !callback.handled) {
         callback()
