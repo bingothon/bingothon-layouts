@@ -1,6 +1,6 @@
 tabWidth: 4
 singleQuote: true
-semi: false
+semi: true
 vueIndentScriptAndStyle: true
 trailingComma: all
 jsxSingleQuote: false
