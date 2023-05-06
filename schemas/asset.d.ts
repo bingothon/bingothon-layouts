@@ -10,6 +10,7 @@ export interface Asset {
   namespace: string;
   category: string;
   ext: string;
+  name: string;
   sum: string;
   url: string;
 }

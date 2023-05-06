@@ -15,13 +15,13 @@
 </template>
 
 <script lang="ts">
-    import { Component, Ref, Vue, Watch } from 'vue-property-decorator'
-    import { Asset, IntermissionVideos } from '../../../schemas'
-    import { getReplicant, store } from '../../browser-util/state'
-    import { RunData } from '../../../speedcontrol-types'
-    import TextFit from '../helpers/text-fit.vue'
+    import { Component, Ref, Vue, Watch } from 'vue-property-decorator';
+    import { Asset, IntermissionVideos } from '@/schemas';
+    import { getReplicant, store } from '@/browser-util/state';
+    import { RunData } from '../../../speedcontrol-types';
+    import TextFit from '../helpers/text-fit.vue';
 
-    type VideoTypeEnum = 'charity' | 'sponsor'
+    type VideoTypeEnum = 'charity' | 'sponsor';
 
     @Component({
         components: {
@@ -29,67 +29,81 @@
         },
     })
     export default class VideoPlayer extends Vue {
-        video: Asset
-        videoType: VideoTypeEnum = 'charity'
-        nextRun: RunData = store.state.runDataActiveRun
-        @Ref('VideoPlayer') player: HTMLVideoElement
-        @Ref('PlayerSrc') playerSrc: HTMLSourceElement
+        video: Asset;
+        videoType: VideoTypeEnum = 'charity';
+        nextRun: RunData = store.state.runDataActiveRun;
+        @Ref('VideoPlayer') player: HTMLVideoElement;
+        @Ref('PlayerSrc') playerSrc: HTMLSourceElement;
 
         get charityVideos(): Asset[] {
-            return store.state['assets:charityVideos']
+            return store.state['assets:charityVideos'];
         }
 
         get sponsorVideos(): Asset[] {
-            return store.state['assets:sponsorVideos']
+            return store.state['assets:sponsorVideos'];
         }
 
         get domain(): string {
-            return window.location.host
+            return window.location.host;
         }
 
         get currentObsScene(): string {
-            return store.state.obsCurrentScene
+            return store.state.obsCurrentScene;
         }
 
         @Watch('currentObsScene', { immediate: true })
         onOBSSceneChanged(newVal: string) {
             this.$nextTick(() => {
                 if (newVal === 'videoPlayer') {
-                    this.nextRun = store.state.runDataActiveRun
-                    this.videoType = 'charity'
-                    this.playNextVideo(this.videoType)
+                    this.nextRun = store.state.runDataActiveRun;
+                    this.videoType = 'charity';
+                    this.playNextVideo(this.videoType, this.nextRun);
                 }
-            })
+            });
         }
 
-        async playNextVideo(type: VideoTypeEnum): Promise<void> {
-            let video
+        async playNextVideo(type: VideoTypeEnum, nextRun: RunData): Promise<void> {
+            let video: Asset;
             if (type === 'charity') {
-                video = this.charityVideos[store.state.intermissionVideos.charityVideoIndex]
+                if (nextRun.customData.charityVideo) {
+                    video = this.charityVideos.find((video) => {
+                        return video.name === nextRun.customData.charityVideo;
+                    });
+                }
+                if (!video) {
+                    video = this.charityVideos[store.state.intermissionVideos.charityVideoIndex];
+                }
             } else {
-                video = this.sponsorVideos[store.state.intermissionVideos.sponsorVideoIndex]
+                if (nextRun.customData.sponsorVideo) {
+                    video = this.sponsorVideos.find((video) => {
+                        return video.name === nextRun.customData.sponsorVideo;
+                    });
+                }
+                if (!video) {
+                    video = this.sponsorVideos[store.state.intermissionVideos.sponsorVideoIndex];
+                }
             }
             if (video) {
-                this.video = video
-                this.playerSrc.src = video.url
-                this.playerSrc.type = `video/${video.ext.toLowerCase().replace('.', '')}`
+                this.video = video;
+                this.playerSrc.src = video.url;
+                this.playerSrc.type = `video/${video.ext.toLowerCase().replace('.', '')}`;
                 if (type === 'charity') {
-                    this.player.volume = 1
+                    this.player.volume = 1;
                 } else {
-                    this.player.volume = 0.5
+                    this.player.volume = 0.5;
                 }
-                this.player.load()
-                await this.player.play()
+                this.player.load();
+                await this.player.play();
             } else {
                 //something went wrong, play next video
                 if (type === 'charity') {
                     getReplicant<IntermissionVideos>('intermissionVideos').value.charityVideoIndex =
-                        (store.state.intermissionVideos.charityVideoIndex + 1) % this.charityVideos.length
+                        (store.state.intermissionVideos.charityVideoIndex + 1) % this.charityVideos.length;
                 } else {
                     getReplicant<IntermissionVideos>('intermissionVideos').value.sponsorVideoIndex =
-                        (store.state.intermissionVideos.sponsorVideoIndex + 1) % this.sponsorVideos.length
+                        (store.state.intermissionVideos.sponsorVideoIndex + 1) % this.sponsorVideos.length;
                 }
-                await this.playNextVideo(type)
+                await this.playNextVideo(type, nextRun);
             }
         }
 
@@ -97,18 +111,18 @@
             // console.log("video ended!");
             if (this.videoType === 'charity') {
                 store.state.intermissionVideos.charityVideoIndex =
-                    (store.state.intermissionVideos.charityVideoIndex + 1) % this.charityVideos.length
-                this.playNextVideo('sponsor')
-                this.videoType = 'sponsor'
+                    (store.state.intermissionVideos.charityVideoIndex + 1) % this.charityVideos.length;
+                this.playNextVideo('sponsor', this.nextRun);
+                this.videoType = 'sponsor';
             } else {
                 store.state.intermissionVideos.sponsorVideoIndex =
-                    (store.state.intermissionVideos.sponsorVideoIndex + 1) % this.sponsorVideos.length
-                nodecg.sendMessage('videoPlayerFinished')
+                    (store.state.intermissionVideos.sponsorVideoIndex + 1) % this.sponsorVideos.length;
+                nodecg.sendMessage('videoPlayerFinished');
             }
         }
 
         mounted() {
-            this.player.addEventListener('ended', this.videoEnded)
+            this.player.addEventListener('ended', this.videoEnded);
         }
     }
 </script>
