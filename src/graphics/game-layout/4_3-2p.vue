@@ -16,7 +16,7 @@
             id="discord-voice"
             iconHeight="40px"
             nameWidth="125px"
-            maxUserCount="4"
+            maxUserCount="6"
         ></discord-voice-display>
     </div>
 </template>
@@ -56,6 +56,10 @@
 </script>
 
 <style scoped>
+    * {
+        box-sizing: border-box;
+    }
+
     #GameLayout {
         position: absolute;
         top: 0px;
@@ -69,8 +73,8 @@
         position: absolute;
         top: 0px;
         left: 0px;
-        width: 960px;
-        height: 720px;
+        width: 820px;
+        height: 615px;
         border: 2px var(--container-border-color) solid;
         background-color: aqua;
     }
@@ -78,9 +82,9 @@
     #stream2 {
         position: absolute;
         top: 0px;
-        left: 960px;
-        width: 960px;
-        height: 720px;
+        left: 1100px;
+        width: 820px;
+        height: 615px;
         border: 2px var(--container-border-color) solid;
         background-color: blue;
     }
@@ -97,16 +101,16 @@
 
     #discord-voice {
         position: absolute;
-        top: 780px;
-        left: 1280px;
-        width: 250px;
-        height: 220px;
+        top: 0px;
+        left: 820px;
+        width: 280px;
+        height: 335px;
         border: 2px var(--container-border-color) solid;
     }
 
     #pi1 {
         position: absolute;
-        top: 720px;
+        top: 615px;
         left: 0px;
         border: 2px var(--container-border-color) solid;
         width: 643px;
@@ -115,7 +119,7 @@
 
     #pi2 {
         position: absolute;
-        top: 720px;
+        top: 615px;
         left: 1280px;
         border: 2px var(--container-border-color) solid;
         width: 643px;
@@ -124,37 +128,37 @@
 
     #Bingo-board {
         position: absolute;
-        top: 720px;
+        top: 615px;
         left: 640px;
         border: 2px var(--container-border-color) solid;
         width: 640px;
-        height: 280px;
+        height: 385px;
     }
 
     #game {
         position: absolute;
-        top: 780px;
+        top: 675px;
         left: 0px;
-        width: 320px;
+        width: 643px;
         border: 2px var(--container-border-color) solid;
-        height: 220px;
+        height: 325px;
     }
 
     #SponsorContainer {
         position: absolute;
-        top: 780px;
-        left: 320px;
-        width: 320px;
+        top: 335px;
+        left: 820px;
+        width: 280px;
         border: 2px var(--container-border-color) solid;
-        height: 220px;
+        height: 280px;
     }
 
     #timer {
         position: absolute;
-        top: 780px;
-        left: 1530px;
-        width: 390px;
+        top: 675px;
+        left: 1280px;
+        width: 643px;
         border: 2px var(--container-border-color) solid;
-        height: 220px;
+        height: 325px;
     }
 </style>
