@@ -1,6 +1,6 @@
 <template>
     <div id="GameLayout">
-        <div id="fillur" class="flexContainer"></div>
+        <!-- <div id="fillur" class="flexContainer"></div> -->
         <div id="fillbar" class="flexContainer"></div>
         <player-info id="pi1" playerIndex="0" height="60px" hideSoundIcon="true"></player-info>
         <test-game-container id="game"></test-game-container>
@@ -86,8 +86,8 @@
         position: absolute;
         top: 560px;
         left: 0px;
-        width: 400px;
-        height: 292px;
+        width: 448px;
+        height: 265px;
         /*background-image: url("../../../static/middle-info-background.png");*/
         border: 2px var(--container-border-color) solid;
     }
@@ -97,7 +97,7 @@
         top: 0px;
         left: 0px;
         border: 2px var(--container-border-color) solid;
-        width: 400px;
+        width: 448px;
         box-sizing: border-box;
     }
 
@@ -106,46 +106,46 @@
         top: 60px;
         left: 0px;
         border: 2px var(--container-border-color) solid;
-        width: 400px;
+        width: 448px;
         height: 500px;
     }
 
     #game {
         /*background-image: url("../../../static/middle-info-background.png");*/
         position: absolute;
-        top: 855px;
-        left: 400px;
-        width: 760px;
+        top: 828px;
+        left: 448px;
+        width: 750px;
         border: 2px var(--container-border-color) solid;
-        height: 145px;
+        height: 172px;
     }
 
     #timer {
         position: absolute;
-        top: 855px;
-        left: 1160px;
+        top: 828px;
+        left: 1198px;
         /*background-image: url("../../../static/middle-info-background.png");*/
-        width: 760px;
+        width: 720px;
         border: 2px var(--container-border-color) solid;
-        height: 145px;
+        height: 172px;
     }
 
     #stream1 {
         position: absolute;
         top: 0px;
-        left: 402px;
-        width: 1519px;
-        height: 855px;
+        left: 450px;
+        width: 1471px;
+        height: 828px;
         background-color: aqua;
     }
 
     #SponsorContainer {
         /*background-image: url("../../../static/middle-info-background.png");*/
         position: absolute;
-        top: 855px;
+        top: 828px;
         left: 0px;
-        width: 400px;
+        width: 448px;
         border: 2px var(--container-border-color) solid;
-        height: 145px;
+        height: 172px;
     }
 </style>

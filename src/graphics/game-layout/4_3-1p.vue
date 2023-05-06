@@ -88,7 +88,7 @@
         top: 460px;
         left: 0px;
         width: 586px;
-        height: 200px;
+        height: 150px;
         border: 2px var(--container-border-color) solid;
     }
 
@@ -103,11 +103,11 @@
 
     #Bingo-board {
         position: absolute;
-        top: 660px;
+        top: 610px;
         left: 0px;
         border: 2px var(--container-border-color) solid;
         width: 587px;
-        height: 340px;
+        height: 390px;
     }
 
     #game {

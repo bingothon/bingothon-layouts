@@ -98,8 +98,8 @@
         position: absolute;
         top: 600px;
         left: 1280px;
-        width: 250px;
-        height: 400px;
+        width: 638px;
+        height: 200px;
         /*background-image: url("../../../static/middle-info-background.png");*/
         border: 2px var(--container-border-color) solid;
     }
@@ -132,21 +132,21 @@
     #game {
         /*background-image: url("../../../static/middle-info-background.png");*/
         position: absolute;
-        top: 820px;
+        top: 800px;
         left: 0px;
         width: 640px;
         border: 2px var(--container-border-color) solid;
-        height: 180px;
+        height: 200px;
     }
 
     #timer {
         position: absolute;
-        top: 600px;
-        left: 1530px;
+        top: 800px;
+        left: 1280px;
         /*background-image: url("../../../static/middle-info-background.png");*/
-        width: 390px;
+        width: 638px;
         border: 2px var(--container-border-color) solid;
-        height: 400px;
+        height: 200px;
     }
 
     #SponsorContainer {
@@ -156,6 +156,6 @@
         left: 0px;
         width: 638px;
         border: 2px var(--container-border-color) solid;
-        height: 220px;
+        height: 200px;
     }
 </style>
