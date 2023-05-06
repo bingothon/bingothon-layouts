@@ -74,7 +74,7 @@ const config = (name) => {
         plugins.push(
             new CopyPlugin({
                 patterns: [
-                    { from: "./_misc/common.css", to: "./[name].[ext]" }
+                    { from: "./_misc/common.css", to: "./" }
                 ]
             })
         );
