@@ -11,8 +11,8 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
 
-    const wide = require('../../../../static/logo-winter-wide.png');
-    const fhLogo = require('../BingothonWinterNewFredHutch.png');
+    const wide = require('../../../../static/logo-summer-wide.png');
+    const fhLogo = require('../BingothonMSF.png');
 
     @Component({})
     export default class RotatingLogos extends Vue {
