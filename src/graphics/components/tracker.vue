@@ -126,10 +126,10 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-    import { store } from '../../browser-util/state'
-    import { Games } from '../../../types'
-    import { TrackerData } from '../../../schemas'
+    import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+    import { store } from '../../browser-util/state';
+    import { Games } from '../../../types';
+    import { TrackerData } from '../../../schemas';
 
     @Component({
         components: {},
@@ -137,61 +137,61 @@
     export default class Tracker extends Vue {
         @Watch('trackerData')
         onTrackerDataChange(): void {
-            console.log('watcher function for trackers')
-            this.updateTrackers()
+            console.log('watcher function for trackers');
+            this.updateTrackers();
         }
 
         @Prop({ required: true, default: 1 })
-        playerNumber: string // actually a number but who cares about types? shrug
+        playerNumber: string; // actually a number but who cares about types? shrug
 
         @Prop({ default: 'vertical' })
-        alignment: string
+        alignment: string;
 
-        basePath = '/bundles/bingothon-layouts/static/tracker/skyward-sword/'
+        basePath = '/bundles/bingothon-layouts/static/tracker/skyward-sword/';
 
         mounted() {
-            this.updateTrackers()
+            this.updateTrackers();
         }
 
         get game(): Games {
-            let player = parseInt(this.playerNumber)
+            let player = parseInt(this.playerNumber);
             switch (player) {
                 case 4:
-                    return store.state.gameP4
+                    return store.state.gameP4;
                 case 3:
-                    return store.state.gameP3
+                    return store.state.gameP3;
                 case 2:
-                    return store.state.gameP2
+                    return store.state.gameP2;
                 case 1:
                 default:
-                    return store.state.gameP1
+                    return store.state.gameP1;
             }
         }
 
         get trackerData(): TrackerData {
-            return store.state.trackerData
+            return store.state.trackerData;
         }
 
         updateTrackers() {
-            console.log('update trackers')
-            let player = parseInt(this.playerNumber)
+            console.log('update trackers');
+            let player = parseInt(this.playerNumber);
             switch (player) {
                 case 4:
-                    store.dispatch('unbindGameP4')
-                    store.dispatch('bindGameP4')
-                    break
+                    store.dispatch('unbindGameP4');
+                    store.dispatch('bindGameP4');
+                    break;
                 case 3:
-                    store.dispatch('unbindGameP3')
-                    store.dispatch('bindGameP3')
-                    break
+                    store.dispatch('unbindGameP3');
+                    store.dispatch('bindGameP3');
+                    break;
                 case 2:
-                    store.dispatch('unbindGameP2')
-                    store.dispatch('bindGameP2')
-                    break
+                    store.dispatch('unbindGameP2');
+                    store.dispatch('bindGameP2');
+                    break;
                 case 1:
                 default:
-                    store.dispatch('unbindGameP1')
-                    store.dispatch('bindGameP1')
+                    store.dispatch('unbindGameP1');
+                    store.dispatch('bindGameP1');
             }
         }
     }

@@ -137,7 +137,7 @@
         'also find the FULL uncut interviews on our website at bingothon.com as well!\n' +
         'Bingothon is committed to supporting as many bingo events as possible, and for that to happen, restreamers are the unsung heroes we need to make ' +
         'that happen! If you are interested in volunteering as a restreamer, then do not hesitate to join our Discord server and talk to a Main Organizer ' +
-        'about it!'
+        'about it!';
 
     const CHARITY_BLURBS =
         'Fred Hutch is a cancer research center where world-renowned scientists and humanitarians work together to prevent, diagnose and treat cancer, HIV and many other diseases. With three Novel laureates among their researchers, they are at the front of the battle against those illnesses.\n' +
@@ -146,19 +146,19 @@
         'Beyond their research, Fred Hutch are rethinking the patient experience so it is best-of-class: seamless, fully integrated across teams, with consistent, informed providers and services considerate of the whole person… and their families.\n' +
         'Fred Hutch is the home of the HIV Vaccine Trials Network, the world’s largest publicly funded international collaboration conducting clinical trials of HIV vaccines and treatments.\n' +
         "One of Fred Hutch's researchers, Keith Jerome is leading research to find a cure for Herpes simplex viruses. The goal is start human clinical trials by the end of 2023.\n" +
-        'Researchers from Fred Hutch have won the Nobel Prize in physiology or medicine three times: in 1990, 2001 and 2004. Dr E. Donnal Thomas was awarded in 1990 for his work on the bone marrow and blood stem cell transplantation. Dr Leland Hartwell was awared in 2001 for discovering the universal mechanism that controls cell division in all eukaryotic, or nucleated, organisms. And finally, Dr. Linda Buck was awared in 2004 for her work on odorant receptors and the organization of the olfactory system — the network responsible for our sense of smell.'
+        'Researchers from Fred Hutch have won the Nobel Prize in physiology or medicine three times: in 1990, 2001 and 2004. Dr E. Donnal Thomas was awarded in 1990 for his work on the bone marrow and blood stem cell transplantation. Dr Leland Hartwell was awared in 2001 for discovering the universal mechanism that controls cell division in all eukaryotic, or nucleated, organisms. And finally, Dr. Linda Buck was awared in 2004 for her work on odorant receptors and the organization of the olfactory system — the network responsible for our sense of smell.';
 
     const SPONSOR_BLURBS =
         'We would like to thank Team17 for sponsoring Bingothon Winter 2022, and for their continuous support within the past few events.\n' +
-        "We would like to thank our sponsor Team17 for providing a multitude of prizes for this event. Find out more about what they've offered by typing !prizes in the chat!"
+        "We would like to thank our sponsor Team17 for providing a multitude of prizes for this event. Find out more about what they've offered by typing !prizes in the chat!";
 
-    import { Component, Vue } from 'vue-property-decorator'
-    import { getReplicant, store } from '../../browser-util/state'
-    import { TrackerPrize } from '../../../types'
-    import moment from 'moment'
-    import { RunData } from '../../../speedcontrol-types'
-    import HostBingo from '../components/hostBingo.vue'
-    import { HostsSpeakingDuringIntermission, ShowPictureDuringIntermission } from '../../../schemas'
+    import { Component, Vue } from 'vue-property-decorator';
+    import { getReplicant, store } from '../../browser-util/state';
+    import { TrackerPrize } from '../../../types';
+    import moment from 'moment';
+    import { RunData } from '../../../speedcontrol-types';
+    import HostBingo from '../components/hostBingo.vue';
+    import { HostsSpeakingDuringIntermission, ShowPictureDuringIntermission } from '../../../schemas';
 
     @Component({
         components: {
@@ -166,184 +166,184 @@
         },
     })
     export default class HostDashboard extends Vue {
-        timeSinceLastIntermission: string = ''
-        lastIntermissionInterval: NodeJS.Timeout | null = null
-        charityIndex: number = 0
-        bingothonIndex: number = 0
-        sponsorIndex: number = 0
+        timeSinceLastIntermission: string = '';
+        lastIntermissionInterval: NodeJS.Timeout | null = null;
+        charityIndex: number = 0;
+        bingothonIndex: number = 0;
+        sponsorIndex: number = 0;
 
         get adTimer(): number {
-            return store.state.twitchCommercialTimer.secondsRemaining
+            return store.state.twitchCommercialTimer.secondsRemaining;
         }
 
         get donationTotal() {
-            return this.formatDollarAmount(store.state.donationTotal)
+            return this.formatDollarAmount(store.state.donationTotal);
         }
 
         get prizes() {
-            return store.state.trackerPrizes //probably needs to be formatted
+            return store.state.trackerPrizes; //probably needs to be formatted
         }
 
         get openBids() {
-            return store.state.trackerOpenBids.filter((b) => b.state === 'OPENED')
+            return store.state.trackerOpenBids.filter((b) => b.state === 'OPENED');
         }
 
         get currentRun() {
-            return store.state.runDataActiveRun
+            return store.state.runDataActiveRun;
         }
 
         get comingUpRun(): RunData {
-            return this.getNextRuns(this.currentRun, 1)
+            return this.getNextRuns(this.currentRun, 1);
         }
 
         get afterThatRun(): RunData {
-            return this.getNextRuns(this.currentRun, 2)
+            return this.getNextRuns(this.currentRun, 2);
         }
 
         get hostsSpeakingDuringIntermission(): boolean {
-            return store.state.hostsSpeakingDuringIntermission.speaking
+            return store.state.hostsSpeakingDuringIntermission.speaking;
         }
 
         // only during intermission
         get hostsCanGoLive(): boolean {
-            return store.state.obsCurrentScene == 'intermission' && this.adTimer <= 0
+            return store.state.obsCurrentScene == 'intermission' && this.adTimer <= 0;
         }
 
         get hostsSpeakingToggleButtonText(): string {
             if (!this.hostsCanGoLive) {
-                return '(Disabled)'
+                return '(Disabled)';
             } else if (this.hostsSpeakingDuringIntermission) {
-                return 'Mute'
+                return 'Mute';
             } else {
-                return 'Unmute on stream'
+                return 'Unmute on stream';
             }
         }
 
         get charityTexts(): String[] {
-            return CHARITY_BLURBS.split('\n')
+            return CHARITY_BLURBS.split('\n');
         }
 
         get bingothonTexts(): String[] {
-            return BINGOTHON_BLURBS.split('\n')
+            return BINGOTHON_BLURBS.split('\n');
         }
 
         get sponsorTexts(): String[] {
-            return SPONSOR_BLURBS.split('\n')
+            return SPONSOR_BLURBS.split('\n');
         }
 
         get pictureDuringIntermissionUrl(): string {
-            return store.state.showPictureDuringIntermission.imageUrl
+            return store.state.showPictureDuringIntermission.imageUrl;
         }
 
         set pictureDuringIntermissionUrl(url: string) {
-            getReplicant<ShowPictureDuringIntermission>('showPictureDuringIntermission').value.imageUrl = url
+            getReplicant<ShowPictureDuringIntermission>('showPictureDuringIntermission').value.imageUrl = url;
         }
 
         mounted() {
             this.lastIntermissionInterval = setInterval(() => {
-                const totalS = new Date().getTime() / 1000 - store.state.lastIntermissionTimestamp
-                const mins = (totalS / 60).toFixed(0)
-                const secs = (totalS % 60).toFixed(0)
-                this.timeSinceLastIntermission = mins + ':' + secs.padStart(2, '0')
-            }, 1000)
+                const totalS = new Date().getTime() / 1000 - store.state.lastIntermissionTimestamp;
+                const mins = (totalS / 60).toFixed(0);
+                const secs = (totalS % 60).toFixed(0);
+                this.timeSinceLastIntermission = mins + ':' + secs.padStart(2, '0');
+            }, 1000);
         }
 
         destroyed() {
             if (this.lastIntermissionInterval) {
-                clearInterval(this.lastIntermissionInterval)
-                this.lastIntermissionInterval = null
+                clearInterval(this.lastIntermissionInterval);
+                this.lastIntermissionInterval = null;
             }
         }
 
         toggleHostsSpeakingDuringIntermission() {
             getReplicant<HostsSpeakingDuringIntermission>('hostsSpeakingDuringIntermission').value.speaking =
-                !store.state.hostsSpeakingDuringIntermission.speaking
+                !store.state.hostsSpeakingDuringIntermission.speaking;
         }
 
         clearPicture() {
-            this.pictureDuringIntermissionUrl = null
+            this.pictureDuringIntermissionUrl = null;
         }
 
         runnersToString(run: RunData): string {
-            let res = ''
-            let j = 0
+            let res = '';
+            let j = 0;
             run.teams.forEach((team) => {
                 if (team.name) {
-                    res = res + team.name + ': '
+                    res = res + team.name + ': ';
                 }
-                let i = 0
+                let i = 0;
                 team.players.forEach((player) => {
-                    res += player.name
+                    res += player.name;
                     if (i === team.players.length - 1) {
                         //if current player is last player of team
                         if (j === run.teams.length - 1) {
                             //and last team of the run
                             //do nothing
                         } else {
-                            res += ' vs. ' //if not last team then addd vs.
+                            res += ' vs. '; //if not last team then addd vs.
                         }
                     } else {
-                        res += ' & ' //if not last player of team add &
+                        res += ' & '; //if not last player of team add &
                     }
-                    i++
-                })
-                j++
-            })
-            return res
+                    i++;
+                });
+                j++;
+            });
+            return res;
         }
 
         // Formats dollar amounts to the correct string.
         formatDollarAmount(amount: number): string {
             // We drop the cents and add a comma over $1000.
-            return '$' + amount.toFixed(2)
+            return '$' + amount.toFixed(2);
         }
 
         updateCharityIndex() {
-            this.charityIndex = (this.charityIndex + 1) % this.charityTexts.length
+            this.charityIndex = (this.charityIndex + 1) % this.charityTexts.length;
         }
 
         updateBingothonIndex() {
-            this.bingothonIndex = (this.bingothonIndex + 1) % this.bingothonTexts.length
+            this.bingothonIndex = (this.bingothonIndex + 1) % this.bingothonTexts.length;
         }
 
         updateSponsorIndex() {
-            this.sponsorIndex = (this.sponsorIndex + 1) % this.sponsorTexts.length
+            this.sponsorIndex = (this.sponsorIndex + 1) % this.sponsorTexts.length;
         }
 
         // Get the next Xth run in the schedule.
         getNextRuns(runData: RunData, X: number): RunData {
-            let runDataArray = store.state.runDataArray
-            let indexOfCurrentRun = this.findIndexInRunDataArray(runData)
-            let nextRuns = runDataArray[indexOfCurrentRun + X]
-            return nextRuns
+            let runDataArray = store.state.runDataArray;
+            let indexOfCurrentRun = this.findIndexInRunDataArray(runData);
+            let nextRuns = runDataArray[indexOfCurrentRun + X];
+            return nextRuns;
         }
 
         // Find array index of current run based on it's ID.
         findIndexInRunDataArray(run: RunData): number {
-            let indexOfRun = -1
-            let runDataArray = store.state.runDataArray
+            let indexOfRun = -1;
+            let runDataArray = store.state.runDataArray;
 
             // Completely skips this if the run variable isn't defined.
             if (run) {
                 for (let i = 0; i < runDataArray.length; i++) {
                     if (run.id === runDataArray[i].id) {
-                        indexOfRun = i
-                        break
+                        indexOfRun = i;
+                        break;
                     }
                 }
             }
-            return indexOfRun
+            return indexOfRun;
         }
 
         // calculate the time until the prize period ends and render it as a human readable string ("an hour", "20 minutes")
         getPrizeTimeUntilString(prize: TrackerPrize) {
             if (prize.endtime) {
-                let timeUntil = moment(prize.endtime).fromNow(true)
-                timeUntil = timeUntil.replace('an ', '') // Dirty fix for "Donate in the next an hour".
-                timeUntil = timeUntil.replace('a ', '') // Dirty fix for "Donate in the next a day".
-                return `Donate in the next ${timeUntil}`
+                let timeUntil = moment(prize.endtime).fromNow(true);
+                timeUntil = timeUntil.replace('an ', ''); // Dirty fix for "Donate in the next an hour".
+                timeUntil = timeUntil.replace('a ', ''); // Dirty fix for "Donate in the next a day".
+                return `Donate in the next ${timeUntil}`;
             } else {
-                return `Donate until the end of the event`
+                return `Donate until the end of the event`;
             }
         }
     }

@@ -6,22 +6,22 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { store } from '../../browser-util/state'
+    import { Component, Vue } from 'vue-property-decorator';
+    import { store } from '../../browser-util/state';
 
     @Component({})
     export default class ChatBotControl extends Vue {
         // --- computed properties
         get currentChatBotState(): string {
-            return store.state.twitchChatBotData.state
+            return store.state.twitchChatBotData.state;
         }
 
         get canReconnect(): boolean {
-            return 'connected' === store.state.twitchChatBotData.state
+            return 'connected' === store.state.twitchChatBotData.state;
         }
 
         doReconnect() {
-            nodecg.sendMessageToBundle('twitchChatBot:reconnect', 'bingothon-layouts')
+            nodecg.sendMessageToBundle('twitchChatBot:reconnect', 'bingothon-layouts');
         }
     }
 </script>

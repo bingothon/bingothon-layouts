@@ -53,79 +53,79 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { nodecg } from '../../browser-util/nodecg'
-    import { TwitchStreams } from '../../../schemas'
-    import { getReplicant, store } from '../../browser-util/state'
+    import { Component, Vue } from 'vue-property-decorator';
+    import { nodecg } from '../../browser-util/nodecg';
+    import { TwitchStreams } from '../../../schemas';
+    import { getReplicant, store } from '../../browser-util/state';
 
-    const bingothonBundleName = 'bingothon-layouts'
+    const bingothonBundleName = 'bingothon-layouts';
 
     @Component({})
     export default class TwitchControl extends Vue {
-        volumeBackgroundColor: 'red'
+        volumeBackgroundColor: 'red';
 
-        twitchChannelOverrides: string[] = ['', '', '', '']
+        twitchChannelOverrides: string[] = ['', '', '', ''];
 
         get twitchStreams(): TwitchStreams {
-            return store.state.twitchStreams
+            return store.state.twitchStreams;
         }
 
         get soundOnTwitchStream(): number {
-            return store.state.soundOnTwitchStream
+            return store.state.soundOnTwitchStream;
         }
 
         get playerNames(): string[] {
-            let arr = []
+            let arr = [];
             store.state.runDataActiveRun.teams.forEach((t) => {
                 t.players.forEach((p) => {
-                    arr.push(p.name)
-                })
-            })
-            return arr
+                    arr.push(p.name);
+                });
+            });
+            return arr;
         }
 
         get obsAudioLevels() {
-            return store.state.obsAudioLevels
+            return store.state.obsAudioLevels;
         }
 
         obsAudioLevel(stream: number): number {
-            return this.obsAudioLevels?.[`twitch-stream-${stream}`]?.volume ?? 0
+            return this.obsAudioLevels?.[`twitch-stream-${stream}`]?.volume ?? 0;
         }
 
         volumeChange(id: number, newVal: number) {
-            const newVolume = newVal / 100
-            nodecg.sendMessageToBundle('streams:setStreamVolume', bingothonBundleName, { id, volume: newVolume })
+            const newVolume = newVal / 100;
+            nodecg.sendMessageToBundle('streams:setStreamVolume', bingothonBundleName, { id, volume: newVolume });
         }
 
         updateStreamQuality(id: number, event: any) {
             nodecg.sendMessageToBundle('streams:setStreamQuality', bingothonBundleName, {
                 id,
                 quality: event.target.value,
-            })
+            });
         }
 
         muteChange(id: number) {
             if (this.soundOnTwitchStream === id) {
-                nodecg.sendMessageToBundle('streams:setSoundOnTwitchStream', bingothonBundleName, -1)
+                nodecg.sendMessageToBundle('streams:setSoundOnTwitchStream', bingothonBundleName, -1);
             } else {
-                nodecg.sendMessageToBundle('streams:setSoundOnTwitchStream', bingothonBundleName, id)
+                nodecg.sendMessageToBundle('streams:setSoundOnTwitchStream', bingothonBundleName, id);
             }
         }
 
         togglePlayPause(id: number) {
-            nodecg.sendMessageToBundle('streams:toggleStreamPlayPause', bingothonBundleName, id)
+            nodecg.sendMessageToBundle('streams:toggleStreamPlayPause', bingothonBundleName, id);
         }
 
         refresh(id: number) {
-            nodecg.sendMessageToBundle('streams:refreshStream', bingothonBundleName, id)
+            nodecg.sendMessageToBundle('streams:refreshStream', bingothonBundleName, id);
         }
 
         overrideChannelName(id: number) {
-            getReplicant<TwitchStreams>('twitchStreams').value[id].channel = this.twitchChannelOverrides[id]
+            getReplicant<TwitchStreams>('twitchStreams').value[id].channel = this.twitchChannelOverrides[id];
         }
 
         getStreamLabel(idx: number, playerNames: string[], twitchStreams: TwitchStreams): string {
-            return `${idx}: ${playerNames[idx]} (${twitchStreams[idx]?.channel})`
+            return `${idx}: ${playerNames[idx]} (${twitchStreams[idx]?.channel})`;
         }
     }
 </script>

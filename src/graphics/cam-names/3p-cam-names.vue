@@ -7,8 +7,8 @@
 </template>
 
 <script lang="ts">
-    import PlayerInfo from '../components/playerInfo.vue'
-    import { Component, Vue } from 'vue-property-decorator'
+    import PlayerInfo from '../components/playerInfo.vue';
+    import { Component, Vue } from 'vue-property-decorator';
 
     @Component({
         components: {

@@ -21,26 +21,26 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator'
-    import { store } from '../../browser-util/state'
+    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { store } from '../../browser-util/state';
 
     @Component({
         components: {},
     })
     export default class BestOfX extends Vue {
         @Prop({ default: -1 })
-        playerIndex: number
+        playerIndex: number;
 
         @Prop({ default: '55px' })
-        height: string
+        height: string;
 
         get score(): number {
-            return store.state.bestOfX.matchCounts[this.playerIndex]
+            return store.state.bestOfX.matchCounts[this.playerIndex];
             // return true;
         }
 
         get totalMatches(): number {
-            return store.state.bestOfX.totalMatches
+            return store.state.bestOfX.totalMatches;
         }
     }
 </script>

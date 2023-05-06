@@ -39,12 +39,12 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
+    import { Component, Vue } from 'vue-property-decorator';
 
     @Component({})
     export default class Socials extends Vue {
         mounted() {
-            setTimeout(() => this.$emit('end'), 20 * 1000)
+            setTimeout(() => this.$emit('end'), 20 * 1000);
         }
     }
 </script>

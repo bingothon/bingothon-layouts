@@ -26,11 +26,11 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator'
+    import { Component, Prop, Vue } from 'vue-property-decorator';
 
-    import PlayerInfo from './playerInfo.vue'
-    import TeamInfo from './teamInfo.vue'
-    import { store } from '../../browser-util/state'
+    import PlayerInfo from './playerInfo.vue';
+    import TeamInfo from './teamInfo.vue';
+    import { store } from '../../browser-util/state';
 
     @Component({
         components: {
@@ -40,20 +40,20 @@
     })
     export default class PlayerTeamContainer extends Vue {
         @Prop({ default: -1 })
-        teamIndex: number
+        teamIndex: number;
 
         @Prop({ default: '55px' })
-        height: string
+        height: string;
 
         @Prop({ default: '20px' })
-        margin: string
+        margin: string;
 
         get playerIndex(): number {
-            var idx = 0
+            var idx = 0;
             for (let i = 0; i < this.teamIndex; i++) {
-                idx += store.state.runDataActiveRun.teams[i].players.length
+                idx += store.state.runDataActiveRun.teams[i].players.length;
             }
-            return idx
+            return idx;
         }
     }
 </script>

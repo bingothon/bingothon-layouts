@@ -27,13 +27,13 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator'
-    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-    import { faMicrophone } from '@fortawesome/free-solid-svg-icons'
+    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+    import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
 
-    import { store } from '../../browser-util/state'
-    import TextFit from '../helpers/text-fit.vue'
-    import { VoiceActivityMember } from '../../../types'
+    import { store } from '../../browser-util/state';
+    import TextFit from '../helpers/text-fit.vue';
+    import { VoiceActivityMember } from '../../../types';
 
     @Component({
         components: {
@@ -43,33 +43,33 @@
     })
     export default class DiscordVoiceDisplay extends Vue {
         @Prop({ default: '40px' })
-        iconHeight: string
+        iconHeight: string;
         @Prop({ default: '100px' })
-        nameWidth: string
+        nameWidth: string;
         @Prop({ default: 'blue' })
-        voiceHighlightColor: string
+        voiceHighlightColor: string;
         @Prop({ default: 4 })
-        maxUserCount: number
+        maxUserCount: number;
         @Prop({ default: 0 })
-        startingMember: number
+        startingMember: number;
 
         get voiceActivityMembers(): VoiceActivityMember[] {
-            const members = store.state.voiceActivity.members
+            const members = store.state.voiceActivity.members;
             if (members.length > this.maxUserCount) {
                 console.log(
                     `start ${this.startingMember} length: ${this.maxUserCount}, total: ${
                         this.startingMember + this.maxUserCount
                     }`,
-                )
+                );
                 // TS doesn't care and makes the props that are are supposed to be numbers strings
                 // @ts-ignore
-                return members.slice(this.startingMember, parseInt(this.startingMember) + parseInt(this.maxUserCount))
+                return members.slice(this.startingMember, parseInt(this.startingMember) + parseInt(this.maxUserCount));
             }
-            return members
+            return members;
         }
 
         get micIcon() {
-            return faMicrophone
+            return faMicrophone;
         }
     }
 </script>

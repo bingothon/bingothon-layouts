@@ -31,61 +31,61 @@
 </template>
 
 <script lang="ts">
-    import clone from 'clone'
-    import { Component, Prop, Vue } from 'vue-property-decorator'
-    import { gsap } from 'gsap'
-    import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
-    import { store } from '../../../../browser-util/state'
-    import { TrackerOpenBid } from '../../../../../types'
+    import clone from 'clone';
+    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { gsap } from 'gsap';
+    import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+    import { store } from '../../../../browser-util/state';
+    import { TrackerOpenBid } from '../../../../../types';
 
-    gsap.registerPlugin(ScrollToPlugin)
+    gsap.registerPlugin(ScrollToPlugin);
 
     @Component({})
     export default class Bid extends Vue {
         @Prop({ default: null })
-        data: Object
+        data: Object;
 
-        bid: TrackerOpenBid = null
+        bid: TrackerOpenBid = null;
 
-        width: number = 1
+        width: number = 1;
 
         created() {
-            const chosenBid = this.getRandomBid()
+            const chosenBid = this.getRandomBid();
             if (!chosenBid) {
-                this.$emit('end')
+                this.$emit('end');
             } else {
-                this.bid = clone(chosenBid)
+                this.bid = clone(chosenBid);
             }
         }
 
         mounted() {
-            const fallback = setTimeout(() => this.$emit('end'), 5000)
-            const originalWidth = this.$parent.$el.clientWidth - 34
+            const fallback = setTimeout(() => this.$emit('end'), 5000);
+            const originalWidth = this.$parent.$el.clientWidth - 34;
             if (!this.bid) {
-                return
+                return;
             }
             Vue.nextTick().then(() => {
-                this.width = originalWidth
+                this.width = originalWidth;
                 setTimeout(() => {
-                    clearTimeout(fallback)
-                    var Line2 = this.$refs.Line2 as Element
-                    console.log(this.bid)
-                    const amountToScroll = Line2.scrollWidth - originalWidth
-                    const timeToScroll = (amountToScroll * 13) / 1000
-                    const timeToShow = timeToScroll > 25 ? timeToScroll : 21
+                    clearTimeout(fallback);
+                    var Line2 = this.$refs.Line2 as Element;
+                    console.log(this.bid);
+                    const amountToScroll = Line2.scrollWidth - originalWidth;
+                    const timeToScroll = (amountToScroll * 13) / 1000;
+                    const timeToShow = timeToScroll > 25 ? timeToScroll : 21;
                     gsap.to(this.$refs.Line2, timeToShow, {
                         scrollTo: { x: 'max' },
                         ease: 'none',
                         onComplete: () => {
-                            setTimeout(() => this.$emit('end'), 2 * 1000)
+                            setTimeout(() => this.$emit('end'), 2 * 1000);
                         },
-                    })
-                }, 2 * 1000)
-            })
+                    });
+                }, 2 * 1000);
+            });
         }
 
         formatUSD(amount) {
-            return `$${amount.toFixed(2)}`
+            return `$${amount.toFixed(2)}`;
         }
 
         getRandomBid(): TrackerOpenBid {
@@ -93,19 +93,19 @@
                 // goal is null for bid wars
                 if (bid.goal == null) {
                     // bid wars are closed manually
-                    return bid.state == 'OPENED'
+                    return bid.state == 'OPENED';
                 } else {
                     // Incentives close as soon as the needed amount is reached
                     // we still want to display them until the run starts
-                    return !bid.run_started
+                    return !bid.run_started;
                 }
-            })
+            });
             if (openBids.length) {
                 // concentrate on the next bids
-                openBids = openBids.splice(0, 5)
-                return openBids[Math.floor(Math.random() * openBids.length)]
+                openBids = openBids.splice(0, 5);
+                return openBids[Math.floor(Math.random() * openBids.length)];
             } else {
-                return null
+                return null;
             }
         }
     }

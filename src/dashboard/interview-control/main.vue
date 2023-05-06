@@ -11,42 +11,42 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { AllInterviews, CurrentInterview } from '../../../schemas'
-    import { getReplicant, store } from '../../browser-util/state'
+    import { Component, Vue } from 'vue-property-decorator';
+    import { AllInterviews, CurrentInterview } from '../../../schemas';
+    import { getReplicant, store } from '../../browser-util/state';
 
     @Component({})
     export default class InterviewControl extends Vue {
-        selectedInterviewName: string = ''
+        selectedInterviewName: string = '';
 
         mounted() {
             store.watch(
                 (state) => state.currentInterview,
                 (newValue) => {
-                    this.selectedInterviewName = newValue.name
+                    this.selectedInterviewName = newValue.name;
                 },
                 { immediate: true },
-            )
+            );
         }
 
         get allInterviews(): AllInterviews {
-            return store.state.allInterviews
+            return store.state.allInterviews;
         }
 
         get allInterviewNames(): string[] {
-            return this.allInterviews.map((l) => l.name)
+            return this.allInterviews.map((l) => l.name);
         }
 
         get currentInterview(): CurrentInterview {
-            return store.state.currentInterview
+            return store.state.currentInterview;
         }
 
         updateCurrentInterview() {
-            const newInterview = this.allInterviews.find((l) => l.name === this.selectedInterviewName)
+            const newInterview = this.allInterviews.find((l) => l.name === this.selectedInterviewName);
             if (!newInterview) {
-                throw new Error("The interview selected is invalid, that shouldn't happen!")
+                throw new Error("The interview selected is invalid, that shouldn't happen!");
             }
-            getReplicant<CurrentInterview>('currentInterview').value = newInterview
+            getReplicant<CurrentInterview>('currentInterview').value = newInterview;
         }
     }
 </script>

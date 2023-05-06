@@ -17,49 +17,49 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { getReplicant, store } from '../../browser-util/state'
-    import { RunDataActiveRun } from '../../../speedcontrol-types'
-    import { TrackerData } from '../../../schemas'
+    import { Component, Vue } from 'vue-property-decorator';
+    import { getReplicant, store } from '../../browser-util/state';
+    import { RunDataActiveRun } from '../../../speedcontrol-types';
+    import { TrackerData } from '../../../schemas';
 
     interface IndexedPlayer {
-        name: string
-        index: number
+        name: string;
+        index: number;
     }
 
     @Component({})
     export default class TrackerControl extends Vue {
-        trackerIds: string[] = ['', '', '', '']
+        trackerIds: string[] = ['', '', '', ''];
 
         get runData(): RunDataActiveRun {
-            return store.state.runDataActiveRun
+            return store.state.runDataActiveRun;
         }
 
         get trackerData(): TrackerData {
-            return store.state.trackerData
+            return store.state.trackerData;
         }
 
         get players(): IndexedPlayer[] {
-            let idx = 0
-            let arr = []
+            let idx = 0;
+            let arr = [];
             store.state.runDataActiveRun.teams.forEach((t) => {
                 t.players.forEach((p) => {
-                    arr.push({ name: p.name, index: idx })
-                    idx++
-                })
-            })
-            return arr
+                    arr.push({ name: p.name, index: idx });
+                    idx++;
+                });
+            });
+            return arr;
         }
 
         updateTrackerData() {
-            console.log('click')
-            console.log(this.trackerIds)
-            let newVal = []
+            console.log('click');
+            console.log(this.trackerIds);
+            let newVal = [];
             this.trackerIds.forEach((id) => {
-                console.log(typeof id)
-                newVal.push({ id: id, password: '' })
-            })
-            getReplicant<TrackerData>('trackerData').value = newVal
+                console.log(typeof id);
+                newVal.push({ id: id, password: '' });
+            });
+            getReplicant<TrackerData>('trackerData').value = newVal;
         }
     }
 </script>

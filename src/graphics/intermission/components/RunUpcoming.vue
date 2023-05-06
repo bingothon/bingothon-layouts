@@ -28,44 +28,44 @@
 </template>
 
 <script lang="ts">
-    import moment from 'moment'
-    import { RunData } from 'speedcontrol-types'
-    import { Component, Prop, Vue } from 'vue-property-decorator'
+    import moment from 'moment';
+    import { RunData } from 'speedcontrol-types';
+    import { Component, Prop, Vue } from 'vue-property-decorator';
 
     @Component({})
     export default class RunUpcoming extends Vue {
         @Prop({ default: undefined })
-        data: RunData
+        data: RunData;
         @Prop({ default: undefined })
-        when: number
+        when: number;
 
         formPlayerNamesString(run) {
-            const namesArray = []
-            let namesList = 'No Player(s)'
+            const namesArray = [];
+            let namesList = 'No Player(s)';
             run.teams.forEach((team) => {
-                const teamPlayerArray = []
-                team.players.forEach((player) => teamPlayerArray.push(player.name))
-                namesArray.push(teamPlayerArray.join(', '))
-            })
+                const teamPlayerArray = [];
+                team.players.forEach((player) => teamPlayerArray.push(player.name));
+                namesArray.push(teamPlayerArray.join(', '));
+            });
             if (namesList.length) {
-                namesList = namesArray.join(' vs. ')
+                namesList = namesArray.join(' vs. ');
             }
-            return namesList
+            return namesList;
         }
 
         checkForTotalPlayers(run) {
-            let amount = 0
+            let amount = 0;
             run.teams.forEach((team) =>
                 team.players.forEach(() => {
-                    amount += 1
+                    amount += 1;
                 }),
-            )
-            return amount
+            );
+            return amount;
         }
 
         formETAUntilRun() {
-            const eta = moment.utc().second(0).to(moment.utc().second(this.when), true)
-            return `In about ${eta}`
+            const eta = moment.utc().second(0).to(moment.utc().second(this.when), true);
+            return `In about ${eta}`;
         }
     }
 </script>

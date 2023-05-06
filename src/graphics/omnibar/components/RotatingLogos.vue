@@ -9,23 +9,23 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
+    import { Component, Vue } from 'vue-property-decorator';
 
-    const wide = require('../../../../static/logo-winter-wide.png')
-    const fhLogo = require('../BingothonWinterNewFredHutch.png')
+    const wide = require('../../../../static/logo-winter-wide.png');
+    const fhLogo = require('../BingothonWinterNewFredHutch.png');
 
     @Component({})
     export default class RotatingLogos extends Vue {
-        logo: string = wide
+        logo: string = wide;
 
         mounted(): void {
-            this.changeLogo()
+            this.changeLogo();
         }
 
         changeLogo(): void {
-            this.logo = this.logo !== wide ? wide : fhLogo
-            const time = this.logo === fhLogo ? 30 : 30
-            setTimeout(this.changeLogo, time * 1000)
+            this.logo = this.logo !== wide ? wide : fhLogo;
+            const time = this.logo === fhLogo ? 30 : 30;
+            setTimeout(this.changeLogo, time * 1000);
         }
     }
 </script>

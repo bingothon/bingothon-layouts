@@ -28,16 +28,16 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator'
-    import Logo from './components/Logo.vue'
-    import Rotation from './components/Rotation.vue'
-    import { store } from '../../browser-util/state'
-    import RunUpcoming from './components/RunUpcoming.vue'
-    import { RunData } from '../../../speedcontrol-types'
-    import InfoStorageBox from '../_misc/components/InfoStorageBox.vue'
-    import DiscordVoiceDisplay from '../components/discordVoiceDisplay.vue'
-    import HostBingo from '../components/hostBingo.vue'
-    import Music from './components/Music.vue'
+    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import Logo from './components/Logo.vue';
+    import Rotation from './components/Rotation.vue';
+    import { store } from '../../browser-util/state';
+    import RunUpcoming from './components/RunUpcoming.vue';
+    import { RunData } from '../../../speedcontrol-types';
+    import InfoStorageBox from '../_misc/components/InfoStorageBox.vue';
+    import DiscordVoiceDisplay from '../components/discordVoiceDisplay.vue';
+    import HostBingo from '../components/hostBingo.vue';
+    import Music from './components/Music.vue';
 
     @Component({
         components: {
@@ -52,44 +52,44 @@
     })
     export default class Intermission extends Vue {
         @Prop({ default: undefined })
-        data
+        data;
 
-        nextRun: RunData = null
+        nextRun: RunData = null;
 
         created() {
-            this.refreshUpcomingRun()
+            this.refreshUpcomingRun();
         }
 
         mounted() {
-            nodecg.listenFor('forceRefreshIntermission', this.refreshUpcomingRun)
+            nodecg.listenFor('forceRefreshIntermission', this.refreshUpcomingRun);
         }
 
         refreshUpcomingRun() {
-            const curRun = store.state.runDataActiveRun
-            const nextRun = store.state.runDataArray[this.findRunIndex(curRun) + 1]
+            const curRun = store.state.runDataActiveRun;
+            const nextRun = store.state.runDataArray[this.findRunIndex(curRun) + 1];
             if (nextRun) {
-                this.nextRun = nextRun
+                this.nextRun = nextRun;
             }
         }
 
         get hostsSpeakingDuringIntermission(): boolean {
-            return store.state.hostsSpeakingDuringIntermission.speaking
+            return store.state.hostsSpeakingDuringIntermission.speaking;
         }
 
         get showIntermissionImage(): boolean {
-            return !!store.state.showPictureDuringIntermission.imageUrl
+            return !!store.state.showPictureDuringIntermission.imageUrl;
         }
 
         get intermissionImageUrl(): string {
-            return store.state.showPictureDuringIntermission.imageUrl
+            return store.state.showPictureDuringIntermission.imageUrl;
         }
 
         findRunIndex(run: RunData): number {
-            let curRunID = run.id
+            let curRunID = run.id;
             if (!curRunID) {
-                return -1
+                return -1;
             }
-            return store.state.runDataArray.findIndex((run) => run.id === curRunID)
+            return store.state.runDataArray.findIndex((run) => run.id === curRunID);
         }
     }
 </script>

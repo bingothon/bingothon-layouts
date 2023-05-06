@@ -85,15 +85,15 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue, Watch } from 'vue-property-decorator'
-    import { nodecg } from '../../browser-util/nodecg'
-    import { BingoboardMode } from '../../../schemas'
-    import { store } from '../../browser-util/state'
-    import clone from 'clone'
+    import { Component, Vue, Watch } from 'vue-property-decorator';
+    import { nodecg } from '../../browser-util/nodecg';
+    import { BingoboardMode } from '../../../schemas';
+    import { store } from '../../browser-util/state';
+    import clone from 'clone';
 
     @Component({})
     export default class BingomodeControl extends Vue {
-        ALL_BINGO_MODES = Object.freeze(['invasion', 'normal'])
+        ALL_BINGO_MODES = Object.freeze(['invasion', 'normal']);
 
         ALL_COLORS = {
             options: [
@@ -138,21 +138,21 @@
                     colorId: 'color-control-purple',
                 },
             ],
-        }
+        };
         //Object.freeze(['pink', 'red', 'orange', 'brown', 'yellow', 'green', 'teal', 'blue', 'navy', 'purple']);
-        currentBingomode: string = 'invasion'
-        markerRedirects: [string, string][] = []
-        alwaysShowMarkers: boolean = false
+        currentBingomode: string = 'invasion';
+        markerRedirects: [string, string][] = [];
+        alwaysShowMarkers: boolean = false;
 
         get bingoboardModeRep(): BingoboardMode {
-            return store.state.bingoboardMode
+            return store.state.bingoboardMode;
         }
 
         @Watch('bingoboardModeRep', { immediate: true })
         reset(): void {
-            this.currentBingomode = store.state.bingoboardMode.boardMode
-            this.markerRedirects = clone(store.state.bingoboardMode.markerRedirects)
-            this.alwaysShowMarkers = store.state.bingoboardMode.alwaysShowMarkers
+            this.currentBingomode = store.state.bingoboardMode.boardMode;
+            this.markerRedirects = clone(store.state.bingoboardMode.markerRedirects);
+            this.alwaysShowMarkers = store.state.bingoboardMode.alwaysShowMarkers;
         }
 
         update(): void {
@@ -160,23 +160,23 @@
                 boardMode: this.currentBingomode,
                 markerRedirects: this.markerRedirects,
                 alwaysShowMarkers: this.alwaysShowMarkers,
-            })
+            });
         }
 
         addOverride(): void {
-            this.markerRedirects.push(['red', 'red'])
+            this.markerRedirects.push(['red', 'red']);
         }
 
         removeOverride(index: number): void {
-            this.markerRedirects.splice(index, 1)
+            this.markerRedirects.splice(index, 1);
         }
 
         forceRefreshInvasion(): void {
-            nodecg.sendMessage('bingomode:forceRefreshInvasion')
+            nodecg.sendMessage('bingomode:forceRefreshInvasion');
         }
 
         get isNotInvasion(): boolean {
-            return this.currentBingomode !== 'invasion'
+            return this.currentBingomode !== 'invasion';
         }
     }
 </script>

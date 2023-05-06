@@ -31,34 +31,34 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue, Watch } from 'vue-property-decorator'
-    import { TwitchStreams } from '../../../schemas'
-    import { getReplicant, store } from '../../browser-util/state'
+    import { Component, Vue, Watch } from 'vue-property-decorator';
+    import { TwitchStreams } from '../../../schemas';
+    import { getReplicant, store } from '../../browser-util/state';
 
-    declare const Twitch: any
+    declare const Twitch: any;
 
-    const initWidth = 1024
-    const initHeight = 576
+    const initWidth = 1024;
+    const initHeight = 576;
 
     @Component({})
     export default class CropControl extends Vue {
-        leftPercent: number = 0
+        leftPercent: number = 0;
 
-        topPercent: number = 0
+        topPercent: number = 0;
 
-        widthPercent: number = 100
+        widthPercent: number = 100;
 
-        heightPercent: number = 100
+        heightPercent: number = 100;
 
-        currentChannel: string = ''
+        currentChannel: string = '';
 
-        successMessage: string = ''
+        successMessage: string = '';
 
-        player: any = null
+        player: any = null;
 
-        playerMuted: boolean = true
+        playerMuted: boolean = true;
 
-        playerPaused: boolean = true
+        playerPaused: boolean = true;
 
         mounted() {}
 
@@ -68,56 +68,56 @@
                 channel: this.currentChannel,
                 width: initWidth,
                 height: initHeight,
-            }
-            this.player = new Twitch.Player(this.$refs.twitchPlayer, playerOptions)
-            this.player.setMuted(true)
-            this.playerMuted = true
-            this.playerPaused = true
-            const stream = store.state.twitchStreams.find((s) => s.channel === this.currentChannel)
+            };
+            this.player = new Twitch.Player(this.$refs.twitchPlayer, playerOptions);
+            this.player.setMuted(true);
+            this.playerMuted = true;
+            this.playerPaused = true;
+            const stream = store.state.twitchStreams.find((s) => s.channel === this.currentChannel);
             if (stream) {
-                this.leftPercent = stream.leftPercent
-                this.topPercent = stream.topPercent
-                this.widthPercent = stream.widthPercent
-                this.heightPercent = stream.heightPercent
+                this.leftPercent = stream.leftPercent;
+                this.topPercent = stream.topPercent;
+                this.widthPercent = stream.widthPercent;
+                this.heightPercent = stream.heightPercent;
             }
         }
 
         destroyTwitchPlayer() {
-            this.player = null
+            this.player = null;
             // remove the iframe inside the twitchPlayer div
-            ;(this.$refs.twitchPlayer as HTMLElement).innerHTML = ''
+            (this.$refs.twitchPlayer as HTMLElement).innerHTML = '';
         }
 
         @Watch('currentChannel')
         rebuildTwitchPlayer() {
-            this.destroyTwitchPlayer()
-            this.createTwitchPlayer()
+            this.destroyTwitchPlayer();
+            this.createTwitchPlayer();
         }
 
         get currentChannelNames(): string[] {
-            return store.state.twitchStreams.map((s) => s.channel)
+            return store.state.twitchStreams.map((s) => s.channel);
         }
 
         get containerLeft(): number {
-            return (this.leftPercent / 100) * initWidth
+            return (this.leftPercent / 100) * initWidth;
         }
 
         get containerTop(): number {
-            return (this.topPercent / 100) * initHeight
+            return (this.topPercent / 100) * initHeight;
         }
 
         get containerWidth(): number {
-            return (initWidth * 100) / this.widthPercent
+            return (initWidth * 100) / this.widthPercent;
         }
 
         get containerHeight(): number {
-            return (initHeight * 100) / this.heightPercent
+            return (initHeight * 100) / this.heightPercent;
         }
 
         saveCropping() {
-            const streamIndex = store.state.twitchStreams.findIndex((s) => s.channel === this.currentChannel)
+            const streamIndex = store.state.twitchStreams.findIndex((s) => s.channel === this.currentChannel);
             if (streamIndex === -1) {
-                return
+                return;
             }
             Object.assign(
                 getReplicant<TwitchStreams>('twitchStreams').value[streamIndex],
@@ -128,32 +128,32 @@
                     leftPercent: parseInt(this.leftPercent as unknown as string, 10),
                     topPercent: parseInt(this.topPercent as unknown as string, 10),
                 },
-            )
+            );
         }
 
         get togglePlayerPauseButtonText(): string {
-            return this.playerPaused ? 'Play' : 'Pause'
+            return this.playerPaused ? 'Play' : 'Pause';
         }
 
         togglePlayerPause() {
             if (this.player !== null) {
                 if (this.playerPaused) {
-                    this.player.play()
+                    this.player.play();
                 } else {
-                    this.player.pause()
+                    this.player.pause();
                 }
-                this.playerPaused = !this.playerPaused
+                this.playerPaused = !this.playerPaused;
             }
         }
 
         get togglePlayerMuteButtonText(): string {
-            return this.playerMuted ? 'Unmute' : 'Mute'
+            return this.playerMuted ? 'Unmute' : 'Mute';
         }
 
         togglePlayerMute() {
             if (this.player !== null) {
-                this.playerMuted = !this.playerMuted
-                this.player.setMuted(this.playerMuted)
+                this.playerMuted = !this.playerMuted;
+                this.player.setMuted(this.playerMuted);
             }
         }
     }

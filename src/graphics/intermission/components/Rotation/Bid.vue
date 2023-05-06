@@ -41,44 +41,44 @@
 </template>
 
 <script lang="ts">
-    import clone from 'clone'
-    import { TrackerOpenBid } from '../../../../../types'
-    import { Component, Vue } from 'vue-property-decorator'
-    import { store } from '../../../../browser-util/state'
-    import * as d3 from 'd3'
+    import clone from 'clone';
+    import { TrackerOpenBid } from '../../../../../types';
+    import { Component, Vue } from 'vue-property-decorator';
+    import { store } from '../../../../browser-util/state';
+    import * as d3 from 'd3';
 
     @Component({})
     export default class Bid extends Vue {
-        bid: TrackerOpenBid = null
+        bid: TrackerOpenBid = null;
         //d3 types are dumb and inconsistent
-        d3any: any = d3
+        d3any: any = d3;
 
         mounted() {
-            const chosenBid = this.getRandomBid()
+            const chosenBid = this.getRandomBid();
             if (!chosenBid) {
-                this.$emit('end')
+                this.$emit('end');
             } else {
-                this.bid = clone(chosenBid)
+                this.bid = clone(chosenBid);
             }
-            this.bid = clone(chosenBid)
+            this.bid = clone(chosenBid);
             if (this.bid.options && this.bid.options.length > 0) {
                 this.$nextTick(() => {
-                    this.makeBars(this.bid)
-                })
+                    this.makeBars(this.bid);
+                });
             }
-            setTimeout(() => this.$emit('end'), 20 * 1000)
+            setTimeout(() => this.$emit('end'), 20 * 1000);
         }
 
         formatUSD(amount) {
-            return `$${amount.toFixed(2)}`
+            return `$${amount.toFixed(2)}`;
         }
 
         percentRaised(bid: TrackerOpenBid) {
             if (bid.amount_raised >= bid.goal) {
-                return 100
+                return 100;
             }
-            let percent = bid.goal / 100
-            return bid.amount_raised / percent
+            let percent = bid.goal / 100;
+            return bid.amount_raised / percent;
         }
 
         getRandomBid(): TrackerOpenBid {
@@ -86,34 +86,34 @@
                 // goal is null for bid wars
                 if (bid.goal == null) {
                     // bid wars are closed manually
-                    return bid.state == 'OPENED'
+                    return bid.state == 'OPENED';
                 } else {
                     // Incentives close as soon as the needed amount is reached
                     // we still want to display them until the run starts
-                    return !bid.run_started
+                    return !bid.run_started;
                 }
-            })
+            });
 
             if (openBids.length) {
-                return openBids[Math.floor(Math.random() * openBids.length)]
+                return openBids[Math.floor(Math.random() * openBids.length)];
             } else {
-                return null
+                return null;
             }
         }
 
         makeBars(bid: TrackerOpenBid) {
-            let options = bid.options
-            let data = []
+            let options = bid.options;
+            let data = [];
 
             options.forEach((option) => {
-                data.push({ name: option.name, value: option.amount_raised })
-            })
+                data.push({ name: option.name, value: option.amount_raised });
+            });
 
             data = data.sort(function (a, b) {
-                return d3.ascending(a.value, b.value)
-            })
+                return d3.ascending(a.value, b.value);
+            });
 
-            data = data.slice(0, 5)
+            data = data.slice(0, 5);
 
             //set up svg using margin conventions - we'll need plenty of room on the left for labels
             var margin = {
@@ -121,12 +121,12 @@
                 right: 200,
                 bottom: 15,
                 left: 350,
-            }
+            };
 
-            var color = this.d3any.scale.ordinal().range(['#3f84e5', '#faa300', '#f63e02', '#a41623', '#2f4858'])
+            var color = this.d3any.scale.ordinal().range(['#3f84e5', '#faa300', '#f63e02', '#a41623', '#2f4858']);
 
             var width = 1100 - margin.left - margin.right,
-                height = 400 - margin.top - margin.bottom
+                height = 400 - margin.top - margin.bottom;
 
             var svg = d3
                 .select('.bid-graphics')
@@ -134,7 +134,7 @@
                 .attr('width', width + margin.left + margin.right)
                 .attr('height', height + margin.top + margin.bottom)
                 .append('g')
-                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
             var x = this.d3any.scale
                 .linear()
@@ -142,18 +142,18 @@
                 .domain([
                     0,
                     d3.max(data, function (d) {
-                        return d.value
+                        return d.value;
                     }),
-                ])
+                ]);
 
             var y = this.d3any.scale
                 .ordinal()
                 .rangeRoundBands([height, 0], 0.1)
                 .domain(
                     data.map(function (d) {
-                        return d.name
+                        return d.name;
                     }),
-                )
+                );
 
             // make y-axis to show bar names
             this.d3any.svg
@@ -161,39 +161,39 @@
                 .scale(y)
                 //no tick marks
                 .tickSize(0)
-                .orient('left')
+                .orient('left');
 
-            var bars = svg.selectAll('.bar').data(data).enter().append('g')
+            var bars = svg.selectAll('.bar').data(data).enter().append('g');
 
             //append rects
             bars.append('rect')
                 .attr('class', 'bar')
                 .attr('y', function (d) {
-                    return y(d.name)
+                    return y(d.name);
                 })
                 .style('fill', function (d, i) {
-                    return color(i)
+                    return color(i);
                 })
                 .attr('height', y.rangeBand())
                 .attr('x', 0)
                 .attr('width', function (d) {
-                    return x(d.value)
-                })
+                    return x(d.value);
+                });
 
             //add a value label to the right of each bar
             bars.append('text')
                 .attr('class', 'label')
                 //y position of the label is halfway down the bar
                 .attr('y', function (d) {
-                    return y(d.name) + y.rangeBand() / 2 + 10
+                    return y(d.name) + y.rangeBand() / 2 + 10;
                 })
                 //x position is 6 pixels to the right of the bar
                 .attr('x', function (d) {
-                    return x(d.value) + 6
+                    return x(d.value) + 6;
                 })
                 .text(function (d) {
-                    return `$${d.value.toFixed(2)}`
-                })
+                    return `$${d.value.toFixed(2)}`;
+                });
         }
     }
 </script>

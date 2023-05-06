@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 
 module.exports = {
     root: true,
@@ -10,12 +10,7 @@ module.exports = {
         browser: true,
         es6: true,
     },
-    extends: [
-        'plugin:vue/essential',
-        'plugin:import/warnings',
-        'plugin:import/typescript',
-        'plugin:prettier/recommended',
-    ],
+    extends: ['plugin:vue/essential', 'plugin:import/warnings', 'plugin:import/typescript', 'plugin:prettier/recommended'],
     globals: {
         Atomics: 'readonly',
         SharedArrayBuffer: 'readonly',
@@ -30,4 +25,4 @@ module.exports = {
         'no-new': ['off'],
         'class-methods-use-this': ['off'],
     },
-}
+};

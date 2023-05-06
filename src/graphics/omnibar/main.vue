@@ -9,11 +9,11 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import RotatingLogos from './components/RotatingLogos.vue'
-    import Total from './components/DonationTotal.vue'
-    import Ticker from './components/Ticker.vue'
-    import Divider from './components/Divider.vue'
+    import { Component, Vue } from 'vue-property-decorator';
+    import RotatingLogos from './components/RotatingLogos.vue';
+    import Total from './components/DonationTotal.vue';
+    import Ticker from './components/Ticker.vue';
+    import Divider from './components/Divider.vue';
 
     @Component({
         components: {

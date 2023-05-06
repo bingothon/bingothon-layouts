@@ -1,11 +1,11 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import { create, getReplicant } from '../../browser-util/state'
-import * as Layouts from './layout-list'
-import { AllGameLayouts, CurrentGameLayout } from '../../../schemas'
-import GameLayout from './main.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import { create, getReplicant } from '../../browser-util/state';
+import * as Layouts from './layout-list';
+import { AllGameLayouts, CurrentGameLayout } from '../../../schemas';
+import GameLayout from './main.vue';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
     //Do not append paths with a . or things will break :)
@@ -39,34 +39,34 @@ const routes = [
     { name: 'Host Bingo Layout', path: '/host-bingo', component: Layouts.Layout_Host_Bingo },
     { name: 'Discord Overlay', path: '/discord', component: Layouts.Layout_Discord },
     { path: '*', redirect: '/4p-4_3-layout' },
-]
+];
 
 // put all of the game layouts in the replicant
 const allGameLayouts = routes
     .map((r) => {
-        return { name: r.name || '', path: r.path || '', id: r.path.replace('/', '') }
+        return { name: r.name || '', path: r.path || '', id: r.path.replace('/', '') };
     })
-    .filter((r) => !!r.name)
-getReplicant<AllGameLayouts>('allGameLayouts').value = allGameLayouts
+    .filter((r) => !!r.name);
+getReplicant<AllGameLayouts>('allGameLayouts').value = allGameLayouts;
 
 const router = new VueRouter({
     routes,
-})
+});
 
 // if the replicant changes, update the game layouts route
 getReplicant<CurrentGameLayout>('currentGameLayout').on('change', (newVal) => {
     // don't switch to invalid layouts
     if (allGameLayouts.map((n) => n.name).includes(newVal.name)) {
-        console.log('switching to', newVal)
-        router.push({ name: newVal.name })
+        console.log('switching to', newVal);
+        router.push({ name: newVal.name });
     } else {
-        console.log('invalid layout:', newVal)
+        console.log('invalid layout:', newVal);
     }
-})
+});
 
 create().then(() => {
     new Vue({
         router,
         render: (h) => h(GameLayout),
-    }).$mount('#App')
-})
+    }).$mount('#App');
+});

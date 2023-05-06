@@ -24,26 +24,26 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator'
-    import { HostBingoCell } from '../../../schemas'
-    import { getReplicant, store } from '../../browser-util/state'
-    import CellTextFit from '../helpers/cell-text-fit.vue'
+    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { HostBingoCell } from '../../../schemas';
+    import { getReplicant, store } from '../../browser-util/state';
+    import CellTextFit from '../helpers/cell-text-fit.vue';
 
-    const goals = require('../../../static/hostBingo.json')
+    const goals = require('../../../static/hostBingo.json');
 
     function toColumns(goals: HostBingoCell[]): HostBingoCell[][] {
-        console.log(goals)
-        let result = []
+        console.log(goals);
+        let result = [];
         for (let i = 0; i < 5; i++) {
-            let cur: HostBingoCell[] = []
+            let cur: HostBingoCell[] = [];
             for (let j = 0; j < 5; j++) {
-                let goal = goals[i * 5 + j]
-                cur.push({ ...goal, marked: false })
+                let goal = goals[i * 5 + j];
+                cur.push({ ...goal, marked: false });
             }
-            result.push(cur)
+            result.push(cur);
         }
-        console.log(result)
-        return result
+        console.log(result);
+        return result;
     }
 
     @Component({
@@ -53,30 +53,30 @@
     })
     export default class HostBingoComponent extends Vue {
         @Prop({ default: '10px' })
-        fontSize: string
+        fontSize: string;
 
         @Prop({ default: false })
-        dashboard: boolean
+        dashboard: boolean;
 
-        skewAngle = 1
+        skewAngle = 1;
 
         resetBoard() {
-            getReplicant<HostBingoCell[][]>('hostingBingoboard').value = toColumns(goals)
+            getReplicant<HostBingoCell[][]>('hostingBingoboard').value = toColumns(goals);
         }
 
         get bingoCells(): HostBingoCell[][] {
-            return store.state.hostingBingoboard
+            return store.state.hostingBingoboard;
         }
 
         mounted() {
-            const height = this.$el.scrollHeight
-            const width = this.$el.scrollWidth
-            this.skewAngle = Math.atan(width / height)
+            const height = this.$el.scrollHeight;
+            const width = this.$el.scrollWidth;
+            this.skewAngle = Math.atan(width / height);
 
             getReplicant<HostBingoCell[][]>('hostingBingoboard').on('assignmentRejected', (rejectReason) => {
-                console.log('assignment rejected')
-                console.log(rejectReason)
-            })
+                console.log('assignment rejected');
+                console.log(rejectReason);
+            });
         }
 
         updateCell(cell: HostBingoCell, col: number, row: number) {
@@ -84,7 +84,7 @@
                 goal: cell.goal,
                 description: cell.description,
                 marked: !cell.marked,
-            }
+            };
         }
     }
 </script>

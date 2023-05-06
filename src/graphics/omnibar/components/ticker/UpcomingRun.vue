@@ -12,91 +12,91 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator'
-    import moment from 'moment'
-    import clone from 'clone'
-    import { RunData } from '../../../../../speedcontrol-types'
-    import { store } from '../../../../browser-util/state'
+    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import moment from 'moment';
+    import clone from 'clone';
+    import { RunData } from '../../../../../speedcontrol-types';
+    import { store } from '../../../../browser-util/state';
     // Stored outside of the export so it persists.
-    let nextRunsCache: RunData[] = []
-    let currentRunID: string = null
+    let nextRunsCache: RunData[] = [];
+    let currentRunID: string = null;
 
     @Component({})
     export default class UpcomingRun extends Vue {
         @Prop({ default: null })
-        data: Object
+        data: Object;
 
-        run: RunData = null
+        run: RunData = null;
 
-        when: string = ''
+        when: string = '';
 
         created() {
-            const fallback = setTimeout(() => this.$emit('end'), 5000)
+            const fallback = setTimeout(() => this.$emit('end'), 5000);
             // check if the current run changed, if yes refresh the cache
             if (!currentRunID || currentRunID != this.currentRunID) {
-                const nextRuns = this.getNextRuns()
+                const nextRuns = this.getNextRuns();
                 // Skip if nothing to show.
                 if (!nextRuns.length) {
-                    this.$emit('end')
-                    return
+                    this.$emit('end');
+                    return;
                 }
-                nextRunsCache = nextRuns
+                nextRunsCache = nextRuns;
             }
-            const randNum = Math.floor(Math.random() * nextRunsCache.length)
-            this.run = clone(nextRunsCache[randNum])
+            const randNum = Math.floor(Math.random() * nextRunsCache.length);
+            this.run = clone(nextRunsCache[randNum]);
             if (this.run.scheduledS === undefined || this.run.scheduledS < Date.now() / 1000) {
-                this.when = 'Soon™'
+                this.when = 'Soon™';
             } else {
-                this.when = moment.unix(this.run.scheduledS).fromNow()
+                this.when = moment.unix(this.run.scheduledS).fromNow();
             }
-            nextRunsCache.splice(randNum, 1)
-            clearTimeout(fallback)
-            setTimeout(() => this.$emit('end'), 25 * 1000)
+            nextRunsCache.splice(randNum, 1);
+            clearTimeout(fallback);
+            setTimeout(() => this.$emit('end'), 25 * 1000);
         }
 
         get currentRunID(): string {
-            let curRun = store.state.runDataActiveRun
+            let curRun = store.state.runDataActiveRun;
             if (!curRun) {
-                return null
+                return null;
             }
-            return curRun.id
+            return curRun.id;
         }
 
         formPlayerNamesString(run: RunData): string {
-            const namesArray = []
-            let namesList = 'No Player(s)'
+            const namesArray = [];
+            let namesList = 'No Player(s)';
             run.teams.forEach((team) => {
-                const teamPlayerArray = []
-                team.players.forEach((player) => teamPlayerArray.push(player.name))
-                namesArray.push(teamPlayerArray.join(', '))
-            })
+                const teamPlayerArray = [];
+                team.players.forEach((player) => teamPlayerArray.push(player.name));
+                namesArray.push(teamPlayerArray.join(', '));
+            });
             if (namesList.length) {
-                namesList = namesArray.join(' vs. ')
+                namesList = namesArray.join(' vs. ');
             }
-            return namesList
+            return namesList;
         }
 
         checkForTotalPlayers(run: RunData): number {
-            let amount = 0
+            let amount = 0;
             run.teams.forEach((team) =>
                 team.players.forEach(() => {
-                    amount += 1
+                    amount += 1;
                 }),
-            )
-            return amount
+            );
+            return amount;
         }
 
         getNextRuns(): RunData[] {
-            const runIndex = this.findRunIndex()
-            return store.state.runDataArray.slice(runIndex + 1).slice(0, 4)
+            const runIndex = this.findRunIndex();
+            return store.state.runDataArray.slice(runIndex + 1).slice(0, 4);
         }
 
         findRunIndex(): number {
-            let curRunID = this.currentRunID
+            let curRunID = this.currentRunID;
             if (!curRunID) {
-                return -1
+                return -1;
             }
-            return store.state.runDataArray.findIndex((run) => run.id === curRunID)
+            return store.state.runDataArray.findIndex((run) => run.id === curRunID);
         }
     }
 </script>

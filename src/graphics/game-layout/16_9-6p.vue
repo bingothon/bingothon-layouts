@@ -50,18 +50,18 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { store } from '../../browser-util/state'
-    import TimerContainer from '../components/timerContainer.vue'
-    import GameContainer from '../components/gameContainer.vue'
-    import BingoBoard from '../components/bingoboard.vue'
-    import PlayerInfo from '../components/playerInfo.vue'
-    import TeamInfo from '../components/teamInfo.vue'
-    import PlayerTeamContainer from '../components/playerTeamContainer.vue'
-    import DiscordVoiceDisplay from '../components/discordVoiceDisplay.vue'
-    import TwitchPlayer from '../components/twitchStreamPlaceholder.vue'
-    import { RunDataTeam } from '../../../speedcontrol-types'
-    import RotatingLogo from '../components/sponsorLogoRotation.vue'
+    import { Component, Vue } from 'vue-property-decorator';
+    import { store } from '../../browser-util/state';
+    import TimerContainer from '../components/timerContainer.vue';
+    import GameContainer from '../components/gameContainer.vue';
+    import BingoBoard from '../components/bingoboard.vue';
+    import PlayerInfo from '../components/playerInfo.vue';
+    import TeamInfo from '../components/teamInfo.vue';
+    import PlayerTeamContainer from '../components/playerTeamContainer.vue';
+    import DiscordVoiceDisplay from '../components/discordVoiceDisplay.vue';
+    import TwitchPlayer from '../components/twitchStreamPlaceholder.vue';
+    import { RunDataTeam } from '../../../speedcontrol-types';
+    import RotatingLogo from '../components/sponsorLogoRotation.vue';
 
     @Component({
         components: {
@@ -78,11 +78,11 @@
     })
     export default class GameLayout extends Vue {
         get teams(): RunDataTeam[] {
-            return store.state.runDataActiveRun.teams
+            return store.state.runDataActiveRun.teams;
         }
 
         get coop(): boolean {
-            return store.state.runDataActiveRun.teams[0].players.length === 3
+            return store.state.runDataActiveRun.teams[0].players.length === 3;
         }
     }
 </script>

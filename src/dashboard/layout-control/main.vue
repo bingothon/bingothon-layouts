@@ -32,44 +32,47 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue, Watch } from 'vue-property-decorator'
-    import { AllGameLayouts, CurrentGameLayout } from '../../../schemas'
-    import { getReplicant, store } from '../../browser-util/state'
+    import { Component, Vue, Watch } from 'vue-property-decorator';
+    import { AllGameLayouts, CurrentGameLayout } from '../../../schemas';
+    import { getReplicant, store } from '../../browser-util/state';
 
     @Component({})
     export default class LayoutControl extends Vue {
-        selectedLayoutName: string = ''
+        selectedLayoutName: string = '';
 
         //"Heavily inspired" by https://github.com/esamarathon/esa-layouts/blob/302f2a8a31948bfe0fd35b6cbe75c7ccecd0c4a6/src/dashboard/game-layout-override/main.vue
 
         get allGameLayouts(): AllGameLayouts {
-            return store.state.allGameLayouts
+            return store.state.allGameLayouts;
         }
 
         get allGameLayoutNames(): string[] {
-            return this.allGameLayouts.map((l) => l.name)
+            return this.allGameLayouts.map((l) => l.name);
         }
 
         get currentGameLayout(): CurrentGameLayout {
-            return store.state.currentGameLayout
+            return store.state.currentGameLayout;
         }
 
         updateCurrentLayout(newLayout: CurrentGameLayout) {
             if (!newLayout) {
-                throw new Error("The layout selected is invalid, that shouldn't happen!")
+                throw new Error("The layout selected is invalid, that shouldn't happen!");
             }
-            getReplicant<CurrentGameLayout>('currentGameLayout').value = newLayout
+            getReplicant<CurrentGameLayout>('currentGameLayout').value = newLayout;
         }
 
         @Watch('currentGameLayout')
         async scrollToSelectedLayout(): Promise<void> {
             try {
-                await Vue.nextTick()
+                await Vue.nextTick();
                 if (this.currentGameLayout) {
-                    console.log(`Going to #layout-${this.currentGameLayout.id}`)
-                    this.$vuetify.goTo(`#layout-${this.currentGameLayout.id}`, { container: '#LayoutList', offset: 25 })
+                    console.log(`Going to #layout-${this.currentGameLayout.id}`);
+                    this.$vuetify.goTo(`#layout-${this.currentGameLayout.id}`, {
+                        container: '#LayoutList',
+                        offset: 25,
+                    });
                 } else {
-                    this.$vuetify.goTo(0, { container: '#LayoutList' })
+                    this.$vuetify.goTo(0, { container: '#LayoutList' });
                 }
             } catch (err) {
                 // Not sure if this can error, but better be safe
@@ -79,12 +82,12 @@
         @Watch('allGameLayouts')
         onGameLayoutsChange(): void {
             if (this.allGameLayouts.length) {
-                this.scrollToSelectedLayout()
+                this.scrollToSelectedLayout();
             }
         }
 
         mounted(): void {
-            this.scrollToSelectedLayout()
+            this.scrollToSelectedLayout();
         }
     }
 </script>

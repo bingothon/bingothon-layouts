@@ -8,33 +8,33 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { store } from '../../browser-util/state'
-    import { Timer } from '../../../speedcontrol-types'
+    import { Component, Vue } from 'vue-property-decorator';
+    import { store } from '../../browser-util/state';
+    import { Timer } from '../../../speedcontrol-types';
 
     @Component({})
     export default class TestTimerContainer extends Vue {
-        show = true
-        backupTimerTO: NodeJS.Timer = null
-        time = ''
-        timerStateClass = 'running'
-        updateDataUnwatch
+        show = true;
+        backupTimerTO: NodeJS.Timer = null;
+        time = '';
+        timerStateClass = 'running';
+        updateDataUnwatch;
 
         mounted() {
             // save callback for unwatch
-            this.updateDataUnwatch = store.watch((state) => state.timer, this.updateData, { immediate: true })
+            this.updateDataUnwatch = store.watch((state) => state.timer, this.updateData, { immediate: true });
         }
 
         destroyed() {
-            this.updateDataUnwatch()
+            this.updateDataUnwatch();
         }
 
         get estimate(): string {
-            return store.state.runDataActiveRun.estimate
+            return store.state.runDataActiveRun.estimate;
         }
 
         updateData(timer: Timer) {
-            this.time = this.splitStringToSpans(timer.time)
+            this.time = this.splitStringToSpans(timer.time);
             /*switch (timer.state) {
       default:
       case 'running':
@@ -47,34 +47,34 @@
       case 'finished':
         this.textColor = getComputedStyle(document.documentElement).getPropertyValue('--timer-finish-colour') || 'blue';
       }*/
-            this.timerStateClass = timer.state || 'stopped'
+            this.timerStateClass = timer.state || 'stopped';
             // Backup timer (see below).
-            clearTimeout(this.backupTimerTO)
-            this.backupTimerTO = setTimeout(this.backupTimer, 1000)
+            clearTimeout(this.backupTimerTO);
+            this.backupTimerTO = setTimeout(this.backupTimer, 1000);
         }
         splitStringToSpans(string) {
-            return string.replace(/\S/g, '<span>$&</span>')
+            return string.replace(/\S/g, '<span>$&</span>');
         }
         // Backup timer that takes over if the connection to the server is lost.
         // Based on the last timestamp that was received.
         // When the connection is restored, the server timer will recover and take over again.
         backupTimer() {
-            this.backupTimerTO = setTimeout(this.backupTimer, 200)
-            const timer = store.state.timer
+            this.backupTimerTO = setTimeout(this.backupTimer, 200);
+            const timer = store.state.timer;
             if (timer.state === 'running') {
-                const missedTime = Date.now() - timer.timestamp
-                const timeOffset = timer.milliseconds + missedTime
-                this.time = this.splitStringToSpans(this.msToDuration(timeOffset))
+                const missedTime = Date.now() - timer.timestamp;
+                const timeOffset = timer.milliseconds + missedTime;
+                this.time = this.splitStringToSpans(this.msToDuration(timeOffset));
             }
         }
         msToDuration(ms) {
-            const seconds = Math.floor((ms / 1000) % 60)
-            const minutes = Math.floor((ms / (1000 * 60)) % 60)
-            const hours = Math.floor(ms / (1000 * 60 * 60))
-            const hoursStr = hours < 10 ? `0${hours}` : `${hours}`
-            const minutesStr = minutes < 10 ? `0${minutes}` : `${minutes}`
-            const secondsStr = seconds < 10 ? `0${seconds}` : `${seconds}`
-            return `${hoursStr}:${minutesStr}:${secondsStr}`
+            const seconds = Math.floor((ms / 1000) % 60);
+            const minutes = Math.floor((ms / (1000 * 60)) % 60);
+            const hours = Math.floor(ms / (1000 * 60 * 60));
+            const hoursStr = hours < 10 ? `0${hours}` : `${hours}`;
+            const minutesStr = minutes < 10 ? `0${minutes}` : `${minutes}`;
+            const secondsStr = seconds < 10 ? `0${seconds}` : `${seconds}`;
+            return `${hoursStr}:${minutesStr}:${secondsStr}`;
         }
     }
 </script>

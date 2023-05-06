@@ -32,51 +32,51 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { getReplicant, store } from '../../browser-util/state'
-    import { BestOfX } from '../../../schemas'
+    import { Component, Vue } from 'vue-property-decorator';
+    import { getReplicant, store } from '../../browser-util/state';
+    import { BestOfX } from '../../../schemas';
 
     @Component({})
     export default class BingoControl extends Vue {
-        total: string = this.totalMatches
+        total: string = this.totalMatches;
 
         // --- computed properties
         get enabled(): boolean {
-            return store.state.bestOfX.enabled
+            return store.state.bestOfX.enabled;
         }
 
         get matchScores(): number[] {
-            return store.state.bestOfX.matchCounts
+            return store.state.bestOfX.matchCounts;
         }
 
         get totalMatches(): string {
-            return `${store.state.bestOfX.totalMatches}`
+            return `${store.state.bestOfX.totalMatches}`;
         }
 
         get matchCounts(): string[] {
-            return store.state.bestOfX.matchCounts.map((i) => `${i}`)
+            return store.state.bestOfX.matchCounts.map((i) => `${i}`);
         }
 
         get teams(): string[] {
-            let ids = []
+            let ids = [];
             store.state.runDataActiveRun.teams.forEach((team) => {
-                ids.push(team.id)
-            })
-            return ids
+                ids.push(team.id);
+            });
+            return ids;
         }
 
         updateMatchScores() {
             this.matchCounts.forEach((score: string, idx: number) => {
-                getReplicant<BestOfX>('bestOfX').value.matchCounts[idx] = parseInt(score, 10)
-            })
+                getReplicant<BestOfX>('bestOfX').value.matchCounts[idx] = parseInt(score, 10);
+            });
         }
 
         changeEnabled() {
-            getReplicant<BestOfX>('bestOfX').value.enabled = !this.enabled
+            getReplicant<BestOfX>('bestOfX').value.enabled = !this.enabled;
         }
 
         updateTotal(newVal: string) {
-            getReplicant<BestOfX>('bestOfX').value.totalMatches = parseInt(newVal, 10)
+            getReplicant<BestOfX>('bestOfX').value.totalMatches = parseInt(newVal, 10);
         }
     }
 </script>

@@ -19,10 +19,10 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator'
-    import { store } from '../../browser-util/state'
-    import TextFit from '../helpers/text-fit.vue'
-    import BestOfX from './bestOfX.vue'
+    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { store } from '../../browser-util/state';
+    import TextFit from '../helpers/text-fit.vue';
+    import BestOfX from './bestOfX.vue';
 
     @Component({
         components: {
@@ -32,124 +32,124 @@
     })
     export default class TeamInfo extends Vue {
         @Prop({ required: true })
-        teamIndex: number
+        teamIndex: number;
 
         @Prop({ default: true })
-        showFlag: boolean
+        showFlag: boolean;
 
         @Prop({ default: true })
-        showColor: boolean
+        showColor: boolean;
 
         @Prop({ default: '55px' })
-        height: string
+        height: string;
 
         @Prop({ default: false })
-        reverseOrder: boolean
+        reverseOrder: boolean;
 
         get name(): string {
-            const team = store.state.runDataActiveRun.teams[this.teamIndex]
+            const team = store.state.runDataActiveRun.teams[this.teamIndex];
             if (!team) {
-                return ''
+                return '';
             }
-            return team.name
+            return team.name;
         }
 
         get playerIndex(): number {
-            const team = store.state.runDataActiveRun.teams[this.teamIndex]
+            const team = store.state.runDataActiveRun.teams[this.teamIndex];
             if (!team) {
-                return -1
+                return -1;
             }
-            var idx = 0
+            var idx = 0;
             for (let i = 0; i < this.teamIndex; i++) {
-                idx += store.state.runDataActiveRun.teams[i].players.length
+                idx += store.state.runDataActiveRun.teams[i].players.length;
             }
-            return idx
+            return idx;
         }
 
         get bingoColor(): string {
-            return store.state.bingoboardMeta.playerColors[this.playerIndex] || 'red'
+            return store.state.bingoboardMeta.playerColors[this.playerIndex] || 'red';
         }
 
         get bingoGoalCount(): number {
-            const bingoboard = store.state[store.state.currentMainBingoboard.boardReplicant]
+            const bingoboard = store.state[store.state.currentMainBingoboard.boardReplicant];
             if (!store.state.bingoboardMeta.manualScoreOverride) {
                 return <number>(
                     bingoboard.colorCounts[store.state.bingoboardMeta.playerColors[this.playerIndex] || 'red']
-                )
+                );
             } else {
-                return store.state.bingoboardMeta.manualScores[this.playerIndex]
+                return store.state.bingoboardMeta.manualScores[this.playerIndex];
             }
         }
 
         get bingoColorShown(): boolean {
-            return store.state.bingoboardMeta.colorShown && this.showColor
+            return store.state.bingoboardMeta.colorShown && this.showColor;
         }
 
         get bingoCountShown(): boolean {
-            return store.state.bingoboardMeta.countShown
+            return store.state.bingoboardMeta.countShown;
         }
 
         get finishTime(): string {
             // no individual finish time for one team runs
             // also disable for lockout
             if (store.state.runDataActiveRun.teams.length == 1) {
-                return ''
+                return '';
             }
             // get the team this player belongs to
-            const teamID = store.state.runDataActiveRun.teams[this.teamIndex].id
+            const teamID = store.state.runDataActiveRun.teams[this.teamIndex].id;
             if (teamID) {
-                const finishTime = store.state.timer.teamFinishTimes[teamID]
+                const finishTime = store.state.timer.teamFinishTimes[teamID];
                 if (finishTime) {
                     // disable time if lockout, but still "change" it, to force a refit
                     if (store.state.runDataActiveRun.customData.Bingotype?.includes('lockout')) {
-                        return ' '
+                        return ' ';
                     } else {
-                        return `[${finishTime.time}] `
+                        return `[${finishTime.time}] `;
                     }
                 }
             }
-            return ''
+            return '';
         }
 
         get medalClasses(): string {
             // no individual finish time for one team runs
             // also this is disabled for some layouts
             if (store.state.runDataActiveRun.teams.length == 1) {
-                return ''
+                return '';
             }
             // get the team this player belongs to
-            const teamID = store.state.runDataActiveRun.teams[this.teamIndex].id
+            const teamID = store.state.runDataActiveRun.teams[this.teamIndex].id;
             if (teamID) {
-                const finishTime = store.state.timer.teamFinishTimes[teamID]
+                const finishTime = store.state.timer.teamFinishTimes[teamID];
                 if (finishTime) {
-                    let place = 1
+                    let place = 1;
                     Object.values(store.state.timer.teamFinishTimes).forEach((time) => {
                         if (time.milliseconds < finishTime.milliseconds) {
-                            place++
+                            place++;
                         }
-                    })
-                    let medalColor = null
+                    });
+                    let medalColor = null;
                     switch (place) {
                         case 1:
-                            medalColor = 'gold'
-                            break
+                            medalColor = 'gold';
+                            break;
                         case 2:
-                            medalColor = 'silver'
-                            break
+                            medalColor = 'silver';
+                            break;
                         case 3:
-                            medalColor = 'bronze'
-                            break
+                            medalColor = 'bronze';
+                            break;
                     }
                     if (medalColor) {
-                        return `medal shine medal-${medalColor}`
+                        return `medal shine medal-${medalColor}`;
                     }
                 }
             }
-            return ''
+            return '';
         }
 
         get boXEnabled(): boolean {
-            return store.state.bestOfX.enabled
+            return store.state.bestOfX.enabled;
         }
     }
 </script>

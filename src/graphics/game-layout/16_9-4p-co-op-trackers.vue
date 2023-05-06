@@ -78,19 +78,19 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { store } from '../../browser-util/state'
-    import TestTimerContainer from '../components/timerContainer.vue'
-    import TestGameContainer from '../components/gameContainer.vue'
-    import BingoBoard from '../components/bingoboard.vue'
-    import PlayerInfo from '../components/playerInfo.vue'
-    import TeamInfo from '../components/teamInfo.vue'
-    import PlayerTeamContainer from '../components/playerTeamContainer.vue'
-    import DiscordVoiceDisplay from '../components/discordVoiceDisplay.vue'
-    import { RunDataTeam } from '../../../speedcontrol-types'
-    import TwitchPlayer from '../components/twitchStreamPlaceholder.vue'
-    import RotatingLogo from '../components/sponsorLogoRotation.vue'
-    import Tracker from '../components/tracker.vue'
+    import { Component, Vue } from 'vue-property-decorator';
+    import { store } from '../../browser-util/state';
+    import TestTimerContainer from '../components/timerContainer.vue';
+    import TestGameContainer from '../components/gameContainer.vue';
+    import BingoBoard from '../components/bingoboard.vue';
+    import PlayerInfo from '../components/playerInfo.vue';
+    import TeamInfo from '../components/teamInfo.vue';
+    import PlayerTeamContainer from '../components/playerTeamContainer.vue';
+    import DiscordVoiceDisplay from '../components/discordVoiceDisplay.vue';
+    import { RunDataTeam } from '../../../speedcontrol-types';
+    import TwitchPlayer from '../components/twitchStreamPlaceholder.vue';
+    import RotatingLogo from '../components/sponsorLogoRotation.vue';
+    import Tracker from '../components/tracker.vue';
 
     @Component({
         components: {
@@ -108,15 +108,15 @@
     })
     export default class GameLayout extends Vue {
         get teams(): RunDataTeam[] {
-            return store.state.runDataActiveRun.teams
+            return store.state.runDataActiveRun.teams;
         }
 
         get teamColor1(): string {
-            return store.state.bingoboardMeta.playerColors[0]
+            return store.state.bingoboardMeta.playerColors[0];
         }
 
         get teamColor2(): string {
-            return store.state.bingoboardMeta.playerColors[2]
+            return store.state.bingoboardMeta.playerColors[2];
         }
     }
 </script>

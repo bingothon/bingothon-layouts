@@ -13,52 +13,52 @@
 </template>
 
 <script lang="ts">
-    import moment from 'moment'
-    import clone from 'clone'
-    import { TrackerPrize } from '../../../../../types'
-    import { store } from '../../../../browser-util/state'
-    import { Component, Prop, Vue } from 'vue-property-decorator'
+    import moment from 'moment';
+    import clone from 'clone';
+    import { TrackerPrize } from '../../../../../types';
+    import { store } from '../../../../browser-util/state';
+    import { Component, Prop, Vue } from 'vue-property-decorator';
 
     @Component({})
     export default class Prize extends Vue {
         @Prop({ default: undefined })
-        data
+        data;
 
-        prize: TrackerPrize = null
+        prize: TrackerPrize = null;
 
         mounted() {
             const prizes = store.state.trackerPrizes.filter((prize) => {
-                const now = moment()
+                const now = moment();
                 // filter out prizes that are already expired, no endtime means no expire
                 if (
                     (!prize.endtime || moment(prize.endtime).isAfter(now)) &&
                     (!prize.starttime || moment(prize.starttime).isBefore(now))
                 ) {
-                    return true
+                    return true;
                 } else {
-                    return false
+                    return false;
                 }
-            })
+            });
             if (!prizes.length) {
-                this.$emit('end')
+                this.$emit('end');
             }
-            const randNum = Math.floor(Math.random() * prizes.length)
-            this.prize = clone(prizes[randNum])
-            setTimeout(() => this.$emit('end'), 25 * 1000)
+            const randNum = Math.floor(Math.random() * prizes.length);
+            this.prize = clone(prizes[randNum]);
+            setTimeout(() => this.$emit('end'), 25 * 1000);
         }
 
         formatUSD(amount) {
-            return `$${amount.toFixed(2)}`
+            return `$${amount.toFixed(2)}`;
         }
 
         getPrizeTimeUntilString(prize: TrackerPrize) {
             if (prize.endtime) {
-                let timeUntil = moment(prize.endtime).fromNow(true)
-                timeUntil = timeUntil.replace('an ', '') // Dirty fix for "Donate in the next an hour".
-                timeUntil = timeUntil.replace('a ', '') // Dirty fix for "Donate in the next a day".
-                return `Donate in the next ${timeUntil}`
+                let timeUntil = moment(prize.endtime).fromNow(true);
+                timeUntil = timeUntil.replace('an ', ''); // Dirty fix for "Donate in the next an hour".
+                timeUntil = timeUntil.replace('a ', ''); // Dirty fix for "Donate in the next a day".
+                return `Donate in the next ${timeUntil}`;
             } else {
-                return `Donate until the end of the event`
+                return `Donate until the end of the event`;
             }
         }
     }

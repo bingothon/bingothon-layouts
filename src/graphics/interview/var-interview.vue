@@ -28,15 +28,15 @@
 </template>
 
 <script lang="ts">
-    import { store } from '../../browser-util/state'
-    import { Component, Vue } from 'vue-property-decorator'
-    import TestTimerContainer from '../components/timerContainer.vue'
-    import TestGameContainer from '../components/gameContainer.vue'
-    import BingoBoard from '../components/bingoboard.vue'
-    import PlayerInfo from '../components/playerInfo.vue'
-    import TeamInfo from '../components/teamInfo.vue'
-    import PlayerTeamContainer from '../components/playerTeamContainer.vue'
-    import DiscordInterview from '../components/discordInterview.vue'
+    import { store } from '../../browser-util/state';
+    import { Component, Vue } from 'vue-property-decorator';
+    import TestTimerContainer from '../components/timerContainer.vue';
+    import TestGameContainer from '../components/gameContainer.vue';
+    import BingoBoard from '../components/bingoboard.vue';
+    import PlayerInfo from '../components/playerInfo.vue';
+    import TeamInfo from '../components/teamInfo.vue';
+    import PlayerTeamContainer from '../components/playerTeamContainer.vue';
+    import DiscordInterview from '../components/discordInterview.vue';
 
     @Component({
         components: {
@@ -51,25 +51,25 @@
     })
     export default class Interview extends Vue {
         get playerCount(): number[] {
-            let count = 0
-            const playerIndexes = []
+            let count = 0;
+            const playerIndexes = [];
             store.state.runDataActiveRun.teams.forEach((t) => {
                 t.players.forEach(() => {
-                    playerIndexes.push(count)
-                    count++
-                })
-            })
-            return playerIndexes
+                    playerIndexes.push(count);
+                    count++;
+                });
+            });
+            return playerIndexes;
         }
 
         get teamCount(): number[] {
-            let count = 0
-            const teamIndexes = []
+            let count = 0;
+            const teamIndexes = [];
             store.state.runDataActiveRun.teams.forEach(() => {
-                teamIndexes.push(count)
-                count++
-            })
-            return teamIndexes
+                teamIndexes.push(count);
+                count++;
+            });
+            return teamIndexes;
         }
     }
 </script>

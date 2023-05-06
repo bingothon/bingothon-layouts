@@ -19,37 +19,37 @@
 </template>
 
 <script lang="ts">
-    import { store } from '../../../browser-util/state'
-    import { SongData } from '../../../../schemas'
-    import { Component, Vue } from 'vue-property-decorator'
+    import { store } from '../../../browser-util/state';
+    import { SongData } from '../../../../schemas';
+    import { Component, Vue } from 'vue-property-decorator';
 
     @Component({})
     export default class Music extends Vue {
-        show: boolean = false
-        name: string = ''
-        scrollingEffect: boolean = false
+        show: boolean = false;
+        name: string = '';
+        scrollingEffect: boolean = false;
 
         mounted() {
-            store.watch((state) => state.songData, this.onSongDataUpdate, { immediate: true })
+            store.watch((state) => state.songData, this.onSongDataUpdate, { immediate: true });
             //this.onSongDataUpdate({title: "Epic bingothon Rap Remix - Flo & Tr1cks", playing: true});
         }
 
         onSongDataUpdate(newSong: SongData | undefined) {
             if (newSong && newSong.playing) {
-                this.name = newSong.title
-                this.show = true
+                this.name = newSong.title;
+                this.show = true;
                 // disable scrolling effect until we know if it's needed
-                this.scrollingEffect = false
+                this.scrollingEffect = false;
                 Vue.nextTick(() => {
                     // wait for transition
-                    const nameContainer = this.$refs.nameContainer as Element
-                    const songName = this.$refs.songName as Element
+                    const nameContainer = this.$refs.nameContainer as Element;
+                    const songName = this.$refs.songName as Element;
                     // if the name is bigger than the container we need to scroll
-                    this.scrollingEffect = songName.clientWidth > nameContainer.clientWidth
+                    this.scrollingEffect = songName.clientWidth > nameContainer.clientWidth;
                     //console.log('container:', nameContainer, 'name', songName);
-                })
+                });
             } else {
-                this.show = false
+                this.show = false;
             }
         }
     }

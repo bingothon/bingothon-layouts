@@ -7,28 +7,28 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { store } from '../../browser-util/state'
+    import { Component, Vue } from 'vue-property-decorator';
+    import { store } from '../../browser-util/state';
 
     @Component({})
     export default class TestPlayerContainer extends Vue {
-        index = 0
+        index = 0;
 
         get players(): string[] {
-            const playerRes = []
+            const playerRes = [];
             store.state.runDataActiveRun.teams.forEach((team) => {
                 team.players.forEach((runner) => {
-                    playerRes.push(runner.name)
-                })
-            })
-            return playerRes
+                    playerRes.push(runner.name);
+                });
+            });
+            return playerRes;
         }
 
         changePlayer(init) {
             if (!init) {
-                this.index += 1
+                this.index += 1;
                 if (this.index >= this.players.length) {
-                    this.index = 0
+                    this.index = 0;
                 }
             }
         }

@@ -28,41 +28,41 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue, Watch } from 'vue-property-decorator'
-    import { OmnibarMessages } from '../../../schemas'
-    import { store } from '../../browser-util/state'
-    import clone from 'clone'
+    import { Component, Vue, Watch } from 'vue-property-decorator';
+    import { OmnibarMessages } from '../../../schemas';
+    import { store } from '../../browser-util/state';
+    import clone from 'clone';
 
     @Component({})
     export default class OBSControl extends Vue {
-        messages: OmnibarMessages = []
-        newMessage: string = ''
+        messages: OmnibarMessages = [];
+        newMessage: string = '';
 
         get omniBarMessages(): OmnibarMessages {
-            return store.state.omnibarMessages
+            return store.state.omnibarMessages;
         }
 
         @Watch('omniBarMessages', { immediate: true })
         updateMsgsFromReplicant() {
-            this.messages = clone(this.omniBarMessages)
+            this.messages = clone(this.omniBarMessages);
         }
 
         addMessage(): void {
             if (this.newMessage) {
-                this.messages.push({ message: this.newMessage })
-                this.newMessage = ''
-                nodecg.Replicant('omnibarMessages').value = this.messages
+                this.messages.push({ message: this.newMessage });
+                this.newMessage = '';
+                nodecg.Replicant('omnibarMessages').value = this.messages;
             }
         }
 
         deleteMessage(i: number) {
-            this.messages = this.messages.filter((_, idx) => i !== idx)
-            nodecg.Replicant('omnibarMessages').value = this.messages
+            this.messages = this.messages.filter((_, idx) => i !== idx);
+            nodecg.Replicant('omnibarMessages').value = this.messages;
         }
 
         updateMessage(i: number) {
-            console.log('update: ', this.messages[i].message)
-            nodecg.Replicant('omnibarMessages').value[i] = this.messages[i]
+            console.log('update: ', this.messages[i].message);
+            nodecg.Replicant('omnibarMessages').value[i] = this.messages[i];
         }
     }
 </script>

@@ -45,14 +45,14 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator'
-    import { store } from '../../browser-util/state'
-    import { RunDataPlayer } from '../../../speedcontrol-types'
-    import TextFit from '../helpers/text-fit.vue'
-    import BestOfX from './bestOfX.vue'
+    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { store } from '../../browser-util/state';
+    import { RunDataPlayer } from '../../../speedcontrol-types';
+    import TextFit from '../helpers/text-fit.vue';
+    import BestOfX from './bestOfX.vue';
 
-    const playerSoloImg = require('../_misc/player-solo.png')
-    const twitchIconImg = require('../_misc/twitch-icon.png')
+    const playerSoloImg = require('../_misc/player-solo.png');
+    const twitchIconImg = require('../_misc/twitch-icon.png');
 
     @Component({
         components: {
@@ -62,39 +62,39 @@
     })
     export default class PlayerInfo extends Vue {
         @Prop({ default: -1 })
-        playerIndex: number
+        playerIndex: number;
 
         @Prop({ default: true })
-        showFlag: boolean
+        showFlag: boolean;
 
         @Prop({ default: true })
-        showColor: boolean
+        showColor: boolean;
 
         @Prop({ default: '55px' })
-        height: string
+        height: string;
 
         @Prop({ default: false })
-        reverseOrder: boolean
+        reverseOrder: boolean;
 
         @Prop({ default: false })
-        hideSoundIcon: boolean
+        hideSoundIcon: boolean;
 
         @Prop({ default: false })
-        hideFinishTime: boolean
+        hideFinishTime: boolean;
 
         get player(): RunDataPlayer {
-            let idx = 0
-            let correctPlayer
+            let idx = 0;
+            let correctPlayer;
             for (let i = 0; i < store.state.runDataActiveRun.teams.length; i++) {
-                const team = store.state.runDataActiveRun.teams[i]
+                const team = store.state.runDataActiveRun.teams[i];
                 for (let j = 0; j < team.players.length; j++) {
                     if (idx == this.playerIndex) {
-                        correctPlayer = team.players[j]
+                        correctPlayer = team.players[j];
                         // break out of both loops
-                        i = 100
-                        break
+                        i = 100;
+                        break;
                     }
-                    idx++
+                    idx++;
                 }
             }
             if (!correctPlayer) {
@@ -109,168 +109,168 @@
                     customData: {
                         pronouns: 'they/them',
                     },
-                }
+                };
             }
-            return correctPlayer
+            return correctPlayer;
         }
 
         get show(): boolean {
-            return store.state.playerAlternate
+            return store.state.playerAlternate;
             // return true;
         }
 
         get currentIcon(): any {
             if (this.show) {
-                return playerSoloImg
+                return playerSoloImg;
             } else {
-                return twitchIconImg
+                return twitchIconImg;
             }
         }
 
         get text(): string {
             if (this.show) {
-                return this.player.name
+                return this.player.name;
             } else {
-                return '/' + this.player.social.twitch
+                return '/' + this.player.social.twitch;
             }
         }
 
         get pronouns(): string {
             if (this.player.pronouns) {
                 if (!this.player.pronouns.includes(',')) {
-                    return this.player.pronouns.toString()
+                    return this.player.pronouns.toString();
                 }
                 if (this.player.pronouns.includes('he/him') && this.player.pronouns.includes('they/them')) {
-                    return 'he/them'
+                    return 'he/them';
                 }
                 if (this.player.pronouns.includes('she/her') && this.player.pronouns.includes('they/them')) {
-                    return 'she/them'
+                    return 'she/them';
                 }
-                return 'they/them'
+                return 'they/them';
             }
-            return ''
+            return '';
         }
 
         get finishTime(): string {
             // no individual finish time for one team runs
             // also this is disabled for some layouts
             if (this.hideFinishTime || store.state.runDataActiveRun.teams.length == 1) {
-                return ''
+                return '';
             }
             // get the team this player belongs to
             if (this.teamID) {
-                const finishTime = store.state.timer.teamFinishTimes[this.teamID]
+                const finishTime = store.state.timer.teamFinishTimes[this.teamID];
                 if (finishTime) {
                     // disable time if lockout, but still "change" it, to force a refit
                     if (store.state.runDataActiveRun.customData.Bingotype?.includes('lockout')) {
-                        return ' '
+                        return ' ';
                     } else {
-                        return `[${finishTime.time}] `
+                        return `[${finishTime.time}] `;
                     }
                 }
             }
-            return ''
+            return '';
         }
 
         get teamID(): string | null {
-            let theTeamID = null
-            let playerNum = 0
+            let theTeamID = null;
+            let playerNum = 0;
             store.state.runDataActiveRun.teams.forEach((t) => {
                 t.players.forEach(() => {
                     if (playerNum == this.playerIndex) {
-                        theTeamID = t.id
+                        theTeamID = t.id;
                     }
-                    playerNum++
-                })
-            })
-            return theTeamID
+                    playerNum++;
+                });
+            });
+            return theTeamID;
         }
 
         get teamIndex(): number {
             // use 0 as a default in case this teamindex isn't found
             // which shouldn't happen
-            let theTeamIdx = 0
-            let playerNum = 0
+            let theTeamIdx = 0;
+            let playerNum = 0;
             store.state.runDataActiveRun.teams.forEach((t, teamdIdx) => {
                 t.players.forEach(() => {
                     if (playerNum == this.playerIndex) {
-                        theTeamIdx = teamdIdx
+                        theTeamIdx = teamdIdx;
                     }
-                    playerNum++
-                })
-            })
-            return theTeamIdx
+                    playerNum++;
+                });
+            });
+            return theTeamIdx;
         }
 
         get bingoColor(): string {
-            return store.state.bingoboardMeta.playerColors[this.playerIndex] || 'red'
+            return store.state.bingoboardMeta.playerColors[this.playerIndex] || 'red';
         }
 
         get bingoGoalCount(): number {
-            const bingoboard = store.state[store.state.currentMainBingoboard.boardReplicant]
+            const bingoboard = store.state[store.state.currentMainBingoboard.boardReplicant];
             if (!store.state.bingoboardMeta.manualScoreOverride) {
                 return <number>(
                     bingoboard.colorCounts[store.state.bingoboardMeta.playerColors[this.playerIndex] || 'red']
-                )
+                );
             } else {
-                return store.state.bingoboardMeta.manualScores[this.playerIndex]
+                return store.state.bingoboardMeta.manualScores[this.playerIndex];
             }
         }
 
         get bingoColorShown(): boolean {
-            return store.state.bingoboardMeta.colorShown && this.showColor
+            return store.state.bingoboardMeta.colorShown && this.showColor;
         }
 
         get bingoCountShown(): boolean {
-            return store.state.bingoboardMeta.countShown
+            return store.state.bingoboardMeta.countShown;
         }
 
         get showSound(): boolean {
-            return this.playerIndex == store.state.soundOnTwitchStream && !this.hideSoundIcon
+            return this.playerIndex == store.state.soundOnTwitchStream && !this.hideSoundIcon;
         }
 
         get medalClasses(): string {
             // no individual finish time for one team runs
             // also this is disabled for some layouts
             if (this.hideFinishTime || store.state.runDataActiveRun.teams.length == 1) {
-                return ''
+                return '';
             }
             // get the team this player belongs to
             if (this.teamID) {
-                const finishTime = store.state.timer.teamFinishTimes[this.teamID]
+                const finishTime = store.state.timer.teamFinishTimes[this.teamID];
                 if (finishTime) {
-                    let place = 1
+                    let place = 1;
                     Object.values(store.state.timer.teamFinishTimes).forEach((time) => {
                         if (time.milliseconds < finishTime.milliseconds) {
-                            place++
+                            place++;
                         }
-                    })
-                    let medalColor = null
+                    });
+                    let medalColor = null;
                     switch (place) {
                         case 1:
-                            medalColor = 'gold'
-                            break
+                            medalColor = 'gold';
+                            break;
                         case 2:
-                            medalColor = 'silver'
-                            break
+                            medalColor = 'silver';
+                            break;
                         case 3:
-                            medalColor = 'bronze'
-                            break
+                            medalColor = 'bronze';
+                            break;
                     }
                     if (medalColor) {
-                        return `medal shine medal-${medalColor}`
+                        return `medal shine medal-${medalColor}`;
                     }
                 }
             }
-            return ''
+            return '';
         }
 
         getPlayerFlag(rawFlag: string | undefined): string {
-            return `/bundles/bingothon-layouts/static/flags/${rawFlag}.png`
+            return `/bundles/bingothon-layouts/static/flags/${rawFlag}.png`;
         }
 
         get boXEnabled(): boolean {
-            return store.state.bestOfX.enabled
+            return store.state.bestOfX.enabled;
         }
     }
 </script>

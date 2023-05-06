@@ -66,88 +66,88 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { nodecg } from '../../browser-util/nodecg'
-    import { DiscordDelayInfo, ObsDashboardAudioSources, ObsStreamMode } from '../../../schemas'
-    import { getReplicant, store } from '../../browser-util/state'
+    import { Component, Vue } from 'vue-property-decorator';
+    import { nodecg } from '../../browser-util/nodecg';
+    import { DiscordDelayInfo, ObsDashboardAudioSources, ObsStreamMode } from '../../../schemas';
+    import { getReplicant, store } from '../../browser-util/state';
 
-    const bundleName = 'bingothon-layouts'
+    const bundleName = 'bingothon-layouts';
 
     @Component({})
     export default class OBSControl extends Vue {
-        timeSinceLastIntermission: string = ''
-        lastIntermissionInterval: NodeJS.Timeout | null = null
+        timeSinceLastIntermission: string = '';
+        lastIntermissionInterval: NodeJS.Timeout | null = null;
 
         mounted() {
             this.lastIntermissionInterval = setInterval(() => {
-                const totalS = new Date().getTime() / 1000 - store.state.lastIntermissionTimestamp
-                const mins = (totalS / 60).toFixed(0)
-                const secs = (totalS % 60).toFixed(0)
-                this.timeSinceLastIntermission = mins + ':' + secs.padStart(2, '0')
-            }, 1000)
+                const totalS = new Date().getTime() / 1000 - store.state.lastIntermissionTimestamp;
+                const mins = (totalS / 60).toFixed(0);
+                const secs = (totalS % 60).toFixed(0);
+                this.timeSinceLastIntermission = mins + ':' + secs.padStart(2, '0');
+            }, 1000);
         }
 
         destroyed() {
             if (this.lastIntermissionInterval) {
-                clearInterval(this.lastIntermissionInterval)
-                this.lastIntermissionInterval = null
+                clearInterval(this.lastIntermissionInterval);
+                this.lastIntermissionInterval = null;
             }
         }
 
         get transitionText(): string {
             if (this.adTimer > 0) {
-                return 'Playing ' + this.adTimer + 's Twitch ads'
+                return 'Playing ' + this.adTimer + 's Twitch ads';
             }
-            return 'Transition'
+            return 'Transition';
         }
 
         get adTimer(): number {
-            return store.state.twitchCommercialTimer.secondsRemaining
+            return store.state.twitchCommercialTimer.secondsRemaining;
         }
 
         get obsStreamModes(): ObsStreamMode[] {
-            return ['external-commentary', 'runner-commentary', 'racer-audio-only']
+            return ['external-commentary', 'runner-commentary', 'racer-audio-only'];
         }
 
         get hostsSpeakingDuringIntermission(): boolean {
-            return store.state.hostsSpeakingDuringIntermission.speaking
+            return store.state.hostsSpeakingDuringIntermission.speaking;
         }
 
         get obsConnectionStatus(): string {
-            return store.state.obsConnection.status
+            return store.state.obsConnection.status;
         }
 
         get currentScene(): string {
-            return store.state.obsCurrentScene
+            return store.state.obsCurrentScene;
         }
 
         get previewScene(): string {
-            return store.state.obsPreviewScene
+            return store.state.obsPreviewScene;
         }
 
         set previewScene(scene: string) {
-            getReplicant('obsPreviewScene').value = scene
+            getReplicant('obsPreviewScene').value = scene;
         }
 
         get obsAudioLevels() {
-            return store.state.obsAudioLevels
+            return store.state.obsAudioLevels;
         }
 
         obsAudioLevel(sourceName: string): number {
-            return this.obsAudioLevels?.[sourceName]?.volume ?? 0
+            return this.obsAudioLevels?.[sourceName]?.volume ?? 0;
         }
 
         get obsAudioSources(): [string, any][] {
-            return Object.entries(store.state.obsDashboardAudioSources)
+            return Object.entries(store.state.obsDashboardAudioSources);
         }
 
         updateAudioSourceBaseVolume(audioSource: string, newVal: number) {
             getReplicant<ObsDashboardAudioSources>('obsDashboardAudioSources').value[audioSource].baseVolume =
-                newVal / 100
+                newVal / 100;
         }
 
         get sceneNameList(): string[] {
-            return store.state.obsSceneList.map((s) => s.sceneName)
+            return store.state.obsSceneList.map((s) => s.sceneName);
         }
 
         // get discordAudioDelay(): string {
@@ -167,11 +167,11 @@
         // }
 
         get discordDisplayDelay(): string {
-            return `${store.state.discordDelayInfo.discordDisplayDelayMs}`
+            return `${store.state.discordDelayInfo.discordDisplayDelayMs}`;
         }
 
         set discordDisplayDelay(delay: string) {
-            getReplicant<DiscordDelayInfo>('discordDelayInfo').value.discordDisplayDelayMs = parseInt(delay, 10)
+            getReplicant<DiscordDelayInfo>('discordDelayInfo').value.discordDisplayDelayMs = parseInt(delay, 10);
         }
 
         // get discordDisplayDelaySync(): boolean {
@@ -183,66 +183,66 @@
         // }
 
         get obsPreviewImgData(): string | undefined {
-            return store.state.obsPreviewImg.screenshot
+            return store.state.obsPreviewImg.screenshot;
         }
 
         get obsPreviewImgActive(): boolean {
-            return store.state.obsPreviewImg.active
+            return store.state.obsPreviewImg.active;
         }
 
         set obsPreviewImgActive(val: boolean) {
-            NodeCG.sendMessageToBundle('obsremotecontrol:setPreviewImgActive', bundleName, { active: val })
+            NodeCG.sendMessageToBundle('obsremotecontrol:setPreviewImgActive', bundleName, { active: val });
         }
 
         get obsPreviewImgSource(): string {
-            return store.state.obsPreviewImg.source ?? 'game'
+            return store.state.obsPreviewImg.source ?? 'game';
         }
 
         set obsPreviewImgSource(val: string) {
-            NodeCG.sendMessageToBundle('obsremotecontrol:setPreviewImgSource', bundleName, { source: val })
+            NodeCG.sendMessageToBundle('obsremotecontrol:setPreviewImgSource', bundleName, { source: val });
         }
 
         get obsStreamMode(): ObsStreamMode {
-            return store.state.obsStreamMode
+            return store.state.obsStreamMode;
         }
 
         set obsStreamMode(mode: ObsStreamMode) {
-            getReplicant<ObsStreamMode>('obsStreamMode').value = mode
+            getReplicant<ObsStreamMode>('obsStreamMode').value = mode;
         }
 
         changeOBSStreamMode(mode: ObsStreamMode) {
-            getReplicant<ObsStreamMode>('obsStreamMode').value = mode
+            getReplicant<ObsStreamMode>('obsStreamMode').value = mode;
         }
 
         doTransition() {
-            nodecg.sendMessageToBundle('obs:transition', bundleName)
+            nodecg.sendMessageToBundle('obs:transition', bundleName);
         }
 
         toggleAudioFade(source: string) {
             if (store.state.obsDashboardAudioSources[source].fading === 'muted') {
-                nodecg.sendMessageToBundle('obsRemotecontrol:fadeInAudio', bundleName, { source })
+                nodecg.sendMessageToBundle('obsRemotecontrol:fadeInAudio', bundleName, { source });
             } else {
-                nodecg.sendMessageToBundle('obsRemotecontrol:fadeOutAudio', bundleName, { source })
+                nodecg.sendMessageToBundle('obsRemotecontrol:fadeOutAudio', bundleName, { source });
             }
         }
 
         isAudioUnmuted(fade: string): boolean {
             switch (fade) {
                 case 'fadein':
-                    return true
+                    return true;
                 case 'fadeout':
-                    return false
+                    return false;
                 case 'muted':
-                    return false
+                    return false;
                 case 'unmuted':
-                    return true
+                    return true;
                 default:
-                    return false
+                    return false;
             }
         }
 
         canTriggerAudioFade(fade: string): boolean {
-            return ['muted', 'unmuted'].includes(fade)
+            return ['muted', 'unmuted'].includes(fade);
         }
     }
 </script>

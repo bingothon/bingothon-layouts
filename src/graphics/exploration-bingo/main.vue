@@ -17,64 +17,64 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { store } from '../../browser-util/state'
-    import { ExplorationBingoboard } from '../../../schemas'
+    import { Component, Vue } from 'vue-property-decorator';
+    import { store } from '../../browser-util/state';
+    import { ExplorationBingoboard } from '../../../schemas';
 
     interface BingoCell {
-        name: string
-        hidden: boolean
-        colors: string
-        row: number
-        column: number
+        name: string;
+        hidden: boolean;
+        colors: string;
+        row: number;
+        column: number;
     }
 
     function defaultBingoBoard(): BingoCell[][] {
-        var result = []
+        var result = [];
         for (let i = 0; i < 5; i++) {
-            var cur: BingoCell[] = []
+            var cur: BingoCell[] = [];
             for (let j = 0; j < 5; j++) {
-                cur.push({ name: '', colors: 'blank', row: i, column: j, hidden: true })
+                cur.push({ name: '', colors: 'blank', row: i, column: j, hidden: true });
             }
-            result.push(cur)
+            result.push(cur);
         }
-        return result
+        return result;
     }
 
     @Component({})
     export default class ExplorationBingo extends Vue {
-        bingoCells: BingoCell[][] = defaultBingoBoard()
+        bingoCells: BingoCell[][] = defaultBingoBoard();
 
         mounted() {
-            console.log(this.bingoCells)
-            store.watch((state) => state.explorationBingoboard, this.onBingoBoardUpdate, { immediate: true })
+            console.log(this.bingoCells);
+            store.watch((state) => state.explorationBingoboard, this.onBingoBoardUpdate, { immediate: true });
         }
 
         onBingoBoardUpdate(newGoals: ExplorationBingoboard, oldGoals?: ExplorationBingoboard | undefined) {
-            let idx = 0
+            let idx = 0;
             this.bingoCells.forEach((row, rowIndex) => {
                 row.forEach((cell, columnIndex) => {
                     // update cell with goal name, if changed
-                    const newCell = newGoals.cells[idx]
+                    const newCell = newGoals.cells[idx];
                     if (!oldGoals || !oldGoals.cells.length || newCell.name != oldGoals.cells[idx].name) {
-                        Vue.set(this.bingoCells[rowIndex][columnIndex], 'name', newCell.name)
+                        Vue.set(this.bingoCells[rowIndex][columnIndex], 'name', newCell.name);
                     }
                     // update cell with color background, if changed
                     if (!oldGoals || !oldGoals.cells.length || newCell.colors != oldGoals.cells[idx].colors) {
-                        Vue.set(this.bingoCells[rowIndex][columnIndex], 'colors', newCell.colors)
+                        Vue.set(this.bingoCells[rowIndex][columnIndex], 'colors', newCell.colors);
                     }
-                    Vue.set(this.bingoCells[rowIndex][columnIndex], 'hidden', newCell.hidden)
-                    idx++
-                })
-            })
+                    Vue.set(this.bingoCells[rowIndex][columnIndex], 'hidden', newCell.hidden);
+                    idx++;
+                });
+            });
         }
 
         generateCellClasses(color: string, hidden: boolean): string {
-            let classes = color + 'square'
+            let classes = color + 'square';
             if (!hidden) {
-                classes = classes + ' shown'
+                classes = classes + ' shown';
             }
-            return classes
+            return classes;
         }
 
         squareClicked(cell: BingoCell) {
@@ -84,8 +84,8 @@
                         index: cell.row * 5 + cell.column,
                     })
                     .catch((e) => {
-                        console.error(e)
-                    })
+                        console.error(e);
+                    });
             }
         }
     }

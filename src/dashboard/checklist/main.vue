@@ -10,8 +10,8 @@
     </v-app>
 </template>
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { store } from '../../browser-util/state'
+    import { Component, Vue } from 'vue-property-decorator';
+    import { store } from '../../browser-util/state';
 
     const ACTION_LIST: string[] = [
         'Switch to Intermission',
@@ -27,25 +27,25 @@
         'Unmute the correct Twitch stream',
         'Final Check',
         'Go live and stay hydrated',
-    ]
+    ];
 
-    const ACTION_CHECKED: [string, boolean][] = []
+    const ACTION_CHECKED: [string, boolean][] = [];
     ACTION_LIST.forEach((a) => {
-        ACTION_CHECKED.push([a, false])
-    })
+        ACTION_CHECKED.push([a, false]);
+    });
 
     @Component({})
     export default class Checklist extends Vue {
-        actionsChecked = ACTION_CHECKED
+        actionsChecked = ACTION_CHECKED;
 
         get hostsSpeaking() {
-            return store.state.hostsSpeakingDuringIntermission.speaking
+            return store.state.hostsSpeakingDuringIntermission.speaking;
         }
 
         clearAll() {
             this.actionsChecked.forEach((action) => {
-                Vue.set(action, 1, false)
-            })
+                Vue.set(action, 1, false);
+            });
         }
     }
 </script>

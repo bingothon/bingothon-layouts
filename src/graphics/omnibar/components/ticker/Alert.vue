@@ -17,50 +17,50 @@
 </template>
 
 <script lang="ts">
-    import { gsap } from 'gsap'
-    import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
-    import { Component, Prop, Vue } from 'vue-property-decorator'
+    import { gsap } from 'gsap';
+    import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+    import { Component, Prop, Vue } from 'vue-property-decorator';
 
-    gsap.registerPlugin(ScrollToPlugin)
+    gsap.registerPlugin(ScrollToPlugin);
 
     @Component({})
     export default class Alert extends Vue {
         @Prop({ default: { line1Text: '', line2Text: '' } })
-        data: { line1Text: string; line2Text: string }
+        data: { line1Text: string; line2Text: string };
 
-        width: number = 0
+        width: number = 0;
 
-        line1: string = ''
+        line1: string = '';
 
-        line2: string = ''
+        line2: string = '';
 
-        tweet: boolean = false
+        tweet: boolean = false;
 
         mounted() {
-            const fallback = setTimeout(() => this.$emit('end'), 5000)
-            const originalWidth = this.$parent.$el.clientWidth - 34
-            this.line1 = this.data.line1Text
+            const fallback = setTimeout(() => this.$emit('end'), 5000);
+            const originalWidth = this.$parent.$el.clientWidth - 34;
+            this.line1 = this.data.line1Text;
             if (!this.data.line2Text) {
-                setTimeout(() => this.$emit('end'), 10 * 1000)
+                setTimeout(() => this.$emit('end'), 10 * 1000);
             } else {
-                this.line2 = this.data.line2Text
+                this.line2 = this.data.line2Text;
                 Vue.nextTick().then(() => {
-                    this.width = originalWidth
+                    this.width = originalWidth;
                     setTimeout(() => {
-                        clearTimeout(fallback)
-                        var Line2 = this.$refs.Line2 as Element
-                        const amountToScroll = Line2.scrollWidth - originalWidth
-                        const timeToScroll = (amountToScroll * 13) / 1000
-                        const timeToShow = timeToScroll > 10 ? timeToScroll : 6
+                        clearTimeout(fallback);
+                        var Line2 = this.$refs.Line2 as Element;
+                        const amountToScroll = Line2.scrollWidth - originalWidth;
+                        const timeToScroll = (amountToScroll * 13) / 1000;
+                        const timeToShow = timeToScroll > 10 ? timeToScroll : 6;
                         gsap.to(this.$refs.Line2, timeToShow, {
                             scrollTo: { x: 'max' },
                             ease: 'none',
                             onComplete: () => {
-                                setTimeout(() => this.$emit('end'), 2 * 1000)
+                                setTimeout(() => this.$emit('end'), 2 * 1000);
                             },
-                        })
-                    }, 2 * 1000)
-                })
+                        });
+                    }, 2 * 1000);
+                });
             }
         }
     }

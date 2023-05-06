@@ -7,7 +7,7 @@
 <script>
     export default {
         name: 'StaticLogo',
-    }
+    };
 </script>
 
 <style scoped>

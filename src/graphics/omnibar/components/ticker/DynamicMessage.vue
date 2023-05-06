@@ -5,17 +5,17 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator'
+    import { Component, Prop, Vue } from 'vue-property-decorator';
 
     @Component({})
     export default class DynamicMessage extends Vue {
         @Prop()
-        data: { msg: string; size: number; time: number }
+        data: { msg: string; size: number; time: number };
 
         get cssProps() {
             return {
                 '--font-size': `${this.normalisedData.size}px`,
-            }
+            };
         }
 
         get normalisedData() {
@@ -25,11 +25,11 @@
                     time: 25,
                 },
                 this.data,
-            )
+            );
         }
 
         mounted() {
-            setTimeout(() => this.$emit('end'), this.normalisedData.time * 1000)
+            setTimeout(() => this.$emit('end'), this.normalisedData.time * 1000);
         }
     }
 </script>

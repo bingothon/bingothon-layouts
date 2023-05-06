@@ -6,25 +6,25 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator'
-    import { store } from '../../browser-util/state'
+    import { Component, Vue } from 'vue-property-decorator';
+    import { store } from '../../browser-util/state';
 
     @Component({})
     export default class TestGameContainer extends Vue {
         get gameName(): string {
-            return store.state.runDataActiveRun.game
+            return store.state.runDataActiveRun.game;
         }
 
         get gameCategory(): string {
-            return store.state.runDataActiveRun.category
+            return store.state.runDataActiveRun.category;
         }
 
         get gameSystem(): string {
-            return store.state.runDataActiveRun.system
+            return store.state.runDataActiveRun.system;
         }
 
         get gameEstimate(): string {
-            return store.state.runDataActiveRun.estimate
+            return store.state.runDataActiveRun.estimate;
         }
     }
 </script>

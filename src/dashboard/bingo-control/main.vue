@@ -140,37 +140,37 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue, Watch } from 'vue-property-decorator'
-    import { nodecg } from '../../browser-util/nodecg'
-    import { BingoboardMeta, CurrentMainBingoboard, ExternalBingoboardMeta } from '../../../schemas'
-    import { getReplicant, store } from '../../browser-util/state'
+    import { Component, Vue, Watch } from 'vue-property-decorator';
+    import { nodecg } from '../../browser-util/nodecg';
+    import { BingoboardMeta, CurrentMainBingoboard, ExternalBingoboardMeta } from '../../../schemas';
+    import { getReplicant, store } from '../../browser-util/state';
 
-    type ColorEnum = 'pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple'
-    type BingoRepEnum = 'bingoboard' | 'externalBingoboard' | 'explorationBingoboard'
+    type ColorEnum = 'pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple';
+    type BingoRepEnum = 'bingoboard' | 'externalBingoboard' | 'explorationBingoboard';
 
-    const BOARD_TO_SOCKET_REP = { bingoboard: 'bingosyncSocket', hostingBingoboard: 'hostingBingosocket' }
+    const BOARD_TO_SOCKET_REP = { bingoboard: 'bingosyncSocket', hostingBingoboard: 'hostingBingosocket' };
 
     @Component({})
     export default class BingoControl extends Vue {
-        roomCode: string = ''
+        roomCode: string = '';
 
-        passphrase: string = ''
+        passphrase: string = '';
 
-        currentBoardRep: BingoRepEnum = 'bingoboard'
+        currentBoardRep: BingoRepEnum = 'bingoboard';
 
-        oriBoardID: string = ''
+        oriBoardID: string = '';
 
-        oriPlayerID: string = ''
+        oriPlayerID: string = '';
 
-        oriCoop: boolean = true
+        oriCoop: boolean = true;
 
-        oriGame: string = 'ori1'
+        oriGame: string = 'ori1';
 
-        externalBingoboardMeta: ExternalBingoboardMeta = { game: 'none' }
+        externalBingoboardMeta: ExternalBingoboardMeta = { game: 'none' };
 
-        explorationCustomBoard: string = ''
+        explorationCustomBoard: string = '';
 
-        errorMessage: string = ''
+        errorMessage: string = '';
 
         allColors = Object.freeze([
             'pink',
@@ -183,119 +183,119 @@
             'blue',
             'navy',
             'purple',
-        ])
+        ]);
 
-        allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard']) //add back when need  'explorationBingoboard'
+        allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard']); //add back when need  'explorationBingoboard'
 
         mounted() {
             store.watch(
                 (state) => state.currentMainBingoboard,
                 (newVal) => {
-                    this.currentBoardRep = newVal.boardReplicant
+                    this.currentBoardRep = newVal.boardReplicant;
                 },
                 { immediate: true },
-            )
+            );
         }
 
         @Watch('storeExternalBingoboardMeta', { immediate: true })
         watchExternalBingoboard(meta: ExternalBingoboardMeta) {
-            this.externalBingoboardMeta = meta
+            this.externalBingoboardMeta = meta;
         }
 
         // --- computed properties
         get connectActionText(): string {
-            const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep]
+            const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
             if (!socketRepName) {
-                return 'invalid'
+                return 'invalid';
             }
             switch (store.state[socketRepName].status) {
                 case 'connected':
-                    return 'disconnect'
+                    return 'disconnect';
                 case 'disconnected':
                 case 'error':
-                    return 'connect'
+                    return 'connect';
                 case 'connecting':
-                    return 'connecting...'
+                    return 'connecting...';
                 default:
-                    return 'invalid'
+                    return 'invalid';
             }
         }
 
         get toggleCardText(): string {
             if (store.state.bingoboardMeta.boardHidden) {
-                return 'Show Card'
+                return 'Show Card';
             }
-            return 'Hide Card'
+            return 'Hide Card';
         }
 
         get toggleColorsText(): string {
             if (store.state.bingoboardMeta.colorShown) {
-                return 'Hide Colors'
+                return 'Hide Colors';
             }
-            return 'Show Colors'
+            return 'Show Colors';
         }
 
         get toggleCountText(): string {
             if (store.state.bingoboardMeta.countShown) {
-                return 'Hide Goalcount'
+                return 'Hide Goalcount';
             }
-            return 'Show Goalcount'
+            return 'Show Goalcount';
         }
 
         get manualScoreOverrideText(): string {
             if (store.state.bingoboardMeta.manualScoreOverride) {
-                return 'Disable Manual Score Override'
+                return 'Disable Manual Score Override';
             }
-            return 'Enable Manual Score Override'
+            return 'Enable Manual Score Override';
         }
 
         get isManualScoreOverride(): boolean {
-            return store.state.bingoboardMeta.manualScoreOverride
+            return store.state.bingoboardMeta.manualScoreOverride;
         }
 
         get playerColors(): Array<ColorEnum> {
-            return store.state.bingoboardMeta.playerColors
+            return store.state.bingoboardMeta.playerColors;
         }
 
         get canDoConnectAction(): boolean {
-            const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep]
+            const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
             if (!socketRepName) {
-                return false
+                return false;
             }
             switch (store.state[socketRepName].status) {
                 case 'connected':
-                    return true
+                    return true;
                 case 'disconnected':
                 case 'error':
-                    return !!this.roomCode && !!this.passphrase
+                    return !!this.roomCode && !!this.passphrase;
                 case 'connecting':
                 default:
-                    return false
+                    return false;
             }
         }
 
         get showExtraBingosyncOptions(): boolean {
-            return ['bingoboard', 'hostingBingoboard'].includes(this.currentBoardRep)
+            return ['bingoboard', 'hostingBingoboard'].includes(this.currentBoardRep);
         }
 
         get showExtraExternBoardOptions(): boolean {
-            return this.currentBoardRep === 'externalBingoboard'
+            return this.currentBoardRep === 'externalBingoboard';
         }
 
         get showExtraExplorationOptions(): boolean {
-            return this.currentBoardRep === 'explorationBingoboard'
+            return this.currentBoardRep === 'explorationBingoboard';
         }
 
         get currentBoardActive(): boolean {
-            return this.currentBoardRep === store.state.currentMainBingoboard.boardReplicant
+            return this.currentBoardRep === store.state.currentMainBingoboard.boardReplicant;
         }
 
         get manualScore(): string[] {
-            return store.state.bingoboardMeta.manualScores.map((i) => `${i}`)
+            return store.state.bingoboardMeta.manualScores.map((i) => `${i}`);
         }
 
         get storeExternalBingoboardMeta() {
-            return store.state.externalBingoboardMeta
+            return store.state.externalBingoboardMeta;
         }
 
         // test
@@ -317,29 +317,29 @@
 
         updateManualScore() {
             this.manualScore.forEach((score: string, idx: number) => {
-                getReplicant<BingoboardMeta>('bingoboardMeta').value.manualScores[idx] = parseInt(score, 10)
-            })
+                getReplicant<BingoboardMeta>('bingoboardMeta').value.manualScores[idx] = parseInt(score, 10);
+            });
         }
 
         connectAction() {
             // only expanded options for the bingosync connection,
             // otherwise something else is there to handle the board
             if (this.showExtraBingosyncOptions) {
-                const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep]
+                const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
                 if (!socketRepName) {
-                    throw new Error('unreachable')
+                    throw new Error('unreachable');
                 }
                 switch (store.state[socketRepName].status) {
                     case 'connected':
                         nodecg.sendMessage('bingosync:leaveRoom', { name: this.currentBoardRep }).catch((error) => {
-                            nodecg.log.error(error)
-                            this.errorMessage = error.message
-                        })
-                        break
+                            nodecg.log.error(error);
+                            this.errorMessage = error.message;
+                        });
+                        break;
                     case 'disconnected':
                     case 'error':
                         getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this
-                            .currentBoardRep as BingoRepEnum
+                            .currentBoardRep as BingoRepEnum;
                         nodecg
                             .sendMessage('bingosync:joinRoom', {
                                 roomCode: this.roomCode,
@@ -347,57 +347,57 @@
                                 name: this.currentBoardRep,
                             })
                             .catch((error) => {
-                                nodecg.log.error(error)
-                                this.errorMessage = error.message
-                            })
-                        break
+                                nodecg.log.error(error);
+                                this.errorMessage = error.message;
+                            });
+                        break;
                     default:
-                        break
+                        break;
                 }
             }
         }
 
         updateExploration() {
             try {
-                const goals = JSON.parse(this.explorationCustomBoard)
-                const onlyNames = goals.map((g) => g.name)
+                const goals = JSON.parse(this.explorationCustomBoard);
+                const onlyNames = goals.map((g) => g.name);
                 nodecg.sendMessageToBundle('exploration:newGoals', 'bingothon-layouts', onlyNames).catch((e) => {
-                    this.errorMessage = e.message
-                    nodecg.log.error(e)
-                })
+                    this.errorMessage = e.message;
+                    nodecg.log.error(e);
+                });
             } catch (e) {
-                this.errorMessage = "Couldn't parse the board"
+                this.errorMessage = "Couldn't parse the board";
             }
         }
 
         resetExploration() {
-            nodecg.sendMessageToBundle('exploration:resetBoard', 'bingothon-layouts')
+            nodecg.sendMessageToBundle('exploration:resetBoard', 'bingothon-layouts');
         }
 
         switchAction() {
             getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this
-                .currentBoardRep as BingoRepEnum
+                .currentBoardRep as BingoRepEnum;
         }
 
         updatePlayerColor(idx: number, val: any) {
-            getReplicant<BingoboardMeta>('bingoboardMeta').value.playerColors[idx] = val
+            getReplicant<BingoboardMeta>('bingoboardMeta').value.playerColors[idx] = val;
         }
 
         toggleCard() {
-            getReplicant<BingoboardMeta>('bingoboardMeta').value.boardHidden = !store.state.bingoboardMeta.boardHidden
+            getReplicant<BingoboardMeta>('bingoboardMeta').value.boardHidden = !store.state.bingoboardMeta.boardHidden;
         }
 
         toggleColors() {
-            getReplicant<BingoboardMeta>('bingoboardMeta').value.colorShown = !store.state.bingoboardMeta.colorShown
+            getReplicant<BingoboardMeta>('bingoboardMeta').value.colorShown = !store.state.bingoboardMeta.colorShown;
         }
 
         toggleCount() {
-            getReplicant<BingoboardMeta>('bingoboardMeta').value.countShown = !store.state.bingoboardMeta.countShown
+            getReplicant<BingoboardMeta>('bingoboardMeta').value.countShown = !store.state.bingoboardMeta.countShown;
         }
 
         toggleManualScoreOverride() {
             getReplicant<BingoboardMeta>('bingoboardMeta').value.manualScoreOverride =
-                !store.state.bingoboardMeta.manualScoreOverride
+                !store.state.bingoboardMeta.manualScoreOverride;
         }
 
         updateExternalGame() {
@@ -408,20 +408,20 @@
                         boardID: '',
                         playerID: '',
                         coop: false,
-                    }
-                    break
+                    };
+                    break;
                 }
                 case 'ori2': {
                     this.externalBingoboardMeta = {
                         game: 'ori2',
                         token: '',
                         host: '',
-                    }
+                    };
                 }
                 default: {
                     this.externalBingoboardMeta = {
                         game: 'none',
-                    }
+                    };
                 }
             }
         }
@@ -430,15 +430,15 @@
             nodecg
                 .sendMessageToBundle('externalBingoboard:configure', 'bingothon-layouts', this.externalBingoboardMeta)
                 .catch((error) => {
-                    nodecg.log.error(error)
-                    this.errorMessage = error.message
-                })
+                    nodecg.log.error(error);
+                    this.errorMessage = error.message;
+                });
         }
 
         updateOriGame(game: string) {
-            this.oriGame = game
-            console.log(game)
-            console.log(this.oriGame)
+            this.oriGame = game;
+            console.log(game);
+            console.log(this.oriGame);
         }
     }
 </script>

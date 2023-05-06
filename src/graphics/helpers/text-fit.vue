@@ -5,66 +5,66 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator'
+    import { Component, Prop, Vue } from 'vue-property-decorator';
 
     // stub cause fonts isn't known
     declare namespace document {
-        const fonts: any
+        const fonts: any;
     }
 
     @Component({ name: 'text-fit' })
     export default class TextFit extends Vue {
         @Prop({ required: true })
-        text: string
+        text: string;
         @Prop({ default: 'left' })
-        align: 'left' | 'right' | 'center'
-        transform: string = 'scaleX(1)'
-        top: string = '0'
+        align: 'left' | 'right' | 'center';
+        transform: string = 'scaleX(1)';
+        top: string = '0';
 
         mounted() {
-            const font = window.getComputedStyle(this.$el.querySelector('#FittedTextContent')).font
+            const font = window.getComputedStyle(this.$el.querySelector('#FittedTextContent')).font;
             if (font) {
                 document.fonts.load(font).then(() => {
-                    this.fit()
+                    this.fit();
                     // fuck you chrome
-                    setTimeout(this.fit, 1000)
-                })
+                    setTimeout(this.fit, 1000);
+                });
             }
             this.$watch(
                 'text',
                 () => {
-                    this.fit()
+                    this.fit();
                 },
                 { immediate: true },
-            )
+            );
         }
 
         fit() {
-            this.transform = `scaleX(1)`
-            this.top = '0'
+            this.transform = `scaleX(1)`;
+            this.top = '0';
             this.$nextTick(() => {
                 // get width height of parent and text container to calc scaling
-                const container = this.$el
-                const fittedContent = container.querySelector('#FittedTextContent')
-                var scaleX = container.scrollWidth / fittedContent.scrollWidth
+                const container = this.$el;
+                const fittedContent = container.querySelector('#FittedTextContent');
+                var scaleX = container.scrollWidth / fittedContent.scrollWidth;
                 // console.log(container);
                 // console.log(`${container.scrollWidth}:${fittedContent.scrollWidth}`);
                 // limit max scale to 1
-                scaleX = Math.min(1, scaleX)
+                scaleX = Math.min(1, scaleX);
                 // center if overflow
-                var toLeft = (container.scrollWidth - fittedContent.scrollWidth) / 2
+                var toLeft = (container.scrollWidth - fittedContent.scrollWidth) / 2;
                 if (scaleX == 1) {
                     if (this.align == 'left') {
-                        toLeft = 0
+                        toLeft = 0;
                     } else if (this.align == 'center') {
-                        toLeft = toLeft
+                        toLeft = toLeft;
                     } else {
-                        toLeft = toLeft * 2
+                        toLeft = toLeft * 2;
                     }
                 }
-                this.transform = `translateY(-50%) translateX(${toLeft}px) scaleX(${scaleX})`
-                this.top = '50%'
-            })
+                this.transform = `translateY(-50%) translateX(${toLeft}px) scaleX(${scaleX})`;
+                this.top = '50%';
+            });
         }
     }
 </script>
