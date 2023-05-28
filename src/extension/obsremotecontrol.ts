@@ -144,7 +144,7 @@ waitTillConnected().then((): void => {
             const imgData = await obs.takeSourceScreenshot(obsPreviewImgRep.value.source);
             obsPreviewImgRep.value.screenshot = imgData;
         } catch (e) {
-            logger.error("error taking screenshot: ", e);
+            logger.error(`error taking screenshot from ${obsPreviewImgRep.value.source}: `, e);
         }
     }
 

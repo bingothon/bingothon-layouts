@@ -136,87 +136,62 @@ class OBSUtility extends OBSWebSocket {
      */
 
     public async setMediasourcePlayPause(source: string, pause: boolean): Promise<void> {
-        // TODO: remove this garbage once obs-websocket-js updates to proper bindings
-        // const mediaStatus = await obs.call('GetMediaInputStatus', { inputName: source })
-        // logger.warn(mediaStatus)
-        if (pause) {
-            //logger.warn(`setting ${source} to paused`)
+        try {
             await this.call('TriggerMediaInputAction', {
                 inputName: source,
-                mediaAction: 'OBS_MEDIA_PAUSE_PLAY', // TODO: Might not be a correct media action..
-            }).catch((e: unknown) => logger.error('could not set play pause', e))
+                mediaAction: pause ? 'OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PLAY' : 'OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PAUSE', // TODO: deprecated, but no alternative?
+            });
+        } catch(e) {
+            logger.error('could not set play pause', e)
         }
     }
 
     public async refreshMediasource(source: string): Promise<void> {
         // TODO: remove this garbage once obs-websocket-js updates to proper bindings
         console.log(`triggered refresh for source ${source}`)
-        await (this as any)
-            .send('RestartMedia', {
-                sourceName: source,
-            })
-            .catch((e: unknown) => logger.error('could not restart media', e))
+        try {
+            await this.call('TriggerMediaInputAction', {
+                inputName: source,
+                mediaAction: 'OBS_WEBSOCKET_MEDIA_INPUT_ACTION_RESTART', // TODO: deprecated, but no alternative?
+            });
+        } catch(e) {
+            logger.error('could not set play pause', e)
+        }
     }
 
     public async setSourceBoundsAndCrop(source: string, params: OBSTransformParams): Promise<void> {
         logger.info(`updating source ${source}: ` + JSON.stringify(params))
-        const sceneItem = await this.call('GetSceneItemId', {
-            sceneName: bundleConfig.obs.gameScene || 'game',
-            sourceName: source,
-        }).catch((e) => logger.error('could not get GetSceneItemId', e))
-        //const sceneTransform = await obs.call('GetSceneItemTransform', { sceneName: bundleConfig.obs.gameScene || 'game', sceneItemId: sceneItem!.sceneItemId })
-        //logger.warn(sceneTransform)
-        if (params.visible) {
+        try {
+            const sceneItem = await this.call('GetSceneItemId', {
+                sceneName: bundleConfig.obs.gameScene || 'game',
+                sourceName: source,
+            })
             await this.call('SetSceneItemEnabled', {
                 sceneName: bundleConfig.obs.gameScene || 'game',
-                sceneItemId: sceneItem!.sceneItemId,
-                sceneItemEnabled: true,
+                sceneItemId: sceneItem.sceneItemId,
+                sceneItemEnabled: !!params.visible,
             })
-        } else {
-            await this.call('SetSceneItemEnabled', {
+            await this.call('SetSceneItemTransform', {
                 sceneName: bundleConfig.obs.gameScene || 'game',
-                sceneItemId: sceneItem!.sceneItemId,
-                sceneItemEnabled: false,
-            })
-        }
-        await this.call('SetSceneItemTransform', {
-            sceneName: bundleConfig.obs.gameScene || 'game',
-            sceneItemId: sceneItem!.sceneItemId, // TO DO GET THE CORRECT SCENEITEMID see why sceneItem is not there
+                sceneItemId: sceneItem.sceneItemId,
 
-            sceneItemTransform: {
-                boundsHeight: params.height,
-                boundsType: 'OBS_BOUNDS_STRETCH',
-                boundsWidth: params.width,
-                cropBottom: params.cropBottom,
-                cropLeft: params.cropLeft,
-                cropRight: params.cropRight,
-                cropTop: params.cropTop,
-                positionX: params.x,
-                positionY: params.y,
-                scaleX: 1,
-                scaleY: 1,
-            },
-            // example of the old object can be removed
-            // sceneItemTransform: {
-            //   position: {
-            //     x: params.x,
-            //     y: params.y,
-            //   },
-            //   bounds: {
-            //     type: "OBS_BOUNDS_SCALE_INNER", // TODO: test
-            //     x: params.width,
-            //     y: params.height,
-            //   },
-            //   scale: {},
-            //   visible: params.visible,
-            //   crop: {
-            //     bottom: params.cropBottom,
-            //     left: params.cropLeft,
-            //     right: params.cropRight,
-            //     top: params.cropTop,
-            //   },
-            // }
-        }).catch((e) => logger.error('could not set source settings', e))
+                sceneItemTransform: {
+                    boundsHeight: params.height,
+                    boundsType: 'OBS_BOUNDS_STRETCH',
+                    boundsWidth: params.width,
+                    cropBottom: params.cropBottom,
+                    cropLeft: params.cropLeft,
+                    cropRight: params.cropRight,
+                    cropTop: params.cropTop,
+                    positionX: params.x,
+                    positionY: params.y,
+                    scaleX: 1,
+                    scaleY: 1,
+                },
+            })
+        } catch(e) {
+            logger.error('error in setSourceBoundsAndCrop:', e)
+        }
     }
 
     public async setDefaultBrowserSettings(source: string): Promise<void> {
@@ -254,9 +229,9 @@ class OBSUtility extends OBSWebSocket {
             imageFormat: 'jpeg',
             sourceName: source,
             imageHeight: 300,
-        }).catch((e) => logger.error(`Could not make source screenshot from source: ${source}`, e))
+        })
 
-        return response!.imageData
+        return response.imageData
     }
 
     public async setAudioLevels(audioSource: string, data: EventTypes['InputVolumeMeters'], repository: any): Promise<void> {
