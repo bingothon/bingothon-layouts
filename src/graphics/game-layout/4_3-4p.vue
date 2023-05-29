@@ -54,6 +54,10 @@
 </script>
 
 <style scoped>
+    * {
+        box-sizing: border-box;
+    }
+
     #GameLayout {
         position: absolute;
         top: 0px;
@@ -75,7 +79,7 @@
     #stream3 {
         position: absolute;
         top: 60px;
-        left: 1337px;
+        left: 1333px;
         width: 587px;
         height: 440px;
         background-color: red;
@@ -93,7 +97,7 @@
     #stream4 {
         position: absolute;
         top: 500px;
-        left: 1337px;
+        left: 1333px;
         width: 587px;
         height: 440px;
         background-color: orange;
@@ -112,8 +116,8 @@
     #discord-voice {
         position: absolute;
         top: 0px;
-        left: 975px;
-        width: 359px;
+        left: 973px;
+        width: 360px;
         height: 333px;
         border: 2px var(--container-border-color) solid;
     }
@@ -130,7 +134,7 @@
     #pi3 {
         position: absolute;
         top: 0px;
-        left: 1337px;
+        left: 1333px;
         border: 2px var(--container-border-color) solid;
         width: 587px;
         box-sizing: border-box;
@@ -147,8 +151,8 @@
 
     #pi4 {
         position: absolute;
-        top: 938px;
-        left: 1337px;
+        top: 940px;
+        left: 1333px;
         border: 2px var(--container-border-color) solid;
         width: 587px;
         box-sizing: border-box;
@@ -157,9 +161,9 @@
     #Bingo-board {
         position: absolute;
         top: 500px;
-        left: 586px;
+        left: 587px;
         border: 2px var(--container-border-color) solid;
-        width: 747px;
+        width: 746px;
         height: 500px;
     }
 
@@ -167,16 +171,16 @@
         position: absolute;
         top: 0px;
         left: 586px;
-        width: 386px;
+        width: 388px;
         border: 2px var(--container-border-color) solid;
-        height: 165px;
+        height: 168px;
     }
 
     #timer {
         position: absolute;
         top: 168px;
         left: 586px;
-        width: 386px;
+        width: 388px;
         border: 2px var(--container-border-color) solid;
         height: 165px;
     }
@@ -192,10 +196,10 @@
 
     #SponsorContainer {
         position: absolute;
-        top: 336px;
+        top: 333px;
         left: 586px;
-        width: 748px;
-        height: 163px;
+        width: 746px;
+        height: 168px;
         border: 2px var(--container-border-color) solid;
     }
 </style>

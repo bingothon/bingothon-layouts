@@ -5,9 +5,9 @@
         <twitch-player id="stream3" streamIndex="2"></twitch-player>
         <div id="fillbar" class="flexContainer"></div>
         <div id="fillvoice" class="flexContainer"></div>
-        <player-info id="pi1" playerIndex="0" height="45px"></player-info>
-        <player-info id="pi2" playerIndex="1" height="45px"></player-info>
-        <player-info id="pi3" playerIndex="2" height="45px"></player-info>
+        <player-info id="pi1" playerIndex="0" height="60px"></player-info>
+        <player-info id="pi2" playerIndex="1" height="60px"></player-info>
+        <player-info id="pi3" playerIndex="2" height="60px"></player-info>
         <test-game-container id="game"></test-game-container>
         <test-timer-container id="timer"></test-timer-container>
         <bingo-board id="Bingo-board" fontSize="30px"></bingo-board>
@@ -58,6 +58,10 @@
 </script>
 
 <style scoped>
+    * {
+        box-sizing: border-box;
+    }
+
     #GameLayout {
         position: absolute;
         top: 0px;
@@ -128,7 +132,8 @@
         top: 480px;
         left: 0px;
         border: 2px var(--container-border-color) solid;
-        width: 625px;
+        width: 640px;
+        height: 60px;
     }
 
     #pi2 {
@@ -136,7 +141,7 @@
         top: 480px;
         left: 640px;
         border: 2px var(--container-border-color) solid;
-        width: 625px;
+        width: 640px;
     }
 
     #pi3 {
@@ -144,7 +149,7 @@
         top: 480px;
         left: 1280px;
         border: 2px var(--container-border-color) solid;
-        width: 625px;
+        width: 640px;
     }
 
     #Bingo-board {
@@ -152,7 +157,7 @@
         top: 540px;
         left: 640px;
         border: 2px var(--container-border-color) solid;
-        width: 638px;
+        width: 640px;
         height: 460px;
     }
 
