@@ -14,6 +14,7 @@ import {
     BingoboardMeta,
     BingoboardMode,
     BingosyncSocket,
+    CapturePositions,
     CurrentCamNames,
     CurrentGameLayout,
     CurrentInterview,
@@ -61,6 +62,7 @@ const replicantNames = [
     'bingoboardMeta',
     'bingoboardMode',
     'bingosyncSocket',
+    'capturePositions',
     'currentGameLayout',
     'currentInterview',
     'currentCamNames',
@@ -114,6 +116,7 @@ interface StoreTypes {
     bingoboardMeta: BingoboardMeta;
     bingoboardMode: BingoboardMode;
     bingosyncSocket: BingosyncSocket;
+    capturePositions: CapturePositions,
     currentGameLayout: CurrentGameLayout;
     currentInterview: CurrentInterview;
     currentCamNames: CurrentCamNames;
@@ -180,6 +183,7 @@ export const store = new Store<StoreTypes>({
         bingoboardMeta: {} as BingoboardMeta,
         bingoboardMode: {} as BingoboardMode,
         bingosyncSocket: {} as BingosyncSocket,
+        capturePositions: {} as CapturePositions,
         currentGameLayout: {} as CurrentGameLayout,
         currentInterview: {} as CurrentInterview,
         currentCamNames: {} as CurrentCamNames,

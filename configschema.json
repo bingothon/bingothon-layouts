@@ -254,6 +254,15 @@
 					"default": ""
 				}
 			}
+		},
+		"twitchStreams": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"type": {
+					"enum": ["obsTwitchPlayer", "nodecgGraphic"]
+				}
+			}
 		}
 	}
 }

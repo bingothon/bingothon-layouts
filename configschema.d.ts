@@ -57,5 +57,8 @@ export interface Configschema {
     appId: string;
     measurementId: string;
   };
+  twitchStreams?: {
+    type?: "obsTwitchPlayer" | "nodecgGraphic";
+  };
   [k: string]: unknown;
 }

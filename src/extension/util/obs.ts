@@ -14,6 +14,8 @@ const nodecg = nodecgApiContext.get()
 const logger = new nodecg.Logger(`${nodecg.bundleName}:obs`)
 const bundleConfig = nodecg.bundleConfig as Configschema
 
+const useObsTwitchPlayer = bundleConfig.twitchStreams?.type === "obsTwitchPlayer";
+
 interface OBSTransformParams {
     x?: number
     y?: number
@@ -329,7 +331,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                         obsPreviewSceneRep.value = scene.currentPreviewSceneName
                     })
                     .catch((err): void => {
-                        logger.warn(`Cannot get preview scene: ${err.error}`)
+                        logger.warn(`Cannot get preview scene: ${err}`)
                     })
 
                 obs.call('GetCurrentProgramScene')
@@ -337,7 +339,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                         obsCurrentSceneRep.value = scene.currentProgramSceneName
                     })
                     .catch((err): void => {
-                        logger.warn(`Cannot get current scene: ${err.error}`)
+                        logger.warn(`Cannot get current scene: ${err}`)
                     })
 
                 obs.call('GetSceneList')
@@ -353,75 +355,77 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                     obs.setDefaultBrowserSettings(getStreamSrcName(i))
                 }
 
-                twitchStreams.on('change', (newValue, old) => {
-                    if (!old) return
-                    for (let i = 0; i < 6; i++) {
-                        const stream = newValue[i]
-                        const oldStream = old[i] || {} // old stream might be undefined
-                        if (stream === undefined) {
-                            // this stream should not be displayed
-                            const transProps: OBSTransformParams = {
-                                visible: false,
-                            }
-                            // fire and forget
-                            obs.setSourceBoundsAndCrop(getStreamSrcName(i), transProps)
-                        } else {
-                            // check if the streamurl changed
-                            if (stream.channel !== oldStream.channel) {
+                if (useObsTwitchPlayer) {
+                    twitchStreams.on('change', (newValue, old) => {
+                        if (!old) return
+                        for (let i = 0; i < 6; i++) {
+                            const stream = newValue[i]
+                            const oldStream = old[i] || {} // old stream might be undefined
+                            if (stream === undefined) {
+                                // this stream should not be displayed
+                                const transProps: OBSTransformParams = {
+                                    visible: false,
+                                }
                                 // fire and forget
-                                obs.setBrowserSourceUrl(
-                                    getStreamSrcName(i),
-                                    `https://player.twitch.tv/?channel=${stream.channel}&enableExtensions=true&muted=false&parent=twitch.tv&player=popout&volume=1`,
-                                )
-                            }
-                            // check if the cropping changed
-                            if (
-                                stream.widthPercent !== oldStream.widthPercent ||
-                                stream.heightPercent !== oldStream.heightPercent ||
-                                stream.leftPercent !== oldStream.leftPercent ||
-                                stream.topPercent !== oldStream.topPercent
-                            ) {
-                                handleStreamPosChange(obs, stream, i, currentGameLayoutRep.value, capturePositionsRep.value)
+                                obs.setSourceBoundsAndCrop(getStreamSrcName(i), transProps)
                             } else {
-                                // since this channel exists, make it visible
-                                obs.setSourceBoundsAndCrop(getStreamSrcName(i), { visible: true })
+                                // check if the streamurl changed
+                                if (stream.channel !== oldStream.channel) {
+                                    // fire and forget
+                                    obs.setBrowserSourceUrl(
+                                        getStreamSrcName(i),
+                                        `https://player.twitch.tv/?channel=${stream.channel}&enableExtensions=true&muted=false&parent=twitch.tv&player=popout&volume=1`,
+                                    )
+                                }
+                                // check if the cropping changed
+                                if (
+                                    stream.widthPercent !== oldStream.widthPercent ||
+                                    stream.heightPercent !== oldStream.heightPercent ||
+                                    stream.leftPercent !== oldStream.leftPercent ||
+                                    stream.topPercent !== oldStream.topPercent
+                                ) {
+                                    handleStreamPosChange(obs, stream, i, currentGameLayoutRep.value, capturePositionsRep.value)
+                                } else {
+                                    // since this channel exists, make it visible
+                                    obs.setSourceBoundsAndCrop(getStreamSrcName(i), { visible: true })
+                                }
+                                handleSoundChange(obs, soundOnTwitchStreamRep.value, i, stream, oldStream)
+                                //TODO: use this when switching to streamlink method, obs.setMediasourcePlayPause(getStreamSrcName(i), stream.paused)
                             }
-                            handleSoundChange(obs, soundOnTwitchStreamRep.value, i, stream, oldStream)
-                            //TODO: use this when switching to streamlink method, obs.setMediasourcePlayPause(getStreamSrcName(i), stream.paused)
                         }
-                    }
-                })
-
-                capturePositionsRep.on('change', (newVal, old) => {
-                    if (!old) return
-
-                    twitchStreams.value.forEach((stream, i) => {
-                        handleStreamPosChange(obs, stream, i, currentGameLayoutRep.value, newVal)
                     })
-                })
 
-                currentGameLayoutRep.on('change', (newVal, old) => {
-                    if (!old) return
+                    capturePositionsRep.on('change', (newVal, old) => {
+                        if (!old) return
 
-                    twitchStreams.value.forEach((stream, i) => {
-                        handleStreamPosChange(obs, stream, i, newVal, capturePositionsRep.value)
+                        twitchStreams.value.forEach((stream, i) => {
+                            handleStreamPosChange(obs, stream, i, currentGameLayoutRep.value, newVal)
+                        })
                     })
-                })
 
-                soundOnTwitchStreamRep.on('change', (newVal, old) => {
-                    if (old === undefined) return
+                    currentGameLayoutRep.on('change', (newVal, old) => {
+                        if (!old) return
 
-                    twitchStreams.value.forEach((stream, i) => {
-                        handleSoundChange(obs, newVal, i, stream, stream)
+                        twitchStreams.value.forEach((stream, i) => {
+                            handleStreamPosChange(obs, stream, i, newVal, capturePositionsRep.value)
+                        })
                     })
-                })
 
-                nodecg.listenFor('streams:refreshStream', (index, callback) => {
-                    obs.refreshBrowserSource(getStreamSrcName(index))
-                    if (callback && !callback.handled) {
-                        callback()
-                    }
-                })
+                    soundOnTwitchStreamRep.on('change', (newVal, old) => {
+                        if (old === undefined) return
+
+                        twitchStreams.value.forEach((stream, i) => {
+                            handleSoundChange(obs, newVal, i, stream, stream)
+                        })
+                    })
+
+                    nodecg.listenFor('streams:refreshStream', (index, callback) => {
+                        obs.refreshBrowserSource(getStreamSrcName(index))
+                        if (callback && !callback.handled) {
+                            callback()
+                        }
+                    })
+                }
             })
             .catch((err): void => {
                 logger.warn('OBS connection error.')
@@ -539,12 +543,12 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
             const oldSound = old[source]
             if (!oldSound || oldSound.volume !== sound.volume) {
                 obs.setAudioVolume(source, sound.volume).catch((e): void => {
-                    logger.warn(`Error setting Volume for [${source}] to ${sound.volume}: ${e.error}`)
+                    logger.warn(`Error setting Volume for [${source}] to ${sound.volume}: ${e}`)
                 })
             }
             if (!oldSound || oldSound.muted !== sound.muted) {
                 obs.call('SetInputMute', { inputName: source, inputMuted: sound.muted }).catch((e): void => {
-                    logger.warn(`Error setting mute for [${source}] to ${sound.muted}: ${e.error}`)
+                    logger.warn(`Error setting mute for [${source}] to ${sound.muted}: ${e}`)
                 })
             }
             if (!oldSound || oldSound.delay !== sound.delay) {
@@ -552,7 +556,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                     inputName: source,
                     inputAudioSyncOffset: sound.delay * 1000000,
                 }).catch((e): void => {
-                    logger.warn(`Error setting audio delay for [${source}] to ${sound.delay}ms: ${e.error}`)
+                    logger.warn(`Error setting audio delay for [${source}] to ${sound.delay}ms: ${e}`)
                 })
             }
         })
