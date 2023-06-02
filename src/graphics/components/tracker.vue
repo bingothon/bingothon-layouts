@@ -127,9 +127,9 @@
 
 <script lang="ts">
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-    import { store } from '../../browser-util/state';
+    import { store } from '@/browser-util/state';
     import { Games } from '../../../types';
-    import { TrackerData } from '../../../schemas';
+    import { TrackerData } from '@/schemas';
 
     @Component({
         components: {},
@@ -178,20 +178,20 @@
             switch (player) {
                 case 4:
                     store.dispatch('unbindGameP4');
-                    store.dispatch('bindGameP4');
+                    store.dispatch('bindGameP4', { gameId: this.trackerData[3].id });
                     break;
                 case 3:
                     store.dispatch('unbindGameP3');
-                    store.dispatch('bindGameP3');
+                    store.dispatch('bindGameP3', { gameId: this.trackerData[2].id });
                     break;
                 case 2:
                     store.dispatch('unbindGameP2');
-                    store.dispatch('bindGameP2');
+                    store.dispatch('bindGameP2', { gameId: this.trackerData[1].id });
                     break;
                 case 1:
                 default:
                     store.dispatch('unbindGameP1');
-                    store.dispatch('bindGameP1');
+                    store.dispatch('bindGameP1', { gameId: this.trackerData[0].id });
             }
         }
     }

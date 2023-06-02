@@ -1,9 +1,9 @@
 <template>
     <v-app>
-        <div v-for="player in players" :key="player.index">
+        <div v-for="(player, i) in players" :key="i">
             {{ player.name }}
             <v-text-field
-                v-model="trackerIds[player.index]"
+                v-model="trackerIds[i]"
                 background-color="#455A64"
                 clearable
                 solo
@@ -29,10 +29,8 @@
 
     @Component({})
     export default class TrackerControl extends Vue {
-        trackerIds: string[] = ['', '', '', ''];
-
-        get runData(): RunDataActiveRun {
-            return store.state.runDataActiveRun;
+        get trackerIds(): string[] {
+            return store.state.trackerData.map((tracker) => tracker.id);
         }
 
         get trackerData(): TrackerData {

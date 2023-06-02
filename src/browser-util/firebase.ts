@@ -1,6 +1,5 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth, signInAnonymously } from 'firebase/auth';
-import { getDatabase } from 'firebase/database';
+import firebase from 'firebase';
+import 'firebase/database';
 import { Configschema } from '../../configschema';
 
 const config = nodecg.bundleConfig as Configschema;
@@ -8,16 +7,16 @@ const config = nodecg.bundleConfig as Configschema;
 const firebaseConfig = config.firebaseConfig;
 const logger = new nodecg.Logger(`${nodecg.bundleName}:firebase`);
 
-const fbApp = initializeApp(firebaseConfig);
-const auth = getAuth(fbApp);
-signInAnonymously(auth)
+firebase.initializeApp(firebaseConfig);
+
+firebase
+    .auth()
+    .signInAnonymously()
     .then(() => {
         logger.info('Signed in to Firebase');
     })
     .catch((error) => {
         logger.error('Failed to login to Firebase', error);
     });
-
-export const db = getDatabase(fbApp);
-
-logger.warn(`the loaded firebase database`, db);
+nodecg.log.warn(`the loaded firebase database`, firebase.database());
+export const db = firebase.database();
