@@ -26,6 +26,10 @@ export type ExternalBingoboardMeta =
       [k: string]: unknown;
     }
   | {
+      game: "deus-ex";
+      [k: string]: unknown;
+    }
+  | {
       game: "none";
       [k: string]: unknown;
     };

@@ -1,6 +1,7 @@
 import { ExternalBingoboard, ExternalBingoboardMeta } from '../../schemas'
 import { Ori1ExternalBingoboard } from './external-bingoboards/ori1BingoBoard'
 import { Ori2ExternalBingoboard } from './external-bingoboards/ori2BingoBoard'
+import { DeusExternalBingoboard } from './external-bingoboards/deusExBingoBoard'
 
 import * as nodecgApiContext from './util/nodecg-api-context'
 
@@ -24,6 +25,7 @@ if (boardRep.value.cells.length === 0) {
 const externalBingoboards: {[key: string]: ExternalBingoboardManager} = {
     'ori1': new Ori1ExternalBingoboard(boardRep),
     'ori2': new Ori2ExternalBingoboard(boardRep),
+    'deus-ex': new DeusExternalBingoboard(boardRep),
 }
 
 let activeExternalBingoboard: ExternalBingoboardManager | undefined;

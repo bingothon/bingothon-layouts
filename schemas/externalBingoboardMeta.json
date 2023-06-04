@@ -25,6 +25,12 @@
         {
             "required": ["game"],
             "properties": {
+                "game": {"const": "deus-ex"}
+            }
+        },
+        {
+            "required": ["game"],
+            "properties": {
                 "game": {"const": "none"}
             }
         }

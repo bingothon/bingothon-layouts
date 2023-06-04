@@ -64,6 +64,7 @@
                 <v-radio value="none" label="None" @change="updateExternalGame" />
                 <v-radio value="ori1" label="Ori and the Blind Forest" @change="updateExternalGame" />
                 <v-radio value="ori2" label="Ori and the Will of the Wisps" @change="updateExternalGame" />
+                <v-radio value="deus-ex" label="Deus Ex" @change="updateExternalGame" />
             </v-radio-group>
             <div v-if="externalBingoboardMeta.game == 'ori1'">
                 <div>
