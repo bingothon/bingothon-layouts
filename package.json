@@ -198,15 +198,8 @@
     ],
     "assetCategories": [
       {
-        "name": "charityVideos",
-        "title": "Charity Videos",
-        "allowedTypes": [
-          "mp4"
-        ]
-      },
-      {
-        "name": "sponsorVideos",
-        "title": "Sponsor Videos",
+        "name": "intermissionVideos",
+        "title": "Intermission Videos",
         "allowedTypes": [
           "mp4"
         ]

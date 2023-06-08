@@ -121,36 +121,15 @@
 </template>
 
 <script lang="ts">
-    const BINGOTHON_BLURBS =
-        'If you are enjoying this marathon, then do know that there is even more content on the Bingothon Twitch channel, including for games' +
-        'such as The Legend of Zelda: Breath of the Wild or Super Mario Sunshine!\n' +
-        'Are you interested in featuring a bingo-related event on the Bingothon Twitch channel? Then do not hesitate to contact the Main Organizers ' +
-        'on the Bingothon Discord server and we can certainly discuss an arrangement to make it happen!\n' +
-        'Bingothon has a store where you can buy some cool merch, including Bingothon PJs, Bingothon hoodies and the Bingothon mugs you can win as a prize in this marathon! ' +
-        'You can find it at store.bingothon.com, and you can have a 10% discount with the code WINTER22. Revenue gained from the store would be used ' +
-        'to further improve the marathon in many ways. ' +
-        'Why not consider subscribing to the Bingothon Twitch channel? You can get access to some cool emotes, after all! Revenue made from ' +
-        "subscribing does NOT go to the charity, but is used to improve Bingothon's marathons and other events, so your support is appreciated!\n" +
-        'Do you wonder how people come up with bingo cards for their speedgames? What is the process behind it all? Well we do have the Beyond the ' +
-        'Board monthly series that you can find on our YouTube channel, where we sit down with various bingo runners and interview them about their ' +
-        'bingo cards, speedgame and much more that allows a great insight into how bingos are made and how the community can further support them! You can ' +
-        'also find the FULL uncut interviews on our website at bingothon.com as well!\n' +
-        'Bingothon is committed to supporting as many bingo events as possible, and for that to happen, restreamers are the unsung heroes we need to make ' +
-        'that happen! If you are interested in volunteering as a restreamer, then do not hesitate to join our Discord server and talk to a Main Organizer ' +
-        'about it!';
+    const BLURBS: {
+        bingothon: string[];
+        charity: string[];
+        sponsor: string[];
+    } = require('../../../static/hostBlurbs.json');
 
-    const CHARITY_BLURBS =
-        'Fred Hutch is a cancer research center where world-renowned scientists and humanitarians work together to prevent, diagnose and treat cancer, HIV and many other diseases. With three Novel laureates among their researchers, they are at the front of the battle against those illnesses.\n' +
-        'Fred Hutch have earned a global reputation for their track record of discoveries in cancer, infectious disease and basic research, including important advances in bone marrow transplantation, HIV/AIDS prevention, immunotherapy and COVID-19 vaccines.\n' +
-        'Fred Hutch is the birthplace of the bone marrow transplant, one of the most important medical advances in cancer treatment that has saved the lives of hundreds of thousands of patients around the world. Their Nobel Prize-winning bone marrow transplants have boosted survival rates from nearly zero to 90 percent for certain types of leukemia. Any physician who has peformed one, was either trained there or trained by someone who trained there.\n' +
-        'Beyond their research, Fred Hutch are rethinking the patient experience so it is best-of-class: seamless, fully integrated across teams, with consistent, informed providers and services considerate of the whole person… and their families.\n' +
-        'Fred Hutch is the home of the HIV Vaccine Trials Network, the world’s largest publicly funded international collaboration conducting clinical trials of HIV vaccines and treatments.\n' +
-        "One of Fred Hutch's researchers, Keith Jerome is leading research to find a cure for Herpes simplex viruses. The goal is start human clinical trials by the end of 2023.\n" +
-        'Researchers from Fred Hutch have won the Nobel Prize in physiology or medicine three times: in 1990, 2001 and 2004. Dr E. Donnal Thomas was awarded in 1990 for his work on the bone marrow and blood stem cell transplantation. Dr Leland Hartwell was awared in 2001 for discovering the universal mechanism that controls cell division in all eukaryotic, or nucleated, organisms. And finally, Dr. Linda Buck was awared in 2004 for her work on odorant receptors and the organization of the olfactory system — the network responsible for our sense of smell.';
-
-    const SPONSOR_BLURBS =
-        'We would like to thank Team17 for sponsoring Bingothon Winter 2022, and for their continuous support within the past few events.\n' +
-        "We would like to thank our sponsor Team17 for providing a multitude of prizes for this event. Find out more about what they've offered by typing !prizes in the chat!";
+    const BINGOTHON_BLURBS = BLURBS.bingothon;
+    const CHARITY_BLURBS = BLURBS.charity;
+    const SPONSOR_BLURBS = BLURBS.sponsor;
 
     import { Component, Vue } from 'vue-property-decorator';
     import { getReplicant, store } from '../../browser-util/state';
@@ -158,7 +137,7 @@
     import moment from 'moment';
     import { RunData } from '../../../speedcontrol-types';
     import HostBingo from '../components/hostBingo.vue';
-    import { HostsSpeakingDuringIntermission, ShowPictureDuringIntermission } from '../../../schemas';
+    import { HostsSpeakingDuringIntermission, ShowPictureDuringIntermission } from '@/schemas';
 
     @Component({
         components: {
@@ -220,15 +199,15 @@
         }
 
         get charityTexts(): String[] {
-            return CHARITY_BLURBS.split('\n');
+            return CHARITY_BLURBS; //.split('\n');
         }
 
         get bingothonTexts(): String[] {
-            return BINGOTHON_BLURBS.split('\n');
+            return BINGOTHON_BLURBS; //.split('\n');
         }
 
         get sponsorTexts(): String[] {
-            return SPONSOR_BLURBS.split('\n');
+            return SPONSOR_BLURBS; //.split('\n');
         }
 
         get pictureDuringIntermissionUrl(): string {
