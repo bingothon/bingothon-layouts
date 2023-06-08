@@ -1,6 +1,6 @@
 <template>
     <div class="Interview">
-        <img src="../../../static/logo-winter-wide.png" id="logo" />
+        <img src="../../../static/logo-summer-wide.png" id="logo" />
         <div id="fillvoice" class="flexContainer"></div>
         <div id="team-container" v-if="playerCount.length === 4 && teamCount.length === 2">
             <player-team-container
@@ -115,8 +115,6 @@
         left: 60px;
         top: 60px;
         width: 568px;
-        height: 140px;
-        /* height: 210px; summer*/
     }
     #Bingo-board {
         position: absolute;

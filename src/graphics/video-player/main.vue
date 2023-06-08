@@ -67,22 +67,19 @@
         returnToIntermission() {
             // only send Message if videoPlayer is the active scene, avoids duplication and unnecessary scene switching
             if (this.currentObsScene === 'videoPlayer') {
-                console.log('Back to intermission');
                 nodecg.sendMessage('videoPlayerFinished');
             }
         }
 
         async playNextVideo(): Promise<void> {
             let video: Asset;
-            console.log(`Playlist: ${this.playlist}, Index: ${this.index}`);
             if (this.playlist && this.playlist[this.index]) {
                 console.log(JSON.stringify(this.videos));
                 video = this.videos.find((video) => {
-                    return video.name === this.playlist[this.index];
+                    return video.name === this.playlist[this.index].trim();
                 });
             }
             if (!video) {
-                console.log('No video :(');
                 //check if there's more in the playlist
                 if (this.nextVideoExists()) {
                     this.index += 1;
@@ -92,7 +89,6 @@
                 }
                 return;
             }
-            console.log('Video found: ' + video);
             this.video = video;
             this.playerSrc.src = video.url;
             this.playerSrc.type = `video/${video.ext.toLowerCase().replace('.', '')}`;
