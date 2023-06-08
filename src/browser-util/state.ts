@@ -101,7 +101,7 @@ const replicantNames = [
 ];
 const nodecgSpeedcontrolReplicantNames = ['runDataActiveRun', 'runDataArray', 'timer', 'twitchCommercialTimer'];
 
-const assetNames = ['assets:charityVideos', 'assets:sponsorVideos', 'assets:wideLargeLogos', 'assets:wideSmallLogos', 'assets:squareLogos'];
+const assetNames = ['assets:intermissionVideos', 'assets:wideLargeLogos', 'assets:wideSmallLogos', 'assets:squareLogos'];
 const replicants: Map<string, ReplicantBrowser<any>> = new Map();
 
 let playerAlternateInterval: NodeJS.Timeout | null = null;
@@ -116,7 +116,7 @@ interface StoreTypes {
     bingoboardMeta: BingoboardMeta;
     bingoboardMode: BingoboardMode;
     bingosyncSocket: BingosyncSocket;
-    capturePositions: CapturePositions,
+    capturePositions: CapturePositions;
     currentGameLayout: CurrentGameLayout;
     currentInterview: CurrentInterview;
     currentCamNames: CurrentCamNames;
@@ -158,8 +158,7 @@ interface StoreTypes {
     timer: Timer;
     twitchCommercialTimer: TwitchCommercialTimer;
     // assets
-    'assets:charityVideos': Asset[];
-    'assets:sponsorVideos': Asset[];
+    'assets:intermissionVideos': Asset[];
     'assets:wideLargeLogos': Asset[];
     'assets:wideSmallLogos': Asset[];
     'assets:squareLogos': Asset[];
@@ -225,8 +224,7 @@ export const store = new Store<StoreTypes>({
         timer: {} as Timer,
         twitchCommercialTimer: {} as TwitchCommercialTimer,
         // assets
-        'assets:charityVideos': [] as Asset[],
-        'assets:sponsorVideos': [] as Asset[],
+        'assets:intermissionVideos': [] as Asset[],
         'assets:wideLargeLogos': [] as Asset[],
         'assets:wideSmallLogos': [] as Asset[],
         'assets:squareLogos': [] as Asset[],
@@ -350,5 +348,5 @@ assetNames.forEach((name) => {
 });
 
 export async function create() {
-    return NodeCG.waitForReplicants(...Array.from(replicants.values())).then(() => store);
+  return NodeCG.waitForReplicants(...Array.from(replicants.values())).then(() => store);
 }

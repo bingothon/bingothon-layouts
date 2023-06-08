@@ -16,12 +16,10 @@
 
 <script lang="ts">
     import { Component, Ref, Vue, Watch } from 'vue-property-decorator';
-    import { Asset, IntermissionVideos } from '@/schemas';
-    import { getReplicant, store } from '@/browser-util/state';
+    import { Asset } from '@/schemas';
+    import { store } from '@/browser-util/state';
     import { RunData } from '../../../speedcontrol-types';
     import TextFit from '../helpers/text-fit.vue';
-
-    type VideoTypeEnum = 'charity' | 'sponsor';
 
     @Component({
         components: {
@@ -30,17 +28,17 @@
     })
     export default class VideoPlayer extends Vue {
         video: Asset;
-        videoType: VideoTypeEnum = 'charity';
         nextRun: RunData = store.state.runDataActiveRun;
+        index = 0;
         @Ref('VideoPlayer') player: HTMLVideoElement;
         @Ref('PlayerSrc') playerSrc: HTMLSourceElement;
 
-        get charityVideos(): Asset[] {
-            return store.state['assets:charityVideos'];
+        get playlist(): string[] {
+            return store.state.runDataActiveRun.customData.playlist.split(',');
         }
 
-        get sponsorVideos(): Asset[] {
-            return store.state['assets:sponsorVideos'];
+        get videos(): Asset[] {
+            return store.state['assets:intermissionVideos'];
         }
 
         get domain(): string {
@@ -55,70 +53,61 @@
         onOBSSceneChanged(newVal: string) {
             this.$nextTick(() => {
                 if (newVal === 'videoPlayer') {
-                    this.nextRun = store.state.runDataActiveRun;
-                    this.videoType = 'charity';
-                    this.playNextVideo(this.videoType, this.nextRun);
+                    this.index = 0;
+                    this.playNextVideo();
                 }
             });
         }
 
-        async playNextVideo(type: VideoTypeEnum, nextRun: RunData): Promise<void> {
-            let video: Asset;
-            if (type === 'charity') {
-                if (nextRun.customData.charityVideo) {
-                    video = this.charityVideos.find((video) => {
-                        return video.name === nextRun.customData.charityVideo;
-                    });
-                }
-                if (!video) {
-                    video = this.charityVideos[store.state.intermissionVideos.charityVideoIndex];
-                }
-            } else {
-                if (nextRun.customData.sponsorVideo) {
-                    video = this.sponsorVideos.find((video) => {
-                        return video.name === nextRun.customData.sponsorVideo;
-                    });
-                }
-                if (!video) {
-                    video = this.sponsorVideos[store.state.intermissionVideos.sponsorVideoIndex];
-                }
-            }
-            if (video) {
-                this.video = video;
-                this.playerSrc.src = video.url;
-                this.playerSrc.type = `video/${video.ext.toLowerCase().replace('.', '')}`;
-                if (type === 'charity') {
-                    this.player.volume = 1;
-                } else {
-                    this.player.volume = 0.5;
-                }
-                this.player.load();
-                await this.player.play();
-            } else {
-                //something went wrong, play next video
-                if (type === 'charity') {
-                    getReplicant<IntermissionVideos>('intermissionVideos').value.charityVideoIndex =
-                        (store.state.intermissionVideos.charityVideoIndex + 1) % this.charityVideos.length;
-                } else {
-                    getReplicant<IntermissionVideos>('intermissionVideos').value.sponsorVideoIndex =
-                        (store.state.intermissionVideos.sponsorVideoIndex + 1) % this.sponsorVideos.length;
-                }
-                await this.playNextVideo(type, nextRun);
+        nextVideoExists(): boolean {
+            console.log(`CHecking for new video, Playlist: ${this.playlist}, Index: ${this.index}`);
+            return this.playlist && this.index + 1 < this.playlist.length;
+        }
+
+        returnToIntermission() {
+            // only send Message if videoPlayer is the active scene, avoids duplication and unnecessary scene switching
+            if (this.currentObsScene === 'videoPlayer') {
+                console.log('Back to intermission');
+                nodecg.sendMessage('videoPlayerFinished');
             }
         }
 
-        videoEnded(): void {
-            // console.log("video ended!");
-            if (this.videoType === 'charity') {
-                store.state.intermissionVideos.charityVideoIndex =
-                    (store.state.intermissionVideos.charityVideoIndex + 1) % this.charityVideos.length;
-                this.playNextVideo('sponsor', this.nextRun);
-                this.videoType = 'sponsor';
-            } else {
-                store.state.intermissionVideos.sponsorVideoIndex =
-                    (store.state.intermissionVideos.sponsorVideoIndex + 1) % this.sponsorVideos.length;
-                nodecg.sendMessage('videoPlayerFinished');
+        async playNextVideo(): Promise<void> {
+            let video: Asset;
+            console.log(`Playlist: ${this.playlist}, Index: ${this.index}`);
+            if (this.playlist && this.playlist[this.index]) {
+                console.log(JSON.stringify(this.videos));
+                video = this.videos.find((video) => {
+                    return video.name === this.playlist[this.index];
+                });
             }
+            if (!video) {
+                console.log('No video :(');
+                //check if there's more in the playlist
+                if (this.nextVideoExists()) {
+                    this.index += 1;
+                    await this.playNextVideo();
+                } else {
+                    this.returnToIntermission();
+                }
+                return;
+            }
+            console.log('Video found: ' + video);
+            this.video = video;
+            this.playerSrc.src = video.url;
+            this.playerSrc.type = `video/${video.ext.toLowerCase().replace('.', '')}`;
+            this.player.load();
+            await this.player.play();
+        }
+
+        videoEnded() {
+            console.log('Video Ended');
+            if (this.nextVideoExists()) {
+                this.index += 1;
+                this.playNextVideo();
+                return;
+            }
+            this.returnToIntermission();
         }
 
         mounted() {
