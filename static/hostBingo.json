@@ -1,35 +1,35 @@
 [
     {
-        "goal": "Poetry",
-        "description": "Recite a christmas poem (bonus points if it's about a panda locked in a basement"
+        "goal": "My little PogChamp",
+        "description": "Finish every sentence with an emote"
     },
     {
         "goal": "Karaoke",
-        "description": "Sing a christmas medley karaoke"
+        "description": "Sing a karaoke medley"
     },
     {
-        "goal": "Iambic Pentameter",
-        "description": "Host introduces a run in iambic pentameter in a silly voice (in case of questions ask Proasek)"
+        "goal": "Bingo you, Bingo me",
+        "description": "Replace every verb with Bingo"
     },
     {
         "goal": "Riddle Me!",
         "description": "Solve a riddle"
     },
     {
-        "goal": "Kazoo",
-        "description": "Kazoo time (for Nordic and/or Flotsam"
+        "goal": "Geoguessr",
+        "description": "Play a round of GeoGuessr (please do it only when ahead of schedule or in setup block)"
     },
     {
         "goal": "HYDRATE!",
         "description": "Play a Bingothon themed drinking game"
     },
     {
-        "goal": "We only got one minute to save christmas",
-        "description": "Name as many festive words as you can within 60s (duel with your partner)"
+        "goal": "Night Message",
+        "description": "Put a donation message into google translator a few times, translate it back to English and read it out loud"
     },
     {
-        "goal": "DND",
-        "description": "DND One Shot (try to keep it short)"
+        "goal": "Voices in my head",
+        "description": "Talk in funny voices and pretend to be confused when chat brings it up"
     },
     {
         "goal": "RRRRRR",
@@ -40,8 +40,8 @@
         "description": "Describe a main character or story premise very poorly"
     },
     {
-        "goal": "Not quite Silent Night",
-        "description": "Make your co-host and chat guess christmas movies"
+        "goal": "DJ",
+        "description": "Become a DJ at a radio station"
     },
     {
         "goal": "FORE!",
@@ -52,51 +52,51 @@
         "description": "Play a round of actual bingo"
     },
     {
-        "goal": "We wish you a merry christmas!",
-        "description": "Put on a festive profile picture (and make it be seen on stream)"
+        "goal": "BREAKING NEWS",
+        "description": "Hosts are reporter reporting BREAKING NEWS about bingos"
     },
     {
-        "goal": "Naughty or Nice?",
-        "description": "Assign people in chat whether they are naughty or nice (see link stacy posted)"
+        "goal": "Zzz",
+        "description": "One host pretends to fall asleep during an intermission, the other tries to wake them up"
     },
     {
-        "goal": "Jokes on you",
-        "description": "Tell a bad chrsitmas joke (dad joke niveau)"
+        "goal": "Would you press the button?",
+        "description": "Would you press the button?"
     },
     {
-        "goal": "Last Christmas",
-        "description": "Fill the christmas lyric generator with chat (see link from Stacy)"
+        "goal": "2 truths 1 lie",
+        "description": "Hosts play 2 truths 1 lie"
     },
     {
         "goal": "BOTY",
         "description": "Host the Bingo Awards and award the Bingo of the Year award"
     },
     {
-        "goal": "ingo-bay",
-        "description": "Read a donation in Pig Latin"
+        "goal": "The BINGO-inator",
+        "description": "Advertise a crazy new fictional product"
     },
     {
-        "goal": "Telestrations",
-        "description": "Play a round of Telestrations (include other volunteers as well)"
+        "goal": "Hello there!",
+        "description": "Hosts speak in movie quotes"
     },
     {
-        "goal": "Santa's List",
-        "description": "Judge if a donation is naughty or nice"
+        "goal": "MC Bingo",
+        "description": "Ask ChatGPT to write you rap and perform it"
     },
     {
         "goal": "I have a question?",
         "description": "Only talk in question for the entire intermission"
     },
     {
-        "goal": "Gifts for Chat",
-        "description": "Telling the chat in a Santa ho-ho-ho voice what they’re going to get as a present this year using a random-words generator"
+        "goal": "Borders Without Doctors",
+        "description": "Read a charity blurb out backwards"
     },
     {
         "goal": "Bingo's Got Talent",
         "description": "Act like judges on the famous casting show Bingo's Got Talent"
     },
     {
-        "goal": "I am thou and thou art I",
-        "description": "Pretend to be your co-host"
+        "goal": "'#FreePanda'",
+        "description": "Pretend you are freeing Panda, but in reality you are onlu relocating him, cause the basement needs to be renovated"
     }
 ]
