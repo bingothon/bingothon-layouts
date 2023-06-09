@@ -355,7 +355,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                     obs.setDefaultBrowserSettings(getStreamSrcName(i))
                 }
 
-                if (useObsTwitchPlayer) {
+                if (useObsTwitchPlayer || true) { // TODO repair in the future
                     twitchStreams.on('change', (newValue, old) => {
                         if (!old) return
                         for (let i = 0; i < 6; i++) {
