@@ -190,6 +190,9 @@
 
         get hostsSpeakingToggleButtonText(): string {
             if (!this.hostsCanGoLive) {
+                if (this.hostsSpeakingDuringIntermission) {
+                    this.toggleHostsSpeakingDuringIntermission();
+                }
                 return '(Disabled)';
             } else if (this.hostsSpeakingDuringIntermission) {
                 return 'Mute';
