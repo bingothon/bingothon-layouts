@@ -28,10 +28,13 @@
     })
     export default class VideoPlayer extends Vue {
         video: Asset;
-        nextRun: RunData = store.state.runDataActiveRun;
         index = 0;
         @Ref('VideoPlayer') player: HTMLVideoElement;
         @Ref('PlayerSrc') playerSrc: HTMLSourceElement;
+
+        get nextRun(): RunData {
+            return store.state.runDataActiveRun;
+        }
 
         get playlist(): string[] {
             return store.state.runDataActiveRun.customData.playlist.split(',');
