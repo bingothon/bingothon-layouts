@@ -7,10 +7,7 @@
         <div v-if="obsConnectionStatus === 'disabled'">OBS is disabled, nothing to see here</div>
         <div v-if="obsConnectionStatus === 'connected'">
             Current Scene: {{ currentScene }}
-            <v-select v-model="previewScene" :items="sceneNameList" label="Preview Scene"> </v-select>
-            <v-btn @click="doTransition" :disabled="adTimer > 0">
-                {{ transitionText }}
-            </v-btn>
+            <v-btn :disabled="disableTransition()" @click="quickTransition">{{ quickTransitionButtonText }}</v-btn>
             <div>
                 Audio Preset:
                 <v-row>
@@ -57,9 +54,13 @@
             </div>
             <div class="previewImgContainer">
                 <v-checkbox dark v-model="obsPreviewImgActive" label="Activate Preview"></v-checkbox>
-                <v-select v-model="obsPreviewImgSource" label="Preview Img Scene" :items="sceneNameList"> </v-select>
+                <!--                <v-select v-model="obsPreviewImgSource" label="Preview Img Scene" :items="sceneNameList"> </v-select>-->
                 <img :style="{ width: '100%' }" v-if="obsPreviewImgData" :src="obsPreviewImgData" />
             </div>
+            <v-select v-model="previewScene" :items="sceneNameList" label="Preview Scene"> </v-select>
+            <v-btn @click="doTransition" :disabled="disableTransition()">
+                {{ transitionText }}
+            </v-btn>
         </div>
         <v-text-field v-model="discordDisplayDelay" type="number" label="Discord Display Delay (ms)"></v-text-field>
     </v-app>
@@ -72,6 +73,8 @@
     import { getReplicant, store } from '../../browser-util/state';
 
     const bundleName = 'bingothon-layouts';
+    const intermissionStartScene = '(ads) intermission';
+    const gameScene = 'game';
 
     @Component({})
     export default class OBSControl extends Vue {
@@ -92,6 +95,24 @@
                 clearInterval(this.lastIntermissionInterval);
                 this.lastIntermissionInterval = null;
             }
+        }
+
+        isIntermissionLikeScene(scene: string): boolean {
+            return scene.toLowerCase().includes('intermission') || scene.toLowerCase() == 'videoplayer';
+        }
+
+        disableTransition(): boolean {
+            return this.adTimer > 0;
+        }
+
+        get quickTransitionButtonText(): string {
+            if (this.transitionText != 'Transition') {
+                return this.transitionText;
+            }
+            if (this.isIntermissionLikeScene(this.currentScene)) {
+                return 'Transition to Game Layout';
+            }
+            return 'Start Intermission';
         }
 
         get transitionText(): string {
@@ -216,6 +237,11 @@
 
         doTransition() {
             nodecg.sendMessageToBundle('obs:transition', bundleName);
+        }
+
+        quickTransition() {
+            this.previewScene = this.isIntermissionLikeScene(this.currentScene) ? gameScene : intermissionStartScene;
+            this.doTransition();
         }
 
         toggleAudioFade(source: string) {

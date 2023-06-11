@@ -1,7 +1,7 @@
 'use-strict';
 
-import * as nodecgApiContext from './util/nodecg-api-context'
-import {Configschema} from '../../configschema'
+import * as nodecgApiContext from './util/nodecg-api-context';
+import { Configschema } from '../../configschema';
 import {
     DiscordDelayInfo,
     HostsSpeakingDuringIntermission,
@@ -11,10 +11,10 @@ import {
     ObsDashboardAudioSources,
     ObsPreviewImg,
     ObsStreamMode,
-    TwitchStreams
-} from '../../schemas'
-import {TwitchCommercialTimer} from '../../speedcontrol-types'
-import obs from './util/obs'
+    TwitchStreams,
+} from '../../schemas';
+import { TwitchCommercialTimer } from '../../speedcontrol-types';
+import obs from './util/obs';
 
 // this handles dashboard utilities, all around automating the run setup process
 // and setting everything in OBS properly on transitions
@@ -26,13 +26,13 @@ const nodecg = nodecgApiContext.get();
 const logger = new nodecg.Logger(`${nodecg.bundleName}:remotecontrol`);
 const bundleConfig = nodecg.bundleConfig as Configschema;
 
-
 const obsCurrentSceneRep = nodecg.Replicant<string | null>('obsCurrentScene');
 const obsDashboardAudioSourcesRep = nodecg.Replicant<ObsDashboardAudioSources>('obsDashboardAudioSources');
 const obsAudioSourcesRep = nodecg.Replicant<ObsAudioSources>('obsAudioSources');
 const obsConnectionRep = nodecg.Replicant<ObsConnection>('obsConnection');
 const obsStreamModeRep = nodecg.Replicant<ObsStreamMode>('obsStreamMode');
 const discordDelayInfoRep = nodecg.Replicant<DiscordDelayInfo>('discordDelayInfo');
+const obsPreviewScene = nodecg.Replicant<string>('obsPreviewScene');
 
 const voiceDelayRep = nodecg.Replicant<number>('voiceDelay', { defaultValue: 0, persistent: true });
 const streamsReplicant = nodecg.Replicant<TwitchStreams>('twitchStreams', { defaultValue: [] });
@@ -64,12 +64,11 @@ waitTillConnected().then((): void => {
     logger.info('connected to OBS, setting up remote control utils...');
 
     // default if they somehow not exist
-    [bundleConfig.obs.discordAudio, bundleConfig.obs.mpdAudio, bundleConfig.obs.streamsAudio]
-        .forEach((audioSource): void => {
-            if (!Object.getOwnPropertyNames(obsDashboardAudioSourcesRep.value).includes(audioSource)) {
-                obsDashboardAudioSourcesRep.value[audioSource] = { baseVolume: 0.5, fading: 'unmuted' };
-            }
-        });
+    [bundleConfig.obs.discordAudio, bundleConfig.obs.mpdAudio, bundleConfig.obs.streamsAudio].forEach((audioSource): void => {
+        if (!Object.getOwnPropertyNames(obsDashboardAudioSourcesRep.value).includes(audioSource)) {
+            obsDashboardAudioSourcesRep.value[audioSource] = { baseVolume: 0.5, fading: 'unmuted' };
+        }
+    });
 
     obsDashboardAudioSourcesRep.on('change', (newVal, old): void => {
         if (old === undefined || newVal === null || newVal === old) {
@@ -92,7 +91,7 @@ waitTillConnected().then((): void => {
                 obsAudioSourcesRep.value[source].volume = soundState.baseVolume;
             }
             if (!oldSound || oldSound.fading !== soundState.fading) {
-                obsAudioSourcesRep.value[source].muted = (soundState.fading === 'muted');
+                obsAudioSourcesRep.value[source].muted = soundState.fading === 'muted';
             }
         });
     });
@@ -139,9 +138,9 @@ waitTillConnected().then((): void => {
     });
 
     async function doTakeSourceScreenshot() {
-        if (!obsPreviewImgRep.value.active || !obsPreviewImgRep.value.source) return;
+        if (!obsPreviewImgRep.value.active) return;
         try {
-            const imgData = await obs.takeSourceScreenshot(obsPreviewImgRep.value.source);
+            const imgData = await obs.takeSourceScreenshot(obsPreviewScene.value);
             obsPreviewImgRep.value.screenshot = imgData;
         } catch (e) {
             logger.error(`error taking screenshot from ${obsPreviewImgRep.value.source}: `, e);
@@ -245,8 +244,7 @@ waitTillConnected().then((): void => {
             obsAudioSourcesRep.value[bundleConfig.obs.discordAudio].delay = discordDelayInfo.discordAudioDelayMs;
         }
         // already handled
-        if (discordDelayInfo.discordDisplayDelaySyncStreamLeader && !discordDelayInfo.discordAudioDelaySyncStreamLeader
-      && streamLeaderDelayMs !== null) {
+        if (discordDelayInfo.discordDisplayDelaySyncStreamLeader && !discordDelayInfo.discordAudioDelaySyncStreamLeader && streamLeaderDelayMs !== null) {
             voiceDelayRep.value = streamLeaderDelayMs;
         } else {
             voiceDelayRep.value = discordDelayInfo.discordDisplayDelayMs;
@@ -366,7 +364,7 @@ waitTillConnected().then((): void => {
     /* eslint-enable max-len */
 
     obsStreamModeRep.on('change', (newVal, old): void => {
-    // no value is most likely server restart
+        // no value is most likely server restart
         if (!old) return;
         // change in current scene
         handleScreenStreamModeChange(newVal, obsCurrentSceneRep.value || '');
@@ -387,7 +385,7 @@ waitTillConnected().then((): void => {
     });
 
     hostDiscordDuringIntermissionRep.on('change', (newVal, old): void => {
-    // no value is most likely server restart
+        // no value is most likely server restart
         if (!old) return;
         // nothing changed
         if (newVal.speaking === old.speaking) return;
@@ -415,11 +413,9 @@ waitTillConnected().then((): void => {
     //triggers ads when switching to Ad scene
     const adsTimerReplicant = nodecg.Replicant<TwitchCommercialTimer>('twitchCommercialTimer', 'nodecg-speedcontrol');
     obs.on('CurrentProgramSceneChanged', async ({ sceneName }) => {
-
-        if (sceneName.startsWith('(ads) intermission')
-      && adsTimerReplicant.value && adsTimerReplicant.value.secondsRemaining <= 0) {
+        if (sceneName.startsWith('(ads) intermission') && adsTimerReplicant.value && adsTimerReplicant.value.secondsRemaining <= 0) {
             //play ads
-            nodecg.sendMessageToBundle('twitchStartCommercial', 'nodecg-speedcontrol', { duration: 180 })
+            nodecg.sendMessageToBundle('twitchStartCommercial', 'nodecg-speedcontrol', { duration: 180 });
             nodecg.log.info('Playing 3 minute Twitch Ad');
         }
     });
@@ -435,12 +431,10 @@ waitTillConnected().then((): void => {
 
     nodecg.listenFor('videoPlayerFinished', (): void => {
         if (obsCurrentSceneRep.value?.toLowerCase() === 'videoplayer') {
-            obs.changeScene('intermission')
+            obs.changeScene('intermission');
             nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.mpdAudio }, (err): void => {
                 logger.warn(`Problem fading in mpd during transition: ${err.error}`);
             });
         }
     });
 });
-
-
