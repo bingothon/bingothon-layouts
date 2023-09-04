@@ -572,9 +572,14 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     })
 
     nodecg.listenFor('obs:transition', (_data, callback): void => {
-        logger.info('transitioning...')
-        nodecg.sendMessage('obs:startingTransition', { scene: obsPreviewSceneRep.value })
-        obs.call('SetCurrentProgramScene', { sceneName: obsPreviewSceneRep.value! })
+        logger.info('transitioning...');
+        logger.info(`Data: ${JSON.stringify(_data)}`)
+        let nextScene = obsPreviewSceneRep.value;
+        if (_data && _data.sceneName) {
+            nextScene = _data.sceneName;
+        }
+        nodecg.sendMessage('obs:startingTransition', { scene: nextScene });
+        obs.call('SetCurrentProgramScene', { sceneName: nextScene! })
             .then((): void => {
                 // setting ! on obsPreviewSceneRep.value!
                 if (callback && !callback.handled) {

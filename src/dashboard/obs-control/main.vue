@@ -46,8 +46,8 @@
                             @click="toggleAudioFade(audio[0])"
                             :title="isAudioUnmuted(audio[1].fading) ? 'currently unmuted' : 'currently muted'"
                         >
-                            <v-icon v-if="isAudioUnmuted(audio[1].fading)"> mdi-volume-high </v-icon>
-                            <v-icon v-else> mdi-volume-off </v-icon>
+                            <v-icon v-if="isAudioUnmuted(audio[1].fading)"> mdi-volume-high</v-icon>
+                            <v-icon v-else> mdi-volume-off</v-icon>
                         </v-btn>
                     </v-col>
                 </v-row>
@@ -57,7 +57,7 @@
                 <!--                <v-select v-model="obsPreviewImgSource" label="Preview Img Scene" :items="sceneNameList"> </v-select>-->
                 <img :style="{ width: '100%' }" v-if="obsPreviewImgData" :src="obsPreviewImgData" />
             </div>
-            <v-select v-model="previewScene" :items="sceneNameList" label="Preview Scene"> </v-select>
+            <v-select v-model="previewScene" :items="sceneNameList" label="Preview Scene"></v-select>
             <v-btn @click="doTransition" :disabled="disableTransition()">
                 {{ transitionText }}
             </v-btn>
@@ -110,7 +110,7 @@
                 return this.transitionText;
             }
             if (this.isIntermissionLikeScene(this.currentScene)) {
-                return 'Transition to Game Layout';
+                return 'Transition to Game';
             }
             return 'Start Intermission';
         }
@@ -239,9 +239,17 @@
             nodecg.sendMessageToBundle('obs:transition', bundleName);
         }
 
+        doSceneTransition(scene: string) {
+            nodecg.sendMessageToBundle('obs:transition', bundleName, { sceneName: scene });
+        }
+
         quickTransition() {
-            this.previewScene = this.isIntermissionLikeScene(this.currentScene) ? gameScene : intermissionStartScene;
-            this.doTransition();
+            const nextScene = this.isIntermissionLikeScene(this.currentScene) ? gameScene : intermissionStartScene;
+            console.log(`Next Scene: ${nextScene}`);
+            Vue.nextTick(() => {
+                console.log('Next tick');
+                this.doSceneTransition(nextScene);
+            });
         }
 
         toggleAudioFade(source: string) {
