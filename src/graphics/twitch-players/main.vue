@@ -1,18 +1,17 @@
 <template>
     <div id="TwitchPlayers">
-        <div v-for="(stream, streamIndex) in streams" class="TwitchPlayerContainer">
+        <div v-for="(stream, streamIndex) in streams" :key="streamIndex" class="TwitchPlayerContainer">
             <TwitchPlayer :style="capturePositionStyles(streamIndex)" :streamIndex="streamIndex" />
         </div>
     </div>
 </template>
 
 <script lang="ts">
-    import { Component, Ref, Vue, Watch } from 'vue-property-decorator';
-    import { Asset, CapturePositions, IntermissionVideos, TwitchStreams } from '@/schemas';
-    import { getReplicant, store } from '@/browser-util/state';
-    import { RunData } from '../../../speedcontrol-types';
+    import { Component, Vue } from 'vue-property-decorator';
+    import { CapturePositions, TwitchStreams } from '@/schemas';
+    import { store } from '@/browser-util/state';
     import TextFit from '../helpers/text-fit.vue';
-    import TwitchPlayer from "../components/twitchPlayer.vue";
+    import TwitchPlayer from '../components/twitchPlayer.vue';
 
     @Component({
         components: {
@@ -21,12 +20,10 @@
         },
     })
     export default class TwitchPlayers extends Vue {
-        mounted() {
-
-        }
+        mounted() {}
 
         get capturePositions(): CapturePositions[string] | undefined {
-            const layoutName = store.state.currentGameLayout.path.slice(1) // leading slash we don't want
+            const layoutName = store.state.currentGameLayout.path.slice(1); // leading slash we don't want
             return store.state.capturePositions[layoutName];
         }
 
@@ -36,11 +33,11 @@
 
         capturePositionStyles(streamIdx: number) {
             const position = this.capturePosition(streamIdx);
-            console.log("pos", position);
+            console.log('pos', position);
             if (!position) {
                 return {
-                    visibility: "hidden",
-                    position: "absolute",
+                    visibility: 'hidden',
+                    position: 'absolute',
                 };
             } else {
                 const pos = {
@@ -48,9 +45,9 @@
                     top: `${position.y}px`,
                     width: `${position.width}px`,
                     height: `${position.height}px`,
-                    position: "absolute",
+                    position: 'absolute',
                 };
-                console.log("pos", pos);
+                console.log('pos', pos);
                 return pos;
             }
         }
@@ -62,9 +59,7 @@
 </script>
 
 <style>
-
     body {
         background: none;
     }
-
 </style>

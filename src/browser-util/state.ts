@@ -246,7 +246,7 @@ export const store = new Store<StoreTypes>({
             }
             playerAlternateInterval = setInterval(() => {
                 set(state, 'playerAlternate', !state.playerAlternate);
-            }, interval);
+            }, interval) as unknown as NodeJS.Timeout;
         },
         stopPlayerAlternateInterval() {
             if (playerAlternateInterval) {
@@ -348,5 +348,5 @@ assetNames.forEach((name) => {
 });
 
 export async function create() {
-  return NodeCG.waitForReplicants(...Array.from(replicants.values())).then(() => store);
+    return NodeCG.waitForReplicants(...Array.from(replicants.values())).then(() => store);
 }
