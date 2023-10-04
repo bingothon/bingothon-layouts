@@ -1,40 +1,46 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:600&subset=cyrillic,cyrillic-ext,latin-ext,vietnamese');
 
 :root {
-    --container-background-color: #ce0d0099;
-    --container-border-color: #ff844b;
-    --font-color: #fff;
-    --darker-main-color: #e94e1b;
-    --lighter-main-color: #f39200;
-    --alternative-main-color: #d32f3e;
-    --gradient-light: #ffa600;
-    --gradient-dark: #ff1125be;
+    /* Primary Colors */
+    --container-background-color: #A1063A;  /* Central rich deep red */
+    --container-border-color: #8D0532;     /* A slightly darker tone for borders */
+    --font-color: #F8E8D8;                 /* Soft, light beige for contrast and readability */
+
+    /* Gradient Colors for Background */
+    --gradient-light: #FF6E5E;             /* A warm, slightly peachy red */
+    --gradient-dark: #790A23;              /* A deep burgundy */
+
+    /* Auxiliary Colors */
+    --darker-main-color: #6D0420;          /* Almost maroon for depth and accents */
+    --lighter-main-color: #FF8E7C;         /* Light coral for highlights */
+    --alternative-main-color: #BE4A49;
 }
 
 /*Bingo Colors*/
 :root {
-    --bingo-color-red: linear-gradient(#FF4944, #DA4440 60%, #CE302C);
-    --bingo-color-orange: linear-gradient(#FF9C12, #F98E1E 60%, #D0800F);
-    --bingo-color-green: linear-gradient(#129912, #108010 60%, #0c660c);
-    --bingo-color-blue: linear-gradient(#409CFF, #37A1DE 60%, #088CBD);
-    --bingo-color-purple: linear-gradient(#822dbf, #7120ab);
-    --bingo-color-pink: linear-gradient(#ed86aa, #cc6e8f);
-    --bingo-color-brown: linear-gradient(#3bd45f, #30b050);
-    --bingo-color-teal: linear-gradient(#419695, #2e7372);
-    --bingo-color-navy: linear-gradient(#0d48b5, #022b75);
-    --bingo-color-yellow: linear-gradient(#8c8b8b, #808080);
+    --bingo-color-red: linear-gradient(45deg, #A1063A, #9C2020);
+    --bingo-color-orange: linear-gradient(45deg, #F98F20, #B06900);
+    --bingo-color-green: linear-gradient(45deg, #0F9A10, #0B670B);
+    --bingo-color-blue: linear-gradient(45deg, #0067bb, #003f85);
+    --bingo-color-purple: linear-gradient(45deg, #A1063A, #601890);
+    --bingo-color-pink: linear-gradient(45deg, #ED86B2, #B05676);
+    --bingo-color-brown: linear-gradient(45deg, #3CD465, #227536);
+    --bingo-color-teal: linear-gradient(45deg, #3F9797, #205555);
+    --bingo-color-navy: linear-gradient(45deg, #0D49B6, #001750);
+    --bingo-color-yellow: linear-gradient(45deg, #8D8C8C, #6B6B6B);
 
-    --border-color-red: #CE302C;
-    --border-color-orange: #D0800F;
-    --border-color-green: #129912;
-    --border-color-blue: #088CBD;
-    --border-color-purple: #7120ab;
-    --border-color-pink: #cc6e8f;
-    --border-color-brown: #3bd45f;
-    --border-color-teal: #2e7372;
-    --border-color-navy: #022b75;
-    --border-color-yellow: #808080;
+    --border-color-red: #9C2020;
+    --border-color-orange: #B06900;
+    --border-color-green: #0B670B;
+    --border-color-blue: #078ABC;
+    --border-color-purple: #601890;
+    --border-color-pink: #B05676;
+    --border-color-brown: #227536;
+    --border-color-teal: #205555;
+    --border-color-navy: #001750;
+    --border-color-yellow: #6B6B6B;
 }
+
 
 summer {
     --container-background-color: rgba(206, 13, 0, 0.6);
@@ -71,4 +77,14 @@ body {
 }
 .fade-enter, .fade-leave-to {
     opacity: 0;
+}
+
+.border-3d {
+    /* Base border */
+    border: 3px solid #568152;
+
+    /* 3D shadow effect */
+    box-shadow:
+        -3px -1px 0px #80bb79,  /* top and left */
+        1px 1px 0px #052c01;   /* bottom and right */
 }

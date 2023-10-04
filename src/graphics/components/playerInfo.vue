@@ -300,7 +300,7 @@
     .PlayerInfoBox > .CurrentIcon > img {
         height: 100%;
         position: absolute;
-        filter: invert(1);
+        filter: invert(45%) sepia(34%) saturate(447%) hue-rotate(67deg) brightness(94%) contrast(91%);
     }
 
     .PlayerInfoBox > .CurrentIcon > .PronounsContainer {

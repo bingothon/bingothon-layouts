@@ -11,7 +11,7 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
 
-    const wide = require('../../../../static/logo-summer-wide.png');
+    const wide = require('../../../../static/bingothonlong5years.png');
     const fhLogo = require('../BingothonMSF.png');
 
     @Component({})

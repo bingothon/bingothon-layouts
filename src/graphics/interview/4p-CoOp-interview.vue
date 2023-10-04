@@ -1,6 +1,6 @@
 <template>
     <div class="Interview">
-        <img src="../../../static/logo-summer-wide.png" id="logo" />
+        <img src="../../../static/bingothonlong5years.png" id="logo" />
         <div id="fillvoice" class="flexContainer" />
         <player-team-container id="ptc0" teamIndex="0" height="40px"></player-team-container>
         <player-team-container id="ptc1" teamIndex="1" height="40px"></player-team-container>
@@ -60,7 +60,7 @@
     #logo {
         position: absolute;
         left: 690px;
-        top: 10px;
+        top: 150px;
         width: 568px;
         height: 200px;
     }

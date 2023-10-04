@@ -1,0 +1,141 @@
+
+@import url(./bingosync-style.css);
+table {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.bingo-board-hide {
+    width: 100%;
+    height: 100%;
+    background: black;
+    position: absolute;
+    color: white;
+    align-content: center;
+    justify-content: center;
+    font-size: 45px;
+    text-align: center;
+    align-items: center;
+}
+
+#soon {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.bingo-splash {
+    position: absolute;
+    opacity: 0;
+}
+
+.bingo-splash.activated {
+    animation: bingo-splash 4s;
+}
+
+.square .bg-color,
+.square .shadow {
+    width: 100%;
+    height: 100%;
+    /*Remove padding cause the board is kinda small*/
+    padding: 0;
+    border: 0;
+    left: 0;
+    right: 0;
+}
+
+.square {
+    padding: 0;
+    height: 20%;
+    width: 20%;
+    border: 2px black solid;
+    box-sizing: border-box;
+}
+
+[id^="tile-"] {
+    visibility: visible;
+}
+
+.text-container {
+    left: 0px;
+    right: 0px;
+}
+.bingo-table {
+    border-collapse: collapse;
+}
+.text-span {
+    left: 0px;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.CellTextFitContainer {
+    height: calc(100% - 4px);
+    width: calc(100% - 4px);
+    position: absolute;
+    margin: 2px;
+}
+.marker {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    opacity: 0.9;
+    border: 3px #0009 solid;
+    border-radius: 50%;
+}
+.marker0 {
+    left: 10%;
+    top: 10%;
+}
+.marker1 {
+    right: 10%;
+    top: 10%;
+}
+.marker2 {
+    left: 10%;
+    bottom: 10%;
+}
+.marker3 {
+    right: 10%;
+    bottom: 10%;
+}
+
+/* Cube Animation */
+
+.cube {
+    position: absolute;
+    display:none;
+    top: 0;
+    left: 0;
+    width: 50px;
+    transform-style: preserve-3d;
+    transform-origin: 25px 25px;
+    transform: translate(208px, 208px) rotateX(-540deg) rotateY(540deg);
+    transition: transform 0.150s ease-out;
+    will-change: transform;
+    box-sizing: border-box;
+}
+
+.face {
+    background-color: #a20639;
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    border: 1px solid #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.front  { transform: rotateY(0deg)   translateZ(25px); }
+.back   { transform: rotateY(180deg) translateZ(25px); }
+.left   { transform: rotateY(-90deg) translateZ(25px); }
+.right  { transform: rotateY(90deg)  translateZ(25px); }
+.top    { transform: rotateX(90deg)  translateZ(25px); }
+.bottom { transform: rotateX(-90deg) translateZ(25px); }

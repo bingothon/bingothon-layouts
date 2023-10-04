@@ -2,7 +2,7 @@
     <div id="Intermission">
         <!-- <img src="../../../static/bingothonUKRAINELOGO_colours.png" id="logoWinter"> -->
         <!-- <img src="../../../static/logo-winter-wide.png" id="logoWinter" /> -->
-        <img src="../../../static/logo-summer-wide.png" id="logoSummer">
+        <img src="../../../static/bingothonlong5years.png" id="logoSummer" />
         <div id="host-bingo-text">Host Blackout Bingo</div>
         <!--        <div id="host-bingo-text">Raising Money for</div>-->
         <run-upcoming v-if="nextRun" id="ComingUpNext" :data="nextRun"></run-upcoming>
@@ -110,7 +110,7 @@
     #logoSummer {
         position: absolute;
         left: 48px;
-        top: 20px;
+        top: 98px;
         width: 631px;
     }
 

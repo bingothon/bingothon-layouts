@@ -62,12 +62,26 @@
     .PlayerTeamContainer {
         flex-direction: column;
         width: 100%;
-        background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
+        background-image: linear-gradient(to right, var(--lighter-main-color), var(--darker-main-color));
+        border-radius: 5px; /* Rounded corners */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* A subtle shadow for depth */
+        transition: transform 0.3s, box-shadow 0.3s; /* Transition effect for hover state */
+        overflow: hidden; /* Ensures child elements don't exceed the rounded corners */
+    }
+
+    .PlayerTeamContainer:hover {
+        transform: scale(1.05); /* A slight zoom effect on hover */
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* A deeper shadow on hover */
     }
 
     .PlayerTeamContainer > .PlayerInfo1,
     .PlayerTeamContainer > .TeamInfo,
     .PlayerTeamContainer > .PlayerInfo2 {
         width: 100%;
+    }
+
+    .TeamInfo {
+        border-top: 2px solid rgba(255, 255, 255, 0.1); /* A subtle separator */
+        border-bottom: 2px solid rgba(255, 255, 255, 0.1); /* A subtle separator */
     }
 </style>
