@@ -7,21 +7,18 @@
         <div v-if="obsConnectionStatus === 'disabled'">OBS is disabled, nothing to see here</div>
         <div v-if="obsConnectionStatus === 'connected'">
             Current Scene: {{ currentScene }}
-            <v-select v-model="previewScene" :items="sceneNameList" label="Preview Scene"> </v-select>
-            <v-btn @click="doTransition" :disabled="adTimer > 0">
-                {{ transitionText }}
-            </v-btn>
+            <v-btn :disabled="disableTransition()" @click="quickTransition">{{ quickTransitionButtonText }}</v-btn>
             <div>
                 Audio Preset:
                 <v-row>
                     <v-radio-group v-model="obsStreamMode" :value="obsStreamMode">
                         <v-col v-for="(mode, i) in obsStreamModes" :key="i">
                             <v-radio
-                                :id="`mode-${mode}`"
-                                :key="mode"
-                                :value="mode"
-                                :label="mode"
-                                @change="changeOBSStreamMode(mode)"
+                                :id="`mode-${mode.mode}`"
+                                :key="mode.mode"
+                                :value="mode.mode"
+                                :label="mode.label"
+                                @change="changeOBSStreamMode(mode.mode)"
                             />
                         </v-col>
                     </v-radio-group>
@@ -49,17 +46,21 @@
                             @click="toggleAudioFade(audio[0])"
                             :title="isAudioUnmuted(audio[1].fading) ? 'currently unmuted' : 'currently muted'"
                         >
-                            <v-icon v-if="isAudioUnmuted(audio[1].fading)"> mdi-volume-high </v-icon>
-                            <v-icon v-else> mdi-volume-off </v-icon>
+                            <v-icon v-if="isAudioUnmuted(audio[1].fading)"> mdi-volume-high</v-icon>
+                            <v-icon v-else> mdi-volume-off</v-icon>
                         </v-btn>
                     </v-col>
                 </v-row>
             </div>
             <div class="previewImgContainer">
                 <v-checkbox dark v-model="obsPreviewImgActive" label="Activate Preview"></v-checkbox>
-                <v-select v-model="obsPreviewImgSource" label="Preview Img Scene" :items="sceneNameList"> </v-select>
+                <!--                <v-select v-model="obsPreviewImgSource" label="Preview Img Scene" :items="sceneNameList"> </v-select>-->
                 <img :style="{ width: '100%' }" v-if="obsPreviewImgData" :src="obsPreviewImgData" />
             </div>
+            <v-select v-model="previewScene" :items="sceneNameList" label="Preview Scene"></v-select>
+            <v-btn @click="doTransition" :disabled="disableTransition()">
+                {{ transitionText }}
+            </v-btn>
         </div>
         <v-text-field v-model="discordDisplayDelay" type="number" label="Discord Display Delay (ms)"></v-text-field>
     </v-app>
@@ -72,6 +73,8 @@
     import { getReplicant, store } from '../../browser-util/state';
 
     const bundleName = 'bingothon-layouts';
+    const intermissionStartScene = '(ads) intermission';
+    const gameScene = 'game';
 
     @Component({})
     export default class OBSControl extends Vue {
@@ -94,6 +97,24 @@
             }
         }
 
+        isIntermissionLikeScene(scene: string): boolean {
+            return scene.toLowerCase().includes('intermission') || scene.toLowerCase() == 'videoplayer';
+        }
+
+        disableTransition(): boolean {
+            return this.adTimer > 0;
+        }
+
+        get quickTransitionButtonText(): string {
+            if (this.transitionText != 'Transition') {
+                return this.transitionText;
+            }
+            if (this.isIntermissionLikeScene(this.currentScene)) {
+                return 'Transition to Game';
+            }
+            return 'Start Intermission';
+        }
+
         get transitionText(): string {
             if (this.adTimer > 0) {
                 return 'Playing ' + this.adTimer + 's Twitch ads';
@@ -105,8 +126,16 @@
             return store.state.twitchCommercialTimer.secondsRemaining;
         }
 
-        get obsStreamModes(): ObsStreamMode[] {
-            return ['external-commentary', 'runner-commentary', 'racer-audio-only'];
+        get obsStreamModes(): { label: string; mode: ObsStreamMode }[] {
+            // removing runner commentary because there is currently no way to get Twitch Delay
+            // return ['external-commentary', 'runner-commentary', 'racer-audio-only'];
+            return [
+                {
+                    label: 'Capture Discord via Stream PC',
+                    mode: 'external-commentary',
+                },
+                { label: "Capture Discord via runner's stream", mode: 'racer-audio-only' },
+            ];
         }
 
         get hostsSpeakingDuringIntermission(): boolean {
@@ -216,6 +245,19 @@
 
         doTransition() {
             nodecg.sendMessageToBundle('obs:transition', bundleName);
+        }
+
+        doSceneTransition(scene: string) {
+            nodecg.sendMessageToBundle('obs:transition', bundleName, { sceneName: scene });
+        }
+
+        quickTransition() {
+            const nextScene = this.isIntermissionLikeScene(this.currentScene) ? gameScene : intermissionStartScene;
+            console.log(`Next Scene: ${nextScene}`);
+            Vue.nextTick(() => {
+                console.log('Next tick');
+                this.doSceneTransition(nextScene);
+            });
         }
 
         toggleAudioFade(source: string) {
