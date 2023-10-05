@@ -49,6 +49,8 @@ summer {
     --darker-main-color: #e94e1b;
     --lighter-main-color: #f39200;
     --alternative-main-color: #d32f3e;
+    --gradient-light: #ffa600;
+    --gradient-dark: #ff1125be;
 }
 
 winter {
@@ -58,6 +60,8 @@ winter {
     --darker-main-color: #315091;
     --lighter-main-color: #5c88bc;
     --alternative-main-color: #310088;
+    --gradient-light: #627fbe;
+    --gradient-dark: #050a1b;
 }
 
 
