@@ -14,11 +14,11 @@
                     <v-radio-group v-model="obsStreamMode" :value="obsStreamMode">
                         <v-col v-for="(mode, i) in obsStreamModes" :key="i">
                             <v-radio
-                                :id="`mode-${mode}`"
-                                :key="mode"
-                                :value="mode"
-                                :label="mode"
-                                @change="changeOBSStreamMode(mode)"
+                                :id="`mode-${mode.mode}`"
+                                :key="mode.mode"
+                                :value="mode.mode"
+                                :label="mode.label"
+                                @change="changeOBSStreamMode(mode.mode)"
                             />
                         </v-col>
                     </v-radio-group>
@@ -126,8 +126,16 @@
             return store.state.twitchCommercialTimer.secondsRemaining;
         }
 
-        get obsStreamModes(): ObsStreamMode[] {
-            return ['external-commentary', 'runner-commentary', 'racer-audio-only'];
+        get obsStreamModes(): { label: string; mode: ObsStreamMode }[] {
+            // removing runner commentary because there is currently no way to get Twitch Delay
+            // return ['external-commentary', 'runner-commentary', 'racer-audio-only'];
+            return [
+                {
+                    label: 'Capture Discord via Stream PC',
+                    mode: 'external-commentary',
+                },
+                { label: "Capture Discord via runner's stream", mode: 'racer-audio-only' },
+            ];
         }
 
         get hostsSpeakingDuringIntermission(): boolean {
