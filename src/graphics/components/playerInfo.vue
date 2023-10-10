@@ -28,7 +28,7 @@
             <transition name="fade">
                 <img
                     :key="player.country"
-                    :style="{ visibility: showFlag ? 'visbile' : 'hidden' }"
+                    :style="{ visibility: showFlag ? 'visible' : 'hidden' }"
                     :src="getPlayerFlag(player.country)"
                 />
             </transition>
@@ -37,7 +37,10 @@
             v-if="bingoColorShown === true"
             class="BingoColor FlexContainer"
             :class="`bingo-${bingoColor}`"
-            :style="{ width: height.replace('px', '') * 0.75 + 'px', height: height.replace('px', '') * 0.75 + 'px' }"
+            :style="{
+                width: parseFloat(height.replace('px', '')) * 0.75 + 'px',
+                height: parseFloat(height.replace('px', '')) * 0.75 + 'px',
+            }"
         >
             <span v-if="bingoCountShown === true">{{ bingoGoalCount }}</span>
         </div>
