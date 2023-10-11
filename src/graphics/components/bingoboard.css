@@ -113,7 +113,7 @@ table {
     width: 50px;
     transform-style: preserve-3d;
     transform-origin: 25px 25px;
-    transform: translate(208px, 208px) rotateX(-540deg) rotateY(540deg);
+    transform: translate(208px, 208px) rotateX(0) rotateY(0);
     transition: transform 0.150s ease-out;
     will-change: transform;
     box-sizing: border-box;

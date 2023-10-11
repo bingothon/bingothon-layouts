@@ -1,17 +1,25 @@
 import { Vue, Component, Watch } from 'vue-property-decorator';
 
+type Tile = {
+    row: number;
+    col: number;
+    width?: number;
+    height?: number;
+    top?: number;
+    left?: number;
+};
+
 @Component
 export class BingoBoardAnimation extends Vue {
-    tiles: Array<Array<any>> = Array(5)
-        .fill([])
-        .map(() => Array(5).fill(null));
-
+    tiles: Tile[][] = Array(5)
+        .fill(null)
+        .map(() => Array(5).fill({ row: 0, col: 0 }));
     sequenceIndex: number = 0;
     isRolling: boolean = false;
     currentX: number = 0;
     currentY: number = 0;
-    posX: number = 2;
-    posY: number = 2;
+    col: number = 2;
+    row: number = 2;
     isCubeVisible = false;
     rollTimeout: any = null;
     stopTimeout: any = null;
@@ -26,31 +34,31 @@ export class BingoBoardAnimation extends Vue {
 
     // Define the sequence of movements for the cube
     sequence = [
-        { y: 2, x: 2 },
-        { y: 3, x: 2 },
-        { y: 3, x: 1 },
-        { y: 2, x: 1 },
-        { y: 1, x: 1 },
-        { y: 1, x: 2 },
-        { y: 1, x: 3 },
-        { y: 2, x: 3 },
-        { y: 3, x: 3 },
-        { y: 4, x: 3 },
-        { y: 4, x: 2 },
-        { y: 4, x: 1 },
-        { y: 4, x: 0 },
-        { y: 3, x: 0 },
-        { y: 2, x: 0 },
-        { y: 1, x: 0 },
-        { y: 0, x: 0 },
-        { y: 0, x: 1 },
-        { y: 0, x: 2 },
-        { y: 0, x: 3 },
-        { y: 0, x: 4 },
-        { y: 1, x: 4 },
-        { y: 2, x: 4 },
-        { y: 3, x: 4 },
-        { y: 4, x: 4 },
+        { row: 2, col: 2 },
+        { row: 3, col: 2 },
+        { row: 3, col: 1 },
+        { row: 2, col: 1 },
+        { row: 1, col: 1 },
+        { row: 1, col: 2 },
+        { row: 1, col: 3 },
+        { row: 2, col: 3 },
+        { row: 3, col: 3 },
+        { row: 4, col: 3 },
+        { row: 4, col: 2 },
+        { row: 4, col: 1 },
+        { row: 4, col: 0 },
+        { row: 3, col: 0 },
+        { row: 2, col: 0 },
+        { row: 1, col: 0 },
+        { row: 0, col: 0 },
+        { row: 0, col: 1 },
+        { row: 0, col: 2 },
+        { row: 0, col: 3 },
+        { row: 0, col: 4 },
+        { row: 1, col: 4 },
+        { row: 2, col: 4 },
+        { row: 3, col: 4 },
+        { row: 4, col: 4 },
     ];
 
     mounted() {
@@ -72,14 +80,14 @@ export class BingoBoardAnimation extends Vue {
         });
 
         const startingTile = this.tiles[2][2];
-        cube.style.transform = `translate(${startingTile.x}px, ${startingTile.y}px)`;
+        cube.style.transform = `translate(${startingTile.left}px, ${startingTile.top}px)`;
     }
 
     getNextTile() {
         this.sequenceIndex++;
         if (this.sequenceIndex < this.sequence.length) {
-            const { x, y } = this.sequence[this.sequenceIndex];
-            return this.tiles[y][x];
+            const { col, row } = this.sequence[this.sequenceIndex];
+            return this.tiles[row][col];
         }
         return null;
     }
@@ -95,31 +103,29 @@ export class BingoBoardAnimation extends Vue {
             if (!tile) return;
 
             // Compute your transformation...
-            if (tile.x > this.tiles[this.posY][this.posX].x) {
+            if (tile.col > this.tiles[this.row][this.col].col) {
                 this.currentY += 90;
-            } else if (tile.x < this.tiles[this.posY][this.posX].x) {
+            } else if (tile.col < this.tiles[this.row][this.col].col) {
                 this.currentY -= 90;
-            } else if (tile.y > this.tiles[this.posY][this.posX].y) {
+            } else if (tile.row > this.tiles[this.row][this.col].row) {
                 this.currentX -= 90;
-            } else if (tile.y < this.tiles[this.posY][this.posX].y) {
+            } else if (tile.row < this.tiles[this.row][this.col].row) {
                 this.currentX += 90;
             }
 
-            const currentTile = this.$refs.cells[this.posY * 5 + this.posX] as HTMLElement;
+            const currentTile = this.$refs.cells[this.row * 5 + this.col] as HTMLElement;
             currentTile.style.visibility = 'visible';
 
-            this.posX = this.sequence[this.sequenceIndex].x;
-            this.posY = this.sequence[this.sequenceIndex].y;
+            this.col = this.sequence[this.sequenceIndex].col;
+            this.row = this.sequence[this.sequenceIndex].row;
 
             const cube = this.$refs.cube as HTMLElement;
             const transitionDuration = this.calculateTransitionDuration();
-            console.log('Tile width and height:', tile.width, tile.height);
 
             cube.style.transitionDuration = `${transitionDuration}s`;
-            cube.style.transform = `translate(${tile.x}px, ${tile.y}px) rotateX(${this.currentX}deg) rotateY(${this.currentY}deg)`;
+            cube.style.transform = `translate(${tile.left}px, ${tile.top}px) rotateX(${this.currentX}deg) rotateY(${this.currentY}deg)`;
 
             this.isRolling = true;
-
             this.rollStepTimeout = setTimeout(() => {
                 this.isRolling = false;
                 cube.style.transitionDuration = '0.150s';
@@ -128,6 +134,9 @@ export class BingoBoardAnimation extends Vue {
             currentTile.style.visibility = 'visible';
         } catch (error) {
             console.log('Error in rollStep:', error);
+            clearTimeout(this.rollTimeout);
+            clearTimeout(this.stopTimeout);
+            clearTimeout(this.rollStepTimeout);
             this.stopAnimation();
         }
     }
@@ -136,15 +145,17 @@ export class BingoBoardAnimation extends Vue {
         const bingoBoardRect = this.$el.getBoundingClientRect();
         const cells = this.$refs.cells as HTMLElement[];
 
-        for (let i = 0; i < 5; i++) {
-            for (let j = 0; j < 5; j++) {
-                const cell = cells[i * 5 + j];
+        for (let row = 0; row < 5; row++) {
+            for (let col = 0; col < 5; col++) {
+                const cell = cells[row * 5 + col];
                 const rect = cell.getBoundingClientRect();
-                this.tiles[i][j] = {
-                    x: rect.left - bingoBoardRect.left,
-                    y: rect.top - bingoBoardRect.top,
+                this.tiles[row][col] = {
+                    row: row,
+                    col: col,
                     width: rect.width,
                     height: rect.height,
+                    left: rect.left - bingoBoardRect.left,
+                    top: rect.top - bingoBoardRect.top,
                 };
             }
         }
@@ -172,7 +183,7 @@ export class BingoBoardAnimation extends Vue {
             cube.style.display = 'block';
             this.initializeAnimationState();
 
-            this.rollTimeout = setTimeout(() => this.rollStep(), 4000);
+            this.rollTimeout = setTimeout(() => this.rollStep(), 900);
             this.stopTimeout = setTimeout(() => this.stopAnimation(), 4000);
         });
     }
@@ -182,7 +193,7 @@ export class BingoBoardAnimation extends Vue {
         this.isRolling = false;
         this.sequenceIndex = 0;
 
-        const firstTile = this.$refs.cells[2][2] as HTMLElement;
+        const firstTile = this.$refs.cells[2 * 5 + 2] as HTMLElement;
         firstTile.style.visibility = 'visible';
     }
 
@@ -190,14 +201,15 @@ export class BingoBoardAnimation extends Vue {
         this.isRolling = true; // Stop the rollStep loop
 
         const cube = this.$refs.cube as HTMLElement;
+
+        // Get the middle tile using the 2D array
         const startingTile = this.tiles[2][2];
-        cube.style.transform = `translate(${startingTile.x}px, ${startingTile.y}px)`;
+        cube.style.transform = `translate(${startingTile.left}px, ${startingTile.top}px)`;
         cube.style.display = 'none';
 
         // Reveal the last tile in the sequence
-        const lastTileX = this.sequence[this.sequence.length - 1].x;
-        const lastTileY = this.sequence[this.sequence.length - 1].y;
-        const lastTile = this.$refs.cells[lastTileY][lastTileX] as HTMLElement;
+        const lastSequenceTile = this.sequence[this.sequence.length - 1];
+        const lastTile = this.$refs.cells[lastSequenceTile.row * 5 + lastSequenceTile.col] as HTMLElement;
         lastTile.style.visibility = 'visible';
     }
 }

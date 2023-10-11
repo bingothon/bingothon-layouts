@@ -1,5 +1,5 @@
 <template>
-    <div class="BingoBoard">
+    <div ref="bingoboard" class="BingoBoard">
         <table class="bingo-table">
             <tbody>
                 <tr :key="i" v-for="(column, i) in bingoCells">
@@ -31,10 +31,10 @@
         <!-- 3D Cube Structure -->
         <div ref="cube" class="cube" id="cube" :v-show="isCubeVisible">
             <div :v-show="isCubeVisible" class="face front">B</div>
-            <div :v-show="isCubeVisible" class="face back">I</div>
+            <div :v-show="isCubeVisible" class="face back">O</div>
             <div :v-show="isCubeVisible" class="face left">N</div>
             <div :v-show="isCubeVisible" class="face right">G</div>
-            <div :v-show="isCubeVisible" class="face top">O</div>
+            <div :v-show="isCubeVisible" class="face top">I</div>
             <div :v-show="isCubeVisible" class="face bottom">5</div>
         </div>
     </div>
