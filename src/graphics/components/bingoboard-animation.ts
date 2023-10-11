@@ -172,7 +172,7 @@ export class BingoBoardAnimation extends Vue {
             cube.style.display = 'block';
             this.initializeAnimationState();
 
-            this.rollTimeout = setTimeout(() => this.rollStep(), 900);
+            this.rollTimeout = setTimeout(() => this.rollStep(), 4000);
             this.stopTimeout = setTimeout(() => this.stopAnimation(), 4000);
         });
     }
@@ -182,7 +182,7 @@ export class BingoBoardAnimation extends Vue {
         this.isRolling = false;
         this.sequenceIndex = 0;
 
-        const firstTile = this.$refs.cells[2 * 5 + 2] as HTMLElement;
+        const firstTile = this.$refs.cells[2][2] as HTMLElement;
         firstTile.style.visibility = 'visible';
     }
 
@@ -195,8 +195,9 @@ export class BingoBoardAnimation extends Vue {
         cube.style.display = 'none';
 
         // Reveal the last tile in the sequence
-        const lastTileIndex = this.sequence[this.sequence.length - 1].y * 5 + this.sequence[this.sequence.length - 1].x;
-        const lastTile = this.$refs.cells[lastTileIndex] as HTMLElement;
+        const lastTileX = this.sequence[this.sequence.length - 1].x;
+        const lastTileY = this.sequence[this.sequence.length - 1].y;
+        const lastTile = this.$refs.cells[lastTileY][lastTileX] as HTMLElement;
         lastTile.style.visibility = 'visible';
     }
 }
