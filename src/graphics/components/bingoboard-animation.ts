@@ -2,7 +2,10 @@ import { Vue, Component, Watch } from 'vue-property-decorator';
 
 @Component
 export class BingoBoardAnimation extends Vue {
-    tiles: Array<any> = [];
+    tiles: Array<Array<any>> = Array(5)
+        .fill([])
+        .map(() => Array(5).fill(null));
+
     sequenceIndex: number = 0;
     isRolling: boolean = false;
     currentX: number = 0;
@@ -56,7 +59,7 @@ export class BingoBoardAnimation extends Vue {
     }
 
     setupCubeDimensions() {
-        const tileSize = this.tiles[0];
+        const tileSize = this.tiles[0][0];
         const cube = this.$refs.cube as HTMLElement;
         cube.style.width = `${tileSize.width}px`;
         cube.style.height = `${tileSize.height}px`;
@@ -68,7 +71,7 @@ export class BingoBoardAnimation extends Vue {
             face.style.height = `${tileSize.height}px`;
         });
 
-        const startingTile = this.tiles[2 * 5 + 2];
+        const startingTile = this.tiles[2][2];
         cube.style.transform = `translate(${startingTile.x}px, ${startingTile.y}px)`;
     }
 
@@ -76,7 +79,7 @@ export class BingoBoardAnimation extends Vue {
         this.sequenceIndex++;
         if (this.sequenceIndex < this.sequence.length) {
             const { x, y } = this.sequence[this.sequenceIndex];
-            return this.tiles[y * 5 + x];
+            return this.tiles[y][x];
         }
         return null;
     }
@@ -92,13 +95,13 @@ export class BingoBoardAnimation extends Vue {
             if (!tile) return;
 
             // Compute your transformation...
-            if (tile.x > this.tiles[this.posY * 5 + this.posX].x) {
+            if (tile.x > this.tiles[this.posY][this.posX].x) {
                 this.currentY += 90;
-            } else if (tile.x < this.tiles[this.posY * 5 + this.posX].x) {
+            } else if (tile.x < this.tiles[this.posY][this.posX].x) {
                 this.currentY -= 90;
-            } else if (tile.y > this.tiles[this.posY * 5 + this.posX].y) {
+            } else if (tile.y > this.tiles[this.posY][this.posX].y) {
                 this.currentX -= 90;
-            } else if (tile.y < this.tiles[this.posY * 5 + this.posX].y) {
+            } else if (tile.y < this.tiles[this.posY][this.posX].y) {
                 this.currentX += 90;
             }
 
@@ -137,12 +140,12 @@ export class BingoBoardAnimation extends Vue {
             for (let j = 0; j < 5; j++) {
                 const cell = cells[i * 5 + j];
                 const rect = cell.getBoundingClientRect();
-                this.tiles.push({
+                this.tiles[i][j] = {
                     x: rect.left - bingoBoardRect.left,
                     y: rect.top - bingoBoardRect.top,
                     width: rect.width,
                     height: rect.height,
-                });
+                };
             }
         }
     }
@@ -187,7 +190,7 @@ export class BingoBoardAnimation extends Vue {
         this.isRolling = true; // Stop the rollStep loop
 
         const cube = this.$refs.cube as HTMLElement;
-        const startingTile = this.tiles[2 * 5 + 2]; // Middle tile
+        const startingTile = this.tiles[2][2];
         cube.style.transform = `translate(${startingTile.x}px, ${startingTile.y}px)`;
         cube.style.display = 'none';
 
