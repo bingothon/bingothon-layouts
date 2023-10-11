@@ -41,205 +41,198 @@
 </template>
 
 <script lang="ts">
-    import { Component, Watch } from 'vue-property-decorator';
-    import { BingoBoard as BingoBoardClass } from './bingoboard';
+    import { Prop, Vue, Component } from 'vue-property-decorator';
+    import { BingoBoardAnimation } from './bingoboard-animation';
 
-    @Component
-    export default class BingoBoard extends BingoBoardClass {
-        tiles: Array<any> = [];
-        sequenceIndex: number = 0;
-        isRolling: boolean = false;
-        currentX: number = 0;
-        currentY: number = 0;
-        posX: number = 2;
-        posY: number = 2;
-        isCubeVisible = false;
-        rollTimeout: any = null;
-        stopTimeout: any = null;
-        rollStepTimeout: any = null;
+    import { nodecg } from '../../browser-util/nodecg';
+    import { Bingoboard } from '../../../schemas';
+    import equals from 'deep-equal';
+    import { store } from '../../browser-util/state';
+    import CellTextFit from '../helpers/cell-text-fit.vue';
 
-        @Watch('boardHidden')
-        onBoardHiddenChanged(newVal: boolean, oldVal: boolean) {
-            if (!newVal && oldVal) {
-                this.startAnimation();
+    interface BingoCell {
+        name: string;
+        rawColors: string;
+        markers?: string[];
+        colors: {
+            color: string;
+            style: string;
+        }[];
+    }
+
+    const translatePercent = {
+        2: ['0', '0'],
+        3: ['0', '36', '-34'],
+        4: ['0', '46', '0', '-48'],
+        5: ['0', '56', '18', '-18', '-56'],
+        6: ['0', '60', '30', '0', '-30', '-60'],
+        7: ['0', '64', '38', '13', '-13', '-38', '-64'],
+        8: ['0', '64', '41', '20', '0', '-21', '-41', '-64'],
+        9: ['0', '66', '45', '27', '9', '-9', '-27', '-45', '-66'],
+        10: ['0', '68', '51', '34', '17', '0', '-17', '-34', '-51', '-68'],
+    };
+
+    const ORDERED_COLORS = [
+        'pink',
+        'red',
+        'orange',
+        'brown',
+        'yellow',
+        'green',
+        'teal',
+        'blue',
+        'navy',
+        'purple',
+    ].reverse();
+
+    function sortColors(colors: string[]): string[] {
+        var orderedColors = [];
+        for (var i = 0; i < ORDERED_COLORS.length; i++) {
+            if (colors.indexOf(ORDERED_COLORS[i]) !== -1) {
+                orderedColors.push(ORDERED_COLORS[i]);
             }
         }
+        return orderedColors;
+    }
 
-        // Define the sequence of movements for the cube
-        sequence = [
-            { y: 2, x: 2 },
-            { y: 3, x: 2 },
-            { y: 3, x: 1 },
-            { y: 2, x: 1 },
-            { y: 1, x: 1 },
-            { y: 1, x: 2 },
-            { y: 1, x: 3 },
-            { y: 2, x: 3 },
-            { y: 3, x: 3 },
-            { y: 4, x: 3 },
-            { y: 4, x: 2 },
-            { y: 4, x: 1 },
-            { y: 4, x: 0 },
-            { y: 3, x: 0 },
-            { y: 2, x: 0 },
-            { y: 1, x: 0 },
-            { y: 0, x: 0 },
-            { y: 0, x: 1 },
-            { y: 0, x: 2 },
-            { y: 0, x: 3 },
-            { y: 0, x: 4 },
-            { y: 1, x: 4 },
-            { y: 2, x: 4 },
-            { y: 3, x: 4 },
-            { y: 4, x: 4 },
-        ];
+    const colorToGradient = {
+        green: '#31D814',
+        red: '#FF4944',
+        orange: '#FF9C12',
+        blue: '#409CFF',
+        purple: '#822dbf',
+        pink: '#ed86aa',
+        brown: '#ab5c23',
+        teal: '#419695',
+        navy: '#0d48b5',
+        yellow: '#d8d014',
+    };
+
+    function defaultBingoBoard(): BingoCell[][] {
+        var result = [];
+        for (let i = 0; i < 5; i++) {
+            var cur: BingoCell[] = [];
+            for (let j = 0; j < 5; j++) {
+                cur.push({ name: '', colors: [], rawColors: 'blank' });
+            }
+            result.push(cur);
+        }
+        return result;
+    }
+
+    @Component({
+        components: {
+            CellTextFit,
+        },
+    })
+    export default class BingoBoard extends BingoBoardAnimation {
+        bingoCells: BingoCell[][] = defaultBingoBoard();
+        defaultBoard: BingoCell[][] = defaultBingoBoard();
+
+        @Prop({ default: '10px' })
+        fontSize: string;
+        skewAngle = 1;
+        @Prop({ default: null })
+        bingoboardRep: string | null;
+        @Prop({ default: false })
+        alwaysShown: boolean;
+        // function to call when to drop the watch for the bingoboard, used to change boards
+        bingoboardWatch: () => void;
+
+        splashActivated: string = '';
+        bingoAnimColor: string = 'black';
 
         mounted() {
-            this.generateTilePositions();
-            this.setupCubeDimensions();
-        }
-
-        setupCubeDimensions() {
-            const tileSize = this.tiles[0];
-            const cube = this.$refs.cube as HTMLElement;
-            cube.style.width = `${tileSize.width}px`;
-            cube.style.height = `${tileSize.height}px`;
-            cube.style.transformOrigin = `${tileSize.width / 2}px ${tileSize.height / 2}px`;
-
-            const faces = cube.querySelectorAll('.face') as NodeListOf<HTMLElement>;
-            faces.forEach((face) => {
-                face.style.width = `${tileSize.width}px`;
-                face.style.height = `${tileSize.height}px`;
-            });
-
-            const startingTile = this.tiles[2 * 5 + 2];
-            cube.style.transform = `translate(${startingTile.x}px, ${startingTile.y}px)`;
-        }
-
-        getNextTile() {
-            this.sequenceIndex++;
-            if (this.sequenceIndex < this.sequence.length) {
-                const { x, y } = this.sequence[this.sequenceIndex];
-                return this.tiles[y * 5 + x];
+            const height = this.$el.scrollHeight;
+            const width = this.$el.scrollWidth;
+            this.skewAngle = Math.atan(width / height);
+            // no specific bingoboardRep means use the replicant
+            if (this.bingoboardRep == null) {
+                store.watch(
+                    (state) => state.currentMainBingoboard,
+                    (newBoard) => {
+                        if (this.bingoboardWatch) {
+                            this.bingoboardWatch();
+                            this.bingoboardWatch = null;
+                        }
+                        this.bingoboardWatch = store.watch(
+                            (state) => state[newBoard.boardReplicant],
+                            this.onBingoBoardUpdate,
+                            { immediate: true },
+                        );
+                    },
+                    { immediate: true },
+                );
+            } else {
+                // got a specific one, watch it
+                this.bingoboardWatch = store.watch((state) => state[this.bingoboardRep], this.onBingoBoardUpdate, {
+                    immediate: true,
+                });
+                this.onBingoBoardUpdate(store.state[this.bingoboardRep]);
             }
-            return null;
+            nodecg.listenFor('showBingoAnimation', 'bingothon-layouts', this.showBingoSplash);
         }
 
-        calculateTransitionDuration() {
-            return (0.15 / (this.sequenceIndex + 1)) * 3;
+        destroyed() {
+            nodecg.unlisten('showBingoAnimation', 'bingothon-layouts', this.showBingoSplash);
         }
 
-        rollStep() {
-            if (this.isRolling) return;
-            try {
-                const tile = this.getNextTile();
-                if (!tile) return;
-
-                // Compute your transformation...
-                if (tile.x > this.tiles[this.posY * 5 + this.posX].x) {
-                    this.currentY += 90;
-                } else if (tile.x < this.tiles[this.posY * 5 + this.posX].x) {
-                    this.currentY -= 90;
-                } else if (tile.y > this.tiles[this.posY * 5 + this.posX].y) {
-                    this.currentX -= 90;
-                } else if (tile.y < this.tiles[this.posY * 5 + this.posX].y) {
-                    this.currentX += 90;
-                }
-
-                const currentTile = this.$refs.cells[this.posY * 5 + this.posX] as HTMLElement;
-                currentTile.style.visibility = 'visible';
-
-                this.posX = this.sequence[this.sequenceIndex].x;
-                this.posY = this.sequence[this.sequenceIndex].y;
-
-                const cube = this.$refs.cube as HTMLElement;
-                const transitionDuration = this.calculateTransitionDuration();
-                console.log('Tile width and height:', tile.width, tile.height);
-
-                cube.style.transitionDuration = `${transitionDuration}s`;
-                cube.style.transform = `translate(${tile.x}px, ${tile.y}px) rotateX(${this.currentX}deg) rotateY(${this.currentY}deg)`;
-
-                this.isRolling = true;
-
-                this.rollStepTimeout = setTimeout(() => {
-                    this.isRolling = false;
-                    cube.style.transitionDuration = '0.150s';
-                    this.rollStep();
-                }, transitionDuration * 1000);
-                currentTile.style.visibility = 'visible';
-            } catch (error) {
-                console.log('Error in rollStep:', error);
-                this.stopAnimation();
-            }
+        showBingoSplash(data: { color?: string }) {
+            // if the animation is currently running do nothing
+            if (this.splashActivated != '') return;
+            this.bingoAnimColor = colorToGradient[data.color] || 'black';
+            this.splashActivated = 'activated';
+            setTimeout(() => (this.splashActivated = ''), 4000);
         }
 
-        generateTilePositions() {
-            const bingoBoardRect = this.$el.getBoundingClientRect();
-            const cells = this.$refs.cells as HTMLElement[];
-
-            for (let i = 0; i < 5; i++) {
-                for (let j = 0; j < 5; j++) {
-                    const cell = cells[i * 5 + j];
-                    const rect = cell.getBoundingClientRect();
-                    this.tiles.push({
-                        x: rect.left - bingoBoardRect.left,
-                        y: rect.top - bingoBoardRect.top,
-                        width: rect.width,
-                        height: rect.height,
-                    });
-                }
-            }
+        get boardHidden(): boolean {
+            return store.state.bingoboardMeta.boardHidden && !this.alwaysShown;
         }
 
-        hideTiles() {
-            const tiles = this.$refs.cells as HTMLElement[];
-            tiles.forEach((tile) => (tile.style.visibility = 'hidden'));
-
-            return new Promise<void>((resolve) => {
-                setTimeout(resolve, 1000);
+        onBingoBoardUpdate(newGoals: Bingoboard, oldGoals?: Bingoboard | undefined) {
+            if (!newGoals) return;
+            let idx = 0;
+            this.bingoCells.forEach((row, rowIndex) => {
+                row.forEach((cell, columnIndex) => {
+                    // update cell with goal name, if changed
+                    const newCell = newGoals.cells[idx];
+                    if (!oldGoals || !oldGoals.cells.length || newCell.name != oldGoals.cells[idx].name) {
+                        Vue.set(this.bingoCells[rowIndex][columnIndex], 'name', newCell.name);
+                    }
+                    // update cell with color backgrounds, if changed
+                    if (!oldGoals || !oldGoals.cells.length || !equals(newCell.colors, oldGoals.cells[idx].colors)) {
+                        if (newCell.colors.length !== 0) {
+                            const colors = sortColors(newCell.colors);
+                            console.log(colors);
+                            var newColors = [];
+                            newColors.push({ color: colors[0], style: '' });
+                            var translations = translatePercent[colors.length];
+                            for (var i = 1; i < colors.length; i++) {
+                                // how bingosync handles the backgrounds, set style here to simply bind it to html later
+                                newColors.push({
+                                    color: colors[i],
+                                    style: `transform: skew(-${this.skewAngle}rad) translateX(${translations[i]}%); border-right: solid 1.5px #444444`,
+                                });
+                            }
+                            Vue.set(this.bingoCells[rowIndex][columnIndex], 'colors', newColors);
+                        } else {
+                            Vue.set(this.bingoCells[rowIndex][columnIndex], 'colors', []);
+                        }
+                    }
+                    if (!oldGoals || !oldGoals.cells.length || !equals(newCell.markers, oldGoals.cells[idx].markers)) {
+                        Vue.set(this.bingoCells[rowIndex][columnIndex], 'markers', newCell.markers);
+                    }
+                    idx++;
+                });
             });
         }
 
-        delay(ms: number): Promise<void> {
-            return new Promise((resolve) => setTimeout(resolve, ms));
-        }
-
-        startAnimation() {
-            clearTimeout(this.rollTimeout);
-            clearTimeout(this.stopTimeout);
-            clearTimeout(this.rollStepTimeout);
-            this.hideTiles().then(() => {
-                const cube = this.$refs.cube as HTMLElement;
-                cube.style.display = 'block';
-                this.initializeAnimationState();
-
-                this.rollTimeout = setTimeout(() => this.rollStep(), 900);
-                this.stopTimeout = setTimeout(() => this.stopAnimation(), 4000);
-            });
-        }
-
-        initializeAnimationState() {
-            this.isCubeVisible = true;
-            this.isRolling = false;
-            this.sequenceIndex = 0;
-
-            const firstTile = this.$refs.cells[2 * 5 + 2] as HTMLElement;
-            firstTile.style.visibility = 'visible';
-        }
-
-        stopAnimation() {
-            this.isRolling = true; // Stop the rollStep loop
-
-            const cube = this.$refs.cube as HTMLElement;
-            const startingTile = this.tiles[2 * 5 + 2]; // Middle tile
-            cube.style.transform = `translate(${startingTile.x}px, ${startingTile.y}px)`;
-            cube.style.display = 'none';
-
-            // Reveal the last tile in the sequence
-            const lastTileIndex =
-                this.sequence[this.sequence.length - 1].y * 5 + this.sequence[this.sequence.length - 1].x;
-            const lastTile = this.$refs.cells[lastTileIndex] as HTMLElement;
-            lastTile.style.visibility = 'visible';
+        getMarkerClasses(marker: string, markerIndex: number): string {
+            if (!marker) {
+                return '';
+            } else {
+                return `marker marker${markerIndex} ${marker}square`;
+            }
         }
     }
 </script>
