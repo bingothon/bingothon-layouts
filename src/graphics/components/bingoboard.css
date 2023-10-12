@@ -53,10 +53,12 @@ table {
     width: 20%;
     border: 2px black solid;
     box-sizing: border-box;
+    
 }
 
 [id^="tile-"] {
     visibility: visible;
+    
 }
 
 .text-container {

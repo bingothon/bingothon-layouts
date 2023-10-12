@@ -163,10 +163,27 @@ export class BingoBoardAnimation extends Vue {
 
     hideTiles() {
         const tiles = this.$refs.cells as HTMLElement[];
-        tiles.forEach((tile) => (tile.style.visibility = 'hidden'));
-
+        tiles.forEach((tile) => {
+            tile.style.visibility = 'hidden';
+            tile.style.border = '2px solid transparent';
+        });
         return new Promise<void>((resolve) => {
             setTimeout(resolve, 1000);
+        });
+    }
+
+    showTilesBorder() {
+        const tiles = this.$refs.cells as HTMLElement[];
+        tiles.forEach((tile) => {
+            tile.style.transition = 'border-color 0.5s ease-in-out';
+            tile.style.border = '2px solid transparent';
+            setTimeout(() => {
+                tile.style.borderColor = 'black';
+            }, 10); // A short delay to ensure the border color transition takes effect after the border width is applied
+        });
+
+        return new Promise<void>((resolve) => {
+            setTimeout(resolve, 10);
         });
     }
 
@@ -179,12 +196,14 @@ export class BingoBoardAnimation extends Vue {
         clearTimeout(this.stopTimeout);
         clearTimeout(this.rollStepTimeout);
         this.hideTiles().then(() => {
-            const cube = this.$refs.cube as HTMLElement;
-            cube.style.display = 'block';
-            this.initializeAnimationState();
+            this.showTilesBorder().then(() => {
+                const cube = this.$refs.cube as HTMLElement;
+                cube.style.display = 'block';
+                this.initializeAnimationState();
 
-            this.rollTimeout = setTimeout(() => this.rollStep(), 900);
-            this.stopTimeout = setTimeout(() => this.stopAnimation(), 4000);
+                this.rollTimeout = setTimeout(() => this.rollStep(), 900);
+                this.stopTimeout = setTimeout(() => this.stopAnimation(), 2500);
+            });
         });
     }
 
