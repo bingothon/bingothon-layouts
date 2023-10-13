@@ -1,15 +1,15 @@
 <template>
     <div class="GameLayout">
         <!-- Game Cover Section -->
-        <div v-if="gameCoverUrl" class="GameCover">
-            <img :src="gameCoverUrl" />
+        <div class="GameCover">
+            <img v-if="gameCoverUrl" :src="gameCoverUrl" />
         </div>
 
         <!-- Players Section -->
         <div class="PlayersContainer">
             <div v-for="(joystick, joystickIndex) in playerJoysticks" :key="joystickIndex">
                 <div class="Chip FlexContainer">
-                    <inline-svg class="joystick" v-if="joystick" :svg-content="joystick"> </inline-svg>
+                    <!-- <inline-svg class="joystick" v-if="joystick" :svg-content="joystick"> </inline-svg> -->
                     <span>{{ players[joystickIndex].name }}</span>
                 </div>
             </div>
@@ -23,13 +23,15 @@
         </div>
 
         <!-- Bingo Mode Section -->
-        <div class="BingoMode" v-if="bingoLogo.length > 0">
-            <div v-for="(logo, logoIndex) in bingoLogo" :key="logoIndex">
-                <img :src="logo" />
-            </div>
-            <div v-for="(mode, modeIndex) in bingoMode" :key="modeIndex">
-                <div class="ChipMode">
-                    <span>{{ mode }}</span>
+        <div class="BingoMode">
+            <div v-if="bingoLogo.length > 0">
+                <div v-for="(logo, logoIndex) in bingoLogo" :key="logoIndex">
+                    <img :src="logo" />
+                </div>
+                <div v-for="(mode, modeIndex) in bingoMode" :key="modeIndex">
+                    <div class="ChipMode">
+                        <span>{{ mode }}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -296,6 +298,7 @@
                 nes: require('../../../../static/assets/game-systems/logos/nes.svg'),
                 snes: require('../../../../static/assets/game-systems/logos/snes.svg'),
                 ps1: require('../../../../static/assets/game-systems/logos/ps1.svg'),
+                playstation: require('../../../../static/assets/game-systems/logos/ps1.svg'),
                 psp: require('../../../../static/assets/game-systems/logos/psp.svg'),
                 ps2: require('../../../../static/assets/game-systems/logos/ps2.svg'),
                 ps3: require('../../../../static/assets/game-systems/logos/ps3.svg'),
@@ -337,15 +340,18 @@
     .GameCover {
         display: flex;
         flex: 1;
-        max-width: 100px;
-        margin-left: 40px;
-        justify-content: center; /* This centers its children horizontally */
+        max-width: 220px;
+        margin-left: 15px;
+        justify-content: left; /* This centers its children horizontally */
         align-items: center; /* Optional: This would vertically center the image if the .GameCover has a height larger than the image */
+        min-width: 220px;
+        flex-grow: 0;
+        flex-shrink: 0;
     }
 
     .GameCover img {
-        width: auto;
-        height: 100px;
+        width: 100px;
+        height: auto;
     }
 
     .PlayersContainer {
@@ -355,7 +361,11 @@
         /* start at left side of flex */
         align-items: flex-start;
         min-width: 200px;
+        max-width: 200px;
         justify-content: center;
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: 200px;
     }
 
     .joystick svg {
@@ -375,8 +385,11 @@
         align-items: center;
         /* horizontal align also center */
         justify-content: center;
-        min-width: 500px;
+        min-width: 380px;
+        max-width: 380px;
         padding: 40px;
+        flex-grow: 0;
+        flex-shrink: 0;
     }
 
     .Title {
@@ -391,6 +404,8 @@
         flex-direction: column;
         align-items: flex-start; /* This makes the content align to the left */
         justify-content: center;
+        flex-grow: 0;
+        flex-shrink: 0;
     }
 
     .BingoMode {
@@ -400,11 +415,14 @@
         align-items: flex-start; /* This makes the content align to the left */
         justify-content: center;
         max-width: 100px;
+        min-width: 100px;
+        flex-grow: 0;
+        flex-shrink: 0;
     }
 
     .GameSystem img {
         width: auto;
-        height: 19px;
+        height: 30px;
     }
 
     .BingoMode img {
@@ -415,6 +433,7 @@
     .Chip span {
         flex-grow: 1;
         text-align: center;
+        font-size: 1.5rem;
     }
 
     .Chip {
