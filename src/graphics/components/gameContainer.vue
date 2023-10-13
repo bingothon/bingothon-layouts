@@ -1,7 +1,7 @@
 <template>
     <div class="GameContainer FlexContainer" style="max-height: 200px; flex-direction: column">
         <!-- Joysticks at the top -->
-        <div v-if="playerJoysticks.length > 0" class="FlexContainer">
+        <!-- <div v-if="playerJoysticks.length > 0" class="FlexContainer">
             <div class="GameChip">
                 <div v-for="(joystick, joystickIndex) in playerJoysticks" :key="joystickIndex" class="FlexContainer">
                     <div>
@@ -16,7 +16,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Title in the middle -->
         <div class="GameDetails FlexContainer" style="flex-grow: 1; justify-content: center; align-items: center">

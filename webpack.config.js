@@ -8,7 +8,6 @@ const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const globby = require('globby');
-const proxy = require('http-proxy-middleware');
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -167,17 +166,6 @@ const config = (name) => {
             ],
         },
         plugins,
-        devServer: {
-            // ... other devServer settings
-            proxy: {
-                '/mobygames': {
-                    target: 'https://www.mobygames.com',
-                    secure: false,
-                    changeOrigin: true,
-                    pathRewrite: { '^/mobygames': '/search/auto' },
-                },
-            },
-        },
         optimization: isProd
             ? {
                   splitChunks: {
