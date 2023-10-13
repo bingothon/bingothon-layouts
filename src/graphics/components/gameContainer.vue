@@ -40,7 +40,6 @@
         </div>
     </div>
 </template>
-do you agree its more clear and more recognisable for people when they see logos together with the text
 
 <script lang="ts">
     type ColorEnum = 'pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple';
