@@ -1,0 +1,24 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect width="300" height="300" fill="#ffffff"  />
+
+    <!-- First controller (blue) -->
+    <circle cx="120" cy="150" r="60" fill="#007BFF" />
+    <!-- Buttons for the first controller -->
+    <circle cx="100" cy="130" r="10" fill="#ffffff" />
+    <circle cx="140" cy="130" r="10" fill="#ffffff" />
+    <circle cx="120" cy="110" r="10" fill="#ffffff" />
+    <circle cx="120" cy="170" r="10" fill="#ffffff" />
+
+    <!-- Second controller (green) -->
+    <circle cx="180" cy="150" r="60" fill="#4CAF50" />
+    <!-- Buttons for the second controller -->
+    <circle cx="160" cy="130" r="10" fill="#ffffff" />
+    <circle cx="200" cy="130" r="10" fill="#ffffff" />
+    <circle cx="180" cy="110" r="10" fill="#ffffff" />
+    <circle cx="180" cy="170" r="10" fill="#ffffff" />
+
+    <!-- Linking the two controllers -->
+    <path d="M120 150 Q150 120 180 150" fill="none" stroke="#333" stroke-width="5" />
+
+</svg>

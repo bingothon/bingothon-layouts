@@ -122,18 +122,34 @@
     #discord-voice {
         position: absolute;
         top: 447px;
-        left: 782px;
-        width: 356px;
-        height: 150px;
+        left: 779px;
+        width: 350px;
+        height: 145px;
         border: 2px var(--container-border-color) solid;
+        margin-left: 2px;
+        padding: 3px 4px;
+        background-color: rgba(30, 60, 80, 0.9);
+        border: 1px solid rgba(10, 40, 60, 0.8); /* Dark bluish border */
+
+        /* Darker ice-like gradient background using SVG */
+        background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="darkIceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(40, 70, 90, 0.7); stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(10, 40, 60, 0.9); stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23darkIceGradient)" /></svg>');
+        box-shadow: 0px 0px 5px 2px rgba(10, 40, 60, 0.3);
     }
     #SponsorContainer {
         position: absolute;
-        top: 257px;
-        left: 782px;
-        width: 356px;
-        height: 188px;
+        top: 271px;
+        left: 779px;
+        width: 350px;
+        height: 168px;
         border: 2px var(--container-border-color) solid;
+        margin-left: 2px;
+        padding: 3px 4px;
+        background-color: rgba(30, 60, 80, 0.9);
+        border: 1px solid rgba(10, 40, 60, 0.8); /* Dark bluish border */
+
+        /* Darker ice-like gradient background using SVG */
+        background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="darkIceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(40, 70, 90, 0.7); stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(10, 40, 60, 0.9); stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23darkIceGradient)" /></svg>');
+        box-shadow: 0px 0px 5px 2px rgba(10, 40, 60, 0.3);
     }
 
     #pi1 {
@@ -183,19 +199,32 @@
         /*background-image: url("../../../static/middle-info-background.png");*/
         position: absolute;
         top: 0px;
-        left: 782px;
-        width: 356px;
-        border: 2px var(--container-border-color) solid;
+        left: 779px;
+        width: 350px;
         height: 125px;
+        margin-left: 2px;
+        padding: 3px 4px;
+        background-color: rgba(30, 60, 80, 0.9);
+        border: 1px solid rgba(10, 40, 60, 0.8); /* Dark bluish border */
+
+        /* Darker ice-like gradient background using SVG */
+        background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="darkIceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(40, 70, 90, 0.7); stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(10, 40, 60, 0.9); stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23darkIceGradient)" /></svg>');
+        box-shadow: 0px 0px 5px 2px rgba(10, 40, 60, 0.3);
     }
 
     #timer {
         position: absolute;
-        top: 125px;
-        left: 782px;
-        /*background-image: url("../../../static/middle-info-background.png");*/
-        width: 356px;
-        border: 2px var(--container-border-color) solid;
+        top: 133px;
+        left: 779px;
+        width: 350px;
         height: 130px;
+        margin-left: 2px;
+        padding: 3px 4px;
+        background-color: rgba(30, 60, 80, 0.9);
+        border: 1px solid rgba(10, 40, 60, 0.8); /* Dark bluish border */
+
+        /* Darker ice-like gradient background using SVG */
+        background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="darkIceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(40, 70, 90, 0.7); stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(10, 40, 60, 0.9); stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23darkIceGradient)" /></svg>');
+        box-shadow: 0px 0px 5px 2px rgba(10, 40, 60, 0.3);
     }
 </style>

@@ -1,30 +1,29 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { VueLoaderPlugin } = require("vue-loader");
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const VuetifyLoaderPlugin = require("vuetify-loader/lib/plugin");
-const LiveReloadPlugin = require("webpack-livereload-plugin");
-const TsConfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
-const path = require("path");
-const globby = require("globby");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
+const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const globby = require('globby');
+const proxy = require('http-proxy-middleware');
 
-const isProd = process.env.NODE_ENV === "production";
+const isProd = process.env.NODE_ENV === 'production';
 
 const config = (name) => {
-    const entry = globby
-        .sync("*/main.ts", { cwd: `src/${name}` })
-        .reduce((prev, curr) => {
-            prev[path.basename(path.dirname(curr))] = `./${curr}`;
-            return prev;
-        }, {});
+    const entry = globby.sync('*/main.ts', { cwd: `src/${name}` }).reduce((prev, curr) => {
+        prev[path.basename(path.dirname(curr))] = `./${curr}`;
+        return prev;
+    }, {});
 
     const miniCSSOpts = {
         loader: MiniCssExtractPlugin.loader,
         options: {
             // hmr: !isProd,
-            publicPath: "../"
-        }
+            publicPath: '../',
+        },
     };
 
     let plugins = [];
@@ -32,168 +31,168 @@ const config = (name) => {
         plugins.push(
             new LiveReloadPlugin({
                 port: 0,
-                appendScriptTag: true
-            })
+                appendScriptTag: true,
+            }),
         );
     }
-    plugins = plugins.concat(
-        [
-            new VueLoaderPlugin(),
-            ...Object.keys(entry).map(
-                (entryName) =>
-                    new HtmlWebpackPlugin({
-                        filename: `${entryName}.html`,
-                        chunks: [entryName],
-                        title: entryName,
-                        template: "template.html"
-                    })
-            ),
-            new ForkTsCheckerWebpackPlugin({
-                typescript: {
-                    extensions: {
-                        vue: true
-                    }
-                }
-            })
-        ]
-    );
+    plugins = plugins.concat([
+        new VueLoaderPlugin(),
+        ...Object.keys(entry).map(
+            (entryName) =>
+                new HtmlWebpackPlugin({
+                    filename: `${entryName}.html`,
+                    chunks: [entryName],
+                    title: entryName,
+                    template: 'template.html',
+                }),
+        ),
+        new ForkTsCheckerWebpackPlugin({
+            typescript: {
+                extensions: {
+                    vue: true,
+                },
+            },
+        }),
+    ]);
     if (isProd) {
         plugins.push(
             new MiniCssExtractPlugin({
-                filename: "css/[name].css",
-                ignoreOrder: true
-            })
+                filename: 'css/[name].css',
+                ignoreOrder: true,
+            }),
         );
     }
-    if (name === "dashboard") {
-        plugins.push(
-            new VuetifyLoaderPlugin()
-        );
+    if (name === 'dashboard') {
+        plugins.push(new VuetifyLoaderPlugin());
     }
-    if (name === "graphics") {
+    if (name === 'graphics') {
         plugins.push(
             new CopyPlugin({
-                patterns: [
-                    { from: "./_misc/common.css", to: "./" }
-                ]
-            })
+                patterns: [{ from: './_misc/common.css', to: './' }],
+            }),
         );
     }
 
     return {
         context: path.resolve(__dirname, `src/${name}`),
-        mode: isProd ? "production" : "development",
-        target: "web",
+        mode: isProd ? 'production' : 'development',
+        target: 'web',
         // devtool: isProd ? undefined : 'cheap-source-map',
         entry,
         output: {
             path: path.resolve(__dirname, name),
-            filename: "js/[name].js"
+            filename: 'js/[name].js',
         },
         resolve: {
-            extensions: [".js", ".ts", ".tsx", ".json"],
+            extensions: ['.js', '.ts', '.tsx', '.json'],
             alias: {
-                vue: "vue/dist/vue.esm.js"
+                vue: 'vue/dist/vue.esm.js',
             },
             plugins: [
                 new TsConfigPathsPlugin({
-                    configFile: "tsconfig.browser.json"
-                })
-            ]
+                    configFile: 'tsconfig.browser.json',
+                }),
+            ],
         },
         module: {
             rules: [
                 {
                     test: /\.vue$/,
-                    loader: "vue-loader"
+                    loader: 'vue-loader',
                 },
                 {
                     test: /\.css$/,
                     use: [
-                        (isProd) ? miniCSSOpts : "vue-style-loader",
+                        isProd ? miniCSSOpts : 'vue-style-loader',
                         {
-                            loader: "css-loader",
+                            loader: 'css-loader',
                             options: {
-                                esModule: false
-                            }
-                        }
-                    ]
+                                esModule: false,
+                            },
+                        },
+                    ],
                 },
                 {
                     test: /\.s(c|a)ss$/,
                     use: [
-                        (isProd) ? miniCSSOpts : "vue-style-loader",
+                        isProd ? miniCSSOpts : 'vue-style-loader',
                         {
-                            loader: "css-loader",
+                            loader: 'css-loader',
                             options: {
-                                esModule: false
-                            }
+                                esModule: false,
+                            },
                         },
                         {
-                            loader: "sass-loader",
+                            loader: 'sass-loader',
                             options: {
-                                implementation: require("sass")
-                            }
-                        }
-                    ]
+                                implementation: require('sass'),
+                            },
+                        },
+                    ],
                 },
                 {
                     test: /\.(woff(2)?|ttf|eot)$/,
-                    loader: "file-loader",
+                    loader: 'file-loader',
                     options: {
-                        name: "font/[name].[ext]",
-                        esModule: false
-                    }
+                        name: 'font/[name].[ext]',
+                        esModule: false,
+                    },
                 },
                 {
                     test: /\.svg?$/,
-                    include: [
-                        path.resolve(__dirname, `src/${name}/_misc/fonts`)
-                    ],
-                    loader: "file-loader",
+                    include: [path.resolve(__dirname, `src/${name}/_misc/fonts`)],
+                    loader: 'file-loader',
                     options: {
-                        name: "font/[name].[ext]",
-                        esModule: false
-                    }
+                        name: 'font/[name].[ext]',
+                        esModule: false,
+                    },
                 },
                 {
                     test: /\.(png|svg|jpg)?$/,
-                    exclude: [
-                        path.resolve(__dirname, `src/${name}/_misc/fonts`)
-                    ],
-                    loader: "file-loader",
+                    exclude: [path.resolve(__dirname, `src/${name}/_misc/fonts`)],
+                    loader: 'file-loader',
                     options: {
-                        name: "img/[name]-[contenthash].[ext]",
-                        esModule: false
-                    }
+                        name: 'img/[name]-[contenthash].[ext]',
+                        esModule: false,
+                    },
                 },
                 {
                     test: /\.tsx?$/,
-                    loader: "ts-loader",
+                    loader: 'ts-loader',
                     options: {
                         transpileOnly: true, // ForkTsCheckerWebpackPlugin will do type checking
-                        appendTsSuffixTo: [/\.vue$/]
-                    }
-                }
-            ]
+                        appendTsSuffixTo: [/\.vue$/],
+                    },
+                },
+            ],
         },
         plugins,
-        optimization: (isProd) ? {
-            splitChunks: {
-                chunks: "all",
-                cacheGroups: {
-                    common: {
-                        minChunks: 2
-                    },
-                    vendors: false,
-                    default: false
-                }
-            }
-        } : undefined
+        devServer: {
+            // ... other devServer settings
+            proxy: {
+                '/mobygames': {
+                    target: 'https://www.mobygames.com',
+                    secure: false,
+                    changeOrigin: true,
+                    pathRewrite: { '^/mobygames': '/search/auto' },
+                },
+            },
+        },
+        optimization: isProd
+            ? {
+                  splitChunks: {
+                      chunks: 'all',
+                      cacheGroups: {
+                          common: {
+                              minChunks: 2,
+                          },
+                          vendors: false,
+                          default: false,
+                      },
+                  },
+              }
+            : undefined,
     };
 };
 
-module.exports = [
-    config("dashboard"),
-    config("graphics")
-];
+module.exports = [config('dashboard'), config('graphics')];

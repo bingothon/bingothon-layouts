@@ -303,6 +303,7 @@
     .PlayerInfoBox > .CurrentIcon > img {
         height: 100%;
         position: absolute;
+        filter: invert(100%);
     }
 
     .PlayerInfoBox > .CurrentIcon > .PronounsContainer {
