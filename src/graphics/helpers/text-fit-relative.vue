@@ -1,6 +1,6 @@
 <template>
     <div id="TextContainer">
-        <div id="FittedTextContent" :style="{ transform, top, position, fontSize }">{{ text }}</div>
+        <div id="FittedTextContent" :style="{ transform, top, position }">{{ text }}</div>
     </div>
 </template>
 
@@ -22,8 +22,8 @@
         top: string = '0';
         @Prop({ default: 'absolute' })
         position: 'absolute' | 'relative';
-        @Prop({ default: '1em' })
-        fontSize: string = '1em';
+        @Prop({ default: 0 })
+        margin: number;
 
         mounted() {
             const font = window.getComputedStyle(this.$el.querySelector('#FittedTextContent')).font;
@@ -50,11 +50,12 @@
                 const fittedContent = this.$el.querySelector('#FittedTextContent');
                 const fittedContentBounds = fittedContent.getBoundingClientRect(); // The child you want to fit
                 const parentBounds = fittedContent.parentElement.parentElement.getBoundingClientRect(); // The parent of the child
+                const parentBoundWidthIncludingMargins = parentBounds.width - this.margin;
 
                 console.log(`fitted width:${fittedContentBounds.width} parent width: ${parentBounds.width}`);
 
                 // Calculate the scaling factor based on width of the parent
-                let scaleX = parentBounds.width / fittedContentBounds.width;
+                let scaleX = parentBoundWidthIncludingMargins / fittedContentBounds.width;
 
                 // Limit max scale to 1 to prevent enlarging
                 scaleX = Math.min(1, scaleX);
@@ -67,10 +68,10 @@
                             toLeft = 0;
                             break;
                         case 'center':
-                            toLeft = (parentBounds.width - fittedContentBounds.width * scaleX) / 2;
+                            toLeft = (parentBoundWidthIncludingMargins - fittedContentBounds.width * scaleX) / 2;
                             break;
                         case 'right':
-                            toLeft = parentBounds.width - fittedContentBounds.width * scaleX;
+                            toLeft = parentBoundWidthIncludingMargins - fittedContentBounds.width * scaleX;
                             break;
                     }
                 }

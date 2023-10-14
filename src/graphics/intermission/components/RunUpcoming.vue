@@ -20,31 +20,33 @@
                 <div class="PlayersContainer">
                     <template v-if="isTeamGame">
                         <div v-for="(team, teamIndex) in firstHalf" :key="'first-team-' + teamIndex">
-                            <div v-if="team.name" class="PlayerChip FlexContainer">
+                            <div v-if="team.name" class="TeamChip FlexContainer">
                                 <TextFitRelative
                                     :text="team.name"
-                                    :fontSize="fontSize"
                                     align="center"
                                     position="relative"
+                                    margin="10"
                                 ></TextFitRelative>
                             </div>
-                            <div v-for="player in team.players" class="PlayerChip FlexContainer">
-                                <TextFitRelative
-                                    :text="player.name"
-                                    :fontSize="fontSize"
-                                    align="center"
-                                    position="relative"
-                                ></TextFitRelative>
+                            <div>
+                                <div v-for="player in team.players" class="PlayerChip-1 FlexContainer">
+                                    <TextFitRelative
+                                        :text="player.name"
+                                        align="center"
+                                        position="relative"
+                                        margin="10"
+                                    ></TextFitRelative>
+                                </div>
                             </div>
                         </div>
                     </template>
                     <template v-else>
-                        <div v-for="player in firstHalf" class="PlayerChip FlexContainer">
+                        <div v-for="player in firstHalf" class="PlayerChip-1 FlexContainer">
                             <TextFitRelative
                                 :text="player.name"
-                                :fontSize="fontSize"
                                 align="center"
                                 position="relative"
+                                margin="10"
                             ></TextFitRelative>
                         </div>
                     </template>
@@ -54,9 +56,9 @@
                     <div class="GameCategoryChip" v-if="gameSystem">
                         <TextFitRelative
                             :text="gameCategory"
-                            :fontSize="fontSize"
                             align="center"
                             position="relative"
+                            margin="10"
                         ></TextFitRelative>
                     </div>
                     <!-- Game Title -->
@@ -85,12 +87,12 @@
                 <div class="PlayersContainer">
                     <template v-if="isTeamGame">
                         <div v-for="(team, teamIndex) in secondHalf" :key="'first-team-' + teamIndex">
-                            <div v-if="team.name" class="PlayerChip FlexContainer">
+                            <div v-if="team.name" class="TeamChip FlexContainer">
                                 <TextFitRelative
                                     :text="team.name"
-                                    :fontSize="fontSize"
                                     align="center"
                                     position="relative"
+                                    margin="10"
                                 ></TextFitRelative>
                             </div>
                             <div
@@ -100,9 +102,9 @@
                             >
                                 <TextFitRelative
                                     :text="player.name"
-                                    :fontSize="fontSize"
                                     align="center"
                                     position="relative"
+                                    margin="10"
                                 ></TextFitRelative>
                             </div>
                         </div>
@@ -115,9 +117,10 @@
                         >
                             <TextFitRelative
                                 :text="player.name"
-                                :fontSize="fontSize"
+                                :fontSize="localfontSize"
                                 align="center"
                                 position="relative"
+                                margin="10"
                             ></TextFitRelative>
                         </div>
                     </template>
@@ -128,7 +131,7 @@
             </div>
 
             <!-- Bingo Mode Section -->
-            <div class="BingoMode">
+            <!-- <div class="BingoMode">
                 <div v-if="bingoLogo.length > 0">
                     <div v-for="(logo, logoIndex) in bingoLogo" :key="logoIndex">
                         <img :src="logo" />
@@ -139,7 +142,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -159,7 +162,7 @@
         @Prop({ default: undefined })
         when: number;
         @Prop({ default: '22px' })
-        fontSize: string;
+        localfontSize: string;
 
         gameCoverUrl: string = '';
 
@@ -454,11 +457,11 @@
     .GameCover {
         display: flex;
         flex: 1;
-        max-width: 120px;
+        max-width: 175px;
         margin-left: 15px;
         justify-content: left; /* This centers its children horizontally */
         align-items: center; /* Optional: This would vertically center the image if the .GameCover has a height larger than the image */
-        min-width: 120px;
+        min-width: 175px;
         flex-grow: 0;
         flex-shrink: 0;
     }
@@ -513,27 +516,45 @@
 
     .PlayersContainer {
         display: grid;
-        grid-template-columns: 1fr 1fr; /* this creates 2 equal columns */
+        grid-template-columns: 150px; /* this creates 2 equal columns */
         gap: 8px; /* this is the space between the items */
-        width: 140px;
+        width: 145px;
         flex-grow: 0;
         flex-shrink: 0;
         align-items: center;
         justify-content: center;
     }
 
+    .PlayerChip-1 {
+        position: relative; /* Corrected from 'display' to 'position' */
+        font-weight: bold;
+        padding: 3px 4px;
+        background-color: rgba(220, 240, 255, 0.9);
+        border-radius: 2px;
+        height: 32px;
+        min-width: 125px;
+        width: 125px;
+        max-width: 125px;
+        color: #333;
+        margin: 4px;
+        border: 1px solid rgba(180, 230, 255, 0.7);
+        background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="iceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(240, 255, 255, 0.7); stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(200, 240, 255, 0.9); stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23iceGradient)" /></svg>');
+        box-shadow: 0px 0px 5px 2px rgba(200, 240, 255, 0.3);
+        margin-left: 17px;
+    }
     .PlayerChip {
         position: relative; /* Corrected from 'display' to 'position' */
         font-weight: bold;
         padding: 3px 4px;
         background-color: rgba(220, 240, 255, 0.9);
         border-radius: 2px;
-        height: 22px;
+        height: 32px;
         min-width: 125px;
         width: 125px;
         max-width: 125px;
         color: #333;
         margin: 4px;
+        margin-left: 5px;
         border: 1px solid rgba(180, 230, 255, 0.7);
         background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="iceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(240, 255, 255, 0.7); stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(200, 240, 255, 0.9); stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23iceGradient)" /></svg>');
         box-shadow: 0px 0px 5px 2px rgba(200, 240, 255, 0.3);
@@ -547,6 +568,24 @@
         background-size: cover;
         width: 95px;
         height: 92px;
+    }
+
+    .TeamChip {
+        display: flex;
+        font-weight: bold;
+        padding: 3px 4px;
+        background-color: #5a86cea8;
+        border-radius: 2px;
+        height: 32px;
+        min-width: 140px;
+        width: 140px;
+        max-width: 140px;
+        color: #333;
+        margin: 4px;
+        border: 1px solid rgba(12, 35, 46, 0.842);
+        /* background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="iceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(240, 255, 255, 0.7); stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(200, 240, 255, 0.9); stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23iceGradient)" /></svg>'); */
+        box-shadow: 0px 0px 5px 2px rgba(40, 74, 87, 0.247);
+        color: #fff;
     }
 
     .joystick svg {
@@ -723,5 +762,16 @@
         justify-content: center;
         flex-grow: 0;
         flex-shrink: 0;
+        margin-left: -20px;
+    }
+
+    .PlayerChip #TextContainer {
+        font-size: 22px;
+    }
+    .TeamChip #TextContainer {
+        font-size: 22px;
+    }
+    .PlayerChip-1 #TextContainer {
+        font-size: 22px;
     }
 </style>
