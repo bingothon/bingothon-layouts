@@ -1,53 +1,134 @@
 <template>
-    <div class="GameLayout">
-        <!-- Game Cover Section -->
-        <div class="GameCover">
-            <img v-if="gameCoverUrl" :src="gameCoverUrl" />
+    <div>
+        <div class="Header">
+            Coming Up
+            <span v-if="!when"> Next </span>
+            <span v-else>
+                {{ formETAUntilRun() }}
+            </span>
         </div>
+        <div class="GameLayout">
+            <!-- Game Cover Section -->
 
-        <!-- Players Section -->
-        <div class="PlayersContainer">
-            <div v-for="(joystick, joystickIndex) in playerJoysticks" :key="joystickIndex">
-                <div class="Chip FlexContainer">
-                    <!-- <inline-svg class="joystick" v-if="joystick" :svg-content="joystick"> </inline-svg> -->
-                    <span>{{ players[joystickIndex].name }}</span>
-                </div>
+            <div class="GameCover">
+                <img v-if="gameCoverUrl" :src="gameCoverUrl" />
             </div>
-        </div>
 
-        <!-- Game Title Section -->
-        <div class="GameTitle">
-            <div class="Title" v-if="gameTitle">
-                {{ gameTitle }}
-            </div>
-        </div>
-
-        <!-- Bingo Mode Section -->
-        <div class="BingoMode">
-            <div v-if="bingoLogo.length > 0">
-                <div v-for="(logo, logoIndex) in bingoLogo" :key="logoIndex">
-                    <img :src="logo" />
-                </div>
-                <div v-for="(mode, modeIndex) in bingoMode" :key="modeIndex">
-                    <div class="ChipMode">
-                        <span>{{ mode }}</span>
+            <!-- Bingo Mode Section -->
+            <!-- <div class="BingoMode">
+                <div v-if="bingoLogo.length > 0">
+                    <div v-for="(logo, logoIndex) in bingoLogo" :key="logoIndex">
+                        <img :src="logo" />
+                    </div>
+                    <div v-for="(mode, modeIndex) in bingoMode" :key="modeIndex">
+                        <div class="ChipMode">
+                            <span>{{ mode }}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div> -->
 
-        <!-- Game Details Section -->
-        <div class="GameDetails">
-            <div v-for="(specialMode, specialModeIndex) in specialModes" :key="specialModeIndex">
-                <div class="Chip">
-                    <span>{{ specialMode }}</span>
+            <!-- Game And Players Section-->
+            <div class="GameTitlePlayersContainer">
+                <!-- First Half Players or Teams -->
+                <div class="PlayersContainer">
+                    <template v-if="isTeamGame">
+                        <div v-for="(team, teamIndex) in firstHalf" :key="'first-team-' + teamIndex">
+                            <div class="PlayerChip">
+                                <span>Team 1</span>
+                            </div>
+                            <div v-for="player in team.players" class="PlayerChip FlexContainer">
+                                <TextFitRelative
+                                    :text="player.name"
+                                    :fontSize="fontSize"
+                                    align="center"
+                                    position="relative"
+                                ></TextFitRelative>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div v-for="player in firstHalf" class="PlayerChip FlexContainer">
+                            <TextFitRelative
+                                :text="player.name"
+                                :fontSize="fontSize"
+                                align="center"
+                                position="relative"
+                            ></TextFitRelative>
+                        </div>
+                    </template>
                 </div>
-            </div>
-            <div class="Estimate Chip" v-if="data.estimate">
-                <span class="ChipText">{{ data.estimate }}</span>
-            </div>
-            <div class="GameSystem Chip" v-if="gameSystem">
-                <img v-if="gameLogo" :src="gameLogo" /> <span class="ChipText">{{ gameSystem }} </span>
+                <!-- Game Title And Details -->
+                <div class="GameTitleDetailsContainer">
+                    <div class="GameCategoryChip" v-if="gameSystem">
+                        <TextFitRelative
+                            :text="gameCategory"
+                            :fontSize="fontSize"
+                            align="center"
+                            position="relative"
+                        ></TextFitRelative>
+                    </div>
+                    <!-- Game Title -->
+                    <div class="GameTitle" :class="{ 'single-player': isSinglePlayer }">
+                        <div class="Title" v-if="gameTitle">
+                            {{ gameTitle }}
+                        </div>
+                        <!-- Game Details Section -->
+                    </div>
+                    <div class="GameDetails">
+                        <!-- <div v-for="(specialMode, specialModeIndex) in specialModes" :key="specialModeIndex">
+                            <div class="Chip">
+                                <span>{{ specialMode }}</span>
+                            </div>
+                        </div> -->
+                        <div class="Estimate Chip" v-if="data.estimate">
+                            <span class="ChipText">{{ data.estimate }}</span>
+                        </div>
+                        <div class="GameSystem Chip" v-if="gameSystem">
+                            <img v-if="gameLogo" :src="gameLogo" /> <span class="ChipText">{{ gameSystem }} </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Second Half Players or Teams -->
+                <div class="PlayersContainer">
+                    <template v-if="isTeamGame">
+                        <div v-for="(team, teamIndex) in firstHalf" :key="'first-team-' + teamIndex">
+                            <div class="PlayerChip">
+                                <span>Team 2</span>
+                            </div>
+                            <div
+                                v-for="(player, playerIndex) in team.players"
+                                :key="playerIndex"
+                                class="PlayerChip FlexContainer"
+                            >
+                                <TextFitRelative
+                                    :text="player.name"
+                                    :fontSize="fontSize"
+                                    align="center"
+                                    position="relative"
+                                ></TextFitRelative>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div
+                            v-for="(player, playerIndex) in secondHalf"
+                            :key="playerIndex"
+                            class="PlayerChip FlexContainer"
+                        >
+                            <TextFitRelative
+                                :text="player.name"
+                                :fontSize="fontSize"
+                                align="center"
+                                position="relative"
+                            ></TextFitRelative>
+                        </div>
+                    </template>
+                    <template v-if="isSinglePlayer">
+                        <div class="PlayerPlaceHolder"></div>
+                    </template>
+                </div>
             </div>
         </div>
     </div>
@@ -57,15 +138,18 @@
     import { RunData, RunDataPlayer } from 'speedcontrol-types';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import InlineSvg from '../../components/InlineSvg.vue';
+    import TextFitRelative from '../../helpers/text-fit-relative.vue';
 
     @Component({
-        components: { InlineSvg },
+        components: { InlineSvg, TextFitRelative },
     })
     export default class RunUpcoming extends Vue {
         @Prop({ default: undefined })
         data: RunData;
         @Prop({ default: undefined })
         when: number;
+        @Prop({ default: '22px' })
+        fontSize: string;
 
         gameCoverUrl: string = '';
 
@@ -105,6 +189,10 @@
                 console.error('Error searching game:', error);
                 throw error;
             }
+        }
+
+        get isSinglePlayer() {
+            return this.players.length === 1 && !this.isTeamGame;
         }
 
         get gameTitle(): string {
@@ -231,6 +319,22 @@
             return matchedWords;
         }
 
+        get flattenedPlayersOrTeams() {
+            if (this.isTeamGame) {
+                return this.data.teams;
+            } else {
+                return this.players;
+            }
+        }
+        get firstHalf() {
+            let halfIndex = Math.ceil(this.flattenedPlayersOrTeams.length / 2);
+            return this.flattenedPlayersOrTeams.slice(0, halfIndex);
+        }
+        get secondHalf() {
+            let halfIndex = Math.ceil(this.flattenedPlayersOrTeams.length / 2);
+            return this.flattenedPlayersOrTeams.slice(halfIndex);
+        }
+
         formPlayerNamesString(run) {
             const namesArray = [];
             let namesList = 'No Player(s)';
@@ -331,7 +435,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .GameLayout {
         display: flex;
         background-color: rgba(0, 0, 0, 0.3);
@@ -340,11 +444,11 @@
     .GameCover {
         display: flex;
         flex: 1;
-        max-width: 220px;
+        max-width: 120px;
         margin-left: 15px;
         justify-content: left; /* This centers its children horizontally */
         align-items: center; /* Optional: This would vertically center the image if the .GameCover has a height larger than the image */
-        min-width: 220px;
+        min-width: 120px;
         flex-grow: 0;
         flex-shrink: 0;
     }
@@ -354,18 +458,85 @@
         height: auto;
     }
 
-    .PlayersContainer {
-        flex: 2;
-        display: flex;
-        flex-direction: column;
-        /* start at left side of flex */
-        align-items: flex-start;
-        min-width: 200px;
-        max-width: 200px;
-        justify-content: center;
+    .GameTitlePlayersContainer {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr; /* this creates 2 equal columns */
+        gap: 8px; /* this is the space between the items */
+        width: 290px;
         flex-grow: 0;
         flex-shrink: 0;
-        flex-basis: 200px;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        flex-grow: 0;
+        flex-shrink: 0;
+        width: 945px;
+    }
+
+    .GameTitle {
+        position: relative;
+        background-color: #0a2146; /* Blue color */
+        color: #fff; /* White text */
+        margin: 4px auto;
+    }
+    .GameTitle::before,
+    .GameTitle::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: 20px;
+        height: 20px;
+        background-color: #0a2146;
+        transform: translateY(-50%) rotate(45deg);
+    }
+    .GameTitle::before {
+        left: -10px; /* Half of width */
+    }
+    .GameTitle::after {
+        right: -10px; /* Half of width */
+    }
+
+    .GameTitle.single-player::after {
+        content: none; /* This will remove the pseudo-element */
+    }
+
+    .PlayersContainer {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* this creates 2 equal columns */
+        gap: 8px; /* this is the space between the items */
+        width: 140px;
+        flex-grow: 0;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .PlayerChip {
+        position: relative; /* Corrected from 'display' to 'position' */
+        font-weight: bold;
+        padding: 3px 4px;
+        background-color: rgba(220, 240, 255, 0.9);
+        border-radius: 2px;
+        height: 22px;
+        min-width: 125px;
+        width: 125px;
+        max-width: 125px;
+        color: #333;
+        margin: 4px;
+        border: 1px solid rgba(180, 230, 255, 0.7);
+        background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="iceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(240, 255, 255, 0.7); stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(200, 240, 255, 0.9); stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23iceGradient)" /></svg>');
+        box-shadow: 0px 0px 5px 2px rgba(200, 240, 255, 0.3);
+    }
+
+    .PlayerPlaceHolder {
+        margin: 4px;
+        background-image: url('../../../../static/assets/winter2023/player-placeholder.png');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+        width: 95px;
+        height: 92px;
     }
 
     .joystick svg {
@@ -385,22 +556,24 @@
         align-items: center;
         /* horizontal align also center */
         justify-content: center;
-        min-width: 380px;
-        max-width: 380px;
-        padding: 40px;
+        min-width: 520px;
+        max-width: 520px;
+        padding: 5px;
         flex-grow: 0;
         flex-shrink: 0;
     }
 
     .Title {
-        font-size: 3rem;
+        font-size: 2.1rem;
         font-weight: bold;
         text-align: center;
     }
 
     .GameDetails {
         flex: 4;
-        display: flex;
+        display: grid;
+        grid-template-columns: 160px 160px; /* this creates 2 equal columns */
+        gap: 4px;
         flex-direction: column;
         align-items: flex-start; /* This makes the content align to the left */
         justify-content: center;
@@ -445,14 +618,36 @@
         padding: 3px 4px;
         background-color: rgba(220, 240, 255, 0.9); /* Light blueish, slightly transparent */
         border-radius: 2px;
-        font-size: 14px;
         height: 22px;
         min-width: 150px;
         color: #333;
         margin-left: 2px;
         margin: 4px;
         border: 1px solid rgba(180, 230, 255, 0.7); /* Slightly blueish border for that 'frozen' feel */
+        max-width: 150px;
 
+        /* Ice-like gradient background using SVG */
+        background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="iceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(240, 255, 255, 0.7); stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(200, 240, 255, 0.9); stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23iceGradient)" /></svg>');
+        box-shadow: 0px 0px 5px 2px rgba(200, 240, 255, 0.3); /* Subtle glow to add depth */
+    }
+
+    .GameCategoryChip {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        padding: 3px 4px;
+        background-color: rgba(220, 240, 255, 0.9); /* Light blueish, slightly transparent */
+        border-radius: 2px;
+        height: 22px;
+        min-width: 520px;
+        color: #333;
+        margin-left: 2px;
+        margin: 4px;
+        border: 1px solid rgba(180, 230, 255, 0.7); /* Slightly blueish border for that 'frozen' feel */
+        max-width: 520px;
+        white-space: nowrap;
         /* Ice-like gradient background using SVG */
         background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="iceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(240, 255, 255, 0.7); stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(200, 240, 255, 0.9); stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23iceGradient)" /></svg>');
         box-shadow: 0px 0px 5px 2px rgba(200, 240, 255, 0.3); /* Subtle glow to add depth */
@@ -498,5 +693,25 @@
         background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="iceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(240, 255, 255, 0.7); stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(200, 240, 255, 0.9); stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23iceGradient)" /></svg>');
         box-shadow: 0px 0px 5px 2px rgba(200, 240, 255, 0.3);
         max-width: 70px;
+    }
+
+    .Header {
+        font-weight: 500;
+        height: 60px;
+        line-height: 60px;
+        background-color: var(--border-colour);
+        color: white;
+        font-size: 41px;
+        text-transform: uppercase;
+    }
+    .GameTitleDetailsContainer {
+        width: 621px;
+        margin-top: 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 0;
+        flex-shrink: 0;
     }
 </style>
