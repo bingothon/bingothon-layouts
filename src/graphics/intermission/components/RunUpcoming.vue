@@ -457,18 +457,20 @@
     .GameCover {
         display: flex;
         flex: 1;
-        max-width: 175px;
+        max-width: 150px;
         margin-left: 15px;
-        justify-content: left; /* This centers its children horizontally */
+        justify-content: center; /* This centers its children horizontally */
         align-items: center; /* Optional: This would vertically center the image if the .GameCover has a height larger than the image */
-        min-width: 175px;
+        min-width: 150px;
         flex-grow: 0;
         flex-shrink: 0;
     }
 
     .GameCover img {
-        width: 100px;
+        width: auto;
+        max-width: 100px;
         height: auto;
+        max-height: 125px;
     }
 
     .GameTitlePlayersContainer {
@@ -484,7 +486,7 @@
         align-items: center;
         flex-grow: 0;
         flex-shrink: 0;
-        width: 945px;
+        width: 1040px;
     }
 
     .GameTitle {
@@ -754,7 +756,7 @@
         text-transform: uppercase;
     }
     .GameTitleDetailsContainer {
-        width: 621px;
+        width: 640px;
         margin-top: 0px;
         display: flex;
         flex-direction: column;
@@ -762,7 +764,7 @@
         justify-content: center;
         flex-grow: 0;
         flex-shrink: 0;
-        margin-left: -20px;
+        margin-left: -29px;
     }
 
     .PlayerChip #TextContainer {
