@@ -1,5 +1,6 @@
 <template>
     <div id="Intermission">
+        <div class="ImageOverlay"></div>
         <!-- <img src="../../../static/bingothonUKRAINELOGO_colours.png" id="logoWinter"> -->
         <!-- <img src="../../../static/logo-winter-wide.png" id="logoWinter" /> -->
         <img src="../../../static/bingothonlong5years.png" id="logoSummer" />
@@ -17,6 +18,7 @@
             ></DiscordVoiceDisplay>
             <music></music>
         </info-storage-box>
+
         <div class="HostingBingo">
             <HostBingo class="BingoBoard" id="Bingo-board" fontSize="20px"></HostBingo>
             <!--            <img id="PHLogo" src="../../../static/ProjectHope_Hands_ICON_RGB_KO.png">-->
@@ -110,7 +112,7 @@
     #logoSummer {
         position: absolute;
         left: 48px;
-        top: 98px;
+        top: 48px;
         width: 631px;
     }
 
@@ -133,7 +135,7 @@
         text-transform: uppercase;
         position: absolute;
         left: 105px;
-        top: 237px;
+        top: 177px;
     }
 
     #Rotation {
@@ -200,6 +202,18 @@
         width: 670px;
         font-size: 50px;
         left: 20px;
+    }
+
+    .ImageOverlay {
+        position: absolute;
+        top: 255px;
+        left: 1px;
+        width: 712px;
+        height: 135px;
+        background-image: url(http://localhost:9090/bundles/bingothon-layouts/graphics/js/../img/snowbanner-5127a2773ddbe60639022ef42942cc78.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        z-index: 1;
     }
 
     .HostingBingo > .BingoBoard {

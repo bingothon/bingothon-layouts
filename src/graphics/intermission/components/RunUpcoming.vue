@@ -570,6 +570,7 @@
         background-size: cover;
         width: 95px;
         height: 92px;
+        margin-left: 15px;
     }
 
     .TeamChip {
