@@ -14,28 +14,19 @@
                 <img v-if="gameCoverUrl" :src="gameCoverUrl" />
             </div>
 
-            <!-- Bingo Mode Section -->
-            <!-- <div class="BingoMode">
-                <div v-if="bingoLogo.length > 0">
-                    <div v-for="(logo, logoIndex) in bingoLogo" :key="logoIndex">
-                        <img :src="logo" />
-                    </div>
-                    <div v-for="(mode, modeIndex) in bingoMode" :key="modeIndex">
-                        <div class="ChipMode">
-                            <span>{{ mode }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
             <!-- Game And Players Section-->
             <div class="GameTitlePlayersContainer">
                 <!-- First Half Players or Teams -->
                 <div class="PlayersContainer">
                     <template v-if="isTeamGame">
                         <div v-for="(team, teamIndex) in firstHalf" :key="'first-team-' + teamIndex">
-                            <div class="PlayerChip">
-                                <span>Team 1</span>
+                            <div v-if="team.name" class="PlayerChip FlexContainer">
+                                <TextFitRelative
+                                    :text="team.name"
+                                    :fontSize="fontSize"
+                                    align="center"
+                                    position="relative"
+                                ></TextFitRelative>
                             </div>
                             <div v-for="player in team.players" class="PlayerChip FlexContainer">
                                 <TextFitRelative
@@ -93,9 +84,14 @@
                 <!-- Second Half Players or Teams -->
                 <div class="PlayersContainer">
                     <template v-if="isTeamGame">
-                        <div v-for="(team, teamIndex) in firstHalf" :key="'first-team-' + teamIndex">
-                            <div class="PlayerChip">
-                                <span>Team 2</span>
+                        <div v-for="(team, teamIndex) in secondHalf" :key="'first-team-' + teamIndex">
+                            <div v-if="team.name" class="PlayerChip FlexContainer">
+                                <TextFitRelative
+                                    :text="team.name"
+                                    :fontSize="fontSize"
+                                    align="center"
+                                    position="relative"
+                                ></TextFitRelative>
                             </div>
                             <div
                                 v-for="(player, playerIndex) in team.players"
@@ -128,6 +124,20 @@
                     <template v-if="isSinglePlayer">
                         <div class="PlayerPlaceHolder"></div>
                     </template>
+                </div>
+            </div>
+
+            <!-- Bingo Mode Section -->
+            <div class="BingoMode">
+                <div v-if="bingoLogo.length > 0">
+                    <div v-for="(logo, logoIndex) in bingoLogo" :key="logoIndex">
+                        <img :src="logo" />
+                    </div>
+                    <div v-for="(mode, modeIndex) in bingoMode" :key="modeIndex">
+                        <div class="ChipMode">
+                            <span>{{ mode }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
