@@ -28,8 +28,13 @@
                                     margin="10"
                                 ></TextFitRelative>
                             </div>
-                            <div>
-                                <div v-for="player in team.players" class="PlayerChip-1 FlexContainer">
+                            <div v-if="isTeam(team)">
+                                <!-- This is the type guard -->
+                                <div
+                                    v-for="(player, playerIndex) in team.players"
+                                    :key="playerIndex"
+                                    class="PlayerChip-1 FlexContainer"
+                                >
                                     <TextFitRelative
                                         :text="player.name"
                                         align="center"
@@ -41,7 +46,11 @@
                         </div>
                     </template>
                     <template v-else>
-                        <div v-for="player in firstHalf" class="PlayerChip-1 FlexContainer">
+                        <div
+                            v-for="(player, playerIndex) in firstHalf"
+                            :key="playerIndex"
+                            class="PlayerChip-1 FlexContainer"
+                        >
                             <TextFitRelative
                                 :text="player.name"
                                 align="center"
@@ -64,7 +73,7 @@
                     <!-- Game Title -->
                     <div class="GameTitle" :class="{ 'single-player': isSinglePlayer }">
                         <div class="Title" v-if="gameTitle">
-                            {{ gameTitle }}
+                            <ScrollText :data="{ msg: gameTitle, size: 40, time: 15 }" />
                         </div>
                         <!-- Game Details Section -->
                     </div>
@@ -78,7 +87,8 @@
                             <span class="ChipText">{{ data.estimate }}</span>
                         </div>
                         <div class="GameSystem Chip" v-if="gameSystem">
-                            <img v-if="gameLogo" :src="gameLogo" /> <span class="ChipText">{{ gameSystem }} </span>
+                            <img v-if="gameLogo" :src="gameLogo" />
+                            <!-- <span class="ChipText">{{ gameSystem }} </span> -->
                         </div>
                     </div>
                 </div>
@@ -95,17 +105,19 @@
                                     margin="10"
                                 ></TextFitRelative>
                             </div>
-                            <div
-                                v-for="(player, playerIndex) in team.players"
-                                :key="playerIndex"
-                                class="PlayerChip FlexContainer"
-                            >
-                                <TextFitRelative
-                                    :text="player.name"
-                                    align="center"
-                                    position="relative"
-                                    margin="10"
-                                ></TextFitRelative>
+                            <div v-if="isTeam(team)">
+                                <div
+                                    v-for="(player, playerIndex) in team.players"
+                                    :key="playerIndex"
+                                    class="PlayerChip FlexContainer"
+                                >
+                                    <TextFitRelative
+                                        :text="player.name"
+                                        align="center"
+                                        position="relative"
+                                        margin="10"
+                                    ></TextFitRelative>
+                                </div>
                             </div>
                         </div>
                     </template>
@@ -148,13 +160,14 @@
 </template>
 <script lang="ts">
     import moment from 'moment';
-    import { RunData, RunDataPlayer } from 'speedcontrol-types';
+    import { RunData, RunDataPlayer, RunDataTeam } from 'speedcontrol-types';
     import { Component, Prop, Vue } from 'vue-property-decorator';
     import InlineSvg from '../../components/InlineSvg.vue';
     import TextFitRelative from '../../helpers/text-fit-relative.vue';
+    import ScrollText from './Title/ScrollText.vue';
 
     @Component({
-        components: { InlineSvg, TextFitRelative },
+        components: { InlineSvg, TextFitRelative, ScrollText },
     })
     export default class RunUpcoming extends Vue {
         @Prop({ default: undefined })
@@ -229,6 +242,10 @@
             if (coopKeys.some((key) => this.gameCategory.toLowerCase().includes(key))) {
                 return true;
             }
+        }
+
+        isTeam(obj: RunDataPlayer | RunDataTeam): obj is RunDataTeam {
+            return (obj as RunDataTeam).players !== undefined;
         }
 
         get playerCount(): number {
@@ -332,18 +349,19 @@
             return matchedWords;
         }
 
-        get flattenedPlayersOrTeams() {
+        get flattenedPlayersOrTeams(): RunDataTeam[] | RunDataPlayer[] {
             if (this.isTeamGame) {
                 return this.data.teams;
             } else {
                 return this.players;
             }
         }
-        get firstHalf() {
+        get firstHalf(): RunDataTeam[] | RunDataPlayer[] {
             let halfIndex = Math.ceil(this.flattenedPlayersOrTeams.length / 2);
             return this.flattenedPlayersOrTeams.slice(0, halfIndex);
         }
-        get secondHalf() {
+
+        get secondHalf(): RunDataTeam[] | RunDataPlayer[] {
             let halfIndex = Math.ceil(this.flattenedPlayersOrTeams.length / 2);
             return this.flattenedPlayersOrTeams.slice(halfIndex);
         }
@@ -610,6 +628,7 @@
         justify-content: center;
         min-width: 520px;
         max-width: 520px;
+        max-height: 240px;
         padding: 5px;
         flex-grow: 0;
         flex-shrink: 0;
@@ -619,6 +638,10 @@
         font-size: 2.1rem;
         font-weight: bold;
         text-align: center;
+        max-height: 64px;
+        white-space: nowrap;
+        width: 500px;
+        overflow: hidden;
     }
 
     .GameDetails {
@@ -647,6 +670,7 @@
 
     .GameSystem img {
         width: auto;
+        max-width: 150px;
         height: 30px;
     }
 
@@ -664,7 +688,7 @@
     .Chip {
         display: flex;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: center;
         font-size: 1.5rem;
         font-weight: bold;
         padding: 3px 4px;
