@@ -11,7 +11,7 @@
             <!-- Game Cover Section -->
 
             <div class="GameCover">
-                <img v-if="gameCoverUrl" :src="gameCoverUrl" />
+                <img v-if="gameCover" :src="gameCover" />
             </div>
 
             <!-- Game And Players Section-->
@@ -179,43 +179,43 @@
 
         gameCoverUrl: string = '';
 
-        mounted() {
-            this.fetchGameCover();
-        }
+        // mounted() {
+        //     this.fetchGameCover();
+        // }
 
-        async fetchGameCover() {
-            const result = await this.searchGame(this.gameTitle);
-            console.log(`Result in fetchGameCover: ${result}`);
+        // async fetchGameCover() {
+        //     const result = await this.searchGame(this.gameTitle);
+        //     console.log(`Result in fetchGameCover: ${result}`);
 
-            this.gameCoverUrl = result;
-        }
-        async searchGame(name: string) {
-            try {
-                const url = `http://localhost:3000/gamecover/${encodeURIComponent(name)}`;
+        //     this.gameCoverUrl = result;
+        // }
+        // async searchGame(name: string) {
+        //     try {
+        //         const url = `http://localhost:3000/gamecover/${encodeURIComponent(name)}`;
 
-                const headers = new Headers({
-                    Accept: '*/*',
-                    // Add only the headers that are absolutely necessary. Remove others.
-                });
+        //         const headers = new Headers({
+        //             Accept: '*/*',
+        //             // Add only the headers that are absolutely necessary. Remove others.
+        //         });
 
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: headers,
-                });
+        //         const response = await fetch(url, {
+        //             method: 'GET',
+        //             headers: headers,
+        //         });
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+        //         if (!response.ok) {
+        //             throw new Error('Network response was not ok');
+        //         }
 
-                const result = await response.json();
+        //         const result = await response.json();
 
-                // Assuming that you still want to return the same field from the response:
-                return result;
-            } catch (error) {
-                console.error('Error searching game:', error);
-                throw error;
-            }
-        }
+        //         // Assuming that you still want to return the same field from the response:
+        //         return result;
+        //     } catch (error) {
+        //         console.error('Error searching game:', error);
+        //         throw error;
+        //     }
+        // }
 
         get isSinglePlayer() {
             return this.players.length === 1 && !this.isTeamGame;
@@ -227,6 +227,15 @@
 
         get gameCategory(): string {
             return this.data.category;
+        }
+
+        get gameCover(): string {
+            const coverUrl = this.data.customData.gameCover;
+            if (!coverUrl) {
+                return '';
+            }
+            let modifiedSize = coverUrl.replace('52x72', '96x144');
+            return modifiedSize;
         }
 
         get isTeamGame(): boolean {

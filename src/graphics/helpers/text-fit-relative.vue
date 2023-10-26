@@ -52,7 +52,7 @@
                 const parentBounds = fittedContent.parentElement.parentElement.getBoundingClientRect(); // The parent of the child
                 const parentBoundWidthIncludingMargins = parentBounds.width - this.margin;
 
-                console.log(`fitted width:${fittedContentBounds.width} parent width: ${parentBounds.width}`);
+                //console.log(`fitted width:${fittedContentBounds.width} parent width: ${parentBounds.width}`);
 
                 // Calculate the scaling factor based on width of the parent
                 let scaleX = parentBoundWidthIncludingMargins / fittedContentBounds.width;
@@ -75,7 +75,7 @@
                             break;
                     }
                 }
-                console.log(`scaleX:${scaleX} toLeft:${toLeft}`);
+                //console.log(`scaleX:${scaleX} toLeft:${toLeft}`);
                 this.transform = `translateY(-50%) translateX(${toLeft}px) scaleX(${scaleX})`;
                 this.top = '50%';
             });

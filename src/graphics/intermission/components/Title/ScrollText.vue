@@ -77,12 +77,12 @@
                 // Directly reference the root element for the container
                 const containerElement = this.$el as HTMLElement;
 
-                console.log('ScrollText width:', scrollTextElement.scrollWidth);
-                console.log('Container width:', containerElement.offsetWidth);
+                //console.log('ScrollText width:', scrollTextElement.scrollWidth);
+                //console.log('Container width:', containerElement.offsetWidth);
 
                 this.isOverflowing = scrollTextElement.scrollWidth > containerElement.offsetWidth;
 
-                console.log('Element is overflowing:', this.isOverflowing);
+                //console.log('Element is overflowing:', this.isOverflowing);
 
                 if (this.isOverflowing) {
                     this.scrollPercentage =
