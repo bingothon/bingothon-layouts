@@ -624,10 +624,6 @@
         margin-top: 5px;
     }
 
-    .Player {
-        /* Add styles for each player container here */
-    }
-
     .GameTitle {
         flex: 3;
         display: flex;
