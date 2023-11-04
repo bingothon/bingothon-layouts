@@ -1,5 +1,6 @@
 <template>
     <div id="Intermission">
+        <button @click="toggleTwitchClip"></button>
         <div class="ImageOverlay"></div>
         <!-- <img src="../../../static/bingothonUKRAINELOGO_colours.png" id="logoWinter"> -->
         <!-- <img src="../../../static/logo-winter-wide.png" id="logoWinter" /> -->
@@ -25,6 +26,14 @@
         </div>
         <div :class="'ImageView ' + (showIntermissionImage ? 'PictureShown' : '')">
             <img v-if="showIntermissionImage" :src="intermissionImageUrl" />
+        </div>
+        <div id="twitchClipEmbed" v-if="showTwitchClip">
+            <iframe
+                src="https://clips.twitch.tv/embed?clip=SparklyCoweringTigerTBCheesePull-SjfvL_lGx-x1VtjP&parent=localhost&autoplay=true"
+                width="1172"
+                height="660"
+            >
+            </iframe>
         </div>
     </div>
 </template>
@@ -54,9 +63,10 @@
     })
     export default class Intermission extends Vue {
         @Prop({ default: undefined })
-        data;
+        data: unknown;
 
         nextRun: RunData = null;
+        showTwitchClip: boolean = false;
 
         created() {
             this.refreshUpcomingRun();
@@ -64,6 +74,15 @@
 
         mounted() {
             nodecg.listenFor('forceRefreshIntermission', this.refreshUpcomingRun);
+        }
+
+        toggleTwitchClip() {
+            this.showTwitchClip = !this.showTwitchClip;
+            /*if (this.showTwitchClip) {
+            setTimeout(() => {
+                this.showTwitchClip = false;
+            }, 60 * 1000);
+        }*/
         }
 
         refreshUpcomingRun() {
@@ -246,5 +265,13 @@
     .ImageView > img {
         max-width: 100%;
         max-height: 100%;
+    }
+
+    #twitchClipEmbed {
+        position: absolute;
+        left: 718px;
+        top: 240px;
+        width: 1172px;
+        height: 660px;
     }
 </style>
