@@ -1,6 +1,6 @@
 <template>
     <div class="Interview">
-        <img id="logo" src="../../../static/logo-winter-wide.png" />
+        <img id="logo" src="../../../static/logo-summer-wide.png" />
         <div class="flexContainer" id="fillcamCharity"></div>
         <div class="flexContainer" id="fillcamIVW1"></div>
         <div class="flexContainer" id="infoIVW1">
@@ -12,11 +12,11 @@
         </div>
         <div class="flexContainer" id="info">
             <div id="infotext">
-                <div id="name">Amitabha “Guppy” Gupta, Ph. D</div>
-                <div id="occupation">Researcher at the Fred Hutchinson Research Center</div>
+                <div id="name">Bernard Wiseman</div>
+                <div id="occupation">Head of Mission in Ukraine / MSF</div>
             </div>
             <div id="charity-logo">
-                <img src="../../../static/fred_hutch_logo_brighter.png" />
+                <img src="../../../static/MSFLogo_Wide_WhiteText.png" />
             </div>
         </div>
     </div>
@@ -72,12 +72,18 @@
         background-color: var(--container-background-color);
     }
 
+    #logo > img {
+        border: 2px solid black;
+    }
+
     #logo {
         position: absolute;
         left: 590px;
         top: 10px;
-        width: 626px;
+        /*width: 626px;*/
         height: 150px;
+        filter: drop-shadow(2px 0 0 white) drop-shadow(0 2px 0 white) drop-shadow(-2px 0 0 white)
+            drop-shadow(0 -2px 0 white);
     }
 
     #info {
@@ -86,7 +92,7 @@
         left: 50px;
         width: 1200px;
         height: 100px;
-        background-image: linear-gradient(#429ff8, #002675);
+        background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
         color: var(--font-color);
     }
 
@@ -108,7 +114,7 @@
         left: 1300px;
         height: 50px;
         width: 500px;
-        background-image: linear-gradient(#429ff8, #002675);
+        background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
         color: var(--font-color);
         font-size: 40px;
     }
@@ -119,7 +125,7 @@
         left: 1300px;
         height: 50px;
         width: 500px;
-        background-image: linear-gradient(#429ff8, #002675);
+        background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
         color: var(--font-color);
         font-size: 40px;
     }
