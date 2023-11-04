@@ -31,8 +31,8 @@ const ALL_COLORS: readonly BoardColor[] = Object.freeze(['pink', 'red', 'orange'
 //  log.error(`Failed to recover connection to room ${socketRep.value.roomCode}:`, error);
 // });
 
-const BINGOSYNC_ROOM_URL_RE = /^(.+)\/room\/([0-9a-zA-Z_-]+)$/g
-const BINGOSYNC_SLUG_RE = /^[0-9a-zA-Z_-]+$/g
+const BINGOSYNC_ROOM_URL_RE = /^(.+)\/room\/([0-9a-zA-Z_-]+)$/
+const BINGOSYNC_SLUG_RE = /^[0-9a-zA-Z_-]+$/
 
 const SOCKET_URLS: Record<string, string> = Object.freeze({
     'https://bingosync.com': 'wss://sockets.bingosync.com',
