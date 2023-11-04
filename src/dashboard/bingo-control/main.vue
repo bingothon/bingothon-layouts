@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <span class="error-warning" @click="errorMessage = ''"> {{ errorMessage }}</span>
+        <span class="error-warning" v-if="errorMessage"> {{ errorMessage }}</span>
         <div class="d-flex justify-center line-buttons">
             <v-btn
                 id="override-button"
@@ -339,6 +339,7 @@
                         break;
                     case 'disconnected':
                     case 'error':
+                        this.errorMessage = '';
                         getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this
                             .currentBoardRep as BingoRepEnum;
                         nodecg
