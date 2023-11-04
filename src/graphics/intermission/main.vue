@@ -1,6 +1,5 @@
 <template>
     <div id="Intermission">
-        <button @click="toggleTwitchClip"></button>
         <div class="ImageOverlay"></div>
         <!-- <img src="../../../static/bingothonUKRAINELOGO_colours.png" id="logoWinter"> -->
         <!-- <img src="../../../static/logo-winter-wide.png" id="logoWinter" /> -->
@@ -29,7 +28,7 @@
         </div>
         <div id="twitchClipEmbed" v-if="showTwitchClip">
             <iframe
-                src="https://clips.twitch.tv/embed?clip=SparklyCoweringTigerTBCheesePull-SjfvL_lGx-x1VtjP&parent=localhost&autoplay=true"
+                :src="`https://clips.twitch.tv/embed?clip=${twitchClipSlug}&parent=localhost&autoplay=true&muted=false`"
                 width="1172"
                 height="660"
             >
@@ -67,6 +66,7 @@
 
         nextRun: RunData = null;
         showTwitchClip: boolean = false;
+        twitchClipSlug: string = '';
 
         created() {
             this.refreshUpcomingRun();
@@ -74,15 +74,16 @@
 
         mounted() {
             nodecg.listenFor('forceRefreshIntermission', this.refreshUpcomingRun);
-        }
-
-        toggleTwitchClip() {
-            this.showTwitchClip = !this.showTwitchClip;
-            /*if (this.showTwitchClip) {
-            setTimeout(() => {
+            nodecg.listenFor('playTwitchClip', (slug: string) => {
+                this.twitchClipSlug = slug;
+                this.showTwitchClip = true;
+                setTimeout(() => {
+                    this.showTwitchClip = false;
+                }, 60 * 1000);
+            });
+            nodecg.listenFor('stopTwitchClip', () => {
                 this.showTwitchClip = false;
-            }, 60 * 1000);
-        }*/
+            });
         }
 
         refreshUpcomingRun() {
