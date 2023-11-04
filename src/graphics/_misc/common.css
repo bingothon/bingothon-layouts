@@ -1,19 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:600&subset=cyrillic,cyrillic-ext,latin-ext,vietnamese');
 
 :root {
-    /* Primary Colors */
-    --container-background-color: #A1063A;  /* Central rich deep red */
-    --container-border-color: #8D0532;     /* A slightly darker tone for borders */
-    --font-color: #F8E8D8;                 /* Soft, light beige for contrast and readability */
-
-    /* Gradient Colors for Background */
-    --gradient-light: #FF6E5E;             /* A warm, slightly peachy red */
-    --gradient-dark: #790A23;              /* A deep burgundy */
-
-    /* Auxiliary Colors */
-    --darker-main-color: #6D0420;          /* Almost maroon for depth and accents */
-    --lighter-main-color: #FF8E7C;         /* Light coral for highlights */
-    --alternative-main-color: #BE4A49;
+    --container-background-color: #3b5d7e;
+    --container-border-color: #5c88bc;
+    --font-color: #fff;
+    --darker-main-color: #315091;
+    --lighter-main-color: #5c88bc;
+    --alternative-main-color: #310088;
+    --gradient-light: #627fbe;
+    --gradient-dark: #050a1b;
 }
 
 /*Bingo Colors*/

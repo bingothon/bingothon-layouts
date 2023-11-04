@@ -251,7 +251,7 @@
     "deep-equal": "^2.2.0",
     "discord.js": "^12.5.3",
     "firebase": "^8.10.1",
-    "gsap": "^3.6.0",
+    "gsap": "^3.12.2",
     "moment": "^2.29.1",
     "mpc-js": "^1.2.1",
     "obs-websocket-js": "^5.0.2",
