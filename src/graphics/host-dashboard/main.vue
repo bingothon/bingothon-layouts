@@ -111,9 +111,9 @@
                 <div id="HostingBingo">
                     <HostBingo dashboard="true" fontSize="25px"></HostBingo>
                 </div>
-                <br>
-                <br>
-                <br>
+                <br />
+                <br />
+                <br />
                 <div>
                     <h3>Show an image on stream</h3>
                     Paste the entire image Url here:
@@ -231,10 +231,15 @@
         }
 
         get twitchClipSlug(): string {
-            if (this.twitchClipUrl.includes('http')) {
-                return this.twitchClipUrl.split('/')[3];
+            const urlParts = this.twitchClipUrl.split('/');
+            if (this.twitchClipUrl.includes('clips.twitch.tv')) {
+                // For URLs like https://clips.twitch.tv/AwkwardScaryAniseKappaWealth
+                return urlParts.pop(); // Gets the last segment after the last '/'
+            } else if (this.twitchClipUrl.includes('twitch.tv') && urlParts.includes('clip')) {
+                // For URLs like https://www.twitch.tv/esamarathon/clip/SparklingToughFriesRuleFive
+                return urlParts[urlParts.indexOf('clip') + 1]; // Gets the segment after 'clip'
             }
-            return this.twitchClipUrl.split('/')[1];
+            return ''; // Default return if the URL doesn't match expected formats
         }
 
         set pictureDuringIntermissionUrl(url: string) {
