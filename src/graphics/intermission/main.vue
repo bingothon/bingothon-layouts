@@ -26,7 +26,7 @@
         <div :class="'ImageView ' + (showIntermissionImage ? 'PictureShown' : '')">
             <img v-if="showIntermissionImage" :src="intermissionImageUrl" />
         </div>
-        <TwitchClipPlayer :clipId="twitchClipSlug" :show="showTwitchClip" />
+        <TwitchClipPlayer />
     </div>
 </template>
 
