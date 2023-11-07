@@ -26,14 +26,7 @@
         <div :class="'ImageView ' + (showIntermissionImage ? 'PictureShown' : '')">
             <img v-if="showIntermissionImage" :src="intermissionImageUrl" />
         </div>
-        <div id="twitchClipEmbed" v-if="showTwitchClip">
-            <iframe
-                :src="`https://clips.twitch.tv/embed?clip=${twitchClipSlug}&parent=localhost&autoplay=true&muted=false`"
-                width="1172"
-                height="660"
-            >
-            </iframe>
-        </div>
+        <TwitchClipPlayer />
     </div>
 </template>
 
@@ -48,6 +41,7 @@
     import DiscordVoiceDisplay from '../components/discordVoiceDisplay.vue';
     import HostBingo from '../components/hostBingo.vue';
     import Music from './components/Music.vue';
+    import TwitchClipPlayer from './components/TwitchClipPlayer.vue';
 
     @Component({
         components: {
@@ -58,6 +52,7 @@
             Music,
             DiscordVoiceDisplay,
             HostBingo,
+            TwitchClipPlayer,
         },
     })
     export default class Intermission extends Vue {
