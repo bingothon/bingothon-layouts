@@ -99,11 +99,10 @@
       },
       {
         "name": "twitch-resizer-dashboard",
-        "title": "Twitch Resizer",
-        "width": 10,
+        "title": "Twitch Resizing",
         "file": "crop-control.html",
-        "headerColor": "#008BB9",
-        "workspace": "Twitch Resizing"
+        "fullbleed": "true",
+        "headerColor": "#008BB9"
       },
       {
         "name": "chat-bot-control",
