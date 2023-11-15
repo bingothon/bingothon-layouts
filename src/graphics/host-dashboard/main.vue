@@ -90,10 +90,6 @@
                 </div>
             </div>
             <div id="column3" class="column">
-                <div>
-                    Paste the entire image Url here: <input v-model="pictureDuringIntermissionUrl" />
-                    <button @click="clearPicture">Clear picture</button>
-                </div>
                 <div id="donationTotalHeader">Donation Total:</div>
                 <div id="donationTotal">{{ donationTotal }}</div>
                 <br />
@@ -115,6 +111,22 @@
                 <div id="HostingBingo">
                     <HostBingo dashboard="true" fontSize="25px"></HostBingo>
                 </div>
+                <br />
+                <br />
+                <br />
+                <div>
+                    <h3>Show an image on stream</h3>
+                    Paste the entire image Url here:
+                    <input v-model="pictureDuringIntermissionUrl" />
+                    <button @click="clearPicture">Clear picture</button>
+                </div>
+                <div>
+                    <h3>Play a Twitch clip during intermission</h3>
+                    Paste the full clips.twitch.tv url here:
+                    <input v-model="twitchClipUrl" />
+                    <button @click="startTwitchClip">Play</button>
+                    <button @click="stopTwitchClip">Stop</button>
+                </div>
             </div>
         </div>
     </div>
@@ -133,7 +145,7 @@
 
     import { Component, Vue } from 'vue-property-decorator';
     import { getReplicant, store } from '../../browser-util/state';
-    import { TrackerPrize } from '../../../types';
+    import { TrackerPrize, TrackerOpenBid } from '../../../types';
     import moment from 'moment';
     import { RunData } from '../../../speedcontrol-types';
     import HostBingo from '../components/hostBingo.vue';
@@ -150,6 +162,7 @@
         charityIndex: number = 0;
         bingothonIndex: number = 0;
         sponsorIndex: number = 0;
+        twitchClipUrl: string = '';
 
         get adTimer(): number {
             return store.state.twitchCommercialTimer.secondsRemaining;
@@ -159,11 +172,11 @@
             return this.formatDollarAmount(store.state.donationTotal);
         }
 
-        get prizes() {
+        get prizes(): TrackerPrize[] {
             return store.state.trackerPrizes; //probably needs to be formatted
         }
 
-        get openBids() {
+        get openBids(): TrackerOpenBid[] {
             return store.state.trackerOpenBids.filter((b) => b.state === 'OPENED');
         }
 
@@ -215,6 +228,18 @@
 
         get pictureDuringIntermissionUrl(): string {
             return store.state.showPictureDuringIntermission.imageUrl;
+        }
+
+        get twitchClipSlug(): string {
+            const urlParts = this.twitchClipUrl.split('/');
+            if (this.twitchClipUrl.includes('clips.twitch.tv')) {
+                // For URLs like https://clips.twitch.tv/AwkwardScaryAniseKappaWealth
+                return urlParts.pop(); // Gets the last segment after the last '/'
+            } else if (this.twitchClipUrl.includes('twitch.tv') && urlParts.includes('clip')) {
+                // For URLs like https://www.twitch.tv/esamarathon/clip/SparklingToughFriesRuleFive
+                return urlParts[urlParts.indexOf('clip') + 1]; // Gets the segment after 'clip'
+            }
+            return ''; // Default return if the URL doesn't match expected formats
         }
 
         set pictureDuringIntermissionUrl(url: string) {
@@ -327,6 +352,14 @@
             } else {
                 return `Donate until the end of the event`;
             }
+        }
+
+        startTwitchClip() {
+            nodecg.sendMessage('playTwitchClip', this.twitchClipSlug);
+        }
+
+        stopTwitchClip() {
+            nodecg.sendMessage('stopTwitchClip');
         }
     }
 </script>

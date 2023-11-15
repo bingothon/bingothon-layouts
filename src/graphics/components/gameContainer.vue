@@ -28,7 +28,7 @@
             <!-- Game System Chip and Category in the same row -->
             <div class="FlexContainer">
                 <div v-if="gameSystem" class="GameChip FlexContainer">
-                    <img v-if="gameLogo" :src="gameLogo" alt="Game System Logo" class="gameSystemLogo" />
+                    <img v-if="gameSystemImage" :src="gameSystemImage" alt="Game System Logo" class="gameSystemLogo" />
                     <span>{{ gameSystem }}</span>
                 </div>
 
@@ -47,6 +47,8 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { store } from '../../browser-util/state';
     import { RunDataPlayer } from 'speedcontrol-types';
+
+    import gameSystemImages from '../../../static/assets/game-systems/game-system-images-manifest.json';
 
     @Component({
         components: {
@@ -149,40 +151,12 @@
                 </svg>`;
         }
 
-        get gameLogo(): string {
-            // Map the gameSystem to its corresponding logo
-            const logoMap: Record<string, string> = {
-                pc: require('../../../static/assets/game-systems/logos/pc.svg'),
-                nes: require('../../../static/assets/game-systems/logos/nes.svg'),
-                snes: require('../../../static/assets/game-systems/logos/snes.svg'),
-                playstation: require('../../../static/assets/game-systems/logos/ps1.svg'),
-                'playstation portable': require('../../../static/assets/game-systems/logos/psp.svg'),
-                'playstation 2': require('../../../static/assets/game-systems/logos/ps2.svg'),
-                'playstation 3': require('../../../static/assets/game-systems/logos/ps3.svg'),
-                gcn: require('../../../static/assets/game-systems/logos/gcn.svg'),
-                switch: require('../../../static/assets/game-systems/logos/switch.svg'),
-                n64: require('../../../static/assets/game-systems/logos/n64.svg'),
-                'nintendo ds': require('../../../static/assets/game-systems/logos/ds.svg'),
-                gb: require('../../../static/assets/game-systems/logos/gbclassic.svg'),
-                gbc: require('../../../static/assets/game-systems/logos/gbcolor.svg'),
-                gba: require('../../../static/assets/game-systems/logos/gbadvance.svg'),
-                'playstation 4': require('../../../static/assets/game-systems/logos/ps4.svg'),
-                'wii u': require('../../../static/assets/game-systems/logos/wiiu.svg'),
-                wii: require('../../../static/assets/game-systems/logos/wii.svg'),
-                'xbox classic': require('../../../static/assets/game-systems/logos/xboxclassic.svg'),
-                'xbox one': require('../../../static/assets/game-systems/logos/xboxone.svg'),
-                xbox360: require('../../../static/assets/game-systems/logos/xbox360.svg'),
-                atari2600: require('../../../static/assets/game-systems/logos/atari2600.svg'),
-                atari7800: require('../../../static/assets/game-systems/logos/atari7800.svg'),
-                'pcengine/turbografx-16': require('../../../static/assets/game-systems/logos/pcengine.svg'),
-                'sega master system': require('../../../static/assets/game-systems/logos/segamastersystem.svg'),
-                'sega game gear': require('../../../static/assets/game-systems/logos/segagamegear.svg'),
-                'sega mega drive': require('../../../static/assets/game-systems/logos/segamegadrive.svg'),
-                'sega saturn': require('../../../static/assets/game-systems/logos/segasaturn.svg'),
-                'sega dreamcast': require('../../../static/assets/game-systems/logos/segadreamcast.svg'),
-                zxspectrum: require('../../../static/assets/game-systems/logos/zxspectrum.svg'),
-            };
-            return logoMap[this.gameSystem.toLocaleLowerCase()] || ''; // default to empty string if logo not found
+        get gameSystemImage(): string | undefined {
+            const imagePath = gameSystemImages[this.gameSystem.toLocaleLowerCase()];
+            if (imagePath) {
+                return require('../../../static/assets/game-systems/' + imagePath);
+            }
+            return undefined;
         }
     }
 </script>

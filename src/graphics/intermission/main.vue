@@ -26,6 +26,7 @@
         <div :class="'ImageView ' + (showIntermissionImage ? 'PictureShown' : '')">
             <img v-if="showIntermissionImage" :src="intermissionImageUrl" />
         </div>
+        <TwitchClipPlayer />
     </div>
 </template>
 
@@ -40,6 +41,7 @@
     import DiscordVoiceDisplay from '../components/discordVoiceDisplay.vue';
     import HostBingo from '../components/hostBingo.vue';
     import Music from './components/Music.vue';
+    import TwitchClipPlayer from './components/TwitchClipPlayer.vue';
 
     @Component({
         components: {
@@ -50,13 +52,16 @@
             Music,
             DiscordVoiceDisplay,
             HostBingo,
+            TwitchClipPlayer,
         },
     })
     export default class Intermission extends Vue {
         @Prop({ default: undefined })
-        data;
+        data: unknown;
 
         nextRun: RunData = null;
+        showTwitchClip: boolean = false;
+        twitchClipSlug: string = '';
 
         created() {
             this.refreshUpcomingRun();
@@ -64,6 +69,16 @@
 
         mounted() {
             nodecg.listenFor('forceRefreshIntermission', this.refreshUpcomingRun);
+            nodecg.listenFor('playTwitchClip', (slug: string) => {
+                this.twitchClipSlug = slug;
+                this.showTwitchClip = true;
+                setTimeout(() => {
+                    this.showTwitchClip = false;
+                }, 60 * 1000);
+            });
+            nodecg.listenFor('stopTwitchClip', () => {
+                this.showTwitchClip = false;
+            });
         }
 
         refreshUpcomingRun() {
@@ -246,5 +261,13 @@
     .ImageView > img {
         max-width: 100%;
         max-height: 100%;
+    }
+
+    #twitchClipEmbed {
+        position: absolute;
+        left: 718px;
+        top: 240px;
+        width: 1172px;
+        height: 660px;
     }
 </style>

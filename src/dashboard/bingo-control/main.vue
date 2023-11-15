@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <span class="error-warning" @click="errorMessage = ''"> {{ errorMessage }}</span>
+        <span class="error-warning" v-if="errorMessage"> {{ errorMessage }}</span>
         <div class="d-flex justify-center line-buttons">
             <v-btn
                 id="override-button"
@@ -14,10 +14,10 @@
             </v-btn>
         </div>
         <div v-for="(color, i) in playerColors" :key="i">
-            P{{ i }}:
+            {{ playerNames[i] || `P${i}` }}:
             <v-row>
                 <v-col>
-                    <v-select :value="color" @input="updatePlayerColor(i, $event)" :items="allColors"> </v-select>
+                    <v-select :value="color" @input="updatePlayerColor(i, $event)" :items="allColors"></v-select>
                 </v-col>
                 <v-col v-show="isManualScoreOverride">
                     <v-text-field
@@ -33,7 +33,7 @@
             </v-row>
         </div>
         Select Board:
-        <v-select v-model="currentBoardRep" :items="allBingoReps"> </v-select>
+        <v-select v-model="currentBoardRep" :items="allBingoReps"></v-select>
         <!-- Normal Bingosync Stuff -->
         <div v-if="showExtraBingosyncOptions">
             <div>
@@ -299,20 +299,25 @@
             return store.state.externalBingoboardMeta;
         }
 
+        get playerNames(): string[] {
+            const teams = store.state.runDataActiveRun.teams;
+            return teams.flatMap((team) => team.players.map((player) => player.name));
+        }
+
         // test
         /* get colorCounts(): Array<{color: string, count: number}> {
-      const counts = store.state.bingoboardMeta.colorCounts;
-      const countArray = [];
-      for (const key in counts) {
-        if (counts.hasOwnProperty(key)) {
-          const element = counts[key];
-          if (element > 0) {
-            countArray.push({ color: key, count: element });
-          }
-        }
-      }
-      return countArray;
-    } */
+const counts = store.state.bingoboardMeta.colorCounts;
+const countArray = [];
+for (const key in counts) {
+if (counts.hasOwnProperty(key)) {
+const element = counts[key];
+if (element > 0) {
+countArray.push({ color: key, count: element });
+}
+}
+}
+return countArray;
+} */
 
         // --- handlers
 
@@ -339,6 +344,7 @@
                         break;
                     case 'disconnected':
                     case 'error':
+                        this.errorMessage = '';
                         getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this
                             .currentBoardRep as BingoRepEnum;
                         nodecg
