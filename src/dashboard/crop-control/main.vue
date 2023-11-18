@@ -81,7 +81,6 @@
                 this.widthPercent = stream.widthPercent;
                 this.heightPercent = stream.heightPercent;
             }
-            console.log(globalPlayer);
         }
 
         destroyTwitchPlayer() {
