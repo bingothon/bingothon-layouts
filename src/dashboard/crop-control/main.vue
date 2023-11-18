@@ -24,8 +24,8 @@
             ><span>{{ successMessage }}</span>
         </div>
         <div>
-            <button @click="togglePlayerPause" :disabled="player == null">{{ togglePlayerPauseButtonText }}</button>
-            <button @click="togglePlayerMute" :disabled="player == null">{{ togglePlayerMuteButtonText }}</button>
+            <button @click="togglePlayerPause">{{ togglePlayerPauseButtonText }}</button>
+            <button @click="togglePlayerMute">{{ togglePlayerMuteButtonText }}</button>
         </div>
     </div>
 </template>
@@ -39,6 +39,9 @@
 
     const initWidth = 1024;
     const initHeight = 576;
+
+    // there should only be one instance of this ever, so should be fine
+    let globalPlayer;
 
     @Component({})
     export default class CropControl extends Vue {
@@ -54,8 +57,6 @@
 
         successMessage: string = '';
 
-        player: any = null;
-
         playerMuted: boolean = true;
 
         playerPaused: boolean = true;
@@ -69,8 +70,8 @@
                 width: initWidth,
                 height: initHeight,
             };
-            this.player = new Twitch.Player(this.$refs.twitchPlayer, playerOptions);
-            this.player.setMuted(true);
+            globalPlayer = new Twitch.Player(this.$refs.twitchPlayer, playerOptions);
+            globalPlayer.setMuted(true);
             this.playerMuted = true;
             this.playerPaused = true;
             const stream = store.state.twitchStreams.find((s) => s.channel === this.currentChannel);
@@ -80,10 +81,11 @@
                 this.widthPercent = stream.widthPercent;
                 this.heightPercent = stream.heightPercent;
             }
+            console.log(globalPlayer);
         }
 
         destroyTwitchPlayer() {
-            this.player = null;
+            globalPlayer = null;
             // remove the iframe inside the twitchPlayer div
             (this.$refs.twitchPlayer as HTMLElement).innerHTML = '';
         }
@@ -136,11 +138,11 @@
         }
 
         togglePlayerPause() {
-            if (this.player !== null) {
+            if (globalPlayer !== null) {
                 if (this.playerPaused) {
-                    this.player.play();
+                    globalPlayer.play();
                 } else {
-                    this.player.pause();
+                    globalPlayer.pause();
                 }
                 this.playerPaused = !this.playerPaused;
             }
@@ -151,9 +153,9 @@
         }
 
         togglePlayerMute() {
-            if (this.player !== null) {
+            if (globalPlayer !== null) {
                 this.playerMuted = !this.playerMuted;
-                this.player.setMuted(this.playerMuted);
+                globalPlayer.setMuted(this.playerMuted);
             }
         }
     }
