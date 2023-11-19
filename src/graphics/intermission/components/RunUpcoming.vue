@@ -88,7 +88,7 @@
                         </div>
                         <div class="GameSystem Chip" v-if="gameSystem">
                             <img v-if="gameSystemImage" :src="gameSystemImage" />
-                            <!-- <span class="ChipText">{{ gameSystem }} </span> -->
+                            <span v-else class="ChipText">{{ gameSystem }}</span>
                         </div>
                     </div>
                 </div>
