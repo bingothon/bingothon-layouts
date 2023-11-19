@@ -99,9 +99,9 @@
       },
       {
         "name": "twitch-resizer-dashboard",
-        "title": "Twitch Resizing",
-        "file": "crop-control.html",
+        "title": "Twitch Resizer",
         "fullbleed": "true",
+        "file": "crop-control.html",
         "headerColor": "#008BB9"
       },
       {
