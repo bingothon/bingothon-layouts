@@ -9,14 +9,14 @@
         <run-upcoming v-if="nextRun" id="ComingUpNext" :data="nextRun"></run-upcoming>
         <rotation></rotation>
         <info-storage-box id="ReaderAndMusic">
-            <div class="Mic">
+            <div v-show="hostsSpeakingDuringIntermission" class="Mic">
                 <img src="../../../static/Mic.png" />
             </div>
             <DiscordVoiceDisplay
                 v-show="hostsSpeakingDuringIntermission"
                 voiceHighlightColor="var(--darker-main-color)"
             ></DiscordVoiceDisplay>
-            <music></music>
+            <Music :useSmallVariant="hostsSpeakingDuringIntermission"></Music>
         </info-storage-box>
 
         <div class="HostingBingo">
@@ -192,7 +192,6 @@
 
     .Music {
         position: absolute;
-        left: 730px;
     }
 
     body {
