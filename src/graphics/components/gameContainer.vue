@@ -1,5 +1,5 @@
 <template>
-    <div class="GameContainer FlexContainer" style="max-height: 200px; flex-direction: column">
+    <div class="GameContainer FlexContainer" style="max-height: 200px; flex-direction: column; row-gap: 8px">
         <!-- Joysticks at the top -->
         <!-- <div v-if="playerJoysticks.length > 0" class="FlexContainer">
             <div class="GameChip">
@@ -19,14 +19,14 @@
         </div> -->
 
         <!-- Title in the middle -->
-        <div class="GameDetails FlexContainer" style="flex-grow: 1; justify-content: center; align-items: center">
+        <div class="GameDetails FlexContainer">
             <div class="GameName FlexContainer">{{ gameName }}</div>
         </div>
 
         <!-- Other information on the middle bottom -->
-        <div class="GameExtra FlexContainer" style="flex-direction: column">
+        <div class="GameExtra FlexContainer" style="flex-direction: column; padding: 0 4px">
             <!-- Game System Chip and Category in the same row -->
-            <div class="FlexContainer">
+            <div class="FlexContainer" style="column-gap: 8px">
                 <div v-if="gameSystem" class="GameChip FlexContainer">
                     <img v-if="gameSystemImage" :src="gameSystemImage" alt="Game System Logo" class="gameSystemLogo" />
                     <span>{{ gameSystem }}</span>
@@ -175,7 +175,6 @@
         align-items: center;
         color: white;
         text-align: center;
-        margin: 5px;
     }
 
     .GameDetails > .GameExtra {
@@ -229,20 +228,19 @@
     .GameChip {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
+        align-content: center;
+        text-align: center;
         padding: 3px 4px;
         background-color: rgba(220, 240, 255, 0.9); /* Light blueish, slightly transparent */
         border-radius: 2px;
-        font-size: 14px;
-        height: 18px;
+        font-size: 18px;
         color: #333;
-        margin-left: 2px;
         border: 1px solid rgba(180, 230, 255, 0.7); /* Slightly blueish border for that 'frozen' feel */
 
         /* Ice-like gradient background using SVG */
         background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="iceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(240, 255, 255, 0.7); stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(200, 240, 255, 0.9); stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23iceGradient)" /></svg>');
         box-shadow: 0px 0px 5px 2px rgba(200, 240, 255, 0.3); /* Subtle glow to add depth */
-        margin-bottom: 10px;
-        margin-top: 10px;
     }
 
     .bingoModeLogo {
