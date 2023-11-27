@@ -1,33 +1,36 @@
 <template>
-    <div v-if="show" class="Music FlexContainer">
-        <div class="MCat">
-            <img src="../../../../static/music.png" />
-        </div>
-        <div class="NameContainer" ref="nameContainer">
-            <transition name="fade">
-                <div ref="songName" :key="name" class="Name" :class="{ Animation1: scrollingEffect }">
+    <transition name="fade">
+        <div :key="name" v-if="show" class="Music FlexContainer"  :style="{
+                    width: `${useSmallVariant ? '450' : '1172'}px`,
+                    left: `${useSmallVariant ? '730' : '0'}px`,
+                }">
+            <div class="MCat">
+                <img src="../../../../static/music.png" />
+            </div>
+            <div class="NameContainer" ref="nameContainer">
+                <div ref="songName" class="Name" :class="{ Animation1: scrollingEffect }">
                     {{ name }}
                 </div>
-            </transition>
-            <transition name="fade">
-                <div v-if="scrollingEffect" :key="name" class="Name Animation2">
+                <div v-if="scrollingEffect" class="Name Animation2">
                     {{ name }}
                 </div>
-            </transition>
+            </div>
         </div>
-    </div>
+    </transition>
 </template>
 
 <script lang="ts">
     import { store } from '../../../browser-util/state';
     import { SongData } from '../../../../schemas';
-    import { Component, Vue } from 'vue-property-decorator';
+    import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
 
     @Component({})
     export default class Music extends Vue {
         show: boolean = false;
         name: string = '';
         scrollingEffect: boolean = false;
+        @Prop()
+        useSmallVariant: boolean;
 
         mounted() {
             store.watch((state) => state.songData, this.onSongDataUpdate, { immediate: true });
@@ -38,18 +41,29 @@
             if (newSong && newSong.playing) {
                 this.name = newSong.title;
                 this.show = true;
-                // disable scrolling effect until we know if it's needed
-                this.scrollingEffect = false;
-                Vue.nextTick(() => {
-                    // wait for transition
-                    const nameContainer = this.$refs.nameContainer as Element;
-                    const songName = this.$refs.songName as Element;
-                    // if the name is bigger than the container we need to scroll
-                    this.scrollingEffect = songName.clientWidth > nameContainer.clientWidth;
-                    //console.log('container:', nameContainer, 'name', songName);
-                });
+                this.maybeInitScrollingEffect();
             } else {
                 this.show = false;
+            }
+        }
+
+        maybeInitScrollingEffect() {
+            // disable scrolling effect until we know if it's needed
+            this.scrollingEffect = false;
+            Vue.nextTick(() => {
+                // wait for transition
+                const nameContainer = this.$refs.nameContainer as Element;
+                const songName = this.$refs.songName as Element;
+                // if the name is bigger than the container we need to scroll
+                this.scrollingEffect = songName.clientWidth > nameContainer.clientWidth;
+                //console.log('container:', nameContainer, 'name', songName);
+            });
+        }
+
+        @Watch('useSmallVariant')
+        checkSize() {
+            if (this.show) {
+                this.maybeInitScrollingEffect();
             }
         }
     }
@@ -61,7 +75,6 @@
         justify-content: center;
         align-items: center;
         height: 100%;
-        width: 450px;
     }
     .MCat {
         box-sizing: border-box;
