@@ -87,6 +87,7 @@
         align-content: center;
         align-items: center;
         flex-direction: column;
+        text-align: center;
     }
 
     .GameDetails > .GameName {
