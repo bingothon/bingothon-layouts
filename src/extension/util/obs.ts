@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import OBSWebSocket, { EventSubscription, EventTypes } from 'obs-websocket-js'
 import * as nodecgApiContext from './nodecg-api-context'
 import { Configschema } from '@/configschema'
@@ -236,7 +238,7 @@ class OBSUtility extends OBSWebSocket {
         return response.imageData
     }
 
-    public async setAudioLevels(audioSource: string, data: EventTypes['InputVolumeMeters'], repository: any): Promise<void> {
+    public async setAudioLevels(audioSource: string, data: EventTypes['InputVolumeMeters'], repository: {value: {[k: string]: {volume: number}}}): Promise<void> {
         const matchAudioSource = data.inputs.filter((matchAudioSource): boolean => matchAudioSource.inputName === audioSource)[0]
         if (matchAudioSource) {
             //@ts-ignore
@@ -280,6 +282,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     const obsAudioSourcesRep = nodecg.Replicant<ObsAudioSources>('obsAudioSources')
     const obsPreviewSceneRep = nodecg.Replicant<string | null>('obsPreviewScene', { defaultValue: null })
     const obsCurrentSceneRep = nodecg.Replicant<string | null>('obsCurrentScene', { defaultValue: null })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const obsSceneListRep = nodecg.Replicant<any | null>('obsSceneList', { defaultValue: null }) // TODO: create a type Scene and replace 'any' with 'Scene[]'
     const capturePositionsRep = nodecg.Replicant<CapturePositions>('capturePositions')
     const currentGameLayoutRep = nodecg.Replicant<CurrentGameLayout>('currentGameLayout')
@@ -579,7 +582,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
             nextScene = _data.sceneName;
         }
         nodecg.sendMessage('obs:startingTransition', { scene: nextScene });
-        obs.call('SetCurrentProgramScene', { sceneName: nextScene! })
+        obs.call('SetCurrentProgramScene', { sceneName: nextScene || '' })
             .then((): void => {
                 // setting ! on obsPreviewSceneRep.value!
                 if (callback && !callback.handled) {

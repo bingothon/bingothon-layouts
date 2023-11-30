@@ -19,7 +19,6 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import { getReplicant, store } from '../../browser-util/state';
-    import { RunDataActiveRun } from '../../../speedcontrol-types';
     import { TrackerData } from '../../../schemas';
 
     interface IndexedPlayer {

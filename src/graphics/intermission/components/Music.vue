@@ -1,9 +1,14 @@
 <template>
     <transition name="fade">
-        <div :key="name" v-if="show" class="Music FlexContainer"  :style="{
-                    width: `${useSmallVariant ? '450' : '1172'}px`,
-                    left: `${useSmallVariant ? '730' : '0'}px`,
-                }">
+        <div
+            :key="name"
+            v-if="show"
+            class="Music FlexContainer"
+            :style="{
+                width: `${useSmallVariant ? '450' : '1172'}px`,
+                left: `${useSmallVariant ? '730' : '0'}px`,
+            }"
+        >
             <div class="MCat">
                 <img src="../../../../static/music.png" />
             </div>
@@ -76,15 +81,18 @@
         align-items: center;
         height: 100%;
     }
+
     .MCat {
         box-sizing: border-box;
         height: 100%;
         padding: 5px;
     }
+
     .MCat > img {
         height: 100%;
         object-fit: contain;
     }
+
     .NameContainer {
         position: relative;
         flex: 1;
@@ -95,15 +103,18 @@
         align-items: center;
         display: flex;
     }
+
     .NameContainer > .Name {
         position: absolute;
         overflow: hidden;
         white-space: nowrap;
     }
+
     .NameContainer > .Name.Animation1 {
         /* Make sure that this one reaches default position before the other one goes away to avoid flickering*/
         animation: music-marquee1 15s 200ms linear infinite;
     }
+
     .NameContainer > .Name.Animation2 {
         animation: music-marquee2 15s linear infinite;
     }
@@ -142,6 +153,7 @@
     .fade-leave-active {
         transition: opacity 1s;
     }
+
     .fade-enter,
     .fade-leave-to {
         opacity: 0;

@@ -40,10 +40,6 @@ function processStyling(goalName: string): string {
     return goalName
 }
 
-async function sleep(ms: number): Promise<void> {
-    return new Promise((resolve): NodeJS.Timeout => setTimeout(resolve, ms))
-}
-
 async function getBoards(boardID: string, playerID: string): Promise<OriApiResponse[]> {
     const playerIDs = playerID.split(',')
     if (playerIDs.length === 0) {

@@ -6,7 +6,6 @@
 // Imports
 import * as Discord from 'discord.js';
 import * as Voice from '@discordjs/voice';
-import {Readable} from 'stream';
 import * as nodecgApiContext from './util/nodecg-api-context';
 import {VoiceActivity} from '../../schemas';
 import {Configschema} from '../../configschema';
@@ -30,22 +29,11 @@ const voiceDelayRep = nodecg.Replicant<number>('voiceDelay', {defaultValue: 0, p
 // Discord API
 const bot = new Discord.Client({intents: 32767}); // all intents cause I'm too lazy to figure out which are the correct ones
 
-// config
-const gameModeToConfigKey: Record<string, string> = {
-    neutral: 'discord',
-    botw: 'discord',
-    sms: 'discordSunshine',
-    sa2b: 'discordSA2'
-};
-
 const config = nodecg.bundleConfig as Configschema;
 const botToken = config.discord?.token;
-// @ts-ignore
-let botServerID = config.discord.serverID;
-// @ts-ignore
-let botCommandChannelID = config.discord.commandChannelID;
-// @ts-ignore
-let botVoiceCommentaryChannelID = config.discord.voiceChannelID;
+const botServerID = config.discord.serverID || '';
+const botCommandChannelID = config.discord.commandChannelID || '';
+const botVoiceCommentaryChannelID = config.discord.voiceChannelID || '';
 
 if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChannelID)) {
     log.error('botToken, botServerID, botCommandChannelID, botVoiceCommentaryChannelID all have to be set!');
@@ -94,27 +82,6 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
             joinVC();
         }
     });
-
-    function updateDiscordConfig(): void {
-        // leave old channel
-        /*try {
-            getVoiceChannelSafe(botServerID, botVoiceCommentaryChannelID).leave();
-        } catch (err) {
-            console.log('Bot not connected')
-        }*/
-        voiceStatus = 'disconnected';
-
-        // new config
-        // @ts-ignore
-        botServerID = config[gameModeToConfigKey[gameModeRep.value.game]].serverID;
-        // @ts-ignore
-        botCommandChannelID = config[gameModeToConfigKey[gameModeRep.value.game]].commandChannelID;
-        // @ts-ignore
-        botVoiceCommentaryChannelID = config[gameModeToConfigKey[gameModeRep.value.game]].voiceChannelID;
-
-        joinVC();
-
-    }
 
     function UpdateCommentaryChannelMembers(): void {
         if (!voiceActivity || !voiceActivity.value) return;
@@ -190,16 +157,6 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
             Voice.joinVoiceChannel(joinConfig);
 
             voiceStatus = 'connected';
-
-
-            class Silence extends Readable {
-                // eslint-disable-next-line no-underscore-dangle
-                public _read(): void {
-                    this.push(Buffer.from([0xF8, 0xFF, 0xFE]));
-                }
-            }
-
-            //connection.play(new Silence(), {type: 'opus'});
 
             UpdateCommentaryChannelMembers();
             nodecg.log.info('joined voice channel!');

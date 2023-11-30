@@ -40,7 +40,7 @@ export class DeusExternalBingoboard implements ExternalBingoboardManager {
             this.updateLoopTimer = setInterval(() => {
                 this.bingoUpdate().catch((e) => {
                     log.error('deus-ex update error:', e)
-                    })
+                })
             }, 3000)
         }
     }
