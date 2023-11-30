@@ -22,6 +22,7 @@ import Layout_4x3_4p from './4_3-4p.vue'
 import Layout_15x9_4p from './15_9-4p.vue'
 import Layout_15x9_2p from './15_9-2p.vue'
 import Layout_3x2_2p from './3_2-2p.vue'
+import Layout_3x2_1p from './3_2-1p.vue'
 import Layout_16x10_1p from './16_10-1p.vue'
 import Layout_16x10_2p from './16_10-2p.vue'
 import Layout_DS_2p from './DS-2p.vue'
@@ -44,6 +45,7 @@ export {
     Layout_4x3_3p,
     Layout_3x2_3p,
     Layout_3x2_2p,
+    Layout_3x2_1p,
     Layout_15x9_4p,
     Layout_15x9_2p,
     Layout_DS_2p,
