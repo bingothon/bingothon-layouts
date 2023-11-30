@@ -1,102 +1,102 @@
 [
     {
-        "goal": "My little PogChamp",
-        "description": "Finish every sentence with an emote"
+        "goal": "What's this painting?",
+        "description": "Make chat guess words drawn in Paint"
     },
     {
-        "goal": "Karaoke",
-        "description": "Sing a karaoke medley"
+        "goal": "Parlez-vous français? Yes!",
+        "description": "Hosts talk to each other in foreign language and pretend to understand each other"
     },
     {
-        "goal": "Bingo you, Bingo me",
-        "description": "Replace every verb with Bingo"
+        "goal": "AI-generated rap battle",
+        "description": "Rap to generated lyrics, using whichever generator you like"
     },
     {
-        "goal": "Riddle Me!",
-        "description": "Solve a riddle"
+        "goal": "SPORTS COMMENTARYYYYY!",
+        "description": "Hosts become sports commentators"
     },
     {
-        "goal": "Geoguessr",
-        "description": "Play a round of GeoGuessr (please do it only when ahead of schedule or in setup block)"
+        "goal": "Cloudy with a chance of bingo",
+        "description": "Hosts present the news/weather"
     },
     {
-        "goal": "HYDRATE!",
-        "description": "Play a Bingothon themed drinking game"
+        "goal": "Real Bingo",
+        "description": "Play an actual game of bingo"
     },
     {
-        "goal": "Night Message",
-        "description": "Put a donation message into google translator a few times, translate it back to English and read it out loud"
+        "goal": "Copycat",
+        "description": "Hosts do impressions of their co-host"
     },
     {
-        "goal": "Voices in my head",
-        "description": "Talk in funny voices and pretend to be confused when chat brings it up"
+        "goal": "Naughty or nice?",
+        "description": "Hosts rate whether their other host is naughty or nice"
     },
     {
-        "goal": "RRRRRR",
-        "description": "Talk like pirates"
+        "goal": "Would you press the button",
+        "description": "Hosts play Would You Press The Button"
     },
     {
-        "goal": "Lunk, the green guy",
-        "description": "Describe a main character or story premise very poorly"
+        "goal": "HOST FUSION GO!",
+        "description": "Fuse nicknames with your co-host for your shift"
     },
     {
-        "goal": "DJ",
-        "description": "Become a DJ at a radio station"
+        "goal": "Lunk, the Green Guy",
+        "description": "Describe a story or a character in the worst way possible"
     },
     {
-        "goal": "FORE!",
-        "description": "Commentate the next run like golf commentators (ideal for GWYF bingo)"
+        "goal": "Speedrun Quiz",
+        "description": "Speedrun trick or no? Host lists trick names, the other has to guess which one is an actual trick!"
     },
     {
-        "goal": "BINGO!",
-        "description": "Play a round of actual bingo"
+        "goal": "I Wanna Be The Very Best",
+        "description": "Hosts wanna be the very best (bonus point if we can get as many of us to sing as possible)"
     },
     {
-        "goal": "BREAKING NEWS",
-        "description": "Hosts are reporter reporting BREAKING NEWS about bingos"
+        "goal": "2 Truths 1 Lie",
+        "description": "Speaks for itself. Playing 2 truths 1 lie"
     },
     {
-        "goal": "Zzz",
-        "description": "One host pretends to fall asleep during an intermission, the other tries to wake them up"
+        "goal": "Let's sink yerrrr' bingo, matey!",
+        "description": "Hosts talk like pirates"
     },
     {
-        "goal": "Would you press the button?",
-        "description": "Would you press the button?"
+        "goal": "Wait, we're live?!",
+        "description": "Hosts forget they're live"
     },
     {
-        "goal": "2 truths 1 lie",
-        "description": "Hosts play 2 truths 1 lie"
+        "goal": "Who's That Pokémon?",
+        "description": "Hosts play Who's That Pokemon, link to game on hosting guide"
     },
     {
-        "goal": "BOTY",
-        "description": "Host the Bingo Awards and award the Bingo of the Year award"
+        "goal": "Letsspeedruntalking",
+        "description": "Spitfire hosting, where hosts talk as fast as possible"
     },
     {
-        "goal": "The BINGO-inator",
-        "description": "Advertise a crazy new fictional product"
+        "goal": "I'm REALLY Floha!",
+        "description": "Hosts impersonate Floha"
     },
     {
-        "goal": "Hello there!",
-        "description": "Hosts speak in movie quotes"
+        "goal": "Character Acting",
+        "description": "Hosts pretend to be a video game character"
     },
     {
-        "goal": "MC Bingo",
-        "description": "Ask ChatGPT to write you rap and perform it"
+        "goal": "Oh no, not this goal, monkaS",
+        "description": "Host has to add an emote name after every sentence"
     },
     {
-        "goal": "I have a question?",
-        "description": "Only talk in question for the entire intermission"
+        "goal": "Voicemod",
+        "description": "Host has to use a voice changer"
     },
     {
-        "goal": "Borders Without Doctors",
-        "description": "Read a charity blurb out backwards"
+        "goal": "Tongue Twister",
+        "description": "Hosts try to say a tongue twister"
     },
     {
-        "goal": "Bingo's Got Talent",
-        "description": "Act like judges on the famous casting show Bingo's Got Talent"
+        "goal": "Best Bingothon Clips!",
+        "description": "Hosts discuss their favourite clip of a past Bingothon"
     },
     {
-        "goal": "'#FreePanda'",
-        "description": "Pretend you are freeing Panda, but in reality you are onlu relocating him, cause the basement needs to be renovated"
+        "goal": "Bingothon: The Documentary (TM)",
+        "description": "Hosts describe Bingothon like it's featured in a David Attenborough documentary"
     }
 ]
