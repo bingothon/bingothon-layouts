@@ -49,7 +49,7 @@ export class DeusExternalBingoboard implements ExternalBingoboardManager {
         try {
             // eslint-disable-next-line max-len
             // console.log('update')
-            const response: DeusExResponse = await request.get('http://raycarro.com/dxrando/bingo.txt', { json: true });
+            const response: DeusExResponse = await request.get('https://mods4ever.com/public/bingo.txt', { json: true });
             if (this.boardRep.value) {
                 const playerColor = boardMetaRep.value.playerColors[0] || 'red'
                 const colorCounts: { [key: string]: number } = {
