@@ -153,8 +153,11 @@ export class Ori1ExternalBingoboard implements ExternalBingoboardManager {
             log.error('tried to configure ori1 bingo but game is not ori1!')
             return
         }
-        if (!meta.boardID || !meta.playerID) {
-            throw new Error('invalid config!')
+        if (!meta.boardID) {
+            throw new Error('Invalid config! Board ID missing')
+        }
+        if (!meta.playerID) {
+            throw new Error('Invalid config! Player ID(s) missing')
         }
         this.meta = meta
         await this.oriBingoUpdate()

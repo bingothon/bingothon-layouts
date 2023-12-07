@@ -60,11 +60,15 @@
         <!-- External board -->
         <div v-if="showExtraExternBoardOptions">
             <div>Currently active: {{ storeExternalBingoboardMeta.game }}</div>
-            <v-radio-group v-model="externalBingoboardMeta.game" :value="externalBingoboardMeta.game">
-                <v-radio value="none" label="None" @change="updateExternalGame" />
-                <v-radio value="ori1" label="Ori and the Blind Forest" @change="updateExternalGame" />
-                <v-radio value="ori2" label="Ori and the Will of the Wisps" @change="updateExternalGame" />
-                <v-radio value="deus-ex" label="Deus Ex" @change="updateExternalGame" />
+            <v-radio-group
+                v-model="externalBingoboardMeta.game"
+                :value="externalBingoboardMeta.game"
+                @change="updateExternalGame"
+            >
+                <v-radio value="none" label="None" />
+                <v-radio value="ori1" label="Ori and the Blind Forest" />
+                <v-radio value="ori2" label="Ori and the Will of the Wisps" />
+                <v-radio value="deus-ex" label="Deus Ex" />
             </v-radio-group>
             <div v-if="externalBingoboardMeta.game == 'ori1'">
                 <div>
@@ -159,14 +163,6 @@
 
         currentBoardRep: BingoRepEnum = 'bingoboard';
 
-        oriBoardID: string = '';
-
-        oriPlayerID: string = '';
-
-        oriCoop: boolean = true;
-
-        oriGame: string = 'ori1';
-
         externalBingoboardMeta: ExternalBingoboardMeta = { game: 'none' };
 
         explorationCustomBoard: string = '';
@@ -203,7 +199,9 @@
             this.externalBingoboardMeta = meta;
         }
 
-        // --- computed properties
+        /**
+         COMPUTED PROPERTIES
+         **/
         get connectActionText(): string {
             const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
             if (!socketRepName) {
@@ -304,22 +302,9 @@
             return teams.flatMap((team) => team.players.map((player) => player.name));
         }
 
-        // test
-        /* get colorCounts(): Array<{color: string, count: number}> {
-const counts = store.state.bingoboardMeta.colorCounts;
-const countArray = [];
-for (const key in counts) {
-if (counts.hasOwnProperty(key)) {
-const element = counts[key];
-if (element > 0) {
-countArray.push({ color: key, count: element });
-}
-}
-}
-return countArray;
-} */
-
-        // --- handlers
+        /**
+         HANDLERS
+         **/
 
         updateManualScore() {
             this.manualScore.forEach((score: string, idx: number) => {
@@ -408,6 +393,7 @@ return countArray;
         }
 
         updateExternalGame() {
+            console.log('Updating model');
             switch (this.externalBingoboardMeta.game) {
                 case 'ori1': {
                     this.externalBingoboardMeta = {
@@ -424,6 +410,13 @@ return countArray;
                         token: '',
                         host: '',
                     };
+                    break;
+                }
+                case 'deus-ex': {
+                    this.externalBingoboardMeta = {
+                        game: 'deus-ex',
+                    };
+                    break;
                 }
                 default: {
                     this.externalBingoboardMeta = {
@@ -436,16 +429,11 @@ return countArray;
         externalBingoboardUpdate() {
             nodecg
                 .sendMessageToBundle('externalBingoboard:configure', 'bingothon-layouts', this.externalBingoboardMeta)
+                .then(() => (this.errorMessage = ''))
                 .catch((error) => {
                     nodecg.log.error(error);
                     this.errorMessage = error.message;
                 });
-        }
-
-        updateOriGame(game: string) {
-            this.oriGame = game;
-            console.log(game);
-            console.log(this.oriGame);
         }
     }
 </script>
