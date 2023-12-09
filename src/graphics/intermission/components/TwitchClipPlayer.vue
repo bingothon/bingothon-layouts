@@ -1,15 +1,6 @@
 <template>
     <div v-show="isShown" class="twitch-clip-embed">
-        <iframe
-            :key="iframeKey"
-            :src="twitchClipUrl"
-            width="1172"
-            height="660"
-            frameborder="0"
-            allowfullscreen="true"
-            parent="dash.bingothon.com"
-            muted="false"
-        >
+        <iframe :key="iframeKey" :src="twitchClipUrl" width="1172" height="660" frameborder="0" allowfullscreen="true">
         </iframe>
     </div>
 </template>
@@ -27,7 +18,7 @@
 
         get twitchClipUrl(): string {
             // Uses the internal twitchClipSlug to construct the iframe URL
-            return `https://clips.twitch.tv/embed?clip=${this.twitchClipSlug}&parent=localhost&autoplay=true&muted=false`;
+            return `https://clips.twitch.tv/embed?clip=${this.twitchClipSlug}&parent=dash.bingothon.com&autoplay=true&muted=false`;
         }
 
         mounted() {
