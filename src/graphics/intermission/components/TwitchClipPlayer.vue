@@ -18,7 +18,7 @@
 
         get twitchClipUrl(): string {
             // Uses the internal twitchClipSlug to construct the iframe URL
-            return `https://clips.twitch.tv/embed?clip=${this.twitchClipSlug}&parent=dash.bingothon.com&autoplay=true&muted=false`;
+            return `https://clips.twitch.tv/embed?clip=${this.twitchClipSlug}&parent=dash.bingothon.com&autoplay=true`;
         }
 
         mounted() {
