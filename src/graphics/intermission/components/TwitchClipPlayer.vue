@@ -1,6 +1,15 @@
 <template>
     <div v-show="isShown" class="twitch-clip-embed">
-        <iframe :key="iframeKey" :src="twitchClipUrl" width="1172" height="660" frameborder="0" allowfullscreen="true">
+        <iframe
+            :key="iframeKey"
+            :src="twitchClipUrl"
+            width="1172"
+            height="660"
+            frameborder="0"
+            allowfullscreen="true"
+            parent="dash.bingothon.com"
+            muted="false"
+        >
         </iframe>
     </div>
 </template>
