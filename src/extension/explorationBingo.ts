@@ -1,12 +1,8 @@
 import * as nodecgApiContext from './util/nodecg-api-context'
-import { BingoboardMeta, ExplorationBingoboard } from '../../schemas'
+import { boardMetaRep, explorationBoardRep } from './util/replicants'
 import { ExplorationBingoboardCell } from '../../types'
 
 const nodecg = nodecgApiContext.get()
-// const log = new nodecg.Logger(`${nodecg.bundleName}:explorationBingo`);
-
-const explorationBoardRep = nodecg.Replicant<ExplorationBingoboard>('explorationBingoboard')
-const bingoMetaRep = nodecg.Replicant<BingoboardMeta>('bingoboardMeta')
 
 const defaultEmptyColorCounts = {
     pink: 0,
@@ -103,7 +99,7 @@ nodecg.listenFor('exploration:goalClicked', (goal, callback): void => {
         }
     }
     // only allow one color
-    const playerColor = bingoMetaRep.value.playerColors[0]
+    const playerColor = boardMetaRep.value.playerColors[0]
     const { index } = goal
     if (index < 0 || index >= 25) {
         if (callback && !callback.handled) {

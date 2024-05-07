@@ -1,16 +1,16 @@
 import * as RequestPromise from 'request-promise'
 
-import * as nodecgApiContext from '../util/nodecg-api-context'
-import { BingoboardMeta, ExternalBingoboard, ExternalBingoboardMeta } from '../../../schemas'
+import { boardMetaRep } from '@/util/replicants'
+import type NodeCG from "@nodecg/types"
+import { clearInterval } from 'timers'
+import { ExternalBingoboard, ExternalBingoboardMeta } from '../../../schemas'
 import { ExplorationBingoboardCell } from '../../../types'
 import { ExternalBingoboardManager } from '../externalBingoboards'
-import { ReplicantServer } from 'nodecg/types/server'
-import { clearInterval } from 'timers'
+import * as nodecgApiContext from '../util/nodecg-api-context'
 
 const nodecg = nodecgApiContext.get()
 const log = new nodecg.Logger(`${nodecg.bundleName}:oriBingo`)
 const request = RequestPromise.defaults({ jar: true })
-const boardMetaRep = nodecg.Replicant<BingoboardMeta>('bingoboardMeta')
 // TEST: boardID: 4235, playerID:221
 
 const emphasisRegex = /\*([^*]+)\*/
@@ -143,10 +143,10 @@ function toRevealed(resp: OriApiResponse): RevealedSquare[] {
 type Ori1Meta = ExternalBingoboardMeta & { game: 'ori1' }
 
 export class Ori1ExternalBingoboard implements ExternalBingoboardManager {
-    updateLoopTimer?: NodeJS.Timer
+    updateLoopTimer?: NodeJS.Timeout
     meta?: Ori1Meta
 
-    constructor(private boardRep: ReplicantServer<ExternalBingoboard>) {}
+    constructor(private boardRep: NodeCG.ServerReplicantWithSchemaDefault<ExternalBingoboard>) {}
 
     async configure(meta: ExternalBingoboardMeta): Promise<void> {
         if (meta.game !== 'ori1') {

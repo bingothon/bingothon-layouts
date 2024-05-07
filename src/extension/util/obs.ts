@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import OBSWebSocket, { EventSubscription, EventTypes } from 'obs-websocket-js'
-import * as nodecgApiContext from './nodecg-api-context'
 import { Configschema } from '@/configschema'
-import { CapturePositions, CurrentGameLayout, ObsAudioLevels, ObsAudioSources, ObsConnection, SoundOnTwitchStream, TwitchStreams } from '@/schemas'
+import { CapturePositions, CurrentGameLayout, ObsAudioLevels, ObsAudioSources, SoundOnTwitchStream, TwitchStreams } from '@/schemas'
+import OBSWebSocket, { EventSubscription, EventTypes } from 'obs-websocket-js'
 import { TwitchStream } from 'types'
+import * as nodecgApiContext from './nodecg-api-context'
+import { obsAudioSourcesRep, obsConnectionRep, obsPreviewScene, obsCurrentSceneRep, obsSceneListRep, capturePositionsRep, currentGameLayoutRep, soundOnTwitchStream, obsAudioLevels, streamsReplicant  } from './replicants'
 
 // this module is used to communicate directly with OBS
 // and transparently handle:
@@ -180,15 +181,15 @@ class OBSUtility extends OBSWebSocket {
                 sceneItemId: sceneItem.sceneItemId,
 
                 sceneItemTransform: {
-                    boundsHeight: params.height,
+                    boundsHeight: params.height || 1080,
                     boundsType: 'OBS_BOUNDS_STRETCH',
-                    boundsWidth: params.width,
-                    cropBottom: params.cropBottom,
-                    cropLeft: params.cropLeft,
-                    cropRight: params.cropRight,
-                    cropTop: params.cropTop,
-                    positionX: params.x,
-                    positionY: params.y,
+                    boundsWidth: params.width || 1920,
+                    cropBottom: params.cropBottom || 0,
+                    cropLeft: params.cropLeft || 0,
+                    cropRight: params.cropRight || 0,
+                    cropTop: params.cropTop || 0,
+                    positionX: params.x || 0,
+                    positionY: params.y || 0,
                     scaleX: 1,
                     scaleY: 1,
                 },
@@ -272,23 +273,21 @@ class OBSUtility extends OBSWebSocket {
     }
 }
 
-const obsConnectionRep = nodecg.Replicant<ObsConnection>('obsConnection')
-
 const obs = new OBSUtility()
 
 if (bundleConfig.obs && bundleConfig.obs.enable) {
     // local values to make sure there is no update loop
 
-    const obsAudioSourcesRep = nodecg.Replicant<ObsAudioSources>('obsAudioSources')
-    const obsPreviewSceneRep = nodecg.Replicant<string | null>('obsPreviewScene', { defaultValue: null })
-    const obsCurrentSceneRep = nodecg.Replicant<string | null>('obsCurrentScene', { defaultValue: null })
+    const audioSourcesRep = obsAudioSourcesRep;
+    const obsPreviewSceneRep = obsPreviewScene;
+    const currentSceneRep = obsCurrentSceneRep;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const obsSceneListRep = nodecg.Replicant<any | null>('obsSceneList', { defaultValue: null }) // TODO: create a type Scene and replace 'any' with 'Scene[]'
-    const capturePositionsRep = nodecg.Replicant<CapturePositions>('capturePositions')
-    const currentGameLayoutRep = nodecg.Replicant<CurrentGameLayout>('currentGameLayout')
-    const soundOnTwitchStreamRep = nodecg.Replicant<SoundOnTwitchStream>('soundOnTwitchStream')
-    const twitchStreams = nodecg.Replicant<TwitchStreams>('twitchStreams')
-    const obsAudioLevels = nodecg.Replicant<ObsAudioLevels>('obsAudioLevels', { defaultValue: {}, persistent: false })
+    const sceneListRep = obsSceneListRep;
+    const positionsRep = capturePositionsRep;
+    const currentLayoutRep = currentGameLayoutRep;
+    const soundOnTwitchStreamRep = soundOnTwitchStream;
+    const twitchStreamsRep = streamsReplicant;
+    const audioLevelsRep = obsAudioLevels;
     // load the intermission audio source
 
     const settings = {
@@ -319,8 +318,8 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
 
                 // default if they somehow not exist
                 ;[bundleConfig.obs.discordAudio, bundleConfig.obs.mpdAudio, bundleConfig.obs.streamsAudio].forEach((audioSource): void => {
-                    if (!Object.getOwnPropertyNames(obsAudioSourcesRep.value).includes(audioSource)) {
-                        obsAudioSourcesRep.value[audioSource] = {
+                    if (!Object.getOwnPropertyNames(audioSourcesRep.value).includes(audioSource)) {
+                        audioSourcesRep.value[audioSource] = {
                             volume: 0.5,
                             muted: false,
                             delay: 0,
@@ -339,7 +338,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
 
                 obs.call('GetCurrentProgramScene')
                     .then((scene): void => {
-                        obsCurrentSceneRep.value = scene.currentProgramSceneName
+                        currentSceneRep.value = scene.currentProgramSceneName
                     })
                     .catch((err): void => {
                         logger.warn(`Cannot get current scene: ${err}`)
@@ -347,7 +346,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
 
                 obs.call('GetSceneList')
                     .then((sceneList): void => {
-                        obsSceneListRep.value = sceneList.scenes
+                        sceneListRep.value = (sceneList.scenes as unknown as {sceneIndex: number, sceneName: string}[]).map((scene) => {return {scene.sceneName, scene.sceneIndex}} )
                     })
                     .catch((err): void => {
                         logger.warn(`Cannot get current scene list: ${err.error}`)
@@ -359,7 +358,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                 }
 
                 if (useObsTwitchPlayer || true) { // TODO repair in the future
-                    twitchStreams.on('change', (newValue, old) => {
+                    twitchStreamsRep.on('change', (newValue, old) => {
                         if (!old) return
                         for (let i = 0; i < 6; i++) {
                             const stream = newValue[i]
@@ -387,7 +386,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                                     stream.leftPercent !== oldStream.leftPercent ||
                                     stream.topPercent !== oldStream.topPercent
                                 ) {
-                                    handleStreamPosChange(obs, stream, i, currentGameLayoutRep.value, capturePositionsRep.value)
+                                    handleStreamPosChange(obs, stream, i, currentLayoutRep.value, positionsRep.value)
                                 } else {
                                     // since this channel exists, make it visible
                                     obs.setSourceBoundsAndCrop(getStreamSrcName(i), { visible: true })
@@ -398,26 +397,26 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                         }
                     })
 
-                    capturePositionsRep.on('change', (newVal, old) => {
+                    positionsRep.on('change', (newVal, old) => {
                         if (!old) return
 
-                        twitchStreams.value.forEach((stream, i) => {
-                            handleStreamPosChange(obs, stream, i, currentGameLayoutRep.value, newVal)
+                        twitchStreamsRep.value.forEach((stream, i) => {
+                            handleStreamPosChange(obs, stream, i, currentLayoutRep.value, newVal)
                         })
                     })
 
-                    currentGameLayoutRep.on('change', (newVal, old) => {
+                    currentLayoutRep.on('change', (newVal, old) => {
                         if (!old) return
 
-                        twitchStreams.value.forEach((stream, i) => {
-                            handleStreamPosChange(obs, stream, i, newVal, capturePositionsRep.value)
+                        twitchStreamsRep.value.forEach((stream, i) => {
+                            handleStreamPosChange(obs, stream, i, newVal, positionsRep.value)
                         })
                     })
 
                     soundOnTwitchStreamRep.on('change', (newVal, old) => {
                         if (old === undefined) return
 
-                        twitchStreams.value.forEach((stream, i) => {
+                        twitchStreamsRep.value.forEach((stream, i) => {
                             handleSoundChange(obs, newVal, i, stream, stream)
                         })
                     })
@@ -494,7 +493,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                 newObsAudioLevels[input.inputName] = { volume: 0 }
             }
         }
-        obsAudioLevels.value = newObsAudioLevels
+        audioLevelsRep.value = newObsAudioLevels
 
         // Limiter for the intermission music
         const mpdAudio = data.inputs.filter((input) => input.inputName === bundleConfig.obs.mpdAudio)[0]
@@ -518,7 +517,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     })
 
     obs.on('CurrentProgramSceneChanged', (data): void => {
-        obsCurrentSceneRep.value = data.sceneName
+        currentSceneRep.value = data.sceneName
     })
 
     obs.on('SceneItemTransformChanged', (scene) => {
@@ -528,7 +527,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     obs.on('SceneListChanged', (): void => {
         obs.call('GetSceneList')
             .then((sceneList): void => {
-                obsSceneListRep.value = sceneList.scenes.map((x) => ({
+                sceneListRep.value = sceneList.scenes.map((x) => ({
                     sceneIndex: x.sceneIndex as number,
                     sceneName: x.sceneName as string,
                 }))
@@ -538,7 +537,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
             })
     })
 
-    obsAudioSourcesRep.on('change', (newVal, old): void => {
+    audioSourcesRep.on('change', (newVal, old): void => {
         if (old === undefined || newVal === null || newVal === old) {
             return
         }

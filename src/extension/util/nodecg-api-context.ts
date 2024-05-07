@@ -1,12 +1,12 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { NodeCG } from 'nodecg/types/server'
+import { Configschema } from '@/configschema'
+import type NodeCGTypes from '@nodecg/types'
 
-let context: NodeCG
+let context: NodeCGTypes.ServerAPI<Configschema>
 
-export function get(): NodeCG {
+export function get(): NodeCGTypes.ServerAPI<Configschema> {
     return context
 }
 
-export function set(ctx: NodeCG): void {
+export function set(ctx: NodeCGTypes.ServerAPI<Configschema>): void {
     context = ctx
 }

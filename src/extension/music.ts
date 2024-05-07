@@ -2,25 +2,22 @@
 
 import {MPC, MPDError} from 'mpc-js'
 import * as nodecgApiContext from './util/nodecg-api-context'
-import {SongData} from '../../schemas'
+import { songDataRep } from './util/replicants'
 
 const nodecg = nodecgApiContext.get()
 const logger = new nodecg.Logger(`${nodecg.bundleName}:mpd`)
-const mpdConfig = nodecg.bundleConfig.mpd || {}
+const mpdConfig = nodecg.bundleConfig.mpd
 // const volume = mpdConfig.volume || 80;
 // const currentVolume: number = volume;
 // let fadeInterval: NodeJS.Timeout;
 let shuffleInterval: NodeJS.Timeout
 let connected = false
 
-// Stores song data to be displayed on layouts.
-const songData = nodecg.Replicant<SongData>('songData', { persistent: false })
-
 // Set up connection to MPD server.
 const client = new MPC()
 connect()
 function connect(): void {
-    client.connectTCP(mpdConfig.address || 'localhost', mpdConfig.port || 6600)
+    client.connectTCP(mpdConfig?.address || 'localhost', mpdConfig?.port || 6600)
 
     // Set up events.
     client.on('ready', onReady)
@@ -32,7 +29,7 @@ function connect(): void {
 // Listen for NodeCG messages from dashboard/layouts.
 nodecg.listenFor('pausePlaySong', (): void => {
     if (!connected) return
-    if (songData.value.playing) {
+    if (songDataRep.value.playing) {
         client.playback.stop()
     } else {
         client.playback.play()
@@ -88,14 +85,14 @@ async function updatePlaybackStatusAndSong(): Promise<void> {
     try {
         const status = await client.status.status()
         if (status.state !== 'play') {
-            songData.value.playing = false
-            songData.value.title = 'No Track Playing'
+            songDataRep.value.playing = false
+            songDataRep.value.title = 'No Track Playing'
         } else {
-            songData.value.playing = true
+            songDataRep.value.playing = true
             const currentSong = await client.status.currentSong()
             const songTitle = `${currentSong.title} - ${currentSong.artist}`
-            if (songTitle !== songData.value.title) {
-                songData.value.title = songTitle
+            if (songTitle !== songDataRep.value.title) {
+                songDataRep.value.title = songTitle
             }
         }
     } catch (e) {
@@ -121,53 +118,3 @@ async function shufflePlaylist(): Promise<void> {
         logger.error('', e)
     }
 }
-
-/* fade not used since we used http based music streaming
-which doesn't support volume apparently
-// Used to set the player volume to whatever the variable is set to.
-async function setVolume(): Promise<void> {
-  await client.playbackOptions.setVolume(currentVolume)
-    .catch((e): void => logger.error('', e));
-}
-
-// Used to fade out and pause the song.
-async function fadeOut(): Promise<void> {
-  if (!connected) return;
-
-  clearInterval(fadeInterval);
-  currentVolume = volume;
-  await setVolume();
-
-  async function loop(): Promise<void> {
-    currentVolume -= 1;
-    await setVolume();
-    if (currentVolume <= 0) {
-      clearInterval(fadeInterval);
-      client.playback.pause(true)
-        .catch((e): void => logger.error('', e));
-    }
-  }
-
-  fadeInterval = setInterval(loop, 200);
-}
-
-// Used to unpause and fade in the song.
-async function fadeIn(): Promise<void> {
-  if (!connected) return;
-
-  clearInterval(fadeInterval);
-  currentVolume = 0;
-  await client.playback.pause(false)
-    .catch((e): void => logger.error('', e));
-  await setVolume();
-
-  async function loop(): Promise<void> {
-    currentVolume += 1;
-    await setVolume();
-    if (currentVolume >= volume) {
-      clearInterval(fadeInterval);
-    }
-  }
-
-  fadeInterval = setInterval(loop, 200);
-} */

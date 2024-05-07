@@ -1,16 +1,12 @@
 import * as nodecgApiContext from './util/nodecg-api-context'
 import { TwitchStreams } from '../../schemas'
-import { RunDataActiveRun } from '../../speedcontrol-types'
+import { soundOnTwitchStream, streamsReplicant } from './util/replicants'
+import { runDataActiveRunRep } from './util/speedControlReplicants'
 import { TwitchStream } from '../../types'
 
 const nodecg = nodecgApiContext.get()
 
 // Twitch aspect ratio 1024x576
-
-const runDataActiveRunReplicant = nodecg.Replicant<RunDataActiveRun>('runDataActiveRun', 'nodecg-speedcontrol')
-
-const streamsReplicant = nodecg.Replicant<TwitchStreams>('twitchStreams', { defaultValue: [] })
-const soundOnTwitchStream = nodecg.Replicant<number>('soundOnTwitchStream', { defaultValue: -1 })
 
 const aspectRatioToCropping: { [key: string]: { widthPercent: number; heightPercent: number; topPercent: number; leftPercent: number } } = {
     '16:9': {
@@ -76,7 +72,7 @@ const aspectRatioToCropping: { [key: string]: { widthPercent: number; heightPerc
 }
 
 streamsReplicant.once('change', (): void => {
-    runDataActiveRunReplicant.on('change', (newVal, old): void => {
+    runDataActiveRunRep.on('change', (newVal, old): void => {
         // don't reset on server restart
         if (!newVal || !old) return
 

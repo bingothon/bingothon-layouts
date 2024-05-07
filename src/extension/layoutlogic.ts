@@ -1,13 +1,10 @@
 import clone from 'clone'
-import { AllGameLayouts, CurrentGameLayout } from '../../schemas'
-import { RunDataActiveRun } from '../../speedcontrol-types'
 import * as nodecgApiContext from './util/nodecg-api-context'
+import { allGameLayoutsRep, currentGameLayoutRep } from './util/replicants'
+import { runDataActiveRunRep } from './util/speedControlReplicants'
 
 const nodecg = nodecgApiContext.get()
 
-const allGameLayoutsRep = nodecg.Replicant<AllGameLayouts>('allGameLayouts');
-const currentGameLayoutRep = nodecg.Replicant<CurrentGameLayout>('currentGameLayout');
-const runDataActiveRunRep = nodecg.Replicant<RunDataActiveRun>('runDataActiveRun', 'nodecg-speedcontrol');
 const logger = new nodecg.Logger(`${nodecg.bundleName}:layoutlogic`);
 
 runDataActiveRunRep.on('change', (newValue, old): void => {

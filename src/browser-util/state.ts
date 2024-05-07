@@ -1,5 +1,4 @@
 import clone from 'clone';
-import { ReplicantBrowser } from 'nodecg/types/browser'; // eslint-disable-line
 import Vue, { set } from 'vue';
 import { vuexfireMutations, firebaseAction } from 'vuexfire';
 import Vuex, { Store } from 'vuex';
@@ -50,6 +49,7 @@ import {
 import { RunDataActiveRun, RunDataArray, Timer, TwitchCommercialTimer } from '../../speedcontrol-types';
 // import { Scene } from "../extension/util/obs" TODO: set types for sccenes
 import { Games } from '../../types';
+import type NodeCGTypes from '@nodecg/types';
 
 Vue.use(Vuex);
 
@@ -102,7 +102,7 @@ const replicantNames = [
 const nodecgSpeedcontrolReplicantNames = ['runDataActiveRun', 'runDataArray', 'timer', 'twitchCommercialTimer'];
 
 const assetNames = ['assets:intermissionVideos', 'assets:wideLargeLogos', 'assets:wideSmallLogos', 'assets:squareLogos'];
-const replicants: Map<string, ReplicantBrowser<any>> = new Map();
+const replicants: Map<string, NodeCGTypes.ClientReplicant<any>> = new Map();
 
 let playerAlternateInterval: NodeJS.Timeout | null = null;
 
@@ -302,7 +302,7 @@ store.commit('startPlayerAlternateInterval', 10000);
  * Gets the raw replicant, only intended for modifications, to use values use state
  * @param replicant name of the replicant, throws an error if it isn't found
  */
-export function getReplicant<T>(replicant: string): ReplicantBrowser<T> {
+export function getReplicant<T>(replicant: string): NodeCGTypes.ClientReplicant<T> {
     const rep = replicants.get(replicant);
     if (!rep) {
         throw new Error('invalid replicant!');

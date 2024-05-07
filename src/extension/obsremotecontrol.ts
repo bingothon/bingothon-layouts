@@ -1,20 +1,15 @@
 'use-strict';
 
-import * as nodecgApiContext from './util/nodecg-api-context';
 import { Configschema } from '../../configschema';
 import {
     DiscordDelayInfo,
-    HostsSpeakingDuringIntermission,
-    LastIntermissionTimestamp,
-    ObsAudioSources,
     ObsConnection,
-    ObsDashboardAudioSources,
-    ObsPreviewImg,
-    ObsStreamMode,
-    TwitchStreams,
+    ObsStreamMode
 } from '../../schemas';
 import { TwitchCommercialTimer } from '../../speedcontrol-types';
+import * as nodecgApiContext from './util/nodecg-api-context';
 import obs from './util/obs';
+import { discordDelayInfoRep, obsAudioSourcesRep, obsConnectionRep, obsCurrentSceneRep, obsDashboardAudioSourcesRep, obsPreviewScene, obsStreamModeRep, voiceDelayRep, streamsReplicant, soundOnTwitchStream, hostDiscordDuringIntermissionRep, lastIntermissionTimestampRep, obsPreviewImgRep } from './util/replicants';
 
 // this handles dashboard utilities, all around automating the run setup process
 // and setting everything in OBS properly on transitions
@@ -25,21 +20,6 @@ const HOST_SPEAKING_MUSIC_VOLUME_MULTIPLIER = 0.2;
 const nodecg = nodecgApiContext.get();
 const logger = new nodecg.Logger(`${nodecg.bundleName}:remotecontrol`);
 const bundleConfig = nodecg.bundleConfig as Configschema;
-
-const obsCurrentSceneRep = nodecg.Replicant<string | null>('obsCurrentScene');
-const obsDashboardAudioSourcesRep = nodecg.Replicant<ObsDashboardAudioSources>('obsDashboardAudioSources');
-const obsAudioSourcesRep = nodecg.Replicant<ObsAudioSources>('obsAudioSources');
-const obsConnectionRep = nodecg.Replicant<ObsConnection>('obsConnection');
-const obsStreamModeRep = nodecg.Replicant<ObsStreamMode>('obsStreamMode');
-const discordDelayInfoRep = nodecg.Replicant<DiscordDelayInfo>('discordDelayInfo');
-const obsPreviewScene = nodecg.Replicant<string>('obsPreviewScene');
-
-const voiceDelayRep = nodecg.Replicant<number>('voiceDelay', { defaultValue: 0, persistent: true });
-const streamsReplicant = nodecg.Replicant<TwitchStreams>('twitchStreams', { defaultValue: [] });
-const soundOnTwitchStream = nodecg.Replicant<number>('soundOnTwitchStream', { defaultValue: -1 });
-const hostDiscordDuringIntermissionRep = nodecg.Replicant<HostsSpeakingDuringIntermission>('hostsSpeakingDuringIntermission');
-const lastIntermissionTimestampRep = nodecg.Replicant<LastIntermissionTimestamp>('lastIntermissionTimestamp');
-const obsPreviewImgRep = nodecg.Replicant<ObsPreviewImg>('obsPreviewImg');
 
 let screenshotTimer: ReturnType<typeof setInterval> | undefined = undefined;
 
@@ -286,15 +266,16 @@ waitTillConnected().then((): void => {
         // music only during intermission
         if (nextSceneName.includes('intermission')) {
             // updates the next run panels
-            nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.mpdAudio }, (err): void => {
+            // TODO: NodeCG does not actually support sending server to server messages, hence why we can't get any acks or errors from a cb
+            nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.mpdAudio }, /* (err): void => {
                 logger.warn(`Problem fading in mpd during transition: ${err.error}`);
-            });
+            } */);
         } else {
             // this should be false anyway, hosts should stop speaking before the transition to the next run
             hostDiscordDuringIntermissionRep.value.speaking = false;
-            nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.mpdAudio }, (err): void => {
+            nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.mpdAudio }, /* (err): void => {
                 logger.warn(`Problem fading out mpd during transition: ${err.error}`);
-            });
+            } */);
         }
         // streams audio handled via individual sources
         // if (nextSceneName === 'game') {
@@ -319,13 +300,13 @@ waitTillConnected().then((): void => {
             // }
             // if the next scene isn't intermission unmute discord, also don't fade out if hosts are speaking
             if (isIntermissionLikeScene(nextSceneName) && !hostsSpeaking) {
-                nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.discordAudio }, (err): void => {
+                nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.discordAudio }, /* (err): void => {
                     logger.warn(`Problem fading out discord during transition: ${err.error}`);
-                });
+                } */);
             } else {
-                nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.discordAudio }, (err): void => {
+                nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.discordAudio }, /* (err): void => {
                     logger.warn(`Problem fading in discord during transition: ${err.error}`);
-                });
+                } */);
             }
         } else if (streamMode === 'racer-audio-only') {
             // use player audio
@@ -341,13 +322,13 @@ waitTillConnected().then((): void => {
             // }
             // discord muted except for interview
             if (nextSceneName === 'interview' || (nextSceneName.includes('intermission') && hostsSpeaking)) {
-                nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.discordAudio }, (err): void => {
+                nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.discordAudio }, /* (err): void => {
                     logger.warn(`Problem fading in discord during transition: ${err.error}`);
-                });
+                } */);
             } else {
-                nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.discordAudio }, (err): void => {
+                nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.discordAudio }, /* (err): void => {
                     logger.warn(`Problem fading out discord during transition: ${err.error}`);
-                });
+                } */);
             }
             // if (nextSceneName === 'intermission') {
             //   discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false;
@@ -399,14 +380,14 @@ waitTillConnected().then((): void => {
         if ((obsCurrentSceneRep.value || '').toLowerCase().includes('intermission')) {
             if (newVal.speaking) {
                 obsAudioSourcesRep.value[bundleConfig.obs.mpdAudio].volumeMultiplier = HOST_SPEAKING_MUSIC_VOLUME_MULTIPLIER;
-                nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.discordAudio }, (err): void => {
+                nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.discordAudio }, /* (err): void => {
                     logger.warn(`Problem fading in discord during transition: ${err.error}`);
-                });
+                } */);
             } else {
                 obsAudioSourcesRep.value[bundleConfig.obs.mpdAudio].volumeMultiplier = 1;
-                nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.discordAudio }, (err): void => {
+                nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.discordAudio }, /* (err): void => {
                     logger.warn(`Problem fading out discord during transition: ${err.error}`);
-                });
+                } */);
             }
         }
     });
@@ -421,20 +402,20 @@ waitTillConnected().then((): void => {
     });
 
     adsTimerReplicant.on('change', (newVal): void => {
-        if (newVal.secondsRemaining <= 0 && obsCurrentSceneRep.value === '(ads) intermission') {
+        if (newVal && newVal.secondsRemaining <= 0 && obsCurrentSceneRep.value === '(ads) intermission') {
             obs.changeScene('videoPlayer');
-            nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.mpdAudio }, (err): void => {
+            nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.mpdAudio },/*  (err): void => {
                 logger.warn(`Problem fading out mpd during transition: ${err.error}`);
-            });
+            } */);
         }
     });
 
     nodecg.listenFor('videoPlayerFinished', (): void => {
         if (obsCurrentSceneRep.value?.toLowerCase() === 'videoplayer') {
             obs.changeScene('intermission');
-            nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.mpdAudio }, (err): void => {
+            nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.mpdAudio }, /* (err): void => {
                 logger.warn(`Problem fading in mpd during transition: ${err.error}`);
-            });
+            } */);
         }
     });
 });
