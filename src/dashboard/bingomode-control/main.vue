@@ -86,7 +86,6 @@
 
 <script lang="ts">
     import { Component, Vue, Watch } from 'vue-property-decorator';
-    import { nodecg } from '../../browser-util/nodecg';
     import { BingoboardMode } from '../../../schemas';
     import { store } from '../../browser-util/state';
     import clone from 'clone';
