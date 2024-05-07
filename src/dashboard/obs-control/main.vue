@@ -68,7 +68,6 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { nodecg } from '../../browser-util/nodecg';
     import { DiscordDelayInfo, ObsDashboardAudioSources, ObsStreamMode } from '../../../schemas';
     import { getReplicant, store } from '../../browser-util/state';
 

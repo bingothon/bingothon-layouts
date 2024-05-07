@@ -43,8 +43,6 @@
 <script lang="ts">
     import { Prop, Vue, Component } from 'vue-property-decorator';
     import { BingoBoardAnimation } from './bingoboard-animation';
-
-    import { nodecg } from '../../browser-util/nodecg';
     import { Bingoboard } from '../../../schemas';
     import equals from 'deep-equal';
     import { store } from '../../browser-util/state';

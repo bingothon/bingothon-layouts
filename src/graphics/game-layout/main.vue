@@ -4,7 +4,6 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { nodecg } from '../../browser-util/nodecg';
     import { CapturePositions } from '../../../schemas';
     import { Route } from 'vue-router/types/router';
 
