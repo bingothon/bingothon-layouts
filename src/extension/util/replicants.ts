@@ -18,6 +18,7 @@ import type {
     ObsConnection,
     ObsDashboardAudioSources,
     ObsPreviewImg,
+    ObsSceneList,
     ObsStreamMode,
     SongData,
     TrackerDonations,
@@ -99,10 +100,7 @@ export const obsPreviewImgRep = nodecg().Replicant<ObsPreviewImg>('obsPreviewImg
 export const twitchChatBotDataRep = nodecg().Replicant<TwitchChatBotData>(
     'twitchChatBotData',
 ) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<TwitchChatBotData>;
-export const obsSceneListRep = nodecg().Replicant<string[] | null>('obsSceneList', { defaultValue: null }) as unknown as NodeCGTypes.ServerReplicant<
-string[] | null,
-{ defaultValue: string[] }
->; // TODO: create a type Scene and replace 'any' with 'Scene[]'
+export const obsSceneListRep = nodecg().Replicant<ObsSceneList>('obsSceneList') as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<ObsSceneList>; // TODO: create a type Scene and replace 'any' with 'Scene[]'
 export const capturePositionsRep = nodecg().Replicant<CapturePositions>(
     'capturePositions',
 ) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<CapturePositions>;
