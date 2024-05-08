@@ -1,3 +1,16 @@
+/* eslint-disable global-require */
+
+// This must go first so we can use module aliases!
+/* eslint-disable import/first */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const alias = require('module-alias')
+
+alias.addAlias(
+    '@',
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    require('path').join(__dirname, '.')
+);
+
 import type NodeCG from '@nodecg/types' // eslint-disable-line
 import * as nodecgApiContext from './util/nodecg-api-context'
 import {Asset, CapturePositions, ShowPictureDuringIntermission, SongData, VoiceActivity} from '../../schemas'
