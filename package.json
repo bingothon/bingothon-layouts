@@ -22,10 +22,10 @@
   "scripts": {
     "autofix": "run-s autofix:*",
     "autofix:browser": "eslint --fix --cache --ext .ts,.vue src/dashboard && eslint --fix --cache --ext .ts,.vue src/graphics && eslint --fix --cache --ext .ts src/browser-util",
-    "autofix:extension": "eslint --fix --cache --ext .ts src/extension && eslint --fix --cache --ext .d.ts src/types",
+    "autofix:extension": "eslint --fix --cache --ext .ts,.js,.html,.d.ts src/extension types",
     "lint": "run-s lint:*",
     "lint:browser": "eslint --cache --ext .ts,.js,.html,.vue src/dashboard src/graphics src/browser-util",
-    "lint:extension": "eslint  --cache --ext .ts,.js,.html src/extension types",
+    "lint:extension": "eslint --cache --ext .ts,.js,.html,.d.ts src/extension types",
     "build": "run-s build:*",
     "build:browser": "cross-env NODE_ENV=production webpack",
     "build:extension": "tsc -b tsconfig.extension.json",

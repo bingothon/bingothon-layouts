@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { Configschema } from '@/configschema';
-import { CapturePositions, CurrentGameLayout, ObsAudioLevels, ObsAudioSources, ObsSceneList, SoundOnTwitchStream, TwitchStreams } from '@/schemas';
+import { CapturePositions, CurrentGameLayout, ObsAudioLevels, ObsSceneList, SoundOnTwitchStream } from '@/schemas';
 import OBSWebSocket, { EventSubscription, EventTypes } from 'obs-websocket-js';
 import { TwitchStream } from 'types';
 import * as nodecgApiContext from './nodecg-api-context';
 import {
-    obsAudioSourcesRep,
-    obsConnectionRep,
-    obsPreviewScene,
-    obsCurrentSceneRep,
-    obsSceneListRep,
     capturePositionsRep,
     currentGameLayoutRep,
-    soundOnTwitchStream,
     obsAudioLevels,
+    obsAudioSourcesRep,
+    obsConnectionRep,
+    obsCurrentSceneRep,
+    obsPreviewScene,
+    obsSceneListRep,
+    soundOnTwitchStream,
     streamsReplicant,
 } from './replicants';
 
