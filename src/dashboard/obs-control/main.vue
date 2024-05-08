@@ -131,9 +131,9 @@
             return [
                 {
                     label: 'Capture Discord via Stream PC',
-                    mode: 'external-commentary',
+                    mode: 'external-commentary'
                 },
-                { label: "Capture Discord via runner's stream", mode: 'racer-audio-only' },
+                { label: "Capture Discord via runner's stream", mode: 'racer-audio-only' }
             ];
         }
 

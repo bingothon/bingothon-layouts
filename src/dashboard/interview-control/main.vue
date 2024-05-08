@@ -25,7 +25,7 @@
                 (newValue) => {
                     this.selectedInterviewName = newValue.name;
                 },
-                { immediate: true },
+                { immediate: true }
             );
         }
 

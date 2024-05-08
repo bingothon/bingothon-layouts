@@ -25,7 +25,7 @@
     import { store } from '../../browser-util/state';
 
     @Component({
-        components: {},
+        components: {}
     })
     export default class BestOfX extends Vue {
         @Prop({ default: -1 })

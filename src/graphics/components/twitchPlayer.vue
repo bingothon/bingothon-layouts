@@ -7,7 +7,7 @@
                 left: `${leftAdjustment}px`,
                 top: `${topAdjustment}px`,
                 width: `${playerWidth}px`,
-                height: `${playerHeight}px`,
+                height: `${playerHeight}px`
             }"
         />
     </div>
@@ -50,7 +50,7 @@
                     if (this.player) {
                         this.player.setMuted(this.streamIndex != newVal);
                     }
-                },
+                }
             );
             nodecg.listenFor('streams:refreshStream', 'bingothon-layouts', this.onRefreshStream);
             if (this.updateDelay) {
@@ -65,7 +65,7 @@
                         let qualities = this.player.getQualities().map((q) => {
                             return {
                                 name: q.name,
-                                group: q.group,
+                                group: q.group
                             };
                         });
                         if (qualities) {
@@ -98,7 +98,7 @@
             var playerOptions = {
                 channel: this.currentStream.channel,
                 width: this.playerWidth,
-                height: this.playerHeight,
+                height: this.playerHeight
             };
             this.player = new Twitch.Player(this.$refs.twitchPlayer, playerOptions);
         }

@@ -45,8 +45,8 @@
             TestTimerContainer,
             DiscordVoiceDisplay,
             TwitchPlayer,
-            RotatingLogo,
-        },
+            RotatingLogo
+        }
     })
     export default class GameLayout extends Vue {
         get teams(): RunDataTeam[] {

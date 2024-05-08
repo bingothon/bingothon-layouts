@@ -44,7 +44,7 @@ import {
     TrackerPrizes,
     TwitchChatBotData,
     TwitchStreams,
-    VoiceActivity,
+    VoiceActivity
 } from '../../schemas';
 import { RunDataActiveRun, RunDataArray, Timer, TwitchCommercialTimer } from '../../speedcontrol-types';
 // import { Scene } from "../extension/util/obs" TODO: set types for sccenes
@@ -97,7 +97,7 @@ const replicantNames = [
     'twitchStreams',
     'voiceActivity',
     'voiceDelay',
-    'songData',
+    'songData'
 ];
 const nodecgSpeedcontrolReplicantNames = ['runDataActiveRun', 'runDataArray', 'timer', 'twitchCommercialTimer'];
 
@@ -234,7 +234,7 @@ export const store = new Store<StoreTypes>({
         gameP1: {} as Games,
         gameP2: {} as Games,
         gameP3: {} as Games,
-        gameP4: {} as Games,
+        gameP4: {} as Games
     },
     mutations: {
         updateReplicant(state, { name, value }) {
@@ -254,7 +254,7 @@ export const store = new Store<StoreTypes>({
             }
             playerAlternateInterval = null;
         },
-        ...vuexfireMutations,
+        ...vuexfireMutations
     },
     actions: {
         bindGameP1: firebaseAction<any, any>(({ bindFirebaseRef }, payload) => {
@@ -292,8 +292,8 @@ export const store = new Store<StoreTypes>({
         }),
         unbindGameP4: firebaseAction<any, any>(({ unbindFirebaseRef }) => {
             unbindFirebaseRef('gameP4');
-        }),
-    },
+        })
+    }
 });
 
 store.commit('startPlayerAlternateInterval', 10000);
@@ -316,7 +316,7 @@ replicantNames.forEach((name) => {
     replicant.on('change', (newVal) => {
         store.commit('updateReplicant', {
             name: replicant.name,
-            value: clone(newVal),
+            value: clone(newVal)
         });
     });
 
@@ -329,7 +329,7 @@ nodecgSpeedcontrolReplicantNames.forEach((name) => {
     rep.on('change', (newVal) => {
         store.commit('updateReplicant', {
             name: rep.name,
-            value: clone(newVal),
+            value: clone(newVal)
         });
     });
 
@@ -341,7 +341,7 @@ assetNames.forEach((name) => {
     rep.on('change', (newValue) => {
         store.commit('updateReplicant', {
             name: rep.name,
-            value: clone(newValue),
+            value: clone(newValue)
         });
     });
     replicants.set(name, rep);

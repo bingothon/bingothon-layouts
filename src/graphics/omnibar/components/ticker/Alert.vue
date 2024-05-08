@@ -8,7 +8,7 @@
             ref="Line2"
             class="Line2"
             :style="{
-                width: width > 0 ? `${width}px` : 'inherit',
+                width: width > 0 ? `${width}px` : 'inherit'
             }"
         >
             {{ line2 }}
@@ -57,7 +57,7 @@
                             ease: 'none',
                             onComplete: () => {
                                 setTimeout(() => this.$emit('end'), 2 * 1000);
-                            },
+                            }
                         });
                     }, 2 * 1000);
                 });

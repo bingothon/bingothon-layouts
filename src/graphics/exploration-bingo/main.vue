@@ -81,7 +81,7 @@
             if (!cell.hidden) {
                 nodecg
                     .sendMessageToBundle('exploration:goalClicked', 'bingothon-layouts', {
-                        index: cell.row * 5 + cell.column,
+                        index: cell.row * 5 + cell.column
                     })
                     .catch((e) => {
                         console.error(e);

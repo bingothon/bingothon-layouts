@@ -10,7 +10,7 @@ Vue.use(VueRouter);
 //TODO get rid of router and make interview-var the only interview
 const routes = [
     { name: 'Var Interview', path: '/interview-var', component: Interviews.Interview_Var },
-    { path: '*', redirect: '/interview-var' },
+    { path: '*', redirect: '/interview-var' }
 ];
 
 // put all of the interviews in the replicant
@@ -22,7 +22,7 @@ const allInterviews = routes
 getReplicant<AllInterviews>('allInterviews').value = allInterviews;
 
 const router = new VueRouter({
-    routes,
+    routes
 });
 
 // if the replicant changes, update the interviews route
@@ -34,6 +34,6 @@ getReplicant<CurrentInterview>('currentInterview').on('change', (newVal) => {
 create().then(() => {
     new Vue({
         router,
-        render: (h) => h(Interview),
+        render: (h) => h(Interview)
     }).$mount('#App');
 });

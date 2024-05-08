@@ -132,7 +132,7 @@
     import { TrackerData } from '@/schemas';
 
     @Component({
-        components: {},
+        components: {}
     })
     export default class Tracker extends Vue {
         @Watch('trackerData')

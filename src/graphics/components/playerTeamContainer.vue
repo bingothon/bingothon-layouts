@@ -35,8 +35,8 @@
     @Component({
         components: {
             PlayerInfo,
-            TeamInfo,
-        },
+            TeamInfo
+        }
     })
     export default class PlayerTeamContainer extends Vue {
         @Prop({ default: -1 })

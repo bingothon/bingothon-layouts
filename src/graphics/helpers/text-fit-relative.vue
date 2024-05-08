@@ -39,7 +39,7 @@
                 () => {
                     this.fit();
                 },
-                { immediate: true },
+                { immediate: true }
             );
         }
 

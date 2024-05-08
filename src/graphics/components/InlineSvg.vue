@@ -6,7 +6,7 @@
 <script lang="ts">
     export default {
         props: {
-            svgContent: String,
-        },
+            svgContent: String
+        }
     };
 </script>

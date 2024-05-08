@@ -16,8 +16,8 @@
     @Component({
         components: {
             TextFit,
-            TwitchPlayer,
-        },
+            TwitchPlayer
+        }
     })
     export default class TwitchPlayers extends Vue {
         mounted() {}
@@ -37,7 +37,7 @@
             if (!position) {
                 return {
                     visibility: 'hidden',
-                    position: 'absolute',
+                    position: 'absolute'
                 };
             } else {
                 const pos = {
@@ -45,7 +45,7 @@
                     top: `${position.y}px`,
                     width: `${position.width}px`,
                     height: `${position.height}px`,
-                    position: 'absolute',
+                    position: 'absolute'
                 };
                 console.log('pos', pos);
                 return pos;

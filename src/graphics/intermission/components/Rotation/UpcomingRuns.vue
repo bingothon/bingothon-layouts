@@ -17,8 +17,8 @@
 
     @Component({
         components: {
-            RunUpcoming,
-        },
+            RunUpcoming
+        }
     })
     export default class UpcomingRuns extends Vue {
         @Prop({ required: true })

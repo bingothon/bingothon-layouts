@@ -39,7 +39,7 @@
             :class="`bingo-${bingoColor}`"
             :style="{
                 width: parseFloat(height.replace('px', '')) * 0.75 + 'px',
-                height: parseFloat(height.replace('px', '')) * 0.75 + 'px',
+                height: parseFloat(height.replace('px', '')) * 0.75 + 'px'
             }"
         >
             <span v-if="bingoCountShown === true">{{ bingoGoalCount }}</span>
@@ -60,8 +60,8 @@
     @Component({
         components: {
             TextFit,
-            BestOfX,
-        },
+            BestOfX
+        }
     })
     export default class PlayerInfo extends Vue {
         @Prop({ default: -1 })
@@ -107,11 +107,11 @@
                     teamID: '-1',
                     country: 'eu',
                     social: {
-                        twitch: '',
+                        twitch: ''
                     },
                     customData: {
-                        pronouns: 'they/them',
-                    },
+                        pronouns: 'they/them'
+                    }
                 };
             }
             return correctPlayer;

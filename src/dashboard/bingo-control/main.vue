@@ -178,7 +178,7 @@
             'teal',
             'blue',
             'navy',
-            'purple',
+            'purple'
         ]);
 
         allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard']); //add back when need  'explorationBingoboard'
@@ -189,7 +189,7 @@
                 (newVal) => {
                     this.currentBoardRep = newVal.boardReplicant;
                 },
-                { immediate: true },
+                { immediate: true }
             );
         }
 
@@ -335,7 +335,7 @@
                             .sendMessage('bingosync:joinRoom', {
                                 roomCode: this.roomCode,
                                 passphrase: this.passphrase,
-                                name: this.currentBoardRep,
+                                name: this.currentBoardRep
                             })
                             .catch((error) => {
                                 nodecg.log.error(error);
@@ -399,7 +399,7 @@
                         game: 'ori1',
                         boardID: '',
                         playerID: '',
-                        coop: false,
+                        coop: false
                     };
                     break;
                 }
@@ -407,19 +407,19 @@
                     this.externalBingoboardMeta = {
                         game: 'ori2',
                         token: '',
-                        host: '',
+                        host: ''
                     };
                     break;
                 }
                 case 'deus-ex': {
                     this.externalBingoboardMeta = {
-                        game: 'deus-ex',
+                        game: 'deus-ex'
                     };
                     break;
                 }
                 default: {
                     this.externalBingoboardMeta = {
-                        game: 'none',
+                        game: 'none'
                     };
                 }
             }

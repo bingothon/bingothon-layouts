@@ -12,7 +12,7 @@ const routes = [
     { name: '2p CamNames', path: '/camnames-2p', component: CamNames.CamNames_2p },
     { name: '3p CamNames', path: '/camnames-3p', component: CamNames.CamNames_3p },
     { name: '4p CamNames', path: '/camnames-4p', component: CamNames.CamNames_4p },
-    { path: '*', redirect: '/camnames-4p' },
+    { path: '*', redirect: '/camnames-4p' }
 ];
 
 // put all of the camnames in the replicant
@@ -24,7 +24,7 @@ const allCamNames = routes
 getReplicant<AllCamNames>('allCamNames').value = allCamNames;
 
 const router = new VueRouter({
-    routes,
+    routes
 });
 
 // if the replicant changes, update the interviews route
@@ -36,6 +36,6 @@ getReplicant<CurrentCamNames>('currentCamNames').on('change', (newVal) => {
 create().then(() => {
     new Vue({
         router,
-        render: (h) => h(CamNamesComponent),
+        render: (h) => h(CamNamesComponent)
     }).$mount('#App');
 });

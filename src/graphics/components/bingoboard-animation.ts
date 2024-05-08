@@ -58,7 +58,7 @@ export class BingoBoardAnimation extends Vue {
         { row: 1, col: 4 },
         { row: 2, col: 4 },
         { row: 3, col: 4 },
-        { row: 4, col: 4 },
+        { row: 4, col: 4 }
     ];
 
     mounted() {
@@ -155,7 +155,7 @@ export class BingoBoardAnimation extends Vue {
                     width: rect.width,
                     height: rect.height,
                     left: rect.left - bingoBoardRect.left,
-                    top: rect.top - bingoBoardRect.top,
+                    top: rect.top - bingoBoardRect.top
                 };
             }
         }

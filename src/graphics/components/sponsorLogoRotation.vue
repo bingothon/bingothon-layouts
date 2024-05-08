@@ -19,14 +19,14 @@
     export enum LogoAssetType {
         wideSmallLogos = 'wideSmallLogos',
         wideLargeLogos = 'wideLargeLogos',
-        squareLogos = 'squareLogos',
+        squareLogos = 'squareLogos'
     }
 
     @Component({
         components: {
             PlayerInfo,
-            TeamInfo,
-        },
+            TeamInfo
+        }
     })
     export default class SponsorLogoRotation extends Vue {
         @Prop({ required: true, default: LogoAssetType.wideSmallLogos })

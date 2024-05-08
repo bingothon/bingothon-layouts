@@ -99,7 +99,7 @@
         updateStreamQuality(id: number, event: any) {
             nodecg.sendMessageToBundle('streams:setStreamQuality', bingothonBundleName, {
                 id,
-                quality: event.target.value,
+                quality: event.target.value
             });
         }
 

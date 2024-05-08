@@ -68,7 +68,7 @@
                 autoplay: false,
                 channel: this.currentChannel,
                 width: initWidth,
-                height: initHeight,
+                height: initHeight
             };
             globalPlayer = new Twitch.Player(this.$refs.twitchPlayer, playerOptions);
             globalPlayer.setMuted(true);
@@ -127,8 +127,8 @@
                     widthPercent: parseInt(this.widthPercent as unknown as string, 10),
                     heightPercent: parseInt(this.heightPercent as unknown as string, 10),
                     leftPercent: parseInt(this.leftPercent as unknown as string, 10),
-                    topPercent: parseInt(this.topPercent as unknown as string, 10),
-                },
+                    topPercent: parseInt(this.topPercent as unknown as string, 10)
+                }
             );
         }
 

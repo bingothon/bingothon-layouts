@@ -35,7 +35,7 @@
                 method: 'GET', // HTTP method for the request
                 endpoint: `/clips?id=${slug}`, // Twitch API endpoint for clips
                 data: {}, // Additional data for the request, if needed
-                newAPI: true, // Specify if this is for the new Twitch API
+                newAPI: true // Specify if this is for the new Twitch API
             };
 
             try {
@@ -53,7 +53,7 @@
                                 console.log('Twitch clip duration response:', response);
                                 resolve(response);
                             }
-                        },
+                        }
                     );
                 });
 
