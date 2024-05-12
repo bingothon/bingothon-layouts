@@ -168,7 +168,7 @@
     import gameSystemImages from '../../../../static/assets/game-systems/game-system-images-manifest.json';
 
     @Component({
-        components: { InlineSvg, TextFitRelative, ScrollText },
+        components: { InlineSvg, TextFitRelative, ScrollText }
     })
     export default class RunUpcoming extends Vue {
         @Prop({ default: undefined })
@@ -295,7 +295,7 @@
                 double: require('../../../../static/assets/boards/logos/double.svg'),
                 triple: require('../../../../static/assets/boards/logos/triple.svg'),
                 quad: require('../../../../static/assets/boards/logos/quad.svg'),
-                lockout: require('../../../../static/assets/boards/logos/lockout.svg'),
+                lockout: require('../../../../static/assets/boards/logos/lockout.svg')
             };
 
             const matchedLogos: string[] = [];
@@ -317,7 +317,7 @@
                 triple: 'Triple',
                 quad: 'Quad',
                 lockout: 'Lockout',
-                cinco: 'Cinco',
+                cinco: 'Cinco'
             };
 
             const matchedWords: string[] = [];
@@ -341,7 +341,7 @@
                 speech: 'Speech/Opening',
                 '2v2': '2v2',
                 blind: 'Blind',
-                glitchless: 'Glitchless',
+                glitchless: 'Glitchless'
             };
 
             const matchedWords: string[] = [];
@@ -395,7 +395,7 @@
             run.teams.forEach((team) =>
                 team.players.forEach(() => {
                     amount += 1;
-                }),
+                })
             );
             return amount;
         }

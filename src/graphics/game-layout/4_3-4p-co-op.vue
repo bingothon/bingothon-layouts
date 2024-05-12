@@ -108,8 +108,8 @@
             TestTimerContainer,
             DiscordVoiceDisplay,
             TwitchPlayer,
-            RotatingLogo,
-        },
+            RotatingLogo
+        }
     })
     export default class GameLayout extends Vue {
         get teamColor1(): string {

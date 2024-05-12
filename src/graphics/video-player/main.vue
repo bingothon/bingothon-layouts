@@ -23,8 +23,8 @@
 
     @Component({
         components: {
-            TextFit,
-        },
+            TextFit
+        }
     })
     export default class VideoPlayer extends Vue {
         video: Asset;

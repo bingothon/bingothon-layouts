@@ -37,8 +37,8 @@
             TeamInfo,
             PlayerTeamContainer,
             TestTimerContainer,
-            DiscordVoiceDisplay,
-        },
+            DiscordVoiceDisplay
+        }
     })
     export default class Interview extends Vue {}
 </script>

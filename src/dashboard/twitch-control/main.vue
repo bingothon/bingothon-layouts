@@ -54,7 +54,6 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { nodecg } from '../../browser-util/nodecg';
     import { TwitchStreams } from '../../../schemas';
     import { getReplicant, store } from '../../browser-util/state';
 
@@ -100,7 +99,7 @@
         updateStreamQuality(id: number, event: any) {
             nodecg.sendMessageToBundle('streams:setStreamQuality', bingothonBundleName, {
                 id,
-                quality: event.target.value,
+                quality: event.target.value
             });
         }
 

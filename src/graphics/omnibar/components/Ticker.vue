@@ -34,8 +34,8 @@
             UpcomingRun,
             Prize,
             Bid,
-            Alert,
-        },
+            Alert
+        }
     })
     export default class Ticker extends Vue {
         timestamp = Date.now();
@@ -52,15 +52,15 @@
                 this.genericMessage('#Bingothon Winter 2023 benefits Fred Hutch!'),
                 this.genericMessage('Donate @ donate.bingothon.com'),
                 this.genericMessage(
-                    "Can't get enough of Bingothon? Join the Bingothon Discord at discord.bingothon.com",
-                ),
+                    "Can't get enough of Bingothon? Join the Bingothon Discord at discord.bingothon.com"
+                )
             ];
             store.watch(
                 (state) => state.trackerDonations,
                 (newVal) => {
                     this.latestDonations = newVal.slice(0, 4);
                 },
-                { immediate: true },
+                { immediate: true }
             );
             this.showNextMsg();
         }
@@ -69,8 +69,8 @@
             return {
                 name: 'GenericMessage',
                 data: {
-                    msg,
-                },
+                    msg
+                }
             };
         }
 
@@ -87,8 +87,8 @@
             return {
                 name: 'DynamicMessage',
                 data: {
-                    msg,
-                },
+                    msg
+                }
             };
         }
 
@@ -153,8 +153,8 @@
                 name: 'Alert',
                 data: {
                     line1Text,
-                    line2Text,
-                },
+                    line2Text
+                }
             };
         }
 
@@ -162,8 +162,8 @@
             return {
                 name: 'GenericMessage',
                 data: {
-                    time: 0,
-                },
+                    time: 0
+                }
             };
         }
 

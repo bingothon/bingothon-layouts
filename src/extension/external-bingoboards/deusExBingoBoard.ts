@@ -1,11 +1,11 @@
 import * as RequestPromise from 'request-promise'
 
-import * as nodecgApiContext from '../util/nodecg-api-context'
 import { ExternalBingoboardManager } from "@/externalBingoboards"
-import { ReplicantServer } from "nodecg/types/server"
+import { boardMetaRep } from '@/util/replicants'
+import type NodeCG from "@nodecg/types"
 import { ExternalBingoboard } from "schemas/externalBingoboard"
 import { ExternalBingoboardMeta } from "schemas/externalBingoboardMeta"
-import { BingoboardMeta } from 'schemas/bingoboardMeta'
+import * as nodecgApiContext from '../util/nodecg-api-context'
 
 interface DeusExCell {
     x: number,
@@ -22,12 +22,11 @@ interface DeusExResponse {
 const nodecg = nodecgApiContext.get()
 const log = new nodecg.Logger(`${nodecg.bundleName}:deusExBingo`)
 const request = RequestPromise.defaults({ jar: true })
-const boardMetaRep = nodecg.Replicant<BingoboardMeta>('bingoboardMeta')
 
 export class DeusExternalBingoboard implements ExternalBingoboardManager {
-    updateLoopTimer?: NodeJS.Timer
+    updateLoopTimer?: NodeJS.Timeout
 
-    constructor(private boardRep: ReplicantServer<ExternalBingoboard>) {}
+    constructor(private boardRep: NodeCG.ServerReplicantWithSchemaDefault<ExternalBingoboard>) {}
 
     async configure(meta: ExternalBingoboardMeta): Promise<void> {
         if (meta.game !== 'deus-ex') {

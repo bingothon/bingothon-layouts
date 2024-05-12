@@ -146,7 +146,6 @@
 
 <script lang="ts">
     import { Component, Vue, Watch } from 'vue-property-decorator';
-    import { nodecg } from '../../browser-util/nodecg';
     import { BingoboardMeta, CurrentMainBingoboard, ExternalBingoboardMeta } from '../../../schemas';
     import { getReplicant, store } from '../../browser-util/state';
 
@@ -179,7 +178,7 @@
             'teal',
             'blue',
             'navy',
-            'purple',
+            'purple'
         ]);
 
         allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard']); //add back when need  'explorationBingoboard'
@@ -190,7 +189,7 @@
                 (newVal) => {
                     this.currentBoardRep = newVal.boardReplicant;
                 },
-                { immediate: true },
+                { immediate: true }
             );
         }
 
@@ -336,7 +335,7 @@
                             .sendMessage('bingosync:joinRoom', {
                                 roomCode: this.roomCode,
                                 passphrase: this.passphrase,
-                                name: this.currentBoardRep,
+                                name: this.currentBoardRep
                             })
                             .catch((error) => {
                                 nodecg.log.error(error);
@@ -400,7 +399,7 @@
                         game: 'ori1',
                         boardID: '',
                         playerID: '',
-                        coop: false,
+                        coop: false
                     };
                     break;
                 }
@@ -408,19 +407,19 @@
                     this.externalBingoboardMeta = {
                         game: 'ori2',
                         token: '',
-                        host: '',
+                        host: ''
                     };
                     break;
                 }
                 case 'deus-ex': {
                     this.externalBingoboardMeta = {
-                        game: 'deus-ex',
+                        game: 'deus-ex'
                     };
                     break;
                 }
                 default: {
                     this.externalBingoboardMeta = {
-                        game: 'none',
+                        game: 'none'
                     };
                 }
             }

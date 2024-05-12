@@ -65,7 +65,7 @@
 
         get cssProps() {
             return {
-                '--font-size': `${this.data.size}px`,
+                '--font-size': `${this.data.size}px`
             };
         }
 
@@ -132,14 +132,14 @@
             tl.to(element, {
                 x: `-=${this.scrollPercentage}%`,
                 duration: this.animationDuration,
-                ease: 'linear',
+                ease: 'linear'
             })
                 .to(element, {
                     opacity: 0,
-                    duration: 0.5,
+                    duration: 0.5
                 })
                 .set(element, {
-                    x: '0%',
+                    x: '0%'
                 })
                 .to(element, {
                     opacity: 1,
@@ -149,7 +149,7 @@
                         gsap.delayedCall(0.5, () => {
                             tl.restart();
                         });
-                    },
+                    }
                 });
         }
 

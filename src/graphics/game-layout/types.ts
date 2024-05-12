@@ -25,81 +25,81 @@ export const layout: GameLayoutInterface = {
             top: 0,
             left: 0,
             width: 100,
-            height: 100,
+            height: 100
         },
         {
             top: 0,
             left: 100,
             width: 100,
-            height: 100,
+            height: 100
         },
         {
             top: 100,
             left: 0,
             width: 100,
-            height: 100,
+            height: 100
         },
         {
             top: 100,
             left: 100,
             width: 100,
-            height: 100,
-        },
+            height: 100
+        }
     ],
     players: [
         {
             top: 0,
             left: 0,
             width: 100,
-            height: 100,
+            height: 100
         },
         {
             top: 0,
             left: 100,
             width: 100,
-            height: 100,
+            height: 100
         },
         {
             top: 100,
             left: 0,
             width: 100,
-            height: 100,
+            height: 100
         },
         {
             top: 100,
             left: 100,
             width: 100,
-            height: 100,
-        },
+            height: 100
+        }
     ],
     game: {
         top: 0,
         left: 0,
         width: 100,
-        height: 100,
+        height: 100
     },
     discord: {
         top: 0,
         left: 0,
         width: 100,
-        height: 100,
+        height: 100
     },
     bingoboard: {
         top: 0,
         left: 0,
         width: 100,
-        height: 100,
+        height: 100
     },
     sponsor: {
         top: 0,
         left: 0,
         width: 100,
-        height: 100,
+        height: 100
     },
     timer: {
         top: 0,
         left: 0,
         width: 100,
-        height: 100,
-    },
+        height: 100
+    }
 };

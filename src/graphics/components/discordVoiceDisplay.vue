@@ -4,7 +4,7 @@
         :style="{
             '--icon-height': iconHeight,
             '--name-width': nameWidth,
-            '--voice-highlight-color': voiceHighlightColor,
+            '--voice-highlight-color': voiceHighlightColor
         }"
     >
         <div
@@ -38,8 +38,8 @@
     @Component({
         components: {
             FontAwesomeIcon,
-            TextFit,
-        },
+            TextFit
+        }
     })
     export default class DiscordVoiceDisplay extends Vue {
         @Prop({ default: '40px' })
@@ -59,7 +59,7 @@
                 console.log(
                     `start ${this.startingMember} length: ${this.maxUserCount}, total: ${
                         this.startingMember + this.maxUserCount
-                    }`,
+                    }`
                 );
                 // TS doesn't care and makes the props that are are supposed to be numbers strings
                 // @ts-ignore

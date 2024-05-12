@@ -27,8 +27,8 @@
     @Component({
         components: {
             TextFit,
-            BestOfX,
-        },
+            BestOfX
+        }
     })
     export default class TeamInfo extends Vue {
         @Prop({ required: true })

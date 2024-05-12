@@ -4,7 +4,6 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { nodecg } from '../../browser-util/nodecg';
     import { CapturePositions } from '../../../schemas';
     import { Route } from 'vue-router/types/router';
 
@@ -49,7 +48,7 @@
                         x: sizes.x + parseInt(leftBorder, 10),
                         y: sizes.y + parseInt(topBorder, 10),
                         width: sizes.width - parseInt(rightBorder, 10) - parseInt(leftBorder, 10),
-                        height: sizes.height - parseInt(bottomBorder, 10) - parseInt(topBorder, 10),
+                        height: sizes.height - parseInt(bottomBorder, 10) - parseInt(topBorder, 10)
                     };
                     pos[el.id] = calcSizes;
                 }

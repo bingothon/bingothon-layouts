@@ -6,7 +6,7 @@
             id="CamNamesList"
             :style="{
                 'max-height': '250px',
-                'overflow-y': 'auto',
+                'overflow-y': 'auto'
             }"
         >
             <v-radio-group
@@ -15,7 +15,7 @@
                 hide-details
                 :style="{
                     margin: '0px',
-                    padding: '10px',
+                    padding: '10px'
                 }"
             >
                 <v-radio
@@ -46,7 +46,7 @@
                 (newValue) => {
                     this.selectedCamNames = newValue.name;
                 },
-                { immediate: true },
+                { immediate: true }
             );
         }
 

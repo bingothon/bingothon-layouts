@@ -68,7 +68,6 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { nodecg } from '../../browser-util/nodecg';
     import { DiscordDelayInfo, ObsDashboardAudioSources, ObsStreamMode } from '../../../schemas';
     import { getReplicant, store } from '../../browser-util/state';
 
@@ -132,9 +131,9 @@
             return [
                 {
                     label: 'Capture Discord via Stream PC',
-                    mode: 'external-commentary',
+                    mode: 'external-commentary'
                 },
-                { label: "Capture Discord via runner's stream", mode: 'racer-audio-only' },
+                { label: "Capture Discord via runner's stream", mode: 'racer-audio-only' }
             ];
         }
 

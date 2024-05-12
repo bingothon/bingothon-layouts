@@ -38,8 +38,8 @@
 
     @Component({
         components: {
-            InlineSvg,
-        },
+            InlineSvg
+        }
     })
     export default class TestGameContainer extends Vue {
         playerIndex = 0;

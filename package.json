@@ -17,13 +17,15 @@
     "floha258"
   ],
   "engines": {
-    "npm": ">=8.0.0 <9.0.0",
-    "node": ">=16.0.0 <17.0.0"
+    "node": ">=20.x.x"
   },
   "scripts": {
     "autofix": "run-s autofix:*",
-    "autofix:browser": "eslint --fix --ext .ts,.vue src/dashboard && eslint --fix --ext .ts,.vue src/graphics && eslint --fix --ext .ts src/browser-util",
-    "autofix:extension": "eslint --fix --ext .ts src/extension && eslint --fix --ext .d.ts src/types",
+    "autofix:browser": "eslint --fix --cache --ext .ts,.vue src/dashboard && eslint --fix --cache --ext .ts,.vue src/graphics && eslint --fix --cache --ext .ts src/browser-util",
+    "autofix:extension": "eslint --fix --cache --ext .ts,.js,.html,.d.ts src/extension types",
+    "lint": "run-s lint:*",
+    "lint:browser": "eslint --cache --ext .ts,.js,.html,.vue src/dashboard src/graphics src/browser-util",
+    "lint:extension": "eslint --cache --ext .ts,.js,.html,.d.ts src/extension types",
     "build": "run-s build:*",
     "build:browser": "cross-env NODE_ENV=production webpack",
     "build:extension": "tsc -b tsconfig.extension.json",
@@ -33,10 +35,7 @@
     "watch": "run-p watch:*",
     "watch:browser": "webpack -w",
     "watch:extension": "tsc -b tsconfig.extension.json -w",
-    "tscver": "tsc --version",
-    "lint": "run-s lint:*",
-    "lint:browser": "eslint --ext .ts,.js,.html,.vue src/dashboard src/graphics src/browser-util",
-    "lint:extension": "eslint --ext .ts,.js,.html src/extension types"
+    "tscver": "tsc --version"
   },
   "alias": {
     "vue": "./node_modules/vue/dist/vue.esm.js"
@@ -236,7 +235,6 @@
     "runtimeCompiler": true
   },
   "dependencies": {
-    "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.16.0",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
@@ -252,16 +250,17 @@
     "discord.js": "^13.16.0",
     "firebase": "^8.10.1",
     "gsap": "^3.12.2",
+    "module-alias": "^2.2.3",
     "moment": "^2.29.1",
     "mpc-js": "^1.2.1",
-    "obs-websocket-js": "^5.0.2",
+    "obs-websocket-js": "^5.0.5",
     "request-promise": "^4.2.4",
-    "sass": "^1.52.2",
+    "sass": "~1.32",
     "sass-loader": "^13.0.0",
     "tmi.js": "^1.7.1",
     "ts-loader": "^8.0.7",
     "vuefire": "^2.2.5",
-    "vuetify": "^2.6.14",
+    "vuetify": "^2.7.1",
     "vuetify-loader": "^1.9.2",
     "vuex": "^3.6.2",
     "vuexfire": "^3.2.5",
@@ -270,11 +269,12 @@
   },
   "devDependencies": {
     "@mdi/font": "^5.4.55",
+    "@nodecg/types": "^2.1.12",
     "@types/cheerio": "^0.22.13",
     "@types/clone": "^2.1.1",
     "@types/d3": "^7.4.0",
     "@types/deep-equal": "^1.0.1",
-    "@types/node": "^16.18.12",
+    "@types/node": "^20.12.10",
     "@types/request-promise": "^4.1.44",
     "@types/tmi.js": "^1.7.1",
     "@types/webpack-env": "^1.17.0",
@@ -300,7 +300,6 @@
     "json-schema-to-typescript": "11.0.2",
     "mini-css-extract-plugin": "^2.7.2",
     "moment": "^2.29.1",
-    "nodecg": "^1.7.0",
     "npm-run-all": "^4.1.5",
     "parcel-bundler": "^1.12.4",
     "prettier": "^2.7.1",

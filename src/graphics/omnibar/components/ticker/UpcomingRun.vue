@@ -81,7 +81,7 @@
             run.teams.forEach((team) =>
                 team.players.forEach(() => {
                     amount += 1;
-                }),
+                })
             );
             return amount;
         }

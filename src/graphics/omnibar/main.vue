@@ -20,8 +20,8 @@
             RotatingLogos,
             Total,
             Ticker,
-            Divider,
-        },
+            Divider
+        }
     })
     export default class Omnibar extends Vue {}
 </script>

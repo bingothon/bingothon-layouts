@@ -48,8 +48,8 @@
 
     @Component({
         components: {
-            CellTextFit,
-        },
+            CellTextFit
+        }
     })
     export default class HostBingoComponent extends Vue {
         @Prop({ default: '10px' })
@@ -83,7 +83,7 @@
             getReplicant<HostBingoCell[][]>('hostingBingoboard').value[col][row] = {
                 goal: cell.goal,
                 description: cell.description,
-                marked: !cell.marked,
+                marked: !cell.marked
             };
         }
     }

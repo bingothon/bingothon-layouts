@@ -46,8 +46,8 @@
             TeamInfo,
             PlayerTeamContainer,
             TestTimerContainer,
-            DiscordInterview,
-        },
+            DiscordInterview
+        }
     })
     export default class Interview extends Vue {
         get playerCount(): number[] {

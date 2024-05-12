@@ -1,5 +1,4 @@
 import clone from 'clone';
-import { ReplicantBrowser } from 'nodecg/types/browser'; // eslint-disable-line
 import Vue, { set } from 'vue';
 import { vuexfireMutations, firebaseAction } from 'vuexfire';
 import Vuex, { Store } from 'vuex';
@@ -45,11 +44,12 @@ import {
     TrackerPrizes,
     TwitchChatBotData,
     TwitchStreams,
-    VoiceActivity,
+    VoiceActivity
 } from '../../schemas';
 import { RunDataActiveRun, RunDataArray, Timer, TwitchCommercialTimer } from '../../speedcontrol-types';
 // import { Scene } from "../extension/util/obs" TODO: set types for sccenes
 import { Games } from '../../types';
+import type NodeCGTypes from '@nodecg/types';
 
 Vue.use(Vuex);
 
@@ -97,12 +97,12 @@ const replicantNames = [
     'twitchStreams',
     'voiceActivity',
     'voiceDelay',
-    'songData',
+    'songData'
 ];
 const nodecgSpeedcontrolReplicantNames = ['runDataActiveRun', 'runDataArray', 'timer', 'twitchCommercialTimer'];
 
 const assetNames = ['assets:intermissionVideos', 'assets:wideLargeLogos', 'assets:wideSmallLogos', 'assets:squareLogos'];
-const replicants: Map<string, ReplicantBrowser<any>> = new Map();
+const replicants: Map<string, NodeCGTypes.ClientReplicant<any>> = new Map();
 
 let playerAlternateInterval: NodeJS.Timeout | null = null;
 
@@ -234,7 +234,7 @@ export const store = new Store<StoreTypes>({
         gameP1: {} as Games,
         gameP2: {} as Games,
         gameP3: {} as Games,
-        gameP4: {} as Games,
+        gameP4: {} as Games
     },
     mutations: {
         updateReplicant(state, { name, value }) {
@@ -254,7 +254,7 @@ export const store = new Store<StoreTypes>({
             }
             playerAlternateInterval = null;
         },
-        ...vuexfireMutations,
+        ...vuexfireMutations
     },
     actions: {
         bindGameP1: firebaseAction<any, any>(({ bindFirebaseRef }, payload) => {
@@ -292,8 +292,8 @@ export const store = new Store<StoreTypes>({
         }),
         unbindGameP4: firebaseAction<any, any>(({ unbindFirebaseRef }) => {
             unbindFirebaseRef('gameP4');
-        }),
-    },
+        })
+    }
 });
 
 store.commit('startPlayerAlternateInterval', 10000);
@@ -302,7 +302,7 @@ store.commit('startPlayerAlternateInterval', 10000);
  * Gets the raw replicant, only intended for modifications, to use values use state
  * @param replicant name of the replicant, throws an error if it isn't found
  */
-export function getReplicant<T>(replicant: string): ReplicantBrowser<T> {
+export function getReplicant<T>(replicant: string): NodeCGTypes.ClientReplicant<T> {
     const rep = replicants.get(replicant);
     if (!rep) {
         throw new Error('invalid replicant!');
@@ -316,7 +316,7 @@ replicantNames.forEach((name) => {
     replicant.on('change', (newVal) => {
         store.commit('updateReplicant', {
             name: replicant.name,
-            value: clone(newVal),
+            value: clone(newVal)
         });
     });
 
@@ -329,7 +329,7 @@ nodecgSpeedcontrolReplicantNames.forEach((name) => {
     rep.on('change', (newVal) => {
         store.commit('updateReplicant', {
             name: rep.name,
-            value: clone(newVal),
+            value: clone(newVal)
         });
     });
 
@@ -341,7 +341,7 @@ assetNames.forEach((name) => {
     rep.on('change', (newValue) => {
         store.commit('updateReplicant', {
             name: rep.name,
-            value: clone(newValue),
+            value: clone(newValue)
         });
     });
     replicants.set(name, rep);

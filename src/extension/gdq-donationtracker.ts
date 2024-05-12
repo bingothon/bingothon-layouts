@@ -4,10 +4,11 @@
 /* eslint-disable no-inner-declarations */
 
 import * as RequestPromise from 'request-promise'
-import * as nodecgApiContext from './util/nodecg-api-context'
-import {DonationTotal, TrackerDonations, TrackerOpenBids, TrackerPrizes} from '../../schemas'
-import {Configschema} from '../../configschema'
+import { Configschema } from '../../configschema'
+import { TrackerDonations, TrackerOpenBids, TrackerPrizes } from '../../schemas'
 import { TrackerDonation } from '../../types'
+import * as nodecgApiContext from './util/nodecg-api-context'
+import { donationTotalReplicant, donationsReplicant, openBidsReplicant, prizesReplicant } from './util/replicants'
 import equal = require('deep-equal')
 
 const nodecg = nodecgApiContext.get()
@@ -16,10 +17,7 @@ const log = new nodecg.Logger(`${nodecg.bundleName}:donationtracker`)
 const client = RequestPromise.defaults({})
 
 if (config && config.donationtracker && config.donationtracker.enable) {
-    const donationTotalReplicant = nodecg.Replicant<DonationTotal>('donationTotal')
-    const openBidsReplicant = nodecg.Replicant<TrackerOpenBids>('trackerOpenBids')
-    const donationsReplicant = nodecg.Replicant<TrackerDonations>('trackerDonations')
-    const prizesReplicant = nodecg.Replicant<TrackerPrizes>('trackerPrizes')
+    
     const feedUrl = config.donationtracker.url
     const { eventSlug } = config.donationtracker
     function doUpdate(): void {

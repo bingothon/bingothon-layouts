@@ -28,6 +28,7 @@ export * from './obsAudioSources';
 export * from './obsConnection';
 export * from './obsDashboardAudioSources';
 export * from './obsPreviewImg';
+export * from './obsSceneList';
 export * from './obsStreamMode';
 export * from './omnibarMessages';
 export * from './showPictureDuringIntermission';

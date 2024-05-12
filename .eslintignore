@@ -8,3 +8,4 @@ graphics/**/*
 node_modules/**/*
 script/**/*
 schemas/**/*
+types/augment-window.d.ts

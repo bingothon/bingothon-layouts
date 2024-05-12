@@ -153,8 +153,8 @@
 
     @Component({
         components: {
-            HostBingo,
-        },
+            HostBingo
+        }
     })
     export default class HostDashboard extends Vue {
         timeSinceLastIntermission: string = '';

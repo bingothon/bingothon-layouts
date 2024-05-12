@@ -14,7 +14,7 @@
 
         get cssProps() {
             return {
-                '--font-size': `${this.normalisedData.size}px`,
+                '--font-size': `${this.normalisedData.size}px`
             };
         }
 
@@ -22,9 +22,9 @@
             return Object.assign(
                 {
                     size: 33,
-                    time: 25,
+                    time: 25
                 },
-                this.data,
+                this.data
             );
         }
 

@@ -6,7 +6,7 @@
             class="Music FlexContainer"
             :style="{
                 width: `${useSmallVariant ? '450' : '1172'}px`,
-                left: `${useSmallVariant ? '730' : '0'}px`,
+                left: `${useSmallVariant ? '730' : '0'}px`
             }"
         >
             <div class="MCat">

@@ -86,7 +86,6 @@
 
 <script lang="ts">
     import { Component, Vue, Watch } from 'vue-property-decorator';
-    import { nodecg } from '../../browser-util/nodecg';
     import { BingoboardMode } from '../../../schemas';
     import { store } from '../../browser-util/state';
     import clone from 'clone';
@@ -99,45 +98,45 @@
             options: [
                 {
                     title: 'pink',
-                    colorId: 'color-control-pink',
+                    colorId: 'color-control-pink'
                 },
                 {
                     title: 'red',
-                    colorId: 'color-control-red',
+                    colorId: 'color-control-red'
                 },
                 {
                     title: 'orange',
-                    colorId: 'color-control-orange',
+                    colorId: 'color-control-orange'
                 },
                 {
                     title: 'brown',
-                    colorId: 'color-control-brown',
+                    colorId: 'color-control-brown'
                 },
                 {
                     title: 'yellow',
-                    colorId: 'color-control-yellow',
+                    colorId: 'color-control-yellow'
                 },
                 {
                     title: 'green',
-                    colorId: 'color-control-green',
+                    colorId: 'color-control-green'
                 },
                 {
                     title: 'teal',
-                    colorId: 'color-control-teal',
+                    colorId: 'color-control-teal'
                 },
                 {
                     title: 'blue',
-                    colorId: 'color-control-blue',
+                    colorId: 'color-control-blue'
                 },
                 {
                     title: 'navy',
-                    colorId: 'color-control-navy',
+                    colorId: 'color-control-navy'
                 },
                 {
                     title: 'purple',
-                    colorId: 'color-control-purple',
-                },
-            ],
+                    colorId: 'color-control-purple'
+                }
+            ]
         };
         //Object.freeze(['pink', 'red', 'orange', 'brown', 'yellow', 'green', 'teal', 'blue', 'navy', 'purple']);
         currentBingomode: string = 'invasion';
@@ -159,7 +158,7 @@
             nodecg.sendMessage('bingomode:setBingoboardMode', {
                 boardMode: this.currentBingomode,
                 markerRedirects: this.markerRedirects,
-                alwaysShowMarkers: this.alwaysShowMarkers,
+                alwaysShowMarkers: this.alwaysShowMarkers
             });
         }
 

@@ -3,7 +3,7 @@
         :style="{
             '--icon-height': iconHeight,
             '--name-width': nameWidth,
-            '--voice-highlight-color': voiceHighlightColor,
+            '--voice-highlight-color': voiceHighlightColor
         }"
         class="DiscordVoiceDisplay FlexContainer"
     >
@@ -39,8 +39,8 @@
     @Component({
         components: {
             FontAwesomeIcon,
-            TextFit,
-        },
+            TextFit
+        }
     })
     export default class DiscordInterview extends Vue {
         @Prop({ default: '40px' })

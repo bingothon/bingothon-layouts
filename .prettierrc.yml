@@ -2,9 +2,8 @@ tabWidth: 4
 singleQuote: true
 semi: true
 vueIndentScriptAndStyle: true
-trailingComma: all
+trailingComma: none
 jsxSingleQuote: false
-endOfLine: auto
 printWidth: 160
 overrides:
   - files: ['*.vue']

@@ -1,15 +1,15 @@
 import * as RequestPromise from 'request-promise';
 
-import * as nodecgApiContext from '../util/nodecg-api-context';
-import { BingoboardMeta, ExternalBingoboard, ExternalBingoboardMeta } from '../../../schemas';
-import { BoardColor, ExplorationBingoboardCell } from '../../../types';
 import { ExternalBingoboardManager } from '@/externalBingoboards';
-import { ReplicantServer } from 'nodecg/types/server';
+import { boardMetaRep } from '@/util/replicants';
+import type NodeCG from "@nodecg/types";
+import { ExternalBingoboard, ExternalBingoboardMeta } from '../../../schemas';
+import { BoardColor, ExplorationBingoboardCell } from '../../../types';
+import * as nodecgApiContext from '../util/nodecg-api-context';
 
 const nodecg = nodecgApiContext.get();
 const log = new nodecg.Logger(`${nodecg.bundleName}:ori2Bingo`);
 const request = RequestPromise.defaults({ jar: true });
-const boardMetaRep = nodecg.Replicant<BingoboardMeta>('bingoboardMeta');
 
 const ALL_COLORS: readonly BoardColor[] = Object.freeze(['pink', 'red', 'orange', 'brown', 'yellow', 'green', 'teal', 'blue', 'navy', 'purple']);
 
@@ -62,10 +62,10 @@ function createEmptyBoard(boardSize = 5) {
 type Ori2Meta = ExternalBingoboardMeta & { game: 'ori2' };
 
 export class Ori2ExternalBingoboard implements ExternalBingoboardManager {
-    updateLoopTimer?: NodeJS.Timer;
+    updateLoopTimer?: NodeJS.Timeout;
     meta?: Ori2Meta;
 
-    constructor(private boardRep: ReplicantServer<ExternalBingoboard>) {}
+    constructor(private boardRep: NodeCG.ServerReplicantWithSchemaDefault<ExternalBingoboard>) {}
 
     async configure(meta: ExternalBingoboardMeta): Promise<void> {
         if (meta.game !== 'ori2') {

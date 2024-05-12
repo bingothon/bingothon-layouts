@@ -4,19 +4,18 @@ import * as RequestPromise from 'request-promise'
 import WebSocket from 'ws'
 
 // Ours
-import { Replicant } from 'nodecg/types/server' // eslint-disable-line import/no-extraneous-dependencies
+import { BingoboardMode } from '@/schemas'
 import * as nodecgApiContext from './util/nodecg-api-context'
-import { Bingoboard, BingoboardMeta, BingoboardMode, BingosyncSocket } from '@/schemas'
+import { bingoboardModeRep, boardMetaRep, boardRep, socketRep } from './util/replicants'
 
-import equal from 'deep-equal'
 import clone from 'clone'
-import { InvasionContext } from './util/invasion'
-import { BingoboardCell, BingosyncCell, BoardColor } from '../../types'
+import equal from 'deep-equal'
 import { RunDataActiveRun, RunDataPlayer, RunDataTeam } from '../../speedcontrol-types'
+import { BingoboardCell, BingosyncCell, BoardColor } from '../../types'
+import { InvasionContext } from './util/invasion'
 
 const nodecg = nodecgApiContext.get()
 const log = new nodecg.Logger(`${nodecg.bundleName}:bingosync`)
-const boardMetaRep = nodecg.Replicant<BingoboardMeta>('bingoboardMeta')
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = (): void => {} // tslint:disable-line:no-empty
@@ -44,7 +43,7 @@ class BingosyncManager {
 
     // <= Automatically saves and re-uses cookies.
     // interval for a complete update to not miss stuff
-    private fullUpdateInterval: NodeJS.Timer | undefined
+    private fullUpdateInterval: NodeJS.Timeout | undefined
 
     // interval the fullUpdate function uses to make sure
     // there wasn't an event that cancels the interval
@@ -55,23 +54,20 @@ class BingosyncManager {
     private invasionCtx: InvasionContext | null = null
 
     public constructor(
-        public name: string,
-        public boardRep: Replicant<Bingoboard>,
-        public socketRep: Replicant<BingosyncSocket>,
-        public boardModeRep: Replicant<BingoboardMode> | null,
+        public name: string
     ) {
-        this.boardModeRep?.on('change', (newVal) => {
+        bingoboardModeRep.on('change', (newVal) => {
             log.info(newVal)
             if (newVal.boardMode === 'invasion') {
                 if (this.invasionCtx === null) {
                     const playerColors = boardMetaRep.value.playerColors
                     this.invasionCtx = new InvasionContext(playerColors[0] || 'red', playerColors[1] || 'orange')
-                    this.invasionCtx.initSides(this.boardRep.value.cells)
+                    this.invasionCtx.initSides(boardRep.value.cells)
                 }
             } else {
                 this.invasionCtx = null
             }
-            if (this.boardRep.value.cells.length == 25) {
+            if (boardRep.value.cells.length == 25) {
                 this.fullUpdateMarkers()
             }
         })
@@ -83,24 +79,24 @@ class BingosyncManager {
         })
         // recovering past connection
         // catch startup errors when this is all empty
-        if (!this.socketRep.value || !this.socketRep.value.roomCode || !this.socketRep.value.passphrase) {
-            if (!this.socketRep.value) {
-                this.socketRep.value = { status: 'disconnected' }
+        if (!socketRep.value || !socketRep.value.roomCode || !socketRep.value.passphrase) {
+            if (!socketRep.value) {
+                socketRep.value = { status: 'disconnected' }
                 return
             }
-            this.socketRep.value.status = 'disconnected'
+            socketRep.value.status = 'disconnected'
         }
         // Restore previous connection on startup
-        const { roomCode, passphrase, siteUrl, socketUrl } = this.socketRep.value
+        const { roomCode, passphrase, siteUrl, socketUrl } = socketRep.value
         if (roomCode && passphrase && siteUrl) {
-            log.info(`Recovering connection to room ${this.socketRep.value.roomCode}`)
+            log.info(`Recovering connection to room ${socketRep.value.roomCode}`)
             this.joinRoom(roomCode, siteUrl, socketUrl, passphrase)
                 .then((): void => {
-                    log.info(`Successfully recovered connection to room ${this.socketRep.value.roomCode}`)
+                    log.info(`Successfully recovered connection to room ${socketRep.value.roomCode}`)
                 })
                 .catch((e): void => {
-                    this.socketRep.value.status = 'error'
-                    log.error(`Couldn't join room ${this.socketRep.value.roomCode}`, e)
+                    socketRep.value.status = 'error'
+                    log.error(`Couldn't join room ${socketRep.value.roomCode}`, e)
                 })
         }
     }
@@ -134,12 +130,12 @@ class BingosyncManager {
      * @param socketUrl url for the bingosync socket
      */
     public async joinRoom(roomCode: string, siteUrl: string, socketUrl: string | undefined, passphrase: string): Promise<void> {
-        this.socketRep.value.siteUrl = siteUrl
-        this.socketRep.value.socketUrl = socketUrl
-        this.socketRep.value.passphrase = passphrase
-        this.socketRep.value.roomCode = roomCode
+        socketRep.value.siteUrl = siteUrl
+        socketRep.value.socketUrl = socketUrl
+        socketRep.value.passphrase = passphrase
+        socketRep.value.roomCode = roomCode
 
-        this.socketRep.value.status = 'connecting'
+        socketRep.value.status = 'connecting'
         if (this.fullUpdateInterval) {
             clearInterval(this.fullUpdateInterval)
         }
@@ -164,7 +160,7 @@ class BingosyncManager {
                 throw new Error("unknown bingosync instance, couldn't get sockets url!")
             }
         }
-        this.socketRep.value.socketUrl = socketUrl
+        socketRep.value.socketUrl = socketUrl
         log.info('Got bingosync socket key!')
 
         const thisInterval = setInterval((): void => {
@@ -184,15 +180,15 @@ class BingosyncManager {
             clearInterval(this.fullUpdateInterval)
         }
         this.destroyWebsocket()
-        this.socketRep.value.status = 'disconnected'
-        this.socketRep.value.passphrase = ''
-        this.socketRep.value.roomCode = ''
+        socketRep.value.status = 'disconnected'
+        socketRep.value.passphrase = ''
+        socketRep.value.roomCode = ''
     }
 
     public forceRefreshInvasionCtx(): void {
         if (this.invasionCtx !== null) {
-            this.invasionCtx.initSides(this.boardRep.value.cells)
-            this.invasionCtx.setMarkers(this.boardRep.value.cells)
+            this.invasionCtx.initSides(boardRep.value.cells)
+            this.invasionCtx.setMarkers(boardRep.value.cells)
         }
     }
 
@@ -247,7 +243,7 @@ class BingosyncManager {
 
         const runDataRep = nodecg.Replicant<RunDataActiveRun>('runDataActiveRun', 'nodecg-speedcontrol')
 
-        if (this.boardModeRep && this.boardModeRep.value.boardMode === 'rowcontrol') {
+        if (bingoboardModeRep && bingoboardModeRep.value.boardMode === 'rowcontrol') {
             ALL_COLORS.forEach((color) => {
                 this.updateRowControlScore(newBoardState, color)
             })
@@ -256,19 +252,19 @@ class BingosyncManager {
                 this.updateJsrfLockoutScore(newBoardState, color)
             })
         } else {
-            this.boardRep.value.colorCounts = goalCounts
+            boardRep.value.colorCounts = goalCounts
         }
 
         // Bail if nothing has changed.
-        if (equal(this.boardRep.value.cells, newBoardState)) {
+        if (equal(boardRep.value.cells, newBoardState)) {
             return
         }
 
-        this.boardRep.value.cells = newBoardState
+        boardRep.value.cells = newBoardState
     }
 
     private fullUpdateMarkers(): void {
-        const clonedCells = clone(this.boardRep.value.cells)
+        const clonedCells = clone(boardRep.value.cells)
         clonedCells.forEach((cell: BingoboardCell): void => {
             cell.markers = [null, null, null, null]
             this.processCellForMarkers(cell)
@@ -278,7 +274,7 @@ class BingosyncManager {
             this.invasionCtx.updateSides(clonedCells)
             this.invasionCtx.setMarkers(clonedCells)
         }
-        this.boardRep.value.cells = clonedCells
+        boardRep.value.cells = clonedCells
     }
 
     private processCellForMarkers(cell: BingoboardCell) {
@@ -291,7 +287,7 @@ class BingosyncManager {
         // each color could be overritten by a marker
         cell.rawColors.split(' ').forEach((color): void => {
             let redirected = false
-            for (const [i, redirect] of this.boardModeRep?.value.markerRedirects.entries() || []) {
+            for (const [i, redirect] of bingoboardModeRep.value.markerRedirects.entries() || []) {
                 if (color === redirect[0]) {
                     markers[i] = redirect[1]
                     redirected = true
@@ -302,7 +298,7 @@ class BingosyncManager {
             }
         })
         // if a cell has both a marker and is filled with the same color, drop the marker
-        if (!this.boardModeRep?.value.alwaysShowMarkers) {
+        if (!bingoboardModeRep.value.alwaysShowMarkers) {
             markers.forEach((color, index) => {
                 if (color !== null && newColors.includes(color as BoardColor)) {
                     markers[index] = null
@@ -318,7 +314,7 @@ class BingosyncManager {
             let settled = false
 
             log.info('Opening socket...')
-            this.socketRep.value.status = 'connecting'
+            socketRep.value.status = 'connecting'
             this.websocket = new WebSocket(`${socketUrl}/broadcast`)
 
             this.websocket.onopen = (): void => {
@@ -342,7 +338,7 @@ class BingosyncManager {
                         clearInterval(this.fullUpdateInterval)
                     }
                     this.destroyWebsocket()
-                    this.socketRep.value.status = 'error'
+                    socketRep.value.status = 'error'
                     log.error('Socket protocol error:', json.error ? json.error : json)
                     if (!settled) {
                         reject(new Error(json.error ? json.error : 'unknown error'))
@@ -353,7 +349,7 @@ class BingosyncManager {
 
                 if (!settled) {
                     resolve()
-                    this.socketRep.value.status = 'connected'
+                    socketRep.value.status = 'connected'
                     settled = true
                 }
 
@@ -367,14 +363,14 @@ class BingosyncManager {
                         rawColors: json.square.colors,
                     }
                     this.processCellForMarkers(cell)
-                    this.boardRep.value.cells[index] = cell
+                    boardRep.value.cells[index] = cell
                     // update goal count
                     this.countScore(json)
                     //Check if conditions for lockout win are fulfilled and stop timer
                     if (
                         runData.value &&
-                        ((lockoutVariants.includes(runData.value.customData.Bingotype) && this.boardRep.value.colorCounts[json.color] == 13) || //normal lockout up to 13
-                            (runData.value.customData.Bingotype === 'rowcontrol' && this.boardRep.value.colorCounts[json.color] == 3))
+                        ((lockoutVariants.includes(runData.value.customData.Bingotype) && boardRep.value.colorCounts[json.color] == 13) || //normal lockout up to 13
+                            (runData.value.customData.Bingotype === 'rowcontrol' && boardRep.value.colorCounts[json.color] == 3))
                     ) {
                         //for rowcontrol, this can probably be simplified somehow
                         console.log('lockout AND 13 goals')
@@ -416,10 +412,10 @@ class BingosyncManager {
                         }
                     }
                     if (this.invasionCtx !== null) {
-                        this.invasionCtx.updateSides(this.boardRep.value.cells)
-                        const clonedCells = clone(this.boardRep.value.cells)
+                        this.invasionCtx.updateSides(boardRep.value.cells)
+                        const clonedCells = clone(boardRep.value.cells)
                         this.invasionCtx.setMarkers(clonedCells)
-                        this.boardRep.value.cells = clonedCells
+                        boardRep.value.cells = clonedCells
                     }
                 }
 
@@ -434,7 +430,7 @@ class BingosyncManager {
             }
 
             this.websocket.onclose = (event: { wasClean: boolean; code: number; reason: string; target: WebSocket }): void => {
-                this.socketRep.value.status = 'disconnected'
+                socketRep.value.status = 'disconnected'
                 log.info(`Socket closed (code: ${event.code}, reason: ${event.reason})`)
                 this.destroyWebsocket()
                 this.createWebsocket(socketUrl, socketKey).catch((): void => {
@@ -459,7 +455,7 @@ class BingosyncManager {
                 rowCounter++
             }
         }
-        this.boardRep.value.colorCounts[color] = rowCounter
+        boardRep.value.colorCounts[color] = rowCounter
     }
 
     private updateJsrfLockoutScore(cells: BingoboardCell[], color: BoardColor) {
@@ -517,23 +513,22 @@ class BingosyncManager {
         ) {
             score += BINGOSCORE
         }
-        this.boardRep.value.colorCounts[color] = score
+        boardRep.value.colorCounts[color] = score
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private countScore(json: any) {
-        const boardModeRep = nodecg.Replicant<BingoboardMode>('bingoboardMode')
-        if (boardModeRep.value.boardMode === 'rowcontrol') {
-            this.updateRowControlScore(this.boardRep.value.cells, json.color)
+        if (bingoboardModeRep.value.boardMode === 'rowcontrol') {
+            this.updateRowControlScore(boardRep.value.cells, json.color)
         } else if (runData.value?.customData.Bingotype === 'jsrflockout') {
-            this.updateJsrfLockoutScore(this.boardRep.value.cells, json.color)
+            this.updateJsrfLockoutScore(boardRep.value.cells, json.color)
         } else {
             console.log('normal count :(')
             //normal count
             if (json.remove) {
-                this.boardRep.value.colorCounts[json.color] -= 1
+                boardRep.value.colorCounts[json.color] -= 1
             } else {
-                this.boardRep.value.colorCounts[json.color] += 1
+                boardRep.value.colorCounts[json.color] += 1
             }
         }
     }
@@ -559,14 +554,8 @@ class BingosyncManager {
 
 // create different bingosync instances
 const bingosyncInstances: Map<string, BingosyncManager> = new Map()
-const mainBoardRep = nodecg.Replicant<Bingoboard>('bingoboard')
-const mainSocketRep = nodecg.Replicant<BingosyncSocket>('bingosyncSocket')
-const mainBingoboardMode = nodecg.Replicant<BingoboardMode>('bingoboardMode')
-const hostingBoardRep = nodecg.Replicant<Bingoboard>('hostingBingoboard')
-const hostingSocketRep = nodecg.Replicant<BingosyncSocket>('hostingBingosocket')
 
-bingosyncInstances.set('bingoboard', new BingosyncManager('bingoboard', mainBoardRep, mainSocketRep, mainBingoboardMode))
-bingosyncInstances.set('hostingBingoboard', new BingosyncManager('hostingBingoboard', hostingBoardRep, hostingSocketRep, null)) // TODO hosting bingo bingoboard mode
+bingosyncInstances.set('bingoboard', new BingosyncManager('bingoboard'))
 
 // listeners for messages to interact from the dashboard
 
@@ -586,7 +575,7 @@ nodecg.listenFor('bingosync:joinRoom', async (data, callback): Promise<void> => 
         }
     } catch (error) {
         if (manager) {
-            manager.socketRep.value.status = 'error'
+            socketRep.value.status = 'error'
         }
         log.error(`Failed to join room ${data.roomCode}:`, error)
         if (callback && !callback.handled) {
@@ -663,7 +652,7 @@ nodecg.listenFor('bingomode:setBingoboardMode', (data: BingoboardMode, callback)
     if (data.boardMode === 'invasion') {
         data.markerRedirects = []
     }
-    mainBingoboardMode.value = data
+    bingoboardModeRep.value = data
     if (callback && !callback.handled) {
         callback()
     }

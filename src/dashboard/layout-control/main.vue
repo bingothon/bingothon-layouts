@@ -6,7 +6,7 @@
             id="LayoutList"
             :style="{
                 'max-height': '250px',
-                'overflow-y': 'auto',
+                'overflow-y': 'auto'
             }"
         >
             <v-radio-group
@@ -15,7 +15,7 @@
                 hide-details
                 :style="{
                     margin: '0px',
-                    padding: '10px',
+                    padding: '10px'
                 }"
             >
                 <v-radio
@@ -69,7 +69,7 @@
                     console.log(`Going to #layout-${this.currentGameLayout.id}`);
                     this.$vuetify.goTo(`#layout-${this.currentGameLayout.id}`, {
                         container: '#LayoutList',
-                        offset: 25,
+                        offset: 25
                     });
                 } else {
                     this.$vuetify.goTo(0, { container: '#LayoutList' });

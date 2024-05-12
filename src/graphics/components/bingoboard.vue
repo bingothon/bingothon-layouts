@@ -43,8 +43,6 @@
 <script lang="ts">
     import { Prop, Vue, Component } from 'vue-property-decorator';
     import { BingoBoardAnimation } from './bingoboard-animation';
-
-    import { nodecg } from '../../browser-util/nodecg';
     import { Bingoboard } from '../../../schemas';
     import equals from 'deep-equal';
     import { store } from '../../browser-util/state';
@@ -69,7 +67,7 @@
         7: ['0', '64', '38', '13', '-13', '-38', '-64'],
         8: ['0', '64', '41', '20', '0', '-21', '-41', '-64'],
         9: ['0', '66', '45', '27', '9', '-9', '-27', '-45', '-66'],
-        10: ['0', '68', '51', '34', '17', '0', '-17', '-34', '-51', '-68'],
+        10: ['0', '68', '51', '34', '17', '0', '-17', '-34', '-51', '-68']
     };
 
     const ORDERED_COLORS = [
@@ -82,7 +80,7 @@
         'teal',
         'blue',
         'navy',
-        'purple',
+        'purple'
     ].reverse();
 
     function sortColors(colors: string[]): string[] {
@@ -105,7 +103,7 @@
         brown: '#ab5c23',
         teal: '#419695',
         navy: '#0d48b5',
-        yellow: '#d8d014',
+        yellow: '#d8d014'
     };
 
     function defaultBingoBoard(): BingoCell[][] {
@@ -122,8 +120,8 @@
 
     @Component({
         components: {
-            CellTextFit,
-        },
+            CellTextFit
+        }
     })
     export default class BingoBoard extends BingoBoardAnimation {
         bingoCells: BingoCell[][] = defaultBingoBoard();
@@ -158,15 +156,15 @@
                         this.bingoboardWatch = store.watch(
                             (state) => state[newBoard.boardReplicant],
                             this.onBingoBoardUpdate,
-                            { immediate: true },
+                            { immediate: true }
                         );
                     },
-                    { immediate: true },
+                    { immediate: true }
                 );
             } else {
                 // got a specific one, watch it
                 this.bingoboardWatch = store.watch((state) => state[this.bingoboardRep], this.onBingoBoardUpdate, {
-                    immediate: true,
+                    immediate: true
                 });
                 this.onBingoBoardUpdate(store.state[this.bingoboardRep]);
             }
@@ -211,7 +209,7 @@
                                 // how bingosync handles the backgrounds, set style here to simply bind it to html later
                                 newColors.push({
                                     color: colors[i],
-                                    style: `transform: skew(-${this.skewAngle}rad) translateX(${translations[i]}%); border-right: solid 1.5px #444444`,
+                                    style: `transform: skew(-${this.skewAngle}rad) translateX(${translations[i]}%); border-right: solid 1.5px #444444`
                                 });
                             }
                             Vue.set(this.bingoCells[rowIndex][columnIndex], 'colors', newColors);

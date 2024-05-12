@@ -120,7 +120,7 @@
                 top: 0,
                 right: 200,
                 bottom: 15,
-                left: 350,
+                left: 350
             };
 
             var color = this.d3any.scale.ordinal().range(['#3f84e5', '#faa300', '#f63e02', '#a41623', '#2f4858']);
@@ -143,7 +143,7 @@
                     0,
                     d3.max(data, function (d) {
                         return d.value;
-                    }),
+                    })
                 ]);
 
             var y = this.d3any.scale
@@ -152,7 +152,7 @@
                 .domain(
                     data.map(function (d) {
                         return d.name;
-                    }),
+                    })
                 );
 
             // make y-axis to show bar names

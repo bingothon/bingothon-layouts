@@ -1,7 +1,9 @@
-import { ExternalBingoboard, ExternalBingoboardMeta } from '../../schemas'
+import { ExternalBingoboardMeta } from '../../schemas'
+import { DeusExternalBingoboard } from './external-bingoboards/deusExBingoBoard'
 import { Ori1ExternalBingoboard } from './external-bingoboards/ori1BingoBoard'
 import { Ori2ExternalBingoboard } from './external-bingoboards/ori2BingoBoard'
-import { DeusExternalBingoboard } from './external-bingoboards/deusExBingoBoard'
+
+import { externalBingoboardMetaRep, externalBoardRep } from './util/replicants'
 
 import * as nodecgApiContext from './util/nodecg-api-context'
 
@@ -13,19 +15,16 @@ export interface ExternalBingoboardManager {
     deactivate(): Promise<void>,
 }
 
-const boardRep = nodecg.Replicant<ExternalBingoboard>('externalBingoboard');
-const externalBingoboardMetaRep = nodecg.Replicant<ExternalBingoboardMeta>('externalBingoboardMeta');
-
-if (boardRep.value.cells.length === 0) {
+if (externalBoardRep.value.cells.length === 0) {
     for (let i = 0; i < 25; i += 1) {
-        boardRep.value.cells.push({name: '', hidden: true, hiddenName: '', colors: 'blank', slot: `slot${i}`});
+        externalBoardRep.value.cells.push({name: '', hidden: true, hiddenName: '', colors: 'blank', slot: `slot${i}`});
     }
 }
 
 const externalBingoboards: {[key: string]: ExternalBingoboardManager} = {
-    'ori1': new Ori1ExternalBingoboard(boardRep),
-    'ori2': new Ori2ExternalBingoboard(boardRep),
-    'deus-ex': new DeusExternalBingoboard(boardRep),
+    'ori1': new Ori1ExternalBingoboard(externalBoardRep),
+    'ori2': new Ori2ExternalBingoboard(externalBoardRep),
+    'deus-ex': new DeusExternalBingoboard(externalBoardRep),
 }
 
 let activeExternalBingoboard: ExternalBingoboardManager | undefined;

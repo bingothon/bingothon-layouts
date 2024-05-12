@@ -39,7 +39,7 @@ const routes = [
     { name: '1p 16:10 Layout', path: '/1p-16_10-layout', component: Layouts.Layout_16x10_1p },
     { name: 'Host Bingo Layout', path: '/host-bingo', component: Layouts.Layout_Host_Bingo },
     { name: 'Discord Overlay', path: '/discord', component: Layouts.Layout_Discord },
-    { path: '*', redirect: '/4p-4_3-layout' },
+    { path: '*', redirect: '/4p-4_3-layout' }
 ];
 
 // put all of the game layouts in the replicant
@@ -51,7 +51,7 @@ const allGameLayouts = routes
 getReplicant<AllGameLayouts>('allGameLayouts').value = allGameLayouts;
 
 const router = new VueRouter({
-    routes,
+    routes
 });
 
 // if the replicant changes, update the game layouts route
@@ -68,6 +68,6 @@ getReplicant<CurrentGameLayout>('currentGameLayout').on('change', (newVal) => {
 create().then(() => {
     new Vue({
         router,
-        render: (h) => h(GameLayout),
+        render: (h) => h(GameLayout)
     }).$mount('#App');
 });

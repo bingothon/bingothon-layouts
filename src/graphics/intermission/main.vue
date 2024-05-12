@@ -52,8 +52,8 @@
             Music,
             DiscordVoiceDisplay,
             HostBingo,
-            TwitchClipPlayer,
-        },
+            TwitchClipPlayer
+        }
     })
     export default class Intermission extends Vue {
         @Prop({ default: undefined })

@@ -1,12 +1,24 @@
-import {NodeCG} from 'nodecg/types/server' // eslint-disable-line
-import * as nodecgApiContext from './util/nodecg-api-context'
-import {Asset, CapturePositions, ShowPictureDuringIntermission, SongData, VoiceActivity} from '../../schemas'
 /* eslint-disable global-require */
 
-export = (nodecg: NodeCG): void => {
+// This must go first so we can use module aliases!
+/* eslint-disable import/first */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const alias = require('module-alias')
+
+alias.addAlias(
+    '@',
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    require('path').join(__dirname, '.')
+);
+
+import type NodeCG from '@nodecg/types' // eslint-disable-line
+import * as nodecgApiContext from './util/nodecg-api-context'
+import {Asset, CapturePositions, ShowPictureDuringIntermission, SongData, VoiceActivity} from '../../schemas'
+import { Configschema } from '@/configschema';
+
+export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
     nodecgApiContext.set(nodecg);
     nodecg.log.info('Extension code working!');
-    const {bundleConfig} = nodecg;
     require('./bingosync');
     require('./bingoColors');
     require('./externalBingoboards');
@@ -79,7 +91,7 @@ export = (nodecg: NodeCG): void => {
     require('./util/obs');
     require('./obsremotecontrol');
     require('./layoutlogic');
-    if (bundleConfig.mpd && bundleConfig.mpd.enable) {
+    if (nodecg.bundleConfig.mpd && nodecg.bundleConfig.mpd.enable) {
         require('./music');
     } else {
         nodecg.log.warn('MPD integration is disabled, no music!');

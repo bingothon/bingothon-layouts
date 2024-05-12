@@ -20,8 +20,8 @@
             UpcomingRuns,
             Bid,
             Prize,
-            Socials,
-        },
+            Socials
+        }
     })
     export default class Rotation extends Vue {
         currentComponent = null;

@@ -26,7 +26,7 @@
         'Select the correct audio preset',
         'Unmute the correct Twitch stream',
         'Final Check',
-        'Go live and stay hydrated',
+        'Go live and stay hydrated'
     ];
 
     const ACTION_CHECKED: [string, boolean][] = [];

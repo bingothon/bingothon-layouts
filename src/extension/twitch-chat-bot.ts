@@ -2,14 +2,15 @@
 
 import * as tmi from 'tmi.js'
 // eslint-disable-next-line import/no-extraneous-dependencies
-import bingoDefinitions from './bingodefinitions'
-import { RunDataActiveRun, RunDataPlayer, TwitchAPIData } from '../../speedcontrol-types'
-import { TwitchChatBotData } from '../../schemas'
 import { Configschema } from '../../configschema'
+import { RunDataPlayer } from '../../speedcontrol-types'
+import bingoDefinitions from './bingodefinitions'
+import { twitchChatBotDataRep } from './util/replicants'
+import { runDataActiveRunRep, twitchAPIDataRep } from './util/speedControlReplicants'
 
+import { TwitchChatBotCommand } from '../../types'
 import * as nodecgApiContext from './util/nodecg-api-context'
 import { waitForReplicants } from './util/waitForReplicants'
-import { TwitchChatBotCommand } from '../../types'
 
 const nodecg = nodecgApiContext.get()
 const log = new nodecg.Logger(`${nodecg.bundleName}:twitch-chat-bot`)
@@ -28,34 +29,19 @@ const cooldowns = {
     bingo: { lastUsed: 0, cooldown: 15 },
     schedule: { lastUsed: 0, cooldown: 15 },
 }
-// in case the cooldowns need to be adjusted
-/* nodecg.listenFor('setCommandCooldown',data=>{
-    if (!data || !data.command || !data.cooldown) {
-        log.error("can't set cooldown if command and/or cooldown are missing, got:",data);
-    } else {
-        var com = cooldowns[data.command];
-        if (com) {
-            com.cooldown = data.cooldown;
-        }
-    }
-}) */
 
-// Setting up replicants.
-const twichAPIDataRep = nodecg.Replicant<TwitchAPIData>('twitchAPIData', 'nodecg-speedcontrol')
-const runDataActiveRunRep = nodecg.Replicant<RunDataActiveRun>('runDataActiveRun', 'nodecg-speedcontrol')
-const twitchChatBotDataRep = nodecg.Replicant<TwitchChatBotData>('twitchChatBotData', 'bingothon-layouts')
 twitchChatBotDataRep.value.state = 'disconnected'
 
 const bundleConfig = nodecg.bundleConfig as Configschema
 
 function getTwitchAccessToken(): string {
-    return twichAPIDataRep.value.accessToken || ''
+    return twitchAPIDataRep.value.accessToken || ''
 }
 
 function waitForEverythingReady(): Promise<void> {
     return new Promise((resolve) => {
-        waitForReplicants([twichAPIDataRep, runDataActiveRunRep], () => {
-            twichAPIDataRep.on('change', (val) => {
+        waitForReplicants([twitchAPIDataRep, runDataActiveRunRep], () => {
+            twitchAPIDataRep.on('change', (val) => {
                 if (val.state == 'on') {
                     resolve()
                 }
@@ -147,7 +133,7 @@ class TwitchBotWrapper {
                 reconnect: true,
             },
             identity: {
-                username: twichAPIDataRep.value.channelName || '',
+                username: twitchAPIDataRep.value.channelName || '',
                 password: getTwitchAccessToken,
             },
         }
@@ -156,7 +142,7 @@ class TwitchBotWrapper {
         this.client.on('message', this.messageHandler.bind(this))
         this.connect()
 
-        twichAPIDataRep.on('change', (newTwitchApiData, oldTwitchApiData) => {
+        twitchAPIDataRep.on('change', (newTwitchApiData, oldTwitchApiData) => {
             if (!oldTwitchApiData) return
             // switch twitch integration on
             if (newTwitchApiData.state === 'on' && oldTwitchApiData.state !== 'on') {
@@ -259,7 +245,7 @@ class TwitchBotWrapper {
     async connect(): Promise<void> {
         if (['disconnected', 'error'].includes(twitchChatBotDataRep.value.state)) {
             // check if the twitch access token should still be valid
-            const tokenExpiresAt = twichAPIDataRep.value.tokenExpiresAt
+            const tokenExpiresAt = twitchAPIDataRep.value.tokenExpiresAt
             if (tokenExpiresAt !== undefined) {
                 if (tokenExpiresAt - 10 * 1000 < Date.now()) {
                     log.info('twitch api token is NOT up to date, sending refresh request...')
@@ -284,7 +270,7 @@ class TwitchBotWrapper {
                 }
             }
             twitchChatBotDataRep.value.state = 'connected'
-            this.switchChannel(twichAPIDataRep.value.channelName || 'bingothon')
+            this.switchChannel(twitchAPIDataRep.value.channelName || 'bingothon')
         }
     }
 
@@ -311,11 +297,12 @@ if (bundleConfig.twitch && bundleConfig.twitch.enable && bundleConfig.twitch.cha
         new TwitchBotWrapper()
 
         setTimeout(() => {
-            nodecg.sendMessageToBundle('twitchGetAccessToken', 'nodecg-speedcontrol', null, (err, args) => {
+            // TODO: Again NodeCG has no serverside callback support
+            nodecg.sendMessageToBundle('twitchGetAccessToken', 'nodecg-speedcontrol', null, /* (err, args) => {
                 log.info('got new access token!')
                 log.info(err)
                 log.info(args)
-            })
+            } */)
         }, 10 * 1000)
 
         // nodecg.listenFor("repeaterFeaturedChannels", "nodecg-speedcontrol", (channels: string[]) => {

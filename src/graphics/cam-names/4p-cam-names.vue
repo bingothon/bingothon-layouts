@@ -13,8 +13,8 @@
 
     @Component({
         components: {
-            PlayerInfo,
-        },
+            PlayerInfo
+        }
     })
     export default class CamNames extends Vue {}
 </script>
