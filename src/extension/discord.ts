@@ -1,8 +1,8 @@
 import * as Discord from 'discord.js';
 import * as Voice from '@discordjs/voice';
+import { getVoiceConnection, VoiceConnection } from '@discordjs/voice';
 import * as nodecgApiContext from './util/nodecg-api-context';
 import { voiceActivityRep, voiceDelayRep } from '@/util/replicants';
-import { VoiceConnection, getVoiceConnection } from '@discordjs/voice';
 
 const nodecg = nodecgApiContext.get();
 
@@ -10,7 +10,7 @@ const nodecg = nodecgApiContext.get();
 const log = new nodecg.Logger(`${nodecg.bundleName}:discord`);
 
 // Discord API
-const bot = new Discord.Client({intents: 32767}); // all intents cause I'm too lazy to figure out which are the correct ones
+const bot = new Discord.Client({ intents: 32767 }); // all intents cause I'm too lazy to figure out which are the correct ones
 
 const config = nodecg.bundleConfig;
 const botToken = config.discord?.token || '';

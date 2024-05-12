@@ -25,7 +25,7 @@ import type {
     TrackerOpenBids,
     TrackerPrizes,
     TwitchChatBotData,
-    TwitchStreams,
+    TwitchStream,
     VoiceActivity
 } from 'schemas';
 import type NodeCGTypes from '@nodecg/types';
@@ -85,9 +85,9 @@ export const voiceDelayRep = nodecg().Replicant<number>('voiceDelay', {
     persistent: true,
     defaultValue: 0
 }) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<number>;
-export const streamsReplicant = nodecg().Replicant<TwitchStreams>('twitchStreams', {
+export const streamsReplicant = nodecg().Replicant<TwitchStream[]>('twitchStreams', {
     defaultValue: []
-}) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<TwitchStreams>;
+}) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<TwitchStream[]>;
 export const soundOnTwitchStream = nodecg().Replicant<number>('soundOnTwitchStream', {
     defaultValue: -1
 }) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<number>;

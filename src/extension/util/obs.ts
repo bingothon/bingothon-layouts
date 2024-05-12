@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { Configschema } from '@/configschema';
-import { CapturePositions, CurrentGameLayout, ObsAudioLevels, ObsSceneList, SoundOnTwitchStream } from '@/schemas';
+import { CapturePositions, CurrentGameLayout, ObsAudioLevels, ObsSceneList, SoundOnTwitchStream, TwitchStream } from '@/schemas';
 import OBSWebSocket, { EventSubscription, EventTypes } from 'obs-websocket-js';
-import { TwitchStream } from 'types';
 import * as nodecgApiContext from './nodecg-api-context';
 import {
     capturePositionsRep,
@@ -15,8 +14,9 @@ import {
     obsPreviewScene,
     obsSceneListRep,
     soundOnTwitchStream,
-    streamsReplicant,
+    streamsReplicant
 } from './replicants';
+import { runDataActiveRunRep } from '@/util/speedControlReplicants.js';
 
 // this module is used to communicate directly with OBS
 // and transparently handle:
@@ -51,7 +51,7 @@ function handleStreamPosChange(
     stream: TwitchStream,
     streamIdx: number,
     currentGameLayout: CurrentGameLayout,
-    capturePositions: CapturePositions,
+    capturePositions: CapturePositions
 ) {
     const layoutName = currentGameLayout.path.slice(1); // leading slash we don't want
     const captureLayout = capturePositions[layoutName];
@@ -80,7 +80,7 @@ function handleStreamPosChange(
         x: capturePos.x,
         y: capturePos.y,
         width: capturePos.width,
-        height: capturePos.height,
+        height: capturePos.height
     });
 }
 
@@ -140,8 +140,8 @@ class OBSUtility extends OBSWebSocket {
             //sourceType: "ffmpeg_source", // just to make sure
             inputSettings: {
                 input: url,
-                is_local_file: false,
-            },
+                is_local_file: false
+            }
         }).catch((e) => logger.error('could not set source settings', e));
     }
 
@@ -155,7 +155,7 @@ class OBSUtility extends OBSWebSocket {
         try {
             await this.call('TriggerMediaInputAction', {
                 inputName: source,
-                mediaAction: pause ? 'OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PLAY' : 'OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PAUSE', // TODO: deprecated, but no alternative?
+                mediaAction: pause ? 'OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PLAY' : 'OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PAUSE' // TODO: deprecated, but no alternative?
             });
         } catch (e) {
             logger.error('could not set play pause', e);
@@ -168,7 +168,7 @@ class OBSUtility extends OBSWebSocket {
         try {
             await this.call('TriggerMediaInputAction', {
                 inputName: source,
-                mediaAction: 'OBS_WEBSOCKET_MEDIA_INPUT_ACTION_RESTART', // TODO: deprecated, but no alternative?
+                mediaAction: 'OBS_WEBSOCKET_MEDIA_INPUT_ACTION_RESTART' // TODO: deprecated, but no alternative?
             });
         } catch (e) {
             logger.error('could not set play pause', e);
@@ -180,12 +180,12 @@ class OBSUtility extends OBSWebSocket {
         try {
             const sceneItem = await this.call('GetSceneItemId', {
                 sceneName: bundleConfig.obs.gameScene || 'game',
-                sourceName: source,
+                sourceName: source
             });
             await this.call('SetSceneItemEnabled', {
                 sceneName: bundleConfig.obs.gameScene || 'game',
                 sceneItemId: sceneItem.sceneItemId,
-                sceneItemEnabled: !!params.visible,
+                sceneItemEnabled: !!params.visible
             });
             await this.call('SetSceneItemTransform', {
                 sceneName: bundleConfig.obs.gameScene || 'game',
@@ -202,8 +202,8 @@ class OBSUtility extends OBSWebSocket {
                     positionX: params.x || 0,
                     positionY: params.y || 0,
                     scaleX: 1,
-                    scaleY: 1,
-                },
+                    scaleY: 1
+                }
             });
         } catch (e) {
             logger.error('error in setSourceBoundsAndCrop:', e);
@@ -217,8 +217,8 @@ class OBSUtility extends OBSWebSocket {
                 height: 1080,
                 width: 1920,
                 fps: 30, // TODO: maybe 60?
-                reroute_audio: true,
-            },
+                reroute_audio: true
+            }
         }).catch((e) => logger.error('could not set browser defaults', e));
     }
 
@@ -227,8 +227,8 @@ class OBSUtility extends OBSWebSocket {
         await this.call('SetInputSettings', {
             inputName: source,
             inputSettings: {
-                url,
-            },
+                url
+            }
         }).catch((e) => logger.error('could not set browser source settings', e));
     }
 
@@ -236,7 +236,7 @@ class OBSUtility extends OBSWebSocket {
         logger.info(`triggered refresh for source ${source}`);
         await this.call('PressInputPropertiesButton', {
             inputName: source,
-            propertyName: 'refreshnocache',
+            propertyName: 'refreshnocache'
         }).catch((e: unknown) => logger.error('could not refresh browser source', e));
     }
 
@@ -244,7 +244,7 @@ class OBSUtility extends OBSWebSocket {
         const response = await this.call('GetSourceScreenshot', {
             imageFormat: 'jpeg',
             sourceName: source,
-            imageHeight: 300,
+            imageHeight: 300
         });
 
         return response.imageData;
@@ -253,7 +253,7 @@ class OBSUtility extends OBSWebSocket {
     public async setAudioLevels(
         audioSource: string,
         data: EventTypes['InputVolumeMeters'],
-        repository: { value: { [k: string]: { volume: number } } },
+        repository: { value: { [k: string]: { volume: number } } }
     ): Promise<void> {
         const matchAudioSource = data.inputs.filter((matchAudioSource): boolean => matchAudioSource.inputName === audioSource)[0];
         if (matchAudioSource) {
@@ -268,21 +268,21 @@ class OBSUtility extends OBSWebSocket {
                         // .inputLevelsMul[0][0] is the average of the left and right channels
                         // .inputLevelsMul[0][1] is the peak of the left and right channels
                         // .inputLevelsMul[0][2] is the peak of input audio
-                        volume: dBlevel,
+                        volume: dBlevel
                     };
                 } else {
                     repository.value[audioSource] = {
-                        volume: 0,
+                        volume: 0
                     };
                 }
             } else {
                 repository.value[audioSource] = {
-                    volume: 0,
+                    volume: 0
                 };
             }
         } else {
             repository.value[audioSource] = {
-                volume: 0,
+                volume: 0
             };
         }
     }
@@ -303,11 +303,12 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     const soundOnTwitchStreamRep = soundOnTwitchStream;
     const twitchStreamsRep = streamsReplicant;
     const audioLevelsRep = obsAudioLevels;
+    const runDataRep = runDataActiveRunRep;
     // load the intermission audio source
 
     const settings = {
         url: bundleConfig.obs.address,
-        password: bundleConfig.obs.password,
+        password: bundleConfig.obs.password
     };
     logger.info('Setting up OBS connection.');
     obsConnectionRep.value.status = 'disconnected';
@@ -316,7 +317,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     function connect(): void {
         obs.connect(settings.url, settings.password, {
             eventSubscriptions: EventSubscription.All | EventSubscription.InputVolumeMeters,
-            rpcVersion: 1,
+            rpcVersion: 1
         })
             .then((): void => {
                 logger.info('OBS connection successful.');
@@ -338,7 +339,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                             volume: 0.5,
                             muted: false,
                             delay: 0,
-                            volumeMultiplier: 1,
+                            volumeMultiplier: 1
                         };
                     }
                 });
@@ -378,13 +379,19 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                     // TODO repair in the future
                     twitchStreamsRep.on('change', (newValue, old) => {
                         if (!old) return;
-                        for (let i = 0; i < 6; i++) {
+                        let idx = 0; //stream index
+                        let i = 0; //array index
+                        while (idx < 6) {
+                            if (!newValue[i].visible) {
+                                i++;
+                                continue;
+                            }
                             const stream = newValue[i];
                             const oldStream = old[i] || {}; // old stream might be undefined
                             if (stream === undefined) {
                                 // this stream should not be displayed
                                 const transProps: OBSTransformParams = {
-                                    visible: false,
+                                    visible: false
                                 };
                                 // fire and forget
                                 obs.setSourceBoundsAndCrop(getStreamSrcName(i), transProps);
@@ -394,7 +401,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                                     // fire and forget
                                     obs.setBrowserSourceUrl(
                                         getStreamSrcName(i),
-                                        `https://player.twitch.tv/?channel=${stream.channel}&enableExtensions=true&muted=false&parent=twitch.tv&player=popout&volume=1`,
+                                        `https://player.twitch.tv/?channel=${stream.channel}&enableExtensions=true&muted=false&parent=twitch.tv&player=popout&volume=1`
                                     );
                                 }
                                 // check if the cropping changed
@@ -412,6 +419,8 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                                 handleSoundChange(obs, soundOnTwitchStreamRep.value, i, stream, oldStream);
                                 //TODO: use this when switching to streamlink method, obs.setMediasourcePlayPause(getStreamSrcName(i), stream.paused)
                             }
+                            idx++;
+                            i++;
                         }
                     });
 
@@ -523,7 +532,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                     obs.call('SetInputVolume', {
                         inputName: bundleConfig.obs.mpdAudio,
                         //@ts-ignore
-                        inputVolumeMul: mpdAudio.inputLevelsMul[0][1] - 0.01,
+                        inputVolumeMul: mpdAudio.inputLevelsMul[0][1] - 0.01
                     });
                 }
             }
@@ -547,7 +556,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
             .then((sceneList): void => {
                 sceneListRep.value = sceneList.scenes.map((x) => ({
                     sceneIndex: x.sceneIndex as number,
-                    sceneName: x.sceneName as string,
+                    sceneName: x.sceneName as string
                 }));
             })
             .catch((err): void => {
@@ -574,7 +583,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
             if (!oldSound || oldSound.delay !== sound.delay) {
                 obs.call('SetInputAudioSyncOffset', {
                     inputName: source,
-                    inputAudioSyncOffset: sound.delay * 1000000,
+                    inputAudioSyncOffset: sound.delay * 1000000
                 }).catch((e): void => {
                     logger.warn(`Error setting audio delay for [${source}] to ${sound.delay}ms: ${e}`);
                 });

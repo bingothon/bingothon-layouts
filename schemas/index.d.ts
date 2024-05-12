@@ -39,5 +39,5 @@ export * from './trackerDonations';
 export * from './trackerOpenBids';
 export * from './trackerPrizes';
 export * from './twitchChatBotData';
-export * from './twitchStreams';
+export * from './twitchStream';
 export * from './voiceActivity';

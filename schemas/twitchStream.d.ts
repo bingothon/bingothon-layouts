@@ -5,7 +5,7 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type TwitchStreams = {
+export interface TwitchStream {
   channel: string;
   widthPercent: number;
   heightPercent: number;
@@ -19,4 +19,5 @@ export type TwitchStreams = {
     name: string;
     group: string;
   }[];
-}[];
+  visible: boolean;
+}
