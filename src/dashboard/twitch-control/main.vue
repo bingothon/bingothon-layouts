@@ -63,7 +63,8 @@
     export default class TwitchControl extends Vue {
         volumeBackgroundColor: 'red';
 
-        twitchChannelOverrides: string[] = ['', '', '', ''];
+        // There is probably a better way to do this, but need to ensure that this is set for enough streams
+        twitchChannelOverrides: string[] = ['', '', '', '', '', '', '', '', '', '', '', ''];
 
         get twitchStreams(): TwitchStream[] {
             return store.state.twitchStreams;

@@ -18,7 +18,7 @@
         <div :class="medalClasses" />
         <div class="PlayerName">
             <transition name="fade">
-                <text-fit :key="text" :text="finishTime + text" :align="reverseOrder ? 'right' : 'left'"> </text-fit>
+                <text-fit :key="text" :text="finishTime + text" :align="reverseOrder ? 'right' : 'left'"></text-fit>
             </transition>
         </div>
         <div v-if="showSound" class="Sound">
@@ -49,7 +49,7 @@
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { store } from '../../browser-util/state';
+    import { store } from '@/browser-util/state';
     import { RunDataPlayer } from '../../../speedcontrol-types';
     import TextFit from '../helpers/text-fit.vue';
     import BestOfX from './bestOfX.vue';
@@ -88,17 +88,22 @@
         get player(): RunDataPlayer {
             let idx = 0;
             let correctPlayer;
-            for (let i = 0; i < store.state.runDataActiveRun.teams.length; i++) {
-                const team = store.state.runDataActiveRun.teams[i];
-                for (let j = 0; j < team.players.length; j++) {
-                    if (idx == this.playerIndex) {
-                        correctPlayer = team.players[j];
-                        // break out of both loops
-                        i = 100;
-                        break;
+            if (!store.state.runDataActiveRun.relay) {
+                for (let i = 0; i < store.state.runDataActiveRun.teams.length; i++) {
+                    const team = store.state.runDataActiveRun.teams[i];
+                    for (let j = 0; j < team.players.length; j++) {
+                        if (idx == this.playerIndex) {
+                            correctPlayer = team.players[j];
+                            // break out of both loops
+                            i = 100;
+                            break;
+                        }
+                        idx++;
                     }
-                    idx++;
                 }
+            } else {
+                const team = store.state.runDataActiveRun.teams[this.playerIndex];
+                correctPlayer = team.players.find((player) => player.id === team.relayPlayerID);
             }
             if (!correctPlayer) {
                 return {
