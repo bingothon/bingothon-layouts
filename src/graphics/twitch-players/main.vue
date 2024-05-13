@@ -8,7 +8,7 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { CapturePositions, TwitchStreams } from '@/schemas';
+    import { CapturePositions, TwitchStream } from '@/schemas';
     import { store } from '@/browser-util/state';
     import TextFit from '../helpers/text-fit.vue';
     import TwitchPlayer from '../components/twitchPlayer.vue';
@@ -52,7 +52,7 @@
             }
         }
 
-        get streams(): TwitchStreams {
+        get streams(): TwitchStream[] {
             return store.state.twitchStreams;
         }
     }

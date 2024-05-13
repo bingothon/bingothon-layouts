@@ -1,6 +1,6 @@
 import clone from 'clone';
 import Vue, { set } from 'vue';
-import { vuexfireMutations, firebaseAction } from 'vuexfire';
+import { firebaseAction, vuexfireMutations } from 'vuexfire';
 import Vuex, { Store } from 'vuex';
 import { db } from './firebase';
 import {
@@ -33,6 +33,7 @@ import {
     ObsConnection,
     ObsDashboardAudioSources,
     ObsPreviewImg,
+    ObsSceneList,
     ObsStreamMode,
     OmnibarMessages,
     ShowPictureDuringIntermission,
@@ -43,7 +44,7 @@ import {
     TrackerOpenBids,
     TrackerPrizes,
     TwitchChatBotData,
-    TwitchStreams,
+    TwitchStream,
     VoiceActivity
 } from '../../schemas';
 import { RunDataActiveRun, RunDataArray, Timer, TwitchCommercialTimer } from '../../speedcontrol-types';
@@ -137,7 +138,7 @@ interface StoreTypes {
     obsPreviewScene: null | string;
     obsCurrentScene: null | string;
     obsPreviewImg: ObsPreviewImg;
-    obsSceneList: null | any; // sorry i had to do it to test any was Scene[]
+    obsSceneList: ObsSceneList;
     obsStreamMode: ObsStreamMode;
     omnibarMessages: OmnibarMessages;
     externalBingoboard: ExternalBingoboard;
@@ -148,7 +149,7 @@ interface StoreTypes {
     trackerOpenBids: TrackerOpenBids;
     trackerPrizes: TrackerPrizes;
     twitchChatBotData: TwitchChatBotData;
-    twitchStreams: TwitchStreams;
+    twitchStreams: TwitchStream[];
     voiceActivity: VoiceActivity;
     voiceDelay: 0;
     songData: SongData;
@@ -203,7 +204,7 @@ export const store = new Store<StoreTypes>({
         obsPreviewImg: {} as ObsPreviewImg,
         obsPreviewScene: null as null | string,
         obsCurrentScene: null as null | string,
-        obsSceneList: null as null | any, // sorry i had to do it to test any was Scene[]
+        obsSceneList: [] as ObsSceneList,
         obsStreamMode: '' as ObsStreamMode,
         omnibarMessages: [] as OmnibarMessages,
         externalBingoboard: {} as ExternalBingoboard,
@@ -214,7 +215,7 @@ export const store = new Store<StoreTypes>({
         trackerOpenBids: [] as TrackerOpenBids,
         trackerPrizes: [] as TrackerPrizes,
         twitchChatBotData: {} as TwitchChatBotData,
-        twitchStreams: [] as TwitchStreams,
+        twitchStreams: [] as TwitchStream[],
         voiceActivity: {} as VoiceActivity,
         voiceDelay: 0,
         songData: {} as SongData,

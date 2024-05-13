@@ -73,7 +73,7 @@
             const width = this.$el.scrollWidth;
             this.skewAngle = Math.atan(width / height);
 
-            getReplicant<HostBingoCell[][]>('hostingBingoboard').on('assignmentRejected', (rejectReason) => {
+            getReplicant<HostBingoCell[][]>('hostingBingoboard').on('operationsRejected', (rejectReason) => {
                 console.log('assignment rejected');
                 console.log(rejectReason);
             });

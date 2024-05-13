@@ -15,9 +15,8 @@
 
 <script lang="ts">
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-    import { getReplicant, store } from '../../browser-util/state';
-    import { TwitchStream } from '../../../types';
-    import { TwitchStreams } from '../../../schemas';
+    import { getReplicant, store } from '@/browser-util/state';
+    import { TwitchStream } from '@/schemas';
     // included in the main html
     // import "https://player.twitch.tv/js/embed/v1.js";
 
@@ -59,7 +58,7 @@
                     if (this.player) {
                         let stats = this.player.getPlaybackStats();
                         if (stats) {
-                            getReplicant<TwitchStreams>('twitchStreams').value[this.streamIndex].delay =
+                            getReplicant<TwitchStream[]>('twitchStreams').value[this.streamIndex].delay =
                                 stats.hlsLatencyBroadcaster;
                         }
                         let qualities = this.player.getQualities().map((q) => {
@@ -69,7 +68,7 @@
                             };
                         });
                         if (qualities) {
-                            getReplicant<TwitchStreams>('twitchStreams').value[this.streamIndex].availableQualities =
+                            getReplicant<TwitchStream[]>('twitchStreams').value[this.streamIndex].availableQualities =
                                 qualities;
                         }
                     }

@@ -5,7 +5,7 @@
                 <tr :key="i" v-for="(column, i) in bingoCells">
                     <td class="square" :key="i + '' + j" v-for="(cell, j) in column">
                         <div
-                            :key="color.name"
+                            :key="color.color"
                             v-for="color in cell.colors"
                             :class="'bg-color ' + color.color + 'square'"
                             :style="color.style"
@@ -40,10 +40,9 @@
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { nodecg } from '../../browser-util/nodecg';
-    import { Bingoboard } from '../../../schemas';
+    import { Bingoboard } from '@/schemas';
     import equals from 'deep-equal';
-    import { store } from '../../browser-util/state';
+    import { store } from '@/browser-util/state';
     import CellTextFit from '../helpers/cell-text-fit.vue';
 
     interface BingoCell {
@@ -55,6 +54,7 @@
             style: string;
         }[];
     }
+
     // used from bingosync
     const translatePercent = {
         2: ['0', '0'],
@@ -233,6 +233,7 @@
 
 <style>
     @import url(./bingosync-style.css);
+
     table {
         width: 100%;
         height: 100%;
@@ -316,21 +317,25 @@
         left: 0px;
         right: 0px;
     }
+
     .bingo-table {
         border-collapse: collapse;
     }
+
     .text-span {
         left: 0px;
         right: 0px;
         top: 50%;
         transform: translateY(-50%);
     }
+
     .CellTextFitContainer {
         height: calc(100% - 4px);
         width: calc(100% - 4px);
         position: absolute;
         margin: 2px;
     }
+
     .marker {
         position: absolute;
         width: 20px;
@@ -339,18 +344,22 @@
         border: 3px #0009 solid;
         border-radius: 50%;
     }
+
     .marker0 {
         left: 10%;
         top: 10%;
     }
+
     .marker1 {
         right: 10%;
         top: 10%;
     }
+
     .marker2 {
         left: 10%;
         bottom: 10%;
     }
+
     .marker3 {
         right: 10%;
         bottom: 10%;

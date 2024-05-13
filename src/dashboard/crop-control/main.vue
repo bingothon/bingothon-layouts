@@ -20,8 +20,9 @@
             <span>Left:</span><input v-model="leftPercent" type="number" /> <span>Top:</span
             ><input v-model="topPercent" type="number" /> <span>Width:</span
             ><input v-model="widthPercent" type="number" /> <span>Height:</span
-            ><input v-model="heightPercent" type="number" /> <button @click="saveCropping">Save</button
-            ><span>{{ successMessage }}</span>
+            ><input v-model="heightPercent" type="number" />
+            <button @click="saveCropping">Save</button>
+            <span>{{ successMessage }}</span>
         </div>
         <div>
             <button @click="togglePlayerPause">{{ togglePlayerPauseButtonText }}</button>
@@ -32,8 +33,8 @@
 
 <script lang="ts">
     import { Component, Vue, Watch } from 'vue-property-decorator';
-    import { TwitchStreams } from '../../../schemas';
     import { getReplicant, store } from '../../browser-util/state';
+    import { TwitchStream } from '@/schemas';
 
     declare const Twitch: any;
 
@@ -121,7 +122,7 @@
                 return;
             }
             Object.assign(
-                getReplicant<TwitchStreams>('twitchStreams').value[streamIndex],
+                getReplicant<TwitchStream[]>('twitchStreams').value[streamIndex],
                 // turns out, they actually aren't numbers
                 {
                     widthPercent: parseInt(this.widthPercent as unknown as string, 10),

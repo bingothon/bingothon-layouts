@@ -9,15 +9,15 @@
                 @click="muteChange(i)"
                 :title="i === soundOnTwitchStream ? 'currently unmuted' : 'currently muted'"
             >
-                <v-icon v-if="i === soundOnTwitchStream"> mdi-volume-high </v-icon>
-                <v-icon v-else> mdi-volume-off </v-icon>
+                <v-icon v-if="i === soundOnTwitchStream"> mdi-volume-high</v-icon>
+                <v-icon v-else> mdi-volume-off</v-icon>
             </v-btn>
             <v-btn class="stream-refresh" dark small @click="refresh(i)">
-                <v-icon> mdi-refresh </v-icon>
+                <v-icon> mdi-refresh</v-icon>
             </v-btn>
             <v-btn class="stream-pause" dark small @click="togglePlayPause(i)">
-                <v-icon v-if="stream.paused"> mdi-play </v-icon>
-                <v-icon v-else> mdi-pause </v-icon>
+                <v-icon v-if="stream.paused"> mdi-play</v-icon>
+                <v-icon v-else> mdi-pause</v-icon>
             </v-btn>
             <div>
                 <span>Vol: </span>
@@ -46,7 +46,7 @@
                     type="text"
                     :background-color="'#455A64'"
                 />
-                <v-btn @click="overrideChannelName(i)" :style="'margin: 2px'"> Override stream </v-btn>
+                <v-btn @click="overrideChannelName(i)" :style="'margin: 2px'"> Override stream</v-btn>
             </div>
         </div>
     </v-app>
@@ -54,8 +54,8 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { TwitchStreams } from '../../../schemas';
     import { getReplicant, store } from '../../browser-util/state';
+    import { TwitchStream } from '@/schemas';
 
     const bingothonBundleName = 'bingothon-layouts';
 
@@ -65,7 +65,7 @@
 
         twitchChannelOverrides: string[] = ['', '', '', ''];
 
-        get twitchStreams(): TwitchStreams {
+        get twitchStreams(): TwitchStream[] {
             return store.state.twitchStreams;
         }
 
@@ -120,10 +120,10 @@
         }
 
         overrideChannelName(id: number) {
-            getReplicant<TwitchStreams>('twitchStreams').value[id].channel = this.twitchChannelOverrides[id];
+            getReplicant<TwitchStream[]>('twitchStreams').value[id].channel = this.twitchChannelOverrides[id];
         }
 
-        getStreamLabel(idx: number, playerNames: string[], twitchStreams: TwitchStreams): string {
+        getStreamLabel(idx: number, playerNames: string[], twitchStreams: TwitchStream[]): string {
             return `${idx}: ${playerNames[idx]} (${twitchStreams[idx]?.channel})`;
         }
     }

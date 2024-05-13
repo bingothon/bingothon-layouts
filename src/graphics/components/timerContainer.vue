@@ -9,13 +9,13 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { store } from '../../browser-util/state';
+    import { store } from '@/browser-util/state';
     import { Timer } from '../../../speedcontrol-types';
 
     @Component({})
     export default class TestTimerContainer extends Vue {
         show = true;
-        backupTimerTO: NodeJS.Timer = null;
+        backupTimerTO: NodeJS.Timeout = null;
         time = '';
         timerStateClass = 'running';
         updateDataUnwatch;
@@ -52,9 +52,11 @@
             clearTimeout(this.backupTimerTO);
             this.backupTimerTO = setTimeout(this.backupTimer, 1000);
         }
+
         splitStringToSpans(string) {
             return string.replace(/\S/g, '<span>$&</span>');
         }
+
         // Backup timer that takes over if the connection to the server is lost.
         // Based on the last timestamp that was received.
         // When the connection is restored, the server timer will recover and take over again.
@@ -67,6 +69,7 @@
                 this.time = this.splitStringToSpans(this.msToDuration(timeOffset));
             }
         }
+
         msToDuration(ms) {
             const seconds = Math.floor((ms / 1000) % 60);
             const minutes = Math.floor((ms / (1000 * 60)) % 60);
@@ -84,6 +87,7 @@
         flex-direction: column;
         color: white;
     }
+
     .TimerBox {
         font-weight: 500;
         font-size: 75px;
@@ -91,6 +95,7 @@
         align-content: center;
         text-align: center;
     }
+
     /* Each character in the timer is in a span; setting width so the numbers appear monospaced. */
     .TimerBox >>> span {
         display: inline-block;
@@ -99,11 +104,13 @@
         text-align: center;
         font-weight: bold;
     }
+
     .TimerBox >>> span:nth-of-type(3),
     .TimerBox >>> span:nth-of-type(6) {
         width: 0.22em;
         margin-top: -0.15em; /* Make the colon appear more towards the centre. */
     }
+
     .TimerBox.running {
         color: white;
     }
