@@ -16,7 +16,6 @@ import {
     soundOnTwitchStream,
     streamsReplicant
 } from './replicants';
-import { runDataActiveRunRep } from '@/util/speedControlReplicants.js';
 
 // this module is used to communicate directly with OBS
 // and transparently handle:
@@ -206,7 +205,7 @@ class OBSUtility extends OBSWebSocket {
                 }
             });
         } catch (e) {
-            logger.error('error in setSourceBoundsAndCrop:', e);
+            logger.error(`error in setSourceBoundsAndCrop for source ${source}:`, e);
         }
     }
 
@@ -303,7 +302,6 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     const soundOnTwitchStreamRep = soundOnTwitchStream;
     const twitchStreamsRep = streamsReplicant;
     const audioLevelsRep = obsAudioLevels;
-    const runDataRep = runDataActiveRunRep;
     // load the intermission audio source
 
     const settings = {
@@ -381,8 +379,9 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                         if (!old) return;
                         let idx = 0; //stream index
                         let i = 0; //array index
-                        while (idx < 6) {
-                            if (!newValue[i].visible) {
+                        while (idx < 6 && i < newValue.length) {
+                            // appearently this can go out of bonds
+                            if (!newValue[i] || !newValue[i].visible) {
                                 i++;
                                 continue;
                             }
@@ -394,13 +393,13 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                                     visible: false
                                 };
                                 // fire and forget
-                                obs.setSourceBoundsAndCrop(getStreamSrcName(i), transProps);
+                                obs.setSourceBoundsAndCrop(getStreamSrcName(idx), transProps);
                             } else {
                                 // check if the streamurl changed
                                 if (stream.channel !== oldStream.channel) {
                                     // fire and forget
                                     obs.setBrowserSourceUrl(
-                                        getStreamSrcName(i),
+                                        getStreamSrcName(idx),
                                         `https://player.twitch.tv/?channel=${stream.channel}&enableExtensions=true&muted=false&parent=twitch.tv&player=popout&volume=1`
                                     );
                                 }
@@ -411,12 +410,12 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                                     stream.leftPercent !== oldStream.leftPercent ||
                                     stream.topPercent !== oldStream.topPercent
                                 ) {
-                                    handleStreamPosChange(obs, stream, i, currentLayoutRep.value, positionsRep.value);
+                                    handleStreamPosChange(obs, stream, idx, currentLayoutRep.value, positionsRep.value);
                                 } else {
                                     // since this channel exists, make it visible
-                                    obs.setSourceBoundsAndCrop(getStreamSrcName(i), { visible: true });
+                                    obs.setSourceBoundsAndCrop(getStreamSrcName(idx), { visible: true });
                                 }
-                                handleSoundChange(obs, soundOnTwitchStreamRep.value, i, stream, oldStream);
+                                handleSoundChange(obs, soundOnTwitchStreamRep.value, idx, stream, oldStream);
                                 //TODO: use this when switching to streamlink method, obs.setMediasourcePlayPause(getStreamSrcName(i), stream.paused)
                             }
                             idx++;
@@ -426,17 +425,27 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
 
                     positionsRep.on('change', (newVal, old) => {
                         if (!old) return;
-
-                        twitchStreamsRep.value.forEach((stream, i) => {
-                            handleStreamPosChange(obs, stream, i, currentLayoutRep.value, newVal);
+                        let actualPosIndex = 0;
+                        twitchStreamsRep.value.forEach((stream) => {
+                            if (stream.visible) {
+                                handleStreamPosChange(obs, stream, actualPosIndex, currentLayoutRep.value, newVal);
+                                actualPosIndex++;
+                                return;
+                            }
+                            return;
                         });
                     });
 
                     currentLayoutRep.on('change', (newVal, old) => {
                         if (!old) return;
-
-                        twitchStreamsRep.value.forEach((stream, i) => {
-                            handleStreamPosChange(obs, stream, i, newVal, positionsRep.value);
+                        let actualPosIndex = 0;
+                        twitchStreamsRep.value.forEach((stream) => {
+                            if (stream.visible) {
+                                handleStreamPosChange(obs, stream, actualPosIndex, newVal, positionsRep.value);
+                                actualPosIndex++;
+                                return;
+                            }
+                            return;
                         });
                     });
 

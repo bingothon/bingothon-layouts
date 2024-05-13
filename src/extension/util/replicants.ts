@@ -1,5 +1,6 @@
-import type {
+import {
     AllGameLayouts,
+    Asset,
     Bingoboard,
     BingoboardMeta,
     BingoboardMode,
@@ -20,6 +21,7 @@ import type {
     ObsPreviewImg,
     ObsSceneList,
     ObsStreamMode,
+    ShowPictureDuringIntermission,
     SongData,
     TrackerDonations,
     TrackerOpenBids,
@@ -112,3 +114,7 @@ export const voiceActivityRep = nodecg().Replicant<VoiceActivity>('voiceActivity
     defaultValue: { members: [] },
     persistent: true
 }) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<VoiceActivity>;
+// These aren't used anywhere in the extension code, just gotta makre sure to declare them
+nodecg().Replicant<ShowPictureDuringIntermission>('showPictureDuringIntermission');
+nodecg().Replicant<CapturePositions>('capturePositions');
+nodecg().Replicant<NodeCGTypes.AssetFile[]>('assets:intermissionVideos', { defaultValue: [] });

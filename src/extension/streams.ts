@@ -7,7 +7,9 @@ const nodecg = nodecgApiContext.get();
 
 // Twitch aspect ratio 1024x576
 
-const aspectRatioToCropping: { [key: string]: { widthPercent: number; heightPercent: number; topPercent: number; leftPercent: number } } = {
+const aspectRatioToCropping: {
+    [key: string]: { widthPercent: number; heightPercent: number; topPercent: number; leftPercent: number };
+} = {
     '16:9': {
         widthPercent: 100,
         heightPercent: 100,
@@ -70,73 +72,71 @@ const aspectRatioToCropping: { [key: string]: { widthPercent: number; heightPerc
     }
 };
 
-streamsReplicant.once('change', (): void => {
-    runDataActiveRunRep.on('change', (newVal, old): void => {
-        // don't reset on server restart
-        if (!newVal || !old) return;
+runDataActiveRunRep.on('change', (newVal, old): void => {
+    // don't reset on server restart
+    if (!newVal || !old) return;
 
-        // set the initial cropping based on the aspect ratio marked in the schedule
-        let cropping = {
-            widthPercent: 100,
-            heightPercent: 100,
-            topPercent: 0,
-            leftPercent: 0
-        };
-        if (newVal.customData && newVal.customData.Layout) {
-            cropping = aspectRatioToCropping[newVal.customData.Layout] || cropping;
-        }
+    // set the initial cropping based on the aspect ratio marked in the schedule
+    let cropping = {
+        widthPercent: 100,
+        heightPercent: 100,
+        topPercent: 0,
+        leftPercent: 0
+    };
+    if (newVal.customData && newVal.customData.Layout) {
+        cropping = aspectRatioToCropping[newVal.customData.Layout] || cropping;
+    }
 
-        // grab all runners
-        const newStreams: TwitchStream[] = [];
-        let idx = 0;
-        newVal.teams.forEach((team, teamIndex): void => {
-            team.players.forEach((player, playerIndex): void => {
-                // nodecg.log.info(`${player.social.twitch} to ${old.teams[teamIndex]?.players[playerIndex]?.social.twitch}`)
-                // in case the replicant changed, but this stream wasn't affected, don't reset cropping
-                // fill everything with defaults
-                let current: TwitchStream = {
-                    channel: 'esamarathon',
-                    quality: 'chunked',
-                    widthPercent: 100,
-                    heightPercent: 100,
-                    topPercent: 0,
-                    leftPercent: 0,
-                    volume: 1,
-                    paused: false,
-                    delay: -1,
-                    availableQualities: [],
-                    visible: true
-                };
-                // if it's a relay, make stream that is not the active relay player invisible
-                if (newVal.relay && player.id !== team.relayPlayerID) {
-                    current.visible = false;
-                }
-                current.widthPercent = cropping.widthPercent;
-                current.heightPercent = cropping.heightPercent;
-                current.topPercent = cropping.topPercent;
-                current.leftPercent = cropping.leftPercent;
-                if (!player.social || !player.social.twitch) {
-                    nodecg.log.error(`Twitch name for player ${player.name} missing!`);
-                    current.paused = true;
+    // grab all runners
+    const newStreams: TwitchStream[] = [];
+    let idx = 0;
+    newVal.teams.forEach((team, teamIndex): void => {
+        team.players.forEach((player, playerIndex): void => {
+            // nodecg.log.info(`${player.social.twitch} to ${old.teams[teamIndex]?.players[playerIndex]?.social.twitch}`)
+            // in case the replicant changed, but this stream wasn't affected, don't reset cropping
+            // fill everything with defaults
+            let current: TwitchStream = {
+                channel: 'esamarathon',
+                quality: 'chunked',
+                widthPercent: 100,
+                heightPercent: 100,
+                topPercent: 0,
+                leftPercent: 0,
+                volume: 1,
+                paused: false,
+                delay: -1,
+                availableQualities: [],
+                visible: true
+            };
+            // if it's a relay, make stream that is not the active relay player invisible
+            if (newVal.relay && player.id !== team.relayPlayerID) {
+                current.visible = false;
+            }
+            current.widthPercent = cropping.widthPercent;
+            current.heightPercent = cropping.heightPercent;
+            current.topPercent = cropping.topPercent;
+            current.leftPercent = cropping.leftPercent;
+            if (!player.social || !player.social.twitch) {
+                nodecg.log.error(`Twitch name for player ${player.name} missing!`);
+                current.paused = true;
+            } else {
+                const oldStream = streamsReplicant.value[idx];
+                // check against old replicant, in case of a stream override
+                if (!oldStream || player.social.twitch !== old.teams[teamIndex]?.players[playerIndex]?.social.twitch) {
+                    current.channel = player.social.twitch;
                 } else {
-                    const oldStream = streamsReplicant.value[idx];
-                    // check against old replicant, in case of a stream override
-                    if (!oldStream || player.social.twitch !== old.teams[teamIndex]?.players[playerIndex]?.social.twitch) {
-                        current.channel = player.social.twitch;
-                    } else {
-                        current = oldStream;
-                    }
+                    current = oldStream;
                 }
-                newStreams.push(current);
-                idx += 1;
-            });
+            }
+            newStreams.push(current);
+            idx += 1;
         });
-        // make sure soundOnTwitchStream isn't OoB in streamsReplicant
-        if (soundOnTwitchStream.value >= newStreams.length) {
-            soundOnTwitchStream.value = -1; // mute all
-        }
-        streamsReplicant.value = newStreams;
     });
+    // make sure soundOnTwitchStream isn't OoB in streamsReplicant
+    if (soundOnTwitchStream.value >= newStreams.length) {
+        soundOnTwitchStream.value = -1; // mute all
+    }
+    streamsReplicant.value = newStreams;
 });
 
 nodecg.listenFor('streams:setSoundOnTwitchStream', (streamNr: number, callback): void => {

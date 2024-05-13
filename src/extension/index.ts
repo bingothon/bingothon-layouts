@@ -3,7 +3,7 @@
 // This must go first so we can use module aliases!
 /* eslint-disable import/first */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const alias = require('module-alias')
+const alias = require('module-alias');
 
 alias.addAlias(
     '@',
@@ -11,9 +11,9 @@ alias.addAlias(
     require('path').join(__dirname, '.')
 );
 
-import type NodeCG from '@nodecg/types' // eslint-disable-line
-import * as nodecgApiContext from './util/nodecg-api-context'
-import {Asset, CapturePositions, ShowPictureDuringIntermission, SongData, VoiceActivity} from '../../schemas'
+import type NodeCG from '@nodecg/types'; // eslint-disable-line
+import * as nodecgApiContext from './util/nodecg-api-context';
+import { SongData, VoiceActivity } from '@/schemas';
 import { Configschema } from '@/configschema';
 
 export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
@@ -29,59 +29,104 @@ export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
         } else {
             const voiceActivity = nodecg.Replicant<VoiceActivity>('voiceActivity', {
                 defaultValue: {
-                    members: [],
+                    members: []
                 },
-                persistent: true,
+                persistent: true
             });
             const defaultAvatar = 'https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png';
             voiceActivity.value = {
                 members: [
                     {
-                        id: '0', name: 'abc', avatar: defaultAvatar, isSpeaking: false,
+                        id: '0',
+                        name: 'abc',
+                        avatar: defaultAvatar,
+                        isSpeaking: false
                     },
                     {
-                        id: '1', name: 'testlongname', avatar: defaultAvatar, isSpeaking: true,
+                        id: '1',
+                        name: 'testlongname',
+                        avatar: defaultAvatar,
+                        isSpeaking: true
                     },
                     {
-                        id: '2', name: 'anotherone', avatar: defaultAvatar, isSpeaking: true,
+                        id: '2',
+                        name: 'anotherone',
+                        avatar: defaultAvatar,
+                        isSpeaking: true
                     },
                     {
-                        id: '3', name: 'POGGERS', avatar: defaultAvatar, isSpeaking: false,
+                        id: '3',
+                        name: 'POGGERS',
+                        avatar: defaultAvatar,
+                        isSpeaking: false
                     },
                     {
-                        id: '4', name: 'asdfasdf', avatar: defaultAvatar, isSpeaking: false,
+                        id: '4',
+                        name: 'asdfasdf',
+                        avatar: defaultAvatar,
+                        isSpeaking: false
                     },
                     {
-                        id: '5', name: 'someone', avatar: defaultAvatar, isSpeaking: false,
+                        id: '5',
+                        name: 'someone',
+                        avatar: defaultAvatar,
+                        isSpeaking: false
                     },
                     {
-                        id: '6', name: 'idk this is a lot', avatar: defaultAvatar, isSpeaking: true,
+                        id: '6',
+                        name: 'idk this is a lot',
+                        avatar: defaultAvatar,
+                        isSpeaking: true
                     },
                     {
-                        id: '7', name: 'not creative', avatar: defaultAvatar, isSpeaking: true,
+                        id: '7',
+                        name: 'not creative',
+                        avatar: defaultAvatar,
+                        isSpeaking: true
                     },
                     {
-                        id: '8', name: 'nr8', avatar: defaultAvatar, isSpeaking: false,
+                        id: '8',
+                        name: 'nr8',
+                        avatar: defaultAvatar,
+                        isSpeaking: false
                     },
                     {
-                        id: '9', name: 'nr8', avatar: defaultAvatar, isSpeaking: false,
+                        id: '9',
+                        name: 'nr8',
+                        avatar: defaultAvatar,
+                        isSpeaking: false
                     },
                     {
-                        id: '10', name: 'nr8', avatar: defaultAvatar, isSpeaking: false,
+                        id: '10',
+                        name: 'nr8',
+                        avatar: defaultAvatar,
+                        isSpeaking: false
                     },
                     {
-                        id: '11', name: 'nr8', avatar: defaultAvatar, isSpeaking: false,
+                        id: '11',
+                        name: 'nr8',
+                        avatar: defaultAvatar,
+                        isSpeaking: false
                     },
                     {
-                        id: '12', name: 'nr8', avatar: defaultAvatar, isSpeaking: false,
+                        id: '12',
+                        name: 'nr8',
+                        avatar: defaultAvatar,
+                        isSpeaking: false
                     },
                     {
-                        id: '13', name: 'nr8', avatar: defaultAvatar, isSpeaking: false,
+                        id: '13',
+                        name: 'nr8',
+                        avatar: defaultAvatar,
+                        isSpeaking: false
                     },
                     {
-                        id: '14', name: 'nr8', avatar: defaultAvatar, isSpeaking: false,
-                    },
-                ],
+                        id: '14',
+                        name: 'nr8',
+                        avatar: defaultAvatar,
+                        isSpeaking: false
+                    }
+                ]
             };
         }
     }
@@ -95,13 +140,9 @@ export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
         require('./music');
     } else {
         nodecg.log.warn('MPD integration is disabled, no music!');
-        nodecg.Replicant<SongData>('songData', { persistent: false, defaultValue: { playing: false, title: 'No Track Playing' } });
+        nodecg.Replicant<SongData>('songData', {
+            persistent: false,
+            defaultValue: { playing: false, title: 'No Track Playing' }
+        });
     }
-    // this doesn't really belong anywhere
-    // just make sure to declare
-    nodecg.Replicant<ShowPictureDuringIntermission>('showPictureDuringIntermission');
-    nodecg.Replicant<CapturePositions>('capturePositions');
-    // for some reason, assets have the wrong type if it's not declared here (they aren't an array, which makes nodecg crash)
-    nodecg.Replicant<Asset[]>('assets:intermissionVideos', {defaultValue: []});
-    //const text = fs.readFileSync('src/graphics/host-dashboard/fhfacts.txt', 'utf-8');
 };
