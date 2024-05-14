@@ -18,7 +18,7 @@ import {
     soundOnTwitchStream,
     hostDiscordDuringIntermissionRep,
     lastIntermissionTimestampRep,
-    obsPreviewImgRep,
+    obsPreviewImgRep
 } from './util/replicants';
 
 // this handles dashboard utilities, all around automating the run setup process
@@ -281,7 +281,7 @@ waitTillConnected().then((): void => {
                 'obsRemotecontrol:fadeInAudio',
                 { source: bundleConfig.obs.mpdAudio } /* (err): void => {
                 logger.warn(`Problem fading in mpd during transition: ${err.error}`);
-            } */,
+            } */
             );
         } else {
             // this should be false anyway, hosts should stop speaking before the transition to the next run
@@ -290,7 +290,7 @@ waitTillConnected().then((): void => {
                 'obsRemotecontrol:fadeOutAudio',
                 { source: bundleConfig.obs.mpdAudio } /* (err): void => {
                 logger.warn(`Problem fading out mpd during transition: ${err.error}`);
-            } */,
+            } */
             );
         }
         // streams audio handled via individual sources
@@ -320,14 +320,14 @@ waitTillConnected().then((): void => {
                     'obsRemotecontrol:fadeOutAudio',
                     { source: bundleConfig.obs.discordAudio } /* (err): void => {
                     logger.warn(`Problem fading out discord during transition: ${err.error}`);
-                } */,
+                } */
                 );
             } else {
                 nodecg.sendMessage(
                     'obsRemotecontrol:fadeInAudio',
                     { source: bundleConfig.obs.discordAudio } /* (err): void => {
                     logger.warn(`Problem fading in discord during transition: ${err.error}`);
-                } */,
+                } */
                 );
             }
         } else if (streamMode === 'racer-audio-only') {
@@ -348,14 +348,14 @@ waitTillConnected().then((): void => {
                     'obsRemotecontrol:fadeInAudio',
                     { source: bundleConfig.obs.discordAudio } /* (err): void => {
                     logger.warn(`Problem fading in discord during transition: ${err.error}`);
-                } */,
+                } */
                 );
             } else {
                 nodecg.sendMessage(
                     'obsRemotecontrol:fadeOutAudio',
                     { source: bundleConfig.obs.discordAudio } /* (err): void => {
                     logger.warn(`Problem fading out discord during transition: ${err.error}`);
-                } */,
+                } */
                 );
             }
             // if (nextSceneName === 'intermission') {
@@ -412,7 +412,7 @@ waitTillConnected().then((): void => {
                     'obsRemotecontrol:fadeInAudio',
                     { source: bundleConfig.obs.discordAudio } /* (err): void => {
                     logger.warn(`Problem fading in discord during transition: ${err.error}`);
-                } */,
+                } */
                 );
             } else {
                 obsAudioSourcesRep.value[bundleConfig.obs.mpdAudio].volumeMultiplier = 1;
@@ -420,7 +420,7 @@ waitTillConnected().then((): void => {
                     'obsRemotecontrol:fadeOutAudio',
                     { source: bundleConfig.obs.discordAudio } /* (err): void => {
                     logger.warn(`Problem fading out discord during transition: ${err.error}`);
-                } */,
+                } */
                 );
             }
         }
@@ -442,7 +442,7 @@ waitTillConnected().then((): void => {
                 'obsRemotecontrol:fadeOutAudio',
                 { source: bundleConfig.obs.mpdAudio } /*  (err): void => {
                 logger.warn(`Problem fading out mpd during transition: ${err.error}`);
-            } */,
+            } */
             );
         }
     });
@@ -454,7 +454,7 @@ waitTillConnected().then((): void => {
                 'obsRemotecontrol:fadeInAudio',
                 { source: bundleConfig.obs.mpdAudio } /* (err): void => {
                 logger.warn(`Problem fading in mpd during transition: ${err.error}`);
-            } */,
+            } */
             );
         }
     });

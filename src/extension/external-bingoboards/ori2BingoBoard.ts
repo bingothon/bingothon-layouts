@@ -2,7 +2,7 @@ import * as RequestPromise from 'request-promise';
 
 import { ExternalBingoboardManager } from '@/externalBingoboards';
 import { boardMetaRep } from '@/util/replicants';
-import type NodeCG from "@nodecg/types";
+import type NodeCG from '@nodecg/types';
 import { ExternalBingoboard, ExternalBingoboardMeta } from '../../../schemas';
 import { BoardColor, ExplorationBingoboardCell } from '../../../types';
 import * as nodecgApiContext from '../util/nodecg-api-context';
@@ -52,7 +52,7 @@ function createEmptyBoard(boardSize = 5) {
             hidden: true,
             hiddenName: '',
             colors: 'blank',
-            slot: `slot${i}`,
+            slot: `slot${i}`
         });
     }
 
@@ -94,7 +94,7 @@ export class Ori2ExternalBingoboard implements ExternalBingoboardManager {
             log.error('meta is undefined!');
             return;
         }
-        const board = await fetchBoard(this.meta.token, this.meta.host)
+        const board = await fetchBoard(this.meta.token, this.meta.host);
         const cells = createEmptyBoard(board.size);
 
         // Map universe IDs to colors and count

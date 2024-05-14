@@ -1,6 +1,6 @@
+import type NodeCGTypes from '@nodecg/types';
 import {
     AllGameLayouts,
-    Asset,
     Bingoboard,
     BingoboardMeta,
     BingoboardMode,
@@ -30,7 +30,6 @@ import {
     TwitchStream,
     VoiceActivity
 } from 'schemas';
-import type NodeCGTypes from '@nodecg/types';
 import { get as nodecg } from './nodecg-api-context';
 
 /**
@@ -103,7 +102,7 @@ export const obsPreviewImgRep = nodecg().Replicant<ObsPreviewImg>('obsPreviewImg
 export const twitchChatBotDataRep = nodecg().Replicant<TwitchChatBotData>(
     'twitchChatBotData'
 ) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<TwitchChatBotData>;
-export const obsSceneListRep = nodecg().Replicant<ObsSceneList>('obsSceneList') as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<ObsSceneList>; // TODO: create a type Scene and replace 'any' with 'Scene[]'
+export const obsSceneListRep = nodecg().Replicant<ObsSceneList>('obsSceneList') as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<ObsSceneList>;
 export const capturePositionsRep = nodecg().Replicant<CapturePositions>(
     'capturePositions'
 ) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<CapturePositions>;
