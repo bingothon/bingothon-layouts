@@ -57,14 +57,33 @@
                 </v-btn>
             </div>
         </div>
+        <!-- bingogg Stuff -->
+        <div v-if="showBingoggOptions">
+            <div>
+                Room:
+                <v-text-field v-model="roomCode" background-color="#455A64" clearable solo dark />
+            </div>
+            <div>
+                Passphrase:
+                <v-text-field v-model="passphrase" background-color="#455A64" clearable solo dark />
+            </div>
+            <div class="d-flex justify-center line-buttons">
+                <v-btn
+                    :disabled="!canConnectBingogg"
+                    class="button"
+                    dark
+                    small
+                    @click="connectBingogg"
+                    :style="`width: 100%`"
+                >
+                    {{ connectActionText }}
+                </v-btn>
+            </div>
+        </div>
         <!-- External board -->
         <div v-if="showExtraExternBoardOptions">
             <div>Currently active: {{ storeExternalBingoboardMeta.game }}</div>
-            <v-radio-group
-                v-model="externalBingoboardMeta.game"
-                :value="externalBingoboardMeta.game"
-                @change="updateExternalGame"
-            >
+            <v-radio-group v-model="externalBingoboardMeta.game" @change="updateExternalGame">
                 <v-radio value="none" label="None" />
                 <v-radio value="ori1" label="Ori and the Blind Forest" />
                 <v-radio value="ori2" label="Ori and the Will of the Wisps" />
@@ -150,9 +169,13 @@
     import { getReplicant, store } from '../../browser-util/state';
 
     type ColorEnum = 'pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple';
-    type BingoRepEnum = 'bingoboard' | 'externalBingoboard' | 'explorationBingoboard';
+    type BingoRepEnum = 'bingoboard' | 'externalBingoboard' | 'explorationBingoboard' | 'bingogg';
 
-    const BOARD_TO_SOCKET_REP = { bingoboard: 'bingosyncSocket', hostingBingoboard: 'hostingBingosocket' };
+    const BOARD_TO_SOCKET_REP = {
+        bingoboard: 'bingosyncSocket',
+        hostingBingoboard: 'hostingBingosocket',
+        bingogg: 'bingoggSocket',
+    };
 
     @Component({})
     export default class BingoControl extends Vue {
@@ -181,7 +204,7 @@
             'purple'
         ]);
 
-        allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard']); //add back when need  'explorationBingoboard'
+        allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard', 'bingogg']); //add back when need  'explorationBingoboard'
 
         mounted() {
             store.watch(
@@ -272,8 +295,16 @@
             }
         }
 
+        get canConnectBingogg(): boolean {
+            return true;
+        }
+
         get showExtraBingosyncOptions(): boolean {
             return ['bingoboard', 'hostingBingoboard'].includes(this.currentBoardRep);
+        }
+
+        get showBingoggOptions(): boolean {
+            return this.currentBoardRep === 'bingogg';
         }
 
         get showExtraExternBoardOptions(): boolean {
@@ -346,6 +377,14 @@
                         break;
                 }
             }
+        }
+
+        connectBingogg() {
+            console.log('called bingogg connect');
+            nodecg.sendMessage('bingogg:connect', {
+                slug: this.roomCode,
+                passphrase: this.passphrase,
+            });
         }
 
         updateExploration() {
