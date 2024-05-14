@@ -17,7 +17,7 @@ module.exports = {
         nodecg: 'readonly',
         NodeCG: 'readonly',
     },
-    plugins: ['vue', '@typescript-eslint', 'html'],
+    plugins: ['vue', '@typescript-eslint', 'html', 'prettier'],
     rules: {
         'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
         'no-unused-vars': 'off',
