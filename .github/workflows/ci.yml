@@ -4,12 +4,13 @@ on:
   - pull_request
 
 jobs:
-  lint:
+  lint_and_build:
+    name: Lint and Build
     runs-on: ubuntu-latest
     
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node 20
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
@@ -20,18 +21,6 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-  build:
-    runs-on: ubuntu-latest
-        
-    steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-
-      - name: Install modules
-        run: npm ci
-
-      - name: Run ESLint
+      - name: Build
         run: npm run build
+        
