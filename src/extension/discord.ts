@@ -23,9 +23,9 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
 } else {
     // Variables
     let voiceStatus: 'disconnected' | 'connecting' | 'connected' | 'error' = 'disconnected';
-    
+
     let voiceConnection: VoiceConnection | undefined;
-    
+
     // Connection
     bot.on('ready', (): void => {
         if (!bot.user) {
@@ -39,26 +39,26 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
     });
     bot.on('error', (): void => {
         log.error('The bot encountered a connection error!!');
-        
+
         voiceStatus = 'error';
-        
+
         setTimeout((): void => {
             bot.login(botToken);
         }, 10000);
     });
-    
+
     bot.on('disconnect', (): void => {
         log.error('The bot disconnected!!');
-        
+
         voiceStatus = 'disconnected';
-        
+
         setTimeout((): void => {
             bot.login(botToken);
         }, 10000);
     });
-    
+
     bot.login(botToken);
-    
+
     // Voice
     bot.on('voiceStateUpdate', (): void => {
         updateCommentaryChannelMembers();
@@ -67,42 +67,39 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
             joinVC();
         }
     });
-    
+
     function updateCommentaryChannelMembers(): void {
         if (!voiceActivityRep || !voiceActivityRep.value) return;
-        
+
         if (bot.isReady()) {
-            
-            const memberCollection = getVoiceChannelSafe(botServerID, botVoiceCommentaryChannelID)
-                .members;
-            
+            const memberCollection = getVoiceChannelSafe(botServerID, botVoiceCommentaryChannelID).members;
+
             if (!memberCollection || memberCollection.size < 1) {
                 voiceActivityRep.value.members = [];
                 return;
             }
-            
+
             const newVoiceArray: {
                 id: string;
                 name: string;
                 avatar: string;
                 isSpeaking: boolean;
             }[] = [];
-            
+
             memberCollection.forEach((voiceMember): void => {
                 // Hide our bot and muted members cause that is the restreamer
-                if (config.discord?.ignoredUsers
-                    && config.discord.ignoredUsers.includes(voiceMember.user.tag)) {
+                if (config.discord?.ignoredUsers && config.discord.ignoredUsers.includes(voiceMember.user.tag)) {
                     return;
                 }
                 if (!voiceMember.voice.mute) {
                     let userAvatar = voiceMember.displayAvatarURL();
-                    
+
                     if (!userAvatar) {
                         userAvatar = 'https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png';
                     } // Default avatar
-                    
+
                     let speakStatus = getVoiceConnection(botServerID)?.receiver.speaking.users.has(voiceMember.id);
-                    
+
                     if (!speakStatus) {
                         speakStatus = false;
                     }
@@ -115,19 +112,17 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
                     });
                 }
             });
-            
+
             voiceActivityRep.value.members = newVoiceArray;
-            
         }
     }
-    
+
     function joinVC(): void {
         voiceStatus = 'connecting';
-        
+
         const guild = bot.guilds.cache.get(botServerID);
-        
+
         if (guild && bot.isReady()) {
-            
             const joinConfig = {
                 guildId: botServerID,
                 channelId: botVoiceCommentaryChannelID,
@@ -136,30 +131,30 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
                 group: '',
                 adapterCreator: guild.voiceAdapterCreator
             };
-            
+
             // @ts-expect-error Currently voice is built in mind with API v10 whereas discord.js v13 uses API v9. adapters are incompatible
             Voice.joinVoiceChannel(joinConfig);
-            
+
             voiceStatus = 'connected';
             voiceConnection = getVoiceConnection(botServerID);
-            
+
             if (voiceConnection) {
                 voiceConnection.receiver.speaking.on('start', () => {
                     nodecg.log.info('User started speaking');
                     updateCommentaryChannelMembers();
                 });
-                
+
                 voiceConnection.receiver.speaking.on('end', () => {
                     nodecg.log.info('User stopped speaking');
                     updateCommentaryChannelMembers();
                 });
             }
-            
+
             updateCommentaryChannelMembers();
             nodecg.log.info('joined voice channel!');
-            
+
             let connection = voiceConnection;
-            
+
             if (!connection) {
                 // @ts-expect-error Currently voice is built in mind with API v10 whereas discord.js v13 uses API v9.
                 connection = Voice.joinVoiceChannel(joinConfig);
@@ -179,8 +174,8 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
                     }
                 }, voiceDelayRep.value);
             });
-            
-            receiver.speaking.on('end', (userID => {
+
+            receiver.speaking.on('end', (userID) => {
                 setTimeout((): void => {
                     const member = voiceActivityRep.value.members.find((voiceMember) => {
                         return voiceMember.id === userID;
@@ -189,10 +184,10 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
                         member.isSpeaking = false;
                     }
                 }, voiceDelayRep.value);
-            }));
+            });
         }
     }
-    
+
     // Commands
     function commandChannel(message: Discord.Message): void {
         // ADMIN COMMANDS
@@ -209,10 +204,10 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
                 }
                 joinVC();
                 return;
-            
+
             case '!bot leave':
                 if (voiceStatus !== 'connected') {
-                    message.reply('I\'m not in the podcast channel!');
+                    message.reply("I'm not in the podcast channel!");
                     return;
                 }
                 getVoiceConnection(botServerID)?.disconnect();
@@ -223,29 +218,29 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
                 return;
         }
     }
-    
+
     // Message Handling
     bot.on('messageCreate', (message: Discord.Message): void => {
         if (message.channelId === botCommandChannelID) {
             if (message.content.toLowerCase() === '!status') {
                 switch (voiceStatus) {
                     case 'disconnected':
-                        message.reply('I\'m not in the podcast channel!');
+                        message.reply("I'm not in the podcast channel!");
                         break;
                     case 'connecting':
-                        message.reply('I\'m currently connecting to the podcast channel!');
+                        message.reply("I'm currently connecting to the podcast channel!");
                         break;
                     case 'connected':
-                        message.reply('I\'m currently in the podcast channel!');
+                        message.reply("I'm currently in the podcast channel!");
                         break;
                 }
-                message.reply('Hey! I\'m online and ready to track the voice channel!');
+                message.reply("Hey! I'm online and ready to track the voice channel!");
                 return;
             }
             commandChannel(message);
         }
     });
-    
+
     // helper
     function getVoiceChannelSafe(serverID: string, voiceChannelID: string): Discord.VoiceChannel {
         const guild = bot.guilds.cache.get(serverID);

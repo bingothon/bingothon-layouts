@@ -1,9 +1,9 @@
-import clone from 'clone'
-import * as nodecgApiContext from './util/nodecg-api-context'
-import { allGameLayoutsRep, currentGameLayoutRep } from './util/replicants'
-import { runDataActiveRunRep } from './util/speedControlReplicants'
+import clone from 'clone';
+import * as nodecgApiContext from './util/nodecg-api-context';
+import { allGameLayoutsRep, currentGameLayoutRep } from './util/replicants';
+import { runDataActiveRunRep } from './util/speedControlReplicants';
 
-const nodecg = nodecgApiContext.get()
+const nodecg = nodecgApiContext.get();
 
 const logger = new nodecg.Logger(`${nodecg.bundleName}:layoutlogic`);
 
@@ -22,7 +22,7 @@ runDataActiveRunRep.on('change', (newValue, old): void => {
             break;
         case '16:9 4p Trackers':
             layoutstring = '4p 16:9 Layout Trackers';
-            break
+            break;
         case '16:9 4P Trackers Co-Op':
             layoutstring = '4p 16:9 co-op Layout Trackers';
             break;
@@ -41,6 +41,6 @@ runDataActiveRunRep.on('change', (newValue, old): void => {
             }
             layoutstring = `${playerCount}p ${newValue.customData.Layout} ${coOp ? 'co-op ' : ''}Layout`;
     }
-    const foundLayout = allGameLayoutsRep.value?.find(l => l.name == layoutstring);
-    foundLayout ? currentGameLayoutRep.value = clone(foundLayout) : logger.error('did not find game layout ' + layoutstring);
+    const foundLayout = allGameLayoutsRep.value?.find((l) => l.name == layoutstring);
+    foundLayout ? (currentGameLayoutRep.value = clone(foundLayout)) : logger.error('did not find game layout ' + layoutstring);
 });

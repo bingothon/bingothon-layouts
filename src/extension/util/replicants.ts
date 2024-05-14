@@ -1,6 +1,6 @@
+import type NodeCGTypes from '@nodecg/types';
 import {
     AllGameLayouts,
-    Asset,
     Bingoboard,
     BingoboardMeta,
     BingoboardMode,
@@ -30,7 +30,6 @@ import {
     TwitchStream,
     VoiceActivity
 } from 'schemas';
-import type NodeCGTypes from '@nodecg/types';
 import { get as nodecg } from './nodecg-api-context';
 
 /**

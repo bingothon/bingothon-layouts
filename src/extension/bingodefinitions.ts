@@ -13,7 +13,7 @@ const definitions: { [key: string]: string } = {
     'double anti':
         'In double anti bingo, each player selects a row/column/diagonal for their opponent and chooses an additional line for themselves to complete',
     battleships:
-        'In Battleship bingo, each team places 2,3 and 4 square long battleships on the board, hidden from the other team, which may not overlap. Goal is to sink all of the other teams ships',
-}
+        'In Battleship bingo, each team places 2,3 and 4 square long battleships on the board, hidden from the other team, which may not overlap. Goal is to sink all of the other teams ships'
+};
 
-export default definitions
+export default definitions;
