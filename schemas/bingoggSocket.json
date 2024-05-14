@@ -1,0 +1,24 @@
+
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"status": {
+			"type": "string",
+			"default": "disconnected",
+			"enum": ["connected", "connecting", "disconnected", "error"]
+		},
+		"playerName": {
+			"type": "string",
+			"default": "bingothon"
+		},
+		"roomCode": {
+			"type": "string"
+		},
+		"passphrase": {
+			"type": "string"
+		}
+	},
+	"required": ["status"]
+}

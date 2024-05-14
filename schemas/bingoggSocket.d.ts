@@ -5,6 +5,9 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface CurrentMainBingoboard {
-  boardReplicant: "bingoboard" | "externalBingoboard" | "explorationBingoboard" | "bingogg";
+export interface BingoggSocket {
+  status: "connected" | "connecting" | "disconnected" | "error";
+  playerName?: string;
+  roomCode?: string;
+  passphrase?: string;
 }
