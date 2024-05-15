@@ -110,10 +110,7 @@ runDataActiveRunRep.on('change', (newVal, old): void => {
             };
             // if it's a relay, make stream that is not the active relay player invisible
             if (newVal.relay && player.id !== team.relayPlayerID) {
-                console.log('player', player.id);
-                console.log('team', team);
                 current.visible = false;
-                console.log('visible', current.visible);
             }
             current.widthPercent = cropping.widthPercent;
             current.heightPercent = cropping.heightPercent;
