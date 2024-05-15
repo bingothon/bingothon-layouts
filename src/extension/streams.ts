@@ -110,7 +110,10 @@ runDataActiveRunRep.on('change', (newVal, old): void => {
             };
             // if it's a relay, make stream that is not the active relay player invisible
             if (newVal.relay && player.id !== team.relayPlayerID) {
+                console.log('player', player.id);
+                console.log('team', team);
                 current.visible = false;
+                console.log('visible', current.visible);
             }
             current.widthPercent = cropping.widthPercent;
             current.heightPercent = cropping.heightPercent;
@@ -125,7 +128,8 @@ runDataActiveRunRep.on('change', (newVal, old): void => {
                 if (!oldStream || player.social.twitch !== old.teams[teamIndex]?.players[playerIndex]?.social.twitch) {
                     current.channel = player.social.twitch;
                 } else {
-                    current = oldStream;
+                    // for relays make sure to check if the player is the active player
+                    current = { ...oldStream, visible: current.visible };
                 }
             }
             newStreams.push(current);
