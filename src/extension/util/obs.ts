@@ -403,20 +403,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                                         `https://player.twitch.tv/?channel=${stream.channel}&enableExtensions=true&muted=false&parent=twitch.tv&player=popout&volume=1`
                                     );
                                 }
-                                // check if the cropping changed
-                                if (
-                                    stream.widthPercent !== oldStream.widthPercent ||
-                                    stream.heightPercent !== oldStream.heightPercent ||
-                                    stream.leftPercent !== oldStream.leftPercent ||
-                                    stream.topPercent !== oldStream.topPercent
-                                ) {
-                                    handleStreamPosChange(obs, stream, idx, currentLayoutRep.value, positionsRep.value);
-                                } else {
-                                    // since this channel exists, make it visible
-                                    // obs.setSourceBoundsAndCrop(getStreamSrcName(idx), { visible: true });
-                                    // only sending visible: true makes obs forget about other transform params therefore we need to calculate all params
-                                    handleStreamPosChange(obs, stream, idx, currentLayoutRep.value, positionsRep.value);
-                                }
+                                handleStreamPosChange(obs, stream, idx, currentLayoutRep.value, positionsRep.value);
                                 handleSoundChange(obs, soundOnTwitchStreamRep.value, idx, stream, oldStream);
                                 //TODO: use this when switching to streamlink method, obs.setMediasourcePlayPause(getStreamSrcName(i), stream.paused)
                             }
