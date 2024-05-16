@@ -395,8 +395,8 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                                 // fire and forget
                                 obs.setSourceBoundsAndCrop(getStreamSrcName(idx), transProps);
                             } else {
-                                // check if the streamurl changed
-                                if (stream.channel !== oldStream.channel) {
+                                // check if the streamurl changed or the visible status changed
+                                if (stream.channel !== oldStream.channel || stream.visible !== oldStream.visible) {
                                     // fire and forget
                                     obs.setBrowserSourceUrl(
                                         getStreamSrcName(idx),
@@ -413,7 +413,9 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                                     handleStreamPosChange(obs, stream, idx, currentLayoutRep.value, positionsRep.value);
                                 } else {
                                     // since this channel exists, make it visible
-                                    obs.setSourceBoundsAndCrop(getStreamSrcName(idx), { visible: true });
+                                    // obs.setSourceBoundsAndCrop(getStreamSrcName(idx), { visible: true });
+                                    // only sending visible: true makes obs forget about other transform params therefore we need to calculate all params
+                                    handleStreamPosChange(obs, stream, idx, currentLayoutRep.value, positionsRep.value);
                                 }
                                 handleSoundChange(obs, soundOnTwitchStreamRep.value, idx, stream, oldStream);
                                 //TODO: use this when switching to streamlink method, obs.setMediasourcePlayPause(getStreamSrcName(i), stream.paused)
