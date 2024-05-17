@@ -23,8 +23,7 @@
                     "colors": {
                         "type":"array",
                         "items": {
-                            "type": "string",
-                            "enum": ["pink", "red", "orange", "brown", "yellow", "green", "teal", "blue", "navy", "purple"]
+                            "type": "string"
                         }
                     },
                     "rawColors": {"type":"string"},

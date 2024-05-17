@@ -29,7 +29,7 @@ const parseBoard = (board: Board): Bingoboard => {
                 return {
                     name: cell.goal,
                     slot: `${rowIndex * 5 + index}`,
-                    colors: ['red'],
+                    colors: cell.colors,
                     rawColors: cell.colors.join(' '),
                     markers: [null, null, null, null],
                 };
