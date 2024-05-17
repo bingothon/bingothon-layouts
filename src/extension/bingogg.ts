@@ -1,3 +1,6 @@
+import { Board, ServerMessage } from '@bingogg/types';
+import { Bingoboard } from 'schemas/bingoboard';
+import { BingoboardMeta } from 'schemas/bingoboardMeta';
 import { BingoggSocket } from 'schemas/bingoggSocket';
 import WebSocket from 'ws';
 import * as nodecgApiContext from './util/nodecg-api-context';
@@ -9,12 +12,31 @@ const log = new nodecg.Logger(`${nodecg.bundleName}:bingogg`);
 const bingoggHost = 'http://localhost:8001';
 const socketHost = bingoggHost.replace('http', 'ws');
 
+const boardRep = nodecg.Replicant<Bingoboard>('bingoboard');
+const boardMetaRep = nodecg.Replicant<BingoboardMeta>('bingoboardMeta');
 const socketRep = nodecg.Replicant<BingoggSocket>('bingoggSocket');
 socketRep.value.status = 'disconnected';
 
 log.info('setting up bingogg integration');
 
 let webSocket: WebSocket;
+
+const parseBoard = (board: Board): Bingoboard => {
+    return {
+        colorCounts: {},
+        cells: board.board.flatMap((row, rowIndex) =>
+            row.map((cell, index) => {
+                return {
+                    name: cell.goal,
+                    slot: `${rowIndex * 5 + index}`,
+                    colors: ['red'],
+                    rawColors: cell.colors.join(' '),
+                    markers: [null, null, null, null],
+                };
+            }),
+        ),
+    };
+};
 
 nodecg.listenFor('bingogg:connect', async (data, callback) => {
     const { slug, passphrase } = data;
@@ -57,6 +79,19 @@ nodecg.listenFor('bingogg:connect', async (data, callback) => {
                     payload: { nickname: 'bingothon' },
                 }),
             );
+        });
+
+        webSocket.on('message', (message) => {
+            const data: ServerMessage = JSON.parse(message.toString());
+            console.log(data);
+            switch (data.action) {
+                case 'connected':
+                case 'syncBoard':
+                    boardRep.value = parseBoard(data.board);
+                    break;
+                default:
+                    break;
+            }
         });
     } catch (e) {
         console.log(e);
