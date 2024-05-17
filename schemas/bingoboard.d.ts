@@ -12,7 +12,7 @@ export interface Bingoboard {
   cells: {
     name: string;
     slot: string;
-    colors: ("pink" | "red" | "orange" | "brown" | "yellow" | "green" | "teal" | "blue" | "navy" | "purple")[];
+    colors: string[];
     rawColors: string;
     /**
      * @minItems 4

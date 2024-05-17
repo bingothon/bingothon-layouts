@@ -14,7 +14,7 @@
                             :key="color.color"
                             v-for="color in cell.colors"
                             :class="'bg-color ' + color.color + 'square'"
-                            :style="color.style"
+                            :style="`background-color: ${color.color}`"
                         />
                         <div class="shadow" />
                         <div :class="getMarkerClasses(marker, k)" :key="k" v-for="(marker, k) in cell.markers" />
@@ -90,6 +90,11 @@
                 orderedColors.push(ORDERED_COLORS[i]);
             }
         }
+        colors.forEach((color) => {
+            if (!orderedColors.includes(color)) {
+                orderedColors.push(color);
+            }
+        });
         return orderedColors;
     }
 
