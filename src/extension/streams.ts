@@ -1,6 +1,6 @@
 import * as nodecgApiContext from './util/nodecg-api-context';
 import { TwitchStream } from '../../schemas';
-import { soundOnTwitchStream, streamsReplicant } from './util/replicants';
+import { currentGameLayoutRep, soundOnTwitchStream, streamsReplicant } from './util/replicants';
 import { runDataActiveRunRep } from './util/speedControlReplicants';
 
 const nodecg = nodecgApiContext.get();
@@ -177,5 +177,24 @@ nodecg.listenFor('streams:setStreamQuality', (data: { id: number; quality: strin
     }
     if (callback && !callback.handled) {
         callback();
+    }
+});
+
+nodecg.listenFor('streams:getOriginalCropping', (_, callback): void => {
+    const aspectRatio = currentGameLayoutRep.value?.name?.split(' ')?.find(part => part.includes(':'));
+    if (aspectRatio && aspectRatioToCropping[aspectRatio]) {
+        const originalCropping = aspectRatioToCropping[aspectRatio];
+        if (callback && !callback.handled) {
+            callback({  
+                topPercent: originalCropping.topPercent,
+                leftPercent: originalCropping.leftPercent,
+                heightPercent: originalCropping.heightPercent,
+                widthPercent: originalCropping.widthPercent,
+            });
+        }
+    } else {
+        if (callback && !callback.handled) {
+            callback(undefined);
+        }
     }
 });

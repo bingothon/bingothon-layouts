@@ -22,6 +22,7 @@
             ><input v-model="widthPercent" type="number" /> <span>Height:</span
             ><input v-model="heightPercent" type="number" />
             <button @click="saveCropping">Save</button>
+            <button @click="resetCropping">Use original cropping</button>
             <span>{{ successMessage }}</span>
         </div>
         <div>
@@ -35,6 +36,8 @@
     import { Component, Vue, Watch } from 'vue-property-decorator';
     import { getReplicant, store } from '../../browser-util/state';
     import { TwitchStream } from '@/schemas';
+
+    const bundleName = 'bingothon-layouts';
 
     declare const Twitch: any;
 
@@ -157,6 +160,18 @@
                 this.playerMuted = !this.playerMuted;
                 globalPlayer.setMuted(this.playerMuted);
             }
+        }
+
+        resetCropping() {
+            NodeCG.sendMessageToBundle('streams:getOriginalCropping', bundleName, (cropping: any) => {
+                console.log(cropping)
+                if (cropping) {
+                    this.leftPercent = cropping.leftPercent;
+                    this.topPercent = cropping.topPercent;
+                    this.widthPercent = cropping.widthPercent;
+                    this.heightPercent = cropping.heightPercent;
+                }
+            })
         }
     }
 </script>
