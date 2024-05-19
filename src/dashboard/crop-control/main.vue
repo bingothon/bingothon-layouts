@@ -164,14 +164,13 @@
 
         resetCropping() {
             NodeCG.sendMessageToBundle('streams:getOriginalCropping', bundleName, (cropping: any) => {
-                console.log(cropping)
                 if (cropping) {
                     this.leftPercent = cropping.leftPercent;
                     this.topPercent = cropping.topPercent;
                     this.widthPercent = cropping.widthPercent;
                     this.heightPercent = cropping.heightPercent;
                 }
-            })
+            });
         }
     }
 </script>

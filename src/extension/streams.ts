@@ -181,15 +181,15 @@ nodecg.listenFor('streams:setStreamQuality', (data: { id: number; quality: strin
 });
 
 nodecg.listenFor('streams:getOriginalCropping', (_, callback): void => {
-    const aspectRatio = currentGameLayoutRep.value?.name?.split(' ')?.find(part => part.includes(':'));
+    const aspectRatio = currentGameLayoutRep.value?.name?.split(' ')?.find((part) => part.includes(':'));
     if (aspectRatio && aspectRatioToCropping[aspectRatio]) {
         const originalCropping = aspectRatioToCropping[aspectRatio];
         if (callback && !callback.handled) {
-            callback({  
+            callback({
                 topPercent: originalCropping.topPercent,
                 leftPercent: originalCropping.leftPercent,
                 heightPercent: originalCropping.heightPercent,
-                widthPercent: originalCropping.widthPercent,
+                widthPercent: originalCropping.widthPercent
             });
         }
     } else {
