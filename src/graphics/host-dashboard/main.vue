@@ -12,11 +12,12 @@
 
         <div id="columnsWrapper">
             <div id="column1" class="column">
+                <div class="factHeader">Charity Facts {{ charityIndex + 1 }}/{{ charityTexts.length }}</div>
+                <button v-on:click="updateCharityIndex()">Update Text</button>
                 <div id="PEFacts">
                     <div class="fact">
                         {{ charityTexts[charityIndex] }}
                     </div>
-                    <button v-on:click="updateCharityIndex()">Update Text</button>
                 </div>
                 <div id="bidsHeader">Upcoming Goals/Bidwars:</div>
                 <div id="bidsContainer">
@@ -76,17 +77,19 @@
                         </div>
                     </div>
                 </div>
+                <div class="factHeader">Bingothon Texts {{ bingothonIndex + 1 }}/{{ bingothonTexts.length }}</div>
+                <button v-on:click="updateBingothonIndex()">Update Text</button>
                 <div id="BingothonTexts">
                     <div class="fact">
                         {{ bingothonTexts[bingothonIndex] }}
                     </div>
-                    <button v-on:click="updateBingothonIndex()">Update Text</button>
                 </div>
+                <div class="factHeader">Sponsor Texts {{ sponsorIndex + 1 }}/{{ sponsorTexts.length }}</div>
+                <button v-on:click="updateSponsorIndex()">Update Text</button>
                 <div id="SponsorTexts">
                     <div class="fact">
                         {{ sponsorTexts[sponsorIndex] }}
                     </div>
-                    <button v-on:click="updateSponsorIndex()">Update Text</button>
                 </div>
             </div>
             <div id="column3" class="column">
@@ -438,6 +441,13 @@
         text-align: center;
     }
 
+    .factHeader {
+        width: 100%;
+        font-size: 35px;
+        padding-top: 20px;
+        text-align: center;
+    }
+
     button {
         font-size: 15px;
         text-align: center;
@@ -505,5 +515,9 @@
     #Go-Live-Button {
         background-color: red;
         color: white;
+    }
+
+    #BingothonTexts {
+        border-bottom: 5px solid white;
     }
 </style>
