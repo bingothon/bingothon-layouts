@@ -7,16 +7,7 @@
             <div class="GameExtra FlexContainer" style="flex-direction: column; padding: 0 4px">
                 <!-- Game System Chip and Category in the same row -->
                 <div class="FlexContainer" style="column-gap: 8px">
-                    <div v-if="gameSystem" class="GameChip FlexContainer">
-                        <img
-                            v-if="gameSystemImage"
-                            :src="gameSystemImage"
-                            alt="Game System Logo"
-                            class="gameSystemLogo"
-                        />
-                        <span>{{ gameSystem }}</span>
-                    </div>
-
+                    <GameSystem v-if="gameSystem" class="GameChip FlexContainer" :gameSystem="gameSystem" />
                     <!-- Added Category next to the Game System -->
                     <div class="GameChip FlexContainer">
                         <span>{{ gameCategory }}</span>
@@ -28,17 +19,15 @@
 </template>
 
 <script lang="ts">
-    type ColorEnum = 'pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple';
-    import InlineSvg from './InlineSvg.vue';
+    //import InlineSvg from './InlineSvg.vue';
+    import GameSystem from './gameSystem.vue';
     import { Component, Vue } from 'vue-property-decorator';
     import { store } from '@/browser-util/state';
-    import { RunDataPlayer } from 'speedcontrol-types';
-
-    import gameSystemImages from '../../../static/assets/game-systems/game-system-images-manifest.json';
 
     @Component({
         components: {
-            InlineSvg
+            //InlineSvg,
+            GameSystem
         }
     })
     export default class TestGameContainer extends Vue {
@@ -54,30 +43,6 @@
 
         get gameSystem(): string {
             return store.state.runDataActiveRun.system;
-        }
-
-        get playerColors(): Array<ColorEnum> {
-            return store.state.bingoboardMeta.playerColors;
-        }
-
-        get players(): RunDataPlayer[] {
-            let allPlayers: RunDataPlayer[] = [];
-
-            for (let team of store.state.runDataActiveRun.teams) {
-                for (let player of team.players) {
-                    allPlayers.push(player);
-                }
-            }
-
-            return allPlayers;
-        }
-
-        get gameSystemImage(): string | undefined {
-            const imagePath = gameSystemImages[this.gameSystem.toLocaleLowerCase()];
-            if (imagePath) {
-                return require('../../../static/assets/game-systems/' + imagePath);
-            }
-            return undefined;
         }
     }
 </script>
@@ -104,12 +69,6 @@
     .GameContainer img {
         max-width: 60px;
         max-height: 60px;
-    }
-
-    .gameSystemLogo {
-        width: auto; /* Adjust size as needed */
-        height: 20px; /* Adjust size as needed */
-        margin: 5px;
     }
 
     .GameChip {

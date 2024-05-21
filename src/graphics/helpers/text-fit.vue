@@ -75,6 +75,7 @@
         width: 100%;
         white-space: nowrap;
     }
+
     #FittedTextContent {
         position: absolute;
     }
