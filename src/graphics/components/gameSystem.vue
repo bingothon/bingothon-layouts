@@ -2,7 +2,7 @@
     <div id="GameSystem" class="GameSystem Chip">
         <img v-if="gameSystemImage" :src="gameSystemImage" />
         <span v-if="!gameSystemImage || pathsAndLogos[gameSystem.toLocaleLowerCase()].textNeeded" class="ChipText">
-            {{ gameSystem }}
+            <textFit :text="gameSystem" />
         </span>
     </div>
 </template>
@@ -63,9 +63,14 @@
 </script>
 
 <style scoped>
+    #GameSystem {
+        display: flex;
+        align-items: center;
+    }
+
     .GameSystem img {
         width: auto;
-        max-width: 150px;
-        height: 30px;
+        max-width: 100px;
+        height: 25px;
     }
 </style>

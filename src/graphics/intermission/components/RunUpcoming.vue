@@ -81,7 +81,7 @@
                         <div class="Estimate Chip" v-if="data.estimate">
                             <span class="ChipText">{{ data.estimate }}</span>
                         </div>
-                        <GameSystem class="GameSystem FlexContainer Chip" v-if="gameSystem" :gameSystem="gameSystem" />
+                        <GameSystem class="GameSystem Chip" v-if="gameSystem" :gameSystem="gameSystem" />
                     </div>
                 </div>
 
@@ -423,7 +423,7 @@
     }
 
     .Chip {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
