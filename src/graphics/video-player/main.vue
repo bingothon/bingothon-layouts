@@ -1,8 +1,8 @@
 <template>
     <div id="PlayerContainer">
-        <video ref="VideoPlayer" id="player">
+        <!-- <video ref="VideoPlayer" id="player">
             <source ref="PlayerSrc" />
-        </video>
+        </video> -->
         <div v-if="nextRun" id="upcoming">
             <div id="next">Coming Up Next:</div>
             <div id="run">
@@ -15,8 +15,7 @@
 </template>
 
 <script lang="ts">
-    import { Component, Ref, Vue, Watch } from 'vue-property-decorator';
-    import { Asset } from '@/schemas';
+    import { Component, Vue } from 'vue-property-decorator';
     import { store } from '@/browser-util/state';
     import { RunData } from '../../../speedcontrol-types';
     import TextFit from '../helpers/text-fit.vue';
@@ -27,91 +26,91 @@
         }
     })
     export default class VideoPlayer extends Vue {
-        video: Asset;
-        index = 0;
-        @Ref('VideoPlayer') player: HTMLVideoElement;
-        @Ref('PlayerSrc') playerSrc: HTMLSourceElement;
+        // video: Asset;
+        // index = 0;
+        // @Ref('VideoPlayer') player: HTMLVideoElement;
+        // @Ref('PlayerSrc') playerSrc: HTMLSourceElement;
 
         get nextRun(): RunData {
             return store.state.runDataActiveRun;
         }
 
-        get playlist(): string[] {
-            return store.state.runDataActiveRun.customData.playlist.split(',');
-        }
+        // get playlist(): string[] {
+        //     return store.state.runDataActiveRun.customData.playlist.split(',');
+        // }
 
-        get videos(): Asset[] {
-            return store.state['assets:intermissionVideos'];
-        }
+        // get videos(): Asset[] {
+        //     return store.state['assets:intermissionVideos'];
+        // }
 
-        get domain(): string {
-            return window.location.host;
-        }
+        // get domain(): string {
+        //     return window.location.host;
+        // }
 
-        get currentObsScene(): string {
-            return store.state.obsCurrentScene;
-        }
+        // get currentObsScene(): string {
+        //     return store.state.obsCurrentScene;
+        // }
 
-        @Watch('currentObsScene', { immediate: true })
-        onOBSSceneChanged(newVal: string) {
-            this.$nextTick(() => {
-                if (newVal === 'videoPlayer') {
-                    this.index = 0;
-                    this.playNextVideo();
-                }
-            });
-        }
+        // @Watch('currentObsScene', { immediate: true })
+        // onOBSSceneChanged(newVal: string) {
+        //     this.$nextTick(() => {
+        //         if (newVal === 'videoPlayer') {
+        //             this.index = 0;
+        //             this.playNextVideo();
+        //         }
+        //     });
+        // }
 
-        nextVideoExists(): boolean {
-            console.log(`CHecking for new video, Playlist: ${this.playlist}, Index: ${this.index}`);
-            return this.playlist && this.index + 1 < this.playlist.length;
-        }
+        // nextVideoExists(): boolean {
+        //     console.log(`CHecking for new video, Playlist: ${this.playlist}, Index: ${this.index}`);
+        //     return this.playlist && this.index + 1 < this.playlist.length;
+        // }
 
-        returnToIntermission() {
-            // only send Message if videoPlayer is the active scene, avoids duplication and unnecessary scene switching
-            if (this.currentObsScene === 'videoPlayer') {
-                nodecg.sendMessage('videoPlayerFinished');
-            }
-        }
+        // returnToIntermission() {
+        //     // only send Message if videoPlayer is the active scene, avoids duplication and unnecessary scene switching
+        //     if (this.currentObsScene === 'videoPlayer') {
+        //         nodecg.sendMessage('videoPlayerFinished');
+        //     }
+        // }
 
-        async playNextVideo(): Promise<void> {
-            let video: Asset;
-            if (this.playlist && this.playlist[this.index]) {
-                console.log(JSON.stringify(this.videos));
-                video = this.videos.find((video) => {
-                    return video.name === this.playlist[this.index].trim();
-                });
-            }
-            if (!video) {
-                //check if there's more in the playlist
-                if (this.nextVideoExists()) {
-                    this.index += 1;
-                    await this.playNextVideo();
-                } else {
-                    this.returnToIntermission();
-                }
-                return;
-            }
-            this.video = video;
-            this.playerSrc.src = video.url;
-            this.playerSrc.type = `video/${video.ext.toLowerCase().replace('.', '')}`;
-            this.player.load();
-            await this.player.play();
-        }
+        // async playNextVideo(): Promise<void> {
+        //     let video: Asset;
+        //     if (this.playlist && this.playlist[this.index]) {
+        //         console.log(JSON.stringify(this.videos));
+        //         video = this.videos.find((video) => {
+        //             return video.name === this.playlist[this.index].trim();
+        //         });
+        //     }
+        //     if (!video) {
+        //         //check if there's more in the playlist
+        //         if (this.nextVideoExists()) {
+        //             this.index += 1;
+        //             await this.playNextVideo();
+        //         } else {
+        //             this.returnToIntermission();
+        //         }
+        //         return;
+        //     }
+        //     this.video = video;
+        //     this.playerSrc.src = video.url;
+        //     this.playerSrc.type = `video/${video.ext.toLowerCase().replace('.', '')}`;
+        //     this.player.load();
+        //     await this.player.play();
+        // }
 
-        videoEnded() {
-            console.log('Video Ended');
-            if (this.nextVideoExists()) {
-                this.index += 1;
-                this.playNextVideo();
-                return;
-            }
-            this.returnToIntermission();
-        }
+        // videoEnded() {
+        //     console.log('Video Ended');
+        //     if (this.nextVideoExists()) {
+        //         this.index += 1;
+        //         this.playNextVideo();
+        //         return;
+        //     }
+        //     this.returnToIntermission();
+        // }
 
-        mounted() {
-            this.player.addEventListener('ended', this.videoEnded);
-        }
+        // mounted() {
+        //     this.player.addEventListener('ended', this.videoEnded);
+        // }
     }
 </script>
 

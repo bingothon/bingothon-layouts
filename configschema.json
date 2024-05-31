@@ -177,6 +177,10 @@
 				"gameScene": {
 					"type": "string",
 					"default": "game"
+				},
+				"intermissionVideoDirectory": {
+					"type": "string",
+					"description": "Full local path on the stream PC, includes the final slash: '/home/test/whatever/'"
 				}
 			}
 		},

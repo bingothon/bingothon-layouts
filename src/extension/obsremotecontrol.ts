@@ -20,12 +20,15 @@ import {
     lastIntermissionTimestampRep,
     obsPreviewImgRep
 } from './util/replicants';
+import { runDataActiveRunRep } from './util/speedControlReplicants';
 
 // this handles dashboard utilities, all around automating the run setup process
 // and setting everything in OBS properly on transitions
 // this uses the transparent bindings form the obs.ts in util
 
 const HOST_SPEAKING_MUSIC_VOLUME_MULTIPLIER = 0.2;
+
+const videoPlayerSourceName = 'videoplayer-source';
 
 const nodecg = nodecgApiContext.get();
 const logger = new nodecg.Logger(`${nodecg.bundleName}:remotecontrol`);
@@ -435,8 +438,57 @@ waitTillConnected().then((): void => {
         }
     });
 
-    adsTimerReplicant.on('change', (newVal): void => {
-        if (newVal && newVal.secondsRemaining <= 0 && obsCurrentSceneRep.value === '(ads) intermission') {
+    // TODO: should this be a replicant? Also, recovering from a crash during video playing
+    let intermissionVideosToPlay: string[] = [];
+
+    async function handleNextVideoPlay() {
+        const settings = await obs.call('GetInputSettings', {
+            inputName: videoPlayerSourceName
+        });
+        console.log(JSON.stringify(settings));
+        if (!bundleConfig.obs.intermissionVideoDirectory) {
+            console.error('Intermission video directory not set!');
+            return;
+        }
+        const nextVideoName = intermissionVideosToPlay.pop();
+        if (nextVideoName) {
+            const videoPath = bundleConfig.obs.intermissionVideoDirectory + nextVideoName + '.mp4';
+            await obs.call('SetInputSettings', {
+                inputName: videoPlayerSourceName,
+                inputSettings: {
+                    is_local_file: true,
+                    local_file: videoPath
+                },
+                // TODO: is this a good idea? This resets the settings to default and then applies the new config
+                overlay: false
+            });
+        } else {
+            await obs.changeScene('intermission');
+            nodecg.sendMessage(
+                'obsRemotecontrol:fadeInAudio',
+                { source: bundleConfig.obs.mpdAudio } /* (err): void => {
+                logger.warn(`Problem fading in mpd during transition: ${err.error}`);
+            } */
+            );
+        }
+    }
+
+    obs.on('MediaInputPlaybackEnded', ({ inputName, inputUuid: _ }) => {
+        if (inputName == videoPlayerSourceName) {
+            handleNextVideoPlay().catch((e) => nodecg.log.error('handleNextVideoPlay', e));
+        }
+    });
+
+    function doStartIntermissionVideos() {
+        const videos = runDataActiveRunRep.value?.customData?.playlist?.split(',');
+        if (videos) {
+            if (!videos.length) {
+                nodecg.log.warn('no intermission videos, skipping!');
+                return;
+            }
+            // reverse, so we can use "pop" later
+            intermissionVideosToPlay = videos.reverse();
+
             obs.changeScene('videoPlayer');
             nodecg.sendMessage(
                 'obsRemotecontrol:fadeOutAudio',
@@ -444,7 +496,21 @@ waitTillConnected().then((): void => {
                 logger.warn(`Problem fading out mpd during transition: ${err.error}`);
             } */
             );
+            handleNextVideoPlay().catch((e) => nodecg.log.error('handleNextVideoPlay', e));
+        } else {
+            nodecg.log.error('no playlist in custom data!');
         }
+    }
+
+    adsTimerReplicant.on('change', (newVal): void => {
+        if (newVal && newVal.secondsRemaining <= 0 && obsCurrentSceneRep.value === '(ads) intermission') {
+            doStartIntermissionVideos();
+        }
+    });
+
+    // start the intermission videos on demand, for debugging
+    nodecg.listenFor('startVideoPlayer', (): void => {
+        doStartIntermissionVideos();
     });
 
     nodecg.listenFor('videoPlayerFinished', (): void => {
