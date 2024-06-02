@@ -11,8 +11,8 @@
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
 
-    const wide = require('../bingothon5long.png');
-    const fhLogo = require('../Bingothon5FredHutch.png');
+    const wide = require('../logo-summer-wide2.png');
+    const fhLogo = require('../BingothonMSF.png');
 
     @Component({})
     export default class RotatingLogos extends Vue {
@@ -35,20 +35,24 @@
         padding-right: 7px;
         padding-left: 7px;
     }
+
     #LogoWrapper {
         position: relative;
         top: 50%;
         width: 230px;
     }
+
     #LogoWrapper > img {
         position: absolute;
         max-width: 100%;
         transform: translateY(-50%);
     }
+
     .fade-enter-active,
     .fade-leave-active {
         transition: opacity 1s;
     }
+
     .fade-enter,
     .fade-leave-to {
         opacity: 0;

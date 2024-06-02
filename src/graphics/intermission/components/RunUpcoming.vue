@@ -268,7 +268,7 @@
 
     .GameTitle {
         position: relative;
-        background-color: #0a2146; /* Blue color */
+        background-color: rgba(0, 0, 0, 0.3);
         color: #fff; /* White text */
         margin: 4px auto;
     }
@@ -280,7 +280,7 @@
         top: 50%;
         width: 20px;
         height: 20px;
-        background-color: #0a2146;
+        background-color: rgba(0, 0, 0, 0.3);
         transform: translateY(-50%) rotate(45deg);
     }
 
@@ -342,7 +342,7 @@
     }
 
     .PlayerPlaceHolder {
-        background-image: url('../../../../static/snowflake.png');
+        background-image: url('../../../../static/sun.png');
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;
@@ -355,14 +355,14 @@
         display: flex;
         font-weight: bold;
         padding: 3px 4px;
-        background-color: #5a86cea8;
+        background-color: var(--container-background-color);
         border-radius: 2px;
         height: 32px;
         min-width: 140px;
         width: 140px;
         max-width: 140px;
         margin: 4px;
-        border: 1px solid rgba(12, 35, 46, 0.842);
+        border: 1px solid var(--container-border-color);
         /* background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="iceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(240, 255, 255, 0.7); stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(200, 240, 255, 0.9); stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23iceGradient)" /></svg>'); */
         box-shadow: 0px 0px 5px 2px rgba(40, 74, 87, 0.247);
         color: #fff;

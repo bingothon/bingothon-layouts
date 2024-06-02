@@ -48,8 +48,8 @@
 
         mounted() {
             this.staticMessages = [
-                this.genericMessage('This is Bingothon Winter 2023, enjoy your stay!'),
-                this.genericMessage('#Bingothon Winter 2023 benefits Fred Hutch!'),
+                this.genericMessage('This is Bingothon Summer 2024, enjoy your stay!'),
+                this.genericMessage('#Bingothon Summer 2024 benefits Doctors Without Borders!'),
                 this.genericMessage('Donate @ donate.bingothon.com'),
                 this.genericMessage(
                     "Can't get enough of Bingothon? Join the Bingothon Discord at discord.bingothon.com"
@@ -179,10 +179,12 @@
         flex: 1;
         display: flex;
     }
+
     #Ticker .fade-enter-active,
     #Ticker .fade-leave-active {
         transition: opacity 0.5s;
     }
+
     #Ticker .fade-enter, #Ticker .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
         opacity: 0;
     }
