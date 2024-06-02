@@ -268,7 +268,7 @@
 
     .GameTitle {
         position: relative;
-        background-color: rgba(0, 0, 0, 0.3);
+        background-color: #7c420f; /* SHould probably make this a variable when changing next time*/
         color: #fff; /* White text */
         margin: 4px auto;
     }
@@ -280,7 +280,7 @@
         top: 50%;
         width: 20px;
         height: 20px;
-        background-color: rgba(0, 0, 0, 0.3);
+        background-color: #7c420f; /* SHould probably make this a variable when changing next time*/
         transform: translateY(-50%) rotate(45deg);
     }
 

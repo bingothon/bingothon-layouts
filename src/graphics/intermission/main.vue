@@ -127,7 +127,7 @@
     #logoSummer {
         position: absolute;
         left: 48px;
-        top: 48px;
+        top: 20px;
         width: 631px;
     }
 
@@ -150,7 +150,7 @@
         text-transform: uppercase;
         position: absolute;
         left: 105px;
-        top: 177px;
+        top: 237px;
     }
 
     #Rotation {
