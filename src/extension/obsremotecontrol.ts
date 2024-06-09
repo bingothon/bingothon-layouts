@@ -452,7 +452,10 @@ waitTillConnected().then((): void => {
         }
         const nextVideoName = intermissionVideosToPlay.pop();
         if (nextVideoName) {
-            const videoPath = bundleConfig.obs.intermissionVideoDirectory + nextVideoName + '.mp4';
+            let videoPath = bundleConfig.obs.intermissionVideoDirectory + nextVideoName;
+            if (!videoPath.endsWith('.mp4')) {
+                videoPath += '.mp4';
+            }
             await obs.call('SetInputSettings', {
                 inputName: videoPlayerSourceName,
                 inputSettings: {
