@@ -1,9 +1,10 @@
-import { Board, ServerMessage } from '@bingogg/types';
+import { Board, Cell, ServerMessage } from '@bingogg/types';
 import { Bingoboard } from 'schemas/bingoboard';
 import { BingoboardMeta } from 'schemas/bingoboardMeta';
 import { BingoggSocket } from 'schemas/bingoggSocket';
 import WebSocket from 'ws';
 import * as nodecgApiContext from './util/nodecg-api-context';
+import { BingoboardCell } from 'types';
 
 const nodecg = nodecgApiContext.get();
 
@@ -21,20 +22,18 @@ log.info('setting up bingogg integration');
 
 let webSocket: WebSocket;
 
+const parseCell = (cell: Cell, row: number, col: number): BingoboardCell => ({
+    name: cell.goal,
+    slot: `${row * 5 + col}`,
+    colors: cell.colors,
+    rawColors: cell.colors.join(' '),
+    markers: [null, null, null, null],
+});
+
 const parseBoard = (board: Board): Bingoboard => {
     return {
         colorCounts: {},
-        cells: board.board.flatMap((row, rowIndex) =>
-            row.map((cell, index) => {
-                return {
-                    name: cell.goal,
-                    slot: `${rowIndex * 5 + index}`,
-                    colors: cell.colors,
-                    rawColors: cell.colors.join(' '),
-                    markers: [null, null, null, null],
-                };
-            }),
-        ),
+        cells: board.board.flatMap((row, rowIndex) => row.map((cell, index) => parseCell(cell, rowIndex, index))),
     };
 };
 
@@ -83,11 +82,13 @@ nodecg.listenFor('bingogg:connect', async (data, callback) => {
 
         webSocket.on('message', (message) => {
             const data: ServerMessage = JSON.parse(message.toString());
-            console.log(data);
             switch (data.action) {
                 case 'connected':
                 case 'syncBoard':
                     boardRep.value = parseBoard(data.board);
+                    break;
+                case 'cellUpdate':
+                    boardRep.value.cells[data.row * 5 + data.col] = parseCell(data.cell, data.row, data.col);
                     break;
                 default:
                     break;
