@@ -14,7 +14,7 @@
                             :key="color.color"
                             v-for="color in cell.colors"
                             :class="'bg-color ' + color.color + 'square'"
-                            :style="`background-color: ${color.color}`"
+                            :style="`background-color: ${color.color}; ${color.style}`"
                         />
                         <div class="shadow" />
                         <div :class="getMarkerClasses(marker, k)" :key="k" v-for="(marker, k) in cell.markers" />
