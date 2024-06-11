@@ -1,22 +1,20 @@
 import { Board, Cell, ServerMessage } from '@bingogg/types';
 import { Bingoboard } from 'schemas/bingoboard';
 import { BingoboardMeta } from 'schemas/bingoboardMeta';
-import { BingoggSocket } from 'schemas/bingoggSocket';
 import WebSocket from 'ws';
 import * as nodecgApiContext from './util/nodecg-api-context';
 import { BingoboardCell } from 'types';
+import { boardRep, bingoggSocketRep } from './util/replicants';
 
 const nodecg = nodecgApiContext.get();
 
 const log = new nodecg.Logger(`${nodecg.bundleName}:bingogg`);
 
-const bingoggHost = 'http://localhost:8001';
+const bingoggHost = 'https://bingogg.bingothon.com';
 const socketHost = bingoggHost.replace('http', 'ws');
 
-const boardRep = nodecg.Replicant<Bingoboard>('bingoboard');
 const boardMetaRep = nodecg.Replicant<BingoboardMeta>('bingoboardMeta');
-const socketRep = nodecg.Replicant<BingoggSocket>('bingoggSocket');
-socketRep.value.status = 'disconnected';
+bingoggSocketRep.value.status = 'disconnected';
 
 log.info('setting up bingogg integration');
 
@@ -27,44 +25,44 @@ const parseCell = (cell: Cell, row: number, col: number): BingoboardCell => ({
     slot: `${row * 5 + col}`,
     colors: cell.colors,
     rawColors: cell.colors.join(' '),
-    markers: [null, null, null, null],
+    markers: [null, null, null, null]
 });
 
 const parseBoard = (board: Board): Bingoboard => {
     return {
         colorCounts: {},
-        cells: board.board.flatMap((row, rowIndex) => row.map((cell, index) => parseCell(cell, rowIndex, index))),
+        cells: board.board.flatMap((row, rowIndex) => row.map((cell, index) => parseCell(cell, rowIndex, index)))
     };
 };
 
 nodecg.listenFor('bingogg:connect', async (data, callback) => {
     const { slug, passphrase } = data;
     log.info(`connecting to bingogg room ${data.slug}:${data.passphrase}`);
-    const res = await fetch(`${bingoggHost}/api/rooms/${slug}/authorize`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: passphrase }),
-    });
-
-    if (!res.ok) {
-        if (res.status < 500) {
-            log.error(`Failed to join room ${slug} - ${res.status} ${await res.text()}`);
-            if (callback && !callback.handled) {
-                callback(new Error('Invalid room slug or password'));
-            }
-        } else {
-            log.error(`Encountered a server error while joining room ${slug}`);
-            if (callback && !callback.handled) {
-                callback(new Error('Unable to connect to bingo.gg'));
-            }
-        }
-        return;
-    }
-
-    log.info(`Authorized to connect to bingo.gg room ${slug}`);
-    const { authToken } = await res.json();
-
     try {
+        const res = await fetch(`${bingoggHost}/api/rooms/${slug}/authorize`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: passphrase })
+        });
+
+        if (!res.ok) {
+            if (res.status < 500) {
+                log.error(`Failed to join room ${slug} - ${res.status} ${await res.text()}`);
+                if (callback && !callback.handled) {
+                    callback(new Error('Invalid room slug or password'));
+                }
+            } else {
+                log.error(`Encountered a server error while joining room ${slug}`);
+                if (callback && !callback.handled) {
+                    callback(new Error('Unable to connect to bingo.gg'));
+                }
+            }
+            return;
+        }
+
+        log.info(`Authorized to connect to bingo.gg room ${slug}`);
+        const { authToken } = await res.json();
+
         if (webSocket) {
             webSocket.close();
         }
@@ -75,8 +73,8 @@ nodecg.listenFor('bingogg:connect', async (data, callback) => {
                 JSON.stringify({
                     action: 'join',
                     authToken,
-                    payload: { nickname: 'bingothon' },
-                }),
+                    payload: { nickname: 'bingothon' }
+                })
             );
         });
 
@@ -84,6 +82,8 @@ nodecg.listenFor('bingogg:connect', async (data, callback) => {
             const data: ServerMessage = JSON.parse(message.toString());
             switch (data.action) {
                 case 'connected':
+                    log.info('Successfully connected to room');
+                    bingoggSocketRep.value.status = 'connected';
                 case 'syncBoard':
                     boardRep.value = parseBoard(data.board);
                     break;
@@ -93,6 +93,7 @@ nodecg.listenFor('bingogg:connect', async (data, callback) => {
                 default:
                     break;
             }
+            console.log(boardRep.value);
         });
     } catch (e) {
         console.log(e);
