@@ -7,7 +7,7 @@
 
 export interface BingoboardMeta {
   boardHidden: boolean;
-  playerColors: ("pink" | "red" | "orange" | "brown" | "yellow" | "green" | "teal" | "blue" | "navy" | "purple")[];
+  playerColors: string[];
   colorShown: boolean;
   countShown?: boolean;
   manualScoreOverride: boolean;

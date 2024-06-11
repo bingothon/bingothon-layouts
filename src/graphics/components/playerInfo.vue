@@ -36,10 +36,11 @@
         <div
             v-if="bingoColorShown === true"
             class="BingoColor FlexContainer"
-            :class="`bingo-${bingoColor}`"
+            :class="``"
             :style="{
                 width: parseFloat(height.replace('px', '')) * 0.75 + 'px',
-                height: parseFloat(height.replace('px', '')) * 0.75 + 'px'
+                height: parseFloat(height.replace('px', '')) * 0.75 + 'px',
+                'background-color': bingoColor
             }"
         >
             <span v-if="bingoCountShown === true">{{ bingoGoalCount }}</span>
