@@ -235,7 +235,7 @@
     "runtimeCompiler": true
   },
   "dependencies": {
-    "@bingogg/types": "file:../../../bingogg/schema",
+    "@bingogg/types": "^1.0.0",
     "@discordjs/voice": "^0.16.0",
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
