@@ -174,7 +174,7 @@
     const BOARD_TO_SOCKET_REP = {
         bingoboard: 'bingosyncSocket',
         hostingBingoboard: 'hostingBingosocket',
-        bingogg: 'bingoggSocket',
+        bingogg: 'bingoggSocket'
     };
 
     @Component({})
@@ -383,7 +383,7 @@
             console.log('called bingogg connect');
             nodecg.sendMessage('bingogg:connect', {
                 slug: this.roomCode,
-                passphrase: this.passphrase,
+                passphrase: this.passphrase
             });
         }
 

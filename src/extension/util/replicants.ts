@@ -4,6 +4,7 @@ import {
     Bingoboard,
     BingoboardMeta,
     BingoboardMode,
+    BingoggSocket,
     BingosyncSocket,
     CapturePositions,
     CurrentGameLayout,
@@ -43,6 +44,7 @@ export const bingoboardModeRep = nodecg().Replicant<BingoboardMode>(
 ) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<BingoboardMode>;
 export const boardRep = nodecg().Replicant<Bingoboard>('bingoboard') as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<Bingoboard>;
 export const socketRep = nodecg().Replicant<BingosyncSocket>('bingosyncSocket') as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<BingosyncSocket>;
+export const bingoggSocketRep = nodecg().Replicant<BingoggSocket>('bingoggSocket') as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<BingoggSocket>;
 export const explorationBoardRep = nodecg().Replicant<ExplorationBingoboard>(
     'explorationBingoboard'
 ) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<ExplorationBingoboard>;

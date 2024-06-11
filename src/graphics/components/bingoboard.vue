@@ -193,6 +193,7 @@
         }
 
         onBingoBoardUpdate(newGoals: Bingoboard, oldGoals?: Bingoboard | undefined) {
+            console.log(newGoals);
             if (!newGoals) return;
             let idx = 0;
             this.bingoCells.forEach((row, rowIndex) => {
