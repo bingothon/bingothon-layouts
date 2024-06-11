@@ -15,9 +15,31 @@
         </div>
         <div v-for="(color, i) in playerColors" :key="i">
             {{ playerNames[i] || `P${i}` }}:
-            <v-row>
+            <v-row v-if="!showBingoggOptions">
                 <v-col>
                     <v-select :value="color" @input="updatePlayerColor(i, $event)" :items="allColors"></v-select>
+                </v-col>
+                <v-col v-show="isManualScoreOverride">
+                    <v-text-field
+                        v-model="manualScore[i]"
+                        background-color="#455A64"
+                        class="manual-score"
+                        dark
+                        solo
+                        type="number"
+                        @change="updateManualScore"
+                    />
+                </v-col>
+            </v-row>
+            <v-row v-if="showBingoggOptions">
+                <v-col>
+                    <v-text-field
+                        @input="updatePlayerColor(i, $event)"
+                        background-color="#455A64"
+                        clearable
+                        solo
+                        dark
+                    />
                 </v-col>
                 <v-col v-show="isManualScoreOverride">
                     <v-text-field
@@ -168,7 +190,6 @@
     import { BingoboardMeta, CurrentMainBingoboard, ExternalBingoboardMeta } from '../../../schemas';
     import { getReplicant, store } from '../../browser-util/state';
 
-    type ColorEnum = 'pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple';
     type BingoRepEnum = 'bingoboard' | 'externalBingoboard' | 'explorationBingoboard' | 'bingogg';
 
     const BOARD_TO_SOCKET_REP = {
@@ -274,7 +295,7 @@
             return store.state.bingoboardMeta.manualScoreOverride;
         }
 
-        get playerColors(): Array<ColorEnum> {
+        get playerColors(): Array<string> {
             return store.state.bingoboardMeta.playerColors;
         }
 
@@ -380,7 +401,6 @@
         }
 
         connectBingogg() {
-            console.log('called bingogg connect');
             nodecg.sendMessage('bingogg:connect', {
                 slug: this.roomCode,
                 passphrase: this.passphrase
