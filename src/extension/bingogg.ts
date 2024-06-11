@@ -86,14 +86,19 @@ nodecg.listenFor('bingogg:connect', async (data, callback) => {
                     bingoggSocketRep.value.status = 'connected';
                 case 'syncBoard':
                     boardRep.value = parseBoard(data.board);
+                    data.players?.forEach((player) => {
+                        boardRep.value.colorCounts[player.color] = player.goalCount;
+                    });
                     break;
                 case 'cellUpdate':
                     boardRep.value.cells[data.row * 5 + data.col] = parseCell(data.cell, data.row, data.col);
+                    data.players?.forEach((player) => {
+                        boardRep.value.colorCounts[player.color] = player.goalCount;
+                    });
                     break;
                 default:
                     break;
             }
-            console.log(boardRep.value);
         });
     } catch (e) {
         console.log(e);
