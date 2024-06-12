@@ -98,7 +98,7 @@ export class Ori2ExternalBingoboard implements ExternalBingoboardManager {
         const cells = createEmptyBoard(board.size);
 
         // Map universe IDs to colors and count
-        const colorByUniverseId: { [universeId: number]: BoardColor } = {};
+        const colorByUniverseId: { [universeId: number]: string } = {};
         const squareCountByColor: { [color: string]: number } = {};
         const availableColors = [...boardMetaRep.value.playerColors];
 
