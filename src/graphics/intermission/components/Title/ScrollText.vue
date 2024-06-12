@@ -35,7 +35,7 @@
         data!: { msg: string; size: number; time: number };
         scrollPercentage: number = 0;
         isOverflowing: boolean = false;
-        @Prop({ default: { x: -50, y: 0 } }) // default position, can be adjusted as needed
+        // @Prop({ default: { x: -50, y: 0 } }) // default position, can be adjusted as needed
         // snowSplashPosition!: { x: number; y: number };
         // svgWidth: number = 50;
         // svgHeight: number = 50;
@@ -194,7 +194,7 @@
             to bottom left,
             #0a2146 50%,
             transparent 50%
-        ); 
+        );
         z-index: 2;
     } */
 
