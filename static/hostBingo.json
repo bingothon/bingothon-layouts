@@ -1,102 +1,102 @@
 [
     {
-        "goal": "What's this painting?",
-        "description": "Make chat guess words drawn in Paint"
+        "goal": "Friendship test",
+        "description": "Host A quizzes Host B about 5 things Host B should know about Host A. Goal can only be marked if they get 4 out of 5 questions correct. Otherwise they can either try again, or save it for another intermission with another pair of hosts."
     },
     {
-        "goal": "Parlez-vous français? Yes!",
-        "description": "Hosts talk to each other in foreign language and pretend to understand each other"
+        "goal": "Mad Libs",
+        "description": "Host A asks either their fellow host or chat for words that fit certain categories (noun, adjective, etc.) Whatever word is taken fills in the blank. At the end, Host A reads it all out and gets a very silly story. Only one has to be done, but will link others."
     },
     {
-        "goal": "AI-generated rap battle",
-        "description": "Rap to generated lyrics, using whichever generator you like"
+        "goal": "20 Questions",
+        "description": "Host A thinks of something in the world, and Host B/Chat can ask 20 yes or no questions to try to figure out what was thought of. This goal can only be marked off if Host B/Chat successfully guess within the 20 questions. Otherwise they can try again, or save it for another intermission with another pair of hosts."
     },
     {
-        "goal": "SPORTS COMMENTARYYYYY!",
-        "description": "Hosts become sports commentators"
+        "goal": "Freestyle Rap",
+        "description": "Hosts do their best to freestyle rap during the intermission. Can possibly make it into a rap battle."
     },
     {
-        "goal": "Cloudy with a chance of bingo",
-        "description": "Hosts present the news/weather"
+        "goal": "Jackbox Fun",
+        "description": "Hosts play a Jackbox game of their choosing. Fibbage or Quiplash would probably work best."
     },
     {
-        "goal": "Real Bingo",
-        "description": "Play an actual game of bingo"
+        "goal": "Wordle",
+        "description": "Hosts work together to try to complete the day's Wordle. This goal can only be marked if the Wordle is successfully solved. Chat may participate and help the hosts solve it. If Wordle ends quickly, hosts can play other Wordle-like games."
     },
     {
-        "goal": "Copycat",
-        "description": "Hosts do impressions of their co-host"
+        "goal": "Hosts get Fancy",
+        "description": "Hosts speak very posh and proper for the entire duration of the intermission. The hosts must keep the charade up the entire time. Otherwise they can either try again, or save it for another intermission with another pair of hosts."
     },
     {
-        "goal": "Naughty or nice?",
-        "description": "Hosts rate whether their other host is naughty or nice"
+        "goal": "Hosts sing Karaoke",
+        "description": "Hosts sing at minimum one song together. The song can be chosen by chat or the hosts themselves, and a karaoke version should be found on YouTube. The full song must be completed to chat’s satisfaction."
     },
     {
-        "goal": "Would you press the button",
-        "description": "Hosts play Would You Press The Button"
+        "goal": "Guess the movie",
+        "description": "Host A will come up with several very poor descriptions of movies. They should be descriptions that are bad, but not impossible to guess. Host B/Chat will work together to try to guess the movie. As long as the majority are guessed correctly, the goal can be marked off."
     },
     {
-        "goal": "HOST FUSION GO!",
-        "description": "Fuse nicknames with your co-host for your shift"
+        "goal": "Buzzfeed Fun",
+        "description": "Hosts complete several Buzzfeed quizzes. They can choose among the ones linked, or find their own on the Buzzfeed website."
     },
     {
-        "goal": "Lunk, the Green Guy",
-        "description": "Describe a story or a character in the worst way possible"
+        "goal": "Pictionary",
+        "description": "Hosts get a word from the attached link and must draw it in MS Paint. The other hosts and chat must guess what the correct word is."
     },
     {
-        "goal": "Speedrun Quiz",
-        "description": "Speedrun trick or no? Host lists trick names, the other has to guess which one is an actual trick!"
+        "goal": "Hangman",
+        "description": "Host A comes up with several words and has Host B/Chat try to guess the words. Host A should use the attached link to keep everything looking clean. Each word goes on a separate line. You can do phrases."
     },
     {
-        "goal": "I Wanna Be The Very Best",
-        "description": "Hosts wanna be the very best (bonus point if we can get as many of us to sing as possible)"
+        "goal": "Host Portraits",
+        "description": "Both hosts get a picture of each other, and attempt to draw each other on MS Paint. Chat then judges the drawn portraits with the original reference pictures."
     },
     {
-        "goal": "2 Truths 1 Lie",
-        "description": "Speaks for itself. Playing 2 truths 1 lie"
+        "goal": "Who’s that Pokemon?!",
+        "description": "Hosts play against each other in guessing who a Pokemon is based on their silhouette. They compete in a best of ten rounds."
     },
     {
-        "goal": "Let's sink yerrrr' bingo, matey!",
-        "description": "Hosts talk like pirates"
+        "goal": "Too Many Hosts",
+        "description": "Hosts must use two different voices, giving the appearance of multiple different hosts. For example, one host makes it sound like there are two hosts in the call, or two hosts make it sound like there are four hosts in the call. This bit lasts the entire intermission."
     },
     {
-        "goal": "Wait, we're live?!",
-        "description": "Hosts forget they're live"
+        "goal": "Foreign Tongue Twisters",
+        "description": "Hosts say a few tongue twisters in languages they are not fluent in. This must be done to chat's satisfaction."
     },
     {
-        "goal": "Who's That Pokémon?",
-        "description": "Hosts play Who's That Pokemon, link to game on hosting guide"
+        "goal": "Currency Confusion",
+        "description": "Hosts read out multiple donations, but convert the amounts into bizarre currencies."
     },
     {
-        "goal": "Letsspeedruntalking",
-        "description": "Spitfire hosting, where hosts talk as fast as possible"
+        "goal": "Bingothon Survival Pack",
+        "description": "Using their knowledge of Bingothon memes, what would a person attending a Bingothon event in person need? Examples could include a bingo board, a Bingothon mug, and a toy train set to troll Rob with!"
     },
     {
-        "goal": "I'm REALLY Floha!",
-        "description": "Hosts impersonate Floha"
+        "goal": "Speedrun Knowledge",
+        "description": "Host A describes a speedrun game and category, however they cannot use the name of the game, name of speedrunners, names of speedrun tricks, name of category, name of characters in game, or name of levels in game. Host B and chat need to figure out what game/speedrun they are trying to guess."
     },
     {
-        "goal": "Character Acting",
-        "description": "Hosts pretend to be a video game character"
+        "goal": "Keep Talking and Nobody Explodes",
+        "description": "Host A plays the game while Host B (and maybe others) use the manual to help disarm the bomb. They must successfully disarm a bomb at least."
     },
     {
-        "goal": "Oh no, not this goal, monkaS",
-        "description": "Host has to add an emote name after every sentence"
+        "goal": "What is a train?",
+        "description": "Hosts and chat discuss what is and is not a train."
     },
     {
-        "goal": "Voicemod",
-        "description": "Host has to use a voice changer"
+        "goal": "Slang Jeopardy",
+        "description": "Hosts play slang Jeopardy, where they need to guess what the slang word from each generation means."
     },
     {
-        "goal": "Tongue Twister",
-        "description": "Hosts try to say a tongue twister"
+        "goal": "Who Wants to be a Bingonaire?",
+        "description": "Host A asks Host B a series of ten questions about Bingothon. The questions range from memes, the history of the event, and the people involved in it. This goal requires at least 6 correct answers. Host B gets three lifelines, and they can use each one only once. Phone a Friend allows them to get Pika, Floha, or someone else available (not Rob) and ask for their help. 50/50 removes two wrong answers. Ask the audience means Host B can look at chat for help."
     },
     {
-        "goal": "Best Bingothon Clips!",
-        "description": "Hosts discuss their favourite clip of a past Bingothon"
+        "goal": "Bingo!",
+        "description": "Hosts and chat play a friendly real game of bingo."
     },
     {
-        "goal": "Bingothon: The Documentary (TM)",
-        "description": "Hosts describe Bingothon like it's featured in a David Attenborough documentary"
+        "goal": "The Impossible Question",
+        "description": "Host A will read out a very vague question, and see if anyone can come up with the answer. The question is 'What is 4.6 million?'. Rob and Panda know the answer."
     }
 ]
