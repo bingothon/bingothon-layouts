@@ -1,10 +1,9 @@
 import { Board, Cell, ServerMessage } from '@bingogg/types';
 import { Bingoboard } from 'schemas/bingoboard';
-import { BingoboardMeta } from 'schemas/bingoboardMeta';
 import WebSocket from 'ws';
 import * as nodecgApiContext from './util/nodecg-api-context';
 import { BingoboardCell } from 'types';
-import { boardRep, bingoggSocketRep } from './util/replicants';
+import { boardRep, bingoggSocketRep, socketRep } from './util/replicants';
 
 const nodecg = nodecgApiContext.get();
 
@@ -13,7 +12,6 @@ const log = new nodecg.Logger(`${nodecg.bundleName}:bingogg`);
 const bingoggHost = 'https://bingogg.bingothon.com';
 const socketHost = bingoggHost.replace('http', 'ws');
 
-const boardMetaRep = nodecg.Replicant<BingoboardMeta>('bingoboardMeta');
 bingoggSocketRep.value.status = 'disconnected';
 
 log.info('setting up bingogg integration');
@@ -36,6 +34,7 @@ const parseBoard = (board: Board): Bingoboard => {
 };
 
 nodecg.listenFor('bingogg:connect', async (data, callback) => {
+    socketRep.value.status = 'connecting';
     const { slug, passphrase } = data;
     log.info(`connecting to bingogg room ${data.slug}:${data.passphrase}`);
     try {
@@ -46,6 +45,7 @@ nodecg.listenFor('bingogg:connect', async (data, callback) => {
         });
 
         if (!res.ok) {
+            socketRep.value.status = 'error';
             if (res.status < 500) {
                 log.error(`Failed to join room ${slug} - ${res.status} ${await res.text()}`);
                 if (callback && !callback.handled) {
@@ -99,10 +99,24 @@ nodecg.listenFor('bingogg:connect', async (data, callback) => {
                 default:
                     break;
             }
+            console.log(boardRep.value);
+        });
+
+        webSocket.on('close', () => {
+            bingoggSocketRep.value.status = 'disconnected';
         });
     } catch (e) {
         console.log(e);
     }
+
+    if (callback && !callback.handled) {
+        callback(null);
+    }
+});
+
+nodecg.listenFor('bingogg:disconnect', (callback) => {
+    log.info('Closing bingogg connection');
+    webSocket.close();
 
     if (callback && !callback.handled) {
         callback(null);
