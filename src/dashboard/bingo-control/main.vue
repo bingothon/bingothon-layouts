@@ -401,10 +401,37 @@
         }
 
         connectBingogg() {
-            nodecg.sendMessage('bingogg:connect', {
-                slug: this.roomCode,
-                passphrase: this.passphrase
-            });
+            if (this.showBingoggOptions) {
+                const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
+                if (!socketRepName) {
+                    throw new Error('unreachable');
+                }
+                switch (store.state[socketRepName].status) {
+                    case 'connected':
+                        nodecg.sendMessage('bingogg:disconnect', { name: this.currentBoardRep }).catch((error) => {
+                            nodecg.log.error(error);
+                            this.errorMessage = error.message;
+                        });
+                        break;
+                    case 'disconnected':
+                    case 'error':
+                        this.errorMessage = '';
+                        getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this
+                            .currentBoardRep as BingoRepEnum;
+                        nodecg
+                            .sendMessage('bingogg:connect', {
+                                slug: this.roomCode,
+                                passphrase: this.passphrase
+                            })
+                            .catch((error) => {
+                                nodecg.log.error(error);
+                                this.errorMessage = error.message;
+                            });
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         updateExploration() {
