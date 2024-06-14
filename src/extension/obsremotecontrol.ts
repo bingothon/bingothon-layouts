@@ -7,18 +7,18 @@ import * as nodecgApiContext from './util/nodecg-api-context';
 import obs from './util/obs';
 import {
     discordDelayInfoRep,
+    hostDiscordDuringIntermissionRep,
+    lastIntermissionTimestampRep,
     obsAudioSourcesRep,
     obsConnectionRep,
     obsCurrentSceneRep,
     obsDashboardAudioSourcesRep,
+    obsPreviewImgRep,
     obsPreviewScene,
     obsStreamModeRep,
-    voiceDelayRep,
-    streamsReplicant,
     soundOnTwitchStream,
-    hostDiscordDuringIntermissionRep,
-    lastIntermissionTimestampRep,
-    obsPreviewImgRep
+    streamsReplicant,
+    voiceDelayRep
 } from './util/replicants';
 import { runDataActiveRunRep } from './util/speedControlReplicants';
 
@@ -50,9 +50,11 @@ function waitTillConnected(): Promise<void> {
                 resolve();
             }
         }
+
         obsConnectionRep.on('change', conWait);
     });
 }
+
 waitTillConnected().then((): void => {
     logger.info('connected to OBS, setting up remote control utils...');
 
@@ -115,6 +117,7 @@ waitTillConnected().then((): void => {
         obsDashboardAudioSourcesRep.value[source].fading = 'fadeout';
         let currentVol = obsDashboardAudioSourcesRep.value[source].baseVolume;
         obsAudioSourcesRep.value[source].muted = false;
+
         function doFadeOut(): void {
             currentVol = Math.max(currentVol - 0.05, 0);
             obsAudioSourcesRep.value[source].volume = currentVol;
@@ -127,6 +130,7 @@ waitTillConnected().then((): void => {
                 }
             }
         }
+
         setTimeout(doFadeOut, 100);
     });
 
@@ -209,6 +213,7 @@ waitTillConnected().then((): void => {
         obsDashboardAudioSourcesRep.value[source].fading = 'fadein';
         obsAudioSourcesRep.value[source].muted = false;
         let currentVol = 0;
+
         function doFadeIn(): void {
             const goalVol = obsDashboardAudioSourcesRep.value[source].baseVolume;
             currentVol = Math.min(goalVol, currentVol + 0.05);
@@ -219,6 +224,7 @@ waitTillConnected().then((): void => {
                 obsDashboardAudioSourcesRep.value[source].fading = 'unmuted';
             }
         }
+
         setTimeout(doFadeIn, 100);
     });
 
@@ -452,7 +458,7 @@ waitTillConnected().then((): void => {
         }
         const nextVideoName = intermissionVideosToPlay.pop();
         if (nextVideoName) {
-            let videoPath = bundleConfig.obs.intermissionVideoDirectory + nextVideoName;
+            let videoPath = bundleConfig.obs.intermissionVideoDirectory.trim() + nextVideoName;
             if (!videoPath.endsWith('.mp4')) {
                 videoPath += '.mp4';
             }
