@@ -458,7 +458,7 @@ waitTillConnected().then((): void => {
         }
         const nextVideoName = intermissionVideosToPlay.pop();
         if (nextVideoName) {
-            let videoPath = bundleConfig.obs.intermissionVideoDirectory.trim() + nextVideoName;
+            let videoPath = bundleConfig.obs.intermissionVideoDirectory + nextVideoName.trim();
             if (!videoPath.endsWith('.mp4')) {
                 videoPath += '.mp4';
             }
