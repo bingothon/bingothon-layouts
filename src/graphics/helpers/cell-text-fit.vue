@@ -18,7 +18,7 @@
         text: string;
         @Prop({})
         fontSize!: string;
-        optimizedFontSize: string = this.fontSize;
+        optimizedFontSize: string = "30px";
         transform: string = 'scaleX(1) scaleY(1)';
         top: string = '0';
 
@@ -28,6 +28,8 @@
             if (font) {
                 document.fonts.load(font).then(() => {
                     this.fit();
+                    // fuck chrome
+                    setTimeout(this.fit, 1000);
                 });
             } else {
                 this.fit();
@@ -37,21 +39,31 @@
         @Watch('text')
         fit() {
             this.optimizedFontSize = this.fontSize;
+            this.transform = `scaleX(1) scaleY(1)`;
+            this.top = '0';
             this._fit(0);
         }
         _fit(depth) {
-            this.transform = `scaleX(1) scaleY(1)`;
-            this.top = '0';
             this.$nextTick(() => {
                 // get width height of parent and text container to calc scaling
-                const container = this.$el;
-                const fittedContent = container.querySelector('.fittedContent');
-                var scaleX = container.clientWidth / fittedContent.clientWidth;
-                var scaleY = container.clientHeight / fittedContent.clientHeight;
+                const container = this.$el.getBoundingClientRect();
+                const fittedContent = this.$el.querySelector('.fittedContent');
+                const fittedContentRect = fittedContent.getBoundingClientRect();
+                var scaleX = container.width / fittedContentRect.width;
+                var scaleY = container.height / fittedContentRect.height;
                 const fontSize = window.getComputedStyle(fittedContent).fontSize;
                 // limit recursion
                 if (depth < 10 && (scaleY < 0.8 || scaleX < 0.7)) {
-                    this.optimizedFontSize = `calc(${fontSize} * 0.9)`;
+                    const minScale = Math.min(scaleY, scaleX);
+                    let multiplier = 0.9;
+                    if (minScale < 0.4) {
+                        multiplier = 0.6;
+                    } else if (minScale < 0.5) {
+                        multiplier = 0.7;
+                    } else if (minScale < 0.6) {
+                        multiplier = 0.8;
+                    }
+                    this.optimizedFontSize = `calc(${fontSize} * ${multiplier})`;
                     this._fit(depth + 1);
                     return;
                 }
@@ -59,7 +71,7 @@
                 scaleX = Math.min(1, scaleX);
                 scaleY = Math.min(1, scaleY);
                 // center
-                var toLeft = (container.scrollWidth - fittedContent.scrollWidth) / 2;
+                var toLeft = (container.width - fittedContentRect.width) / 2;
                 this.transform = `translateY(-50%) translateX(${toLeft}px) scaleX(${scaleX}) scaleY(${scaleY})`;
                 this.top = '50%';
             });
