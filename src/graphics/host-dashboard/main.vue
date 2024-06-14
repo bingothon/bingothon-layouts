@@ -57,6 +57,13 @@
                                 {{ runnersToString(currentRun) }}
                             </div>
                         </div>
+                        <br />
+                        <div class="runnerInfo">
+                            Runner Info:
+                            <div>
+                                {{ currentRun.customData.runnerInfo }}
+                            </div>
+                        </div>
                     </div>
                     <div v-if="comingUpRun" id="comingUpInfo" class="run">
                         Coming Up:
@@ -148,7 +155,7 @@
 
     import { Component, Vue } from 'vue-property-decorator';
     import { getReplicant, store } from '../../browser-util/state';
-    import { TrackerPrize, TrackerOpenBid } from '../../../types';
+    import { TrackerOpenBid, TrackerPrize } from '../../../types';
     import moment from 'moment';
     import { RunData } from '../../../speedcontrol-types';
     import HostBingo from '../components/hostBingo.vue';
@@ -283,7 +290,7 @@
                 }
                 let i = 0;
                 team.players.forEach((player) => {
-                    res += player.name;
+                    res += `${player.name}${player.pronouns ? `(${player.pronouns})` : ''}`;
                     if (i === team.players.length - 1) {
                         //if current player is last player of team
                         if (j === run.teams.length - 1) {
