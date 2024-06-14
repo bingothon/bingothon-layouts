@@ -400,11 +400,11 @@
     }
 
     .GameDetails {
-        flex: 4;
-        display: grid;
-        grid-template-columns: 160px 160px; /* this creates 2 equal columns */
+        display: flex;
+        /* display: grid; */
+        /* grid-template-columns: 160px 160px; this creates 2 equal columns */
         gap: 4px;
-        flex-direction: column;
+        /* flex-direction: column; */
         align-items: flex-start; /* This makes the content align to the left */
         justify-content: center;
         flex-grow: 0;
@@ -432,11 +432,11 @@
         background-color: rgba(220, 240, 255, 0.9); /* Light blueish, slightly transparent */
         border-radius: 2px;
         height: 22px;
-        min-width: 150px;
+        /* min-width: 150px; */
         color: #333;
         margin: 4px;
         border: 1px solid rgba(180, 230, 255, 0.7); /* Slightly blueish border for that 'frozen' feel */
-        max-width: 150px;
+        /* max-width: 250px; */
 
         /* Ice-like gradient background using SVG */
         background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="iceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:rgba(240, 255, 255, 0.7); stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(200, 240, 255, 0.9); stop-opacity:1" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23iceGradient)" /></svg>');

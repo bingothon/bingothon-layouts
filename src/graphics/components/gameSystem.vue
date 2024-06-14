@@ -2,7 +2,7 @@
     <div id="GameSystem" class="GameSystem Chip">
         <img v-if="gameSystemImage" :src="gameSystemImage" />
         <span v-if="!gameSystemImage || pathsAndLogos[gameSystem.toLocaleLowerCase()].textNeeded" class="ChipText">
-            <textFit :text="gameSystem" />
+            {{ gameSystem }}
         </span>
     </div>
 </template>
