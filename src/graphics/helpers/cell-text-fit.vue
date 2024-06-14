@@ -1,6 +1,6 @@
 <template>
-    <div id="container">
-        <div id="fittedContent" :style="{ transform, top, 'font-size': optimizedFontSize }" v-html="text" />
+    <div class="cellTextFixContainer">
+        <div class="fittedContent" :style="{ transform, top, 'font-size': optimizedFontSize }" v-html="text" />
     </div>
 </template>
 
@@ -23,12 +23,11 @@
         top: string = '0';
 
         mounted() {
-            const font = window.getComputedStyle(this.$el.querySelector('#fittedContent')).font;
+            this.optimizedFontSize = this.fontSize;
+            const font = window.getComputedStyle(this.$el.querySelector('.fittedContent')).font;
             if (font) {
                 document.fonts.load(font).then(() => {
                     this.fit();
-                    // fuck you chrome
-                    setTimeout(this.fit, 1000);
                 });
             } else {
                 this.fit();
@@ -46,7 +45,7 @@
             this.$nextTick(() => {
                 // get width height of parent and text container to calc scaling
                 const container = this.$el;
-                const fittedContent = container.querySelector('#fittedContent');
+                const fittedContent = container.querySelector('.fittedContent');
                 var scaleX = container.clientWidth / fittedContent.clientWidth;
                 var scaleY = container.clientHeight / fittedContent.clientHeight;
                 const fontSize = window.getComputedStyle(fittedContent).fontSize;
@@ -69,12 +68,12 @@
 </script>
 
 <style>
-    #container {
+    .cellTextFixContainer {
         width: 100%;
         height: 100%;
         text-align: center;
     }
-    #fittedContent {
+    .cellTextFixContainer > .fittedContent {
         position: absolute;
         left: 0;
     }
