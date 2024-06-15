@@ -18,7 +18,7 @@
         text: string;
         @Prop({})
         fontSize!: string;
-        optimizedFontSize: string = "30px";
+        optimizedFontSize: string = '30px';
         transform: string = 'scaleX(1) scaleY(1)';
         top: string = '0';
 

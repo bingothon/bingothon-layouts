@@ -378,7 +378,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                     // TODO repair in the future
                     twitchStreamsRep.on('change', (newValue, old) => {
                         if (!old) return;
-                        const streamsToHide = new Set([0,1,2,3,4,5]);
+                        const streamsToHide = new Set([0, 1, 2, 3, 4, 5]);
                         let idx = 0; //stream index
                         let i = 0; //array index
                         while (idx < 6 && i < newValue.length) {
