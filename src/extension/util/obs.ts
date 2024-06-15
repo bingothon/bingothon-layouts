@@ -374,9 +374,11 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                 }
 
                 if (useObsTwitchPlayer || true) {
+                    // TODO check if the comment is still needed
                     // TODO repair in the future
                     twitchStreamsRep.on('change', (newValue, old) => {
                         if (!old) return;
+                        const streamsToHide = new Set([0,1,2,3,4,5]);
                         let idx = 0; //stream index
                         let i = 0; //array index
                         while (idx < 6 && i < newValue.length) {
@@ -395,6 +397,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                                 // fire and forget
                                 obs.setSourceBoundsAndCrop(getStreamSrcName(idx), transProps);
                             } else {
+                                streamsToHide.delete(idx);
                                 // check if the streamurl changed or the visible status changed
                                 if (stream.channel !== oldStream.channel || stream.visible !== oldStream.visible) {
                                     // fire and forget
@@ -409,6 +412,14 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                             }
                             idx++;
                             i++;
+                        }
+                        for (const stream of streamsToHide) {
+                            // this stream should not be displayed
+                            const transProps: OBSTransformParams = {
+                                visible: false
+                            };
+                            // fire and forget
+                            obs.setSourceBoundsAndCrop(getStreamSrcName(stream), transProps);
                         }
                     });
 
