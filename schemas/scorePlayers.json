@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "array",
+    "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["displayName", "pronouns", "twitch", "discord", "score"],
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "pronouns": {
+          "type": "string"
+        },
+        "twitch": {
+          "type": "string"
+        },
+        "discord": {
+          "type": "string"
+        },
+        "discordProfileUrl": {
+          "type": "string"
+        },
+        "score": {
+          "type": "number",
+          "default": 0
+        }
+      }
+    }
+  }
+  

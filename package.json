@@ -134,6 +134,14 @@
         "headerColor": "#b92b36",
         "width": 2,
         "workspace": "Misc"
+      },
+      {
+        "name": "Score Control",
+        "title": "Score Control",
+        "file": "score-control.html",
+        "headerColor": "#b92b36",
+        "width": 2,
+        "workspace": "Score Control"
       }
     ],
     "graphics": [
@@ -179,6 +187,21 @@
       },
       {
         "file": "twitch-players.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "5p-focus.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "5p-small.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "discussion.html",
         "width": 1920,
         "height": 1080
       },

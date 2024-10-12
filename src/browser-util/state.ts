@@ -36,6 +36,7 @@ import {
     ObsSceneList,
     ObsStreamMode,
     OmnibarMessages,
+    ScorePlayers,
     ShowPictureDuringIntermission,
     SongData,
     SoundOnTwitchStream,
@@ -98,6 +99,7 @@ const replicantNames = [
     'twitchStreams',
     'voiceActivity',
     'voiceDelay',
+    'scorePlayers',
     'songData'
 ];
 const nodecgSpeedcontrolReplicantNames = ['runDataActiveRun', 'runDataArray', 'timer', 'twitchCommercialTimer'];
@@ -152,6 +154,7 @@ interface StoreTypes {
     twitchStreams: TwitchStream[];
     voiceActivity: VoiceActivity;
     voiceDelay: 0;
+    scorePlayers: ScorePlayers;
     songData: SongData;
     // nodecg-speedcontrol
     runDataActiveRun: RunDataActiveRun;
@@ -218,6 +221,7 @@ export const store = new Store<StoreTypes>({
         twitchStreams: [] as TwitchStream[],
         voiceActivity: {} as VoiceActivity,
         voiceDelay: 0,
+        scorePlayers: [] as ScorePlayers,
         songData: {} as SongData,
         // nodecg-speedcontrol
         runDataActiveRun: {} as RunDataActiveRun,

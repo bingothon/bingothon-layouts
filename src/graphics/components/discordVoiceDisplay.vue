@@ -52,9 +52,12 @@
         maxUserCount: number;
         @Prop({ default: 0 })
         startingMember: number;
+        @Prop({ default: false })
+        removePlayers: boolean;
 
         get voiceActivityMembers(): VoiceActivityMember[] {
-            const members = store.state.voiceActivity.members;
+            const membersToExclude = this.removePlayers ? store.state.scorePlayers.map(player => player.discord) : [];
+            const members = store.state.voiceActivity.members.filter(member => !membersToExclude.includes(member.name));
             if (members.length > this.maxUserCount) {
                 console.log(
                     `start ${this.startingMember} length: ${this.maxUserCount}, total: ${

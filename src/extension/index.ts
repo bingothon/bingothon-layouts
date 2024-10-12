@@ -13,7 +13,7 @@ alias.addAlias(
 
 import type NodeCG from '@nodecg/types'; // eslint-disable-line
 import * as nodecgApiContext from './util/nodecg-api-context';
-import { SongData, VoiceActivity } from '@/schemas';
+import { ScorePlayers, SongData, VoiceActivity } from '@/schemas';
 import { Configschema } from '@/configschema';
 
 export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
@@ -33,7 +33,7 @@ export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
                 },
                 persistent: true
             });
-            const defaultAvatar = 'https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png';
+            const defaultAvatar = 'https://cdn.discordapp.com/avatars/264490864582197258/54bda67ab5b6f09deb757db4984920b3.webp';
             voiceActivity.value = {
                 members: [
                     {
@@ -145,4 +145,5 @@ export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
             defaultValue: { playing: false, title: 'No Track Playing' }
         });
     }
+    nodecg.Replicant<ScorePlayers>("scorePlayers", {defaultValue: []});
 };
