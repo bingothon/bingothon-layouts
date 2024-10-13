@@ -11,5 +11,6 @@ export type ScorePlayers = {
   twitch: string;
   discord: string;
   discordProfileUrl?: string;
+  country?: string;
   score: number;
 }[];

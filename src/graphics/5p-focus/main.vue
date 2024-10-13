@@ -1,5 +1,6 @@
 <template>
     <div id="focus-5p">
+        <div id="background"></div>
         <div class="stream-placeholder" id="stream-focus"></div>
         <score-player-info id="info-focus" height="80px" :playerIndex="focusPlayer"></score-player-info>
         <div class="stream-placeholder small-stream-common" id="stream1"></div>
@@ -57,11 +58,14 @@ import DiscordVoiceDisplay from '../components/discordVoiceDisplay.vue';
     margin: 0;
     padding: 0;
   }
-  #focus-5p {
+  #background {
+    position: absolute;
     width: 1920px;
     height: 1080px;
-    background: url(../middle-info-background.png);
     background-size: cover;
+        background-repeat: no-repeat;
+        background-image: linear-gradient(grey, #554d4d);
+        filter: sepia(100%) saturate(360%) brightness(40%) hue-rotate(298deg) blur(3px);
   }
   .stream-placeholder {
     position: absolute;

@@ -14,7 +14,7 @@
         </div>
         <div class="PlayerName">
             <transition name="fade">
-                <text-fit :key="text" :text="finishTime + text" :align="reverseOrder ? 'right' : 'left'"></text-fit>
+                <text-fit :key="text" :text="text" :align="reverseOrder ? 'right' : 'left'"></text-fit>
             </transition>
         </div>
         <div v-if="showSound" class="Sound">
@@ -130,57 +130,6 @@ import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
                 return 'they/them';
             }
             return '';
-        }
-
-        get finishTime(): string {
-            // no individual finish time for one team runs
-            // also this is disabled for some layouts
-            if (this.hideFinishTime || store.state.runDataActiveRun.teams.length == 1) {
-                return '';
-            }
-            // get the team this player belongs to
-            if (this.teamID) {
-                const finishTime = store.state.timer.teamFinishTimes[this.teamID];
-                if (finishTime) {
-                    // disable time if lockout, but still "change" it, to force a refit
-                    if (store.state.runDataActiveRun.customData.Bingotype?.includes('lockout')) {
-                        return ' ';
-                    } else {
-                        return `[${finishTime.time}] `;
-                    }
-                }
-            }
-            return '';
-        }
-
-        get teamID(): string | null {
-            let theTeamID = null;
-            let playerNum = 0;
-            store.state.runDataActiveRun.teams.forEach((t) => {
-                t.players.forEach(() => {
-                    if (playerNum == this.playerIndex) {
-                        theTeamID = t.id;
-                    }
-                    playerNum++;
-                });
-            });
-            return theTeamID;
-        }
-
-        get teamIndex(): number {
-            // use 0 as a default in case this teamindex isn't found
-            // which shouldn't happen
-            let theTeamIdx = 0;
-            let playerNum = 0;
-            store.state.runDataActiveRun.teams.forEach((t, teamdIdx) => {
-                t.players.forEach(() => {
-                    if (playerNum == this.playerIndex) {
-                        theTeamIdx = teamdIdx;
-                    }
-                    playerNum++;
-                });
-            });
-            return theTeamIdx;
         }
 
         get showSound(): boolean {

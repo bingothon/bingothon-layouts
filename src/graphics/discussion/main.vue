@@ -21,7 +21,6 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { CapturePositions, TwitchStream } from '@/schemas';
     import { store } from '@/browser-util/state';
     import TextFit from '../helpers/text-fit.vue';
     import ScorePlayerInfo from '../components/ScorePlayerInfo.vue';

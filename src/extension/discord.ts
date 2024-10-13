@@ -2,7 +2,7 @@ import * as Discord from 'discord.js';
 import * as Voice from '@discordjs/voice';
 import { getVoiceConnection, VoiceConnection } from '@discordjs/voice';
 import * as nodecgApiContext from './util/nodecg-api-context';
-import { voiceActivityRep, voiceDelayRep } from '@/util/replicants';
+import { voiceActivityRep } from '@/util/replicants';
 
 const nodecg = nodecgApiContext.get();
 
@@ -164,26 +164,22 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
                 if (!voiceActivityRep.value.members || voiceActivityRep.value.members.length < 1) {
                     return;
                 }
-                setTimeout((): void => {
-                    const member = voiceActivityRep.value.members.find((voiceMember) => {
-                        return voiceMember.id == userID;
-                    });
-                    if (member) {
-                        // Ignoring the double check from receiver.speaking, user should be speaking anyways
-                        member.isSpeaking = true;
-                    }
-                }, voiceDelayRep.value);
+                const member = voiceActivityRep.value.members.find((voiceMember) => {
+                    return voiceMember.id == userID;
+                });
+                if (member) {
+                    // Ignoring the double check from receiver.speaking, user should be speaking anyways
+                    member.isSpeaking = true;
+                }
             });
 
             receiver.speaking.on('end', (userID) => {
-                setTimeout((): void => {
-                    const member = voiceActivityRep.value.members.find((voiceMember) => {
-                        return voiceMember.id === userID;
-                    });
-                    if (member) {
-                        member.isSpeaking = false;
-                    }
-                }, voiceDelayRep.value);
+                const member = voiceActivityRep.value.members.find((voiceMember) => {
+                    return voiceMember.id === userID;
+                });
+                if (member) {
+                    member.isSpeaking = false;
+                }
             });
         }
     }

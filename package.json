@@ -47,95 +47,6 @@
     },
     "dashboardPanels": [
       {
-        "name": "bingo-control",
-        "title": "Bingo Control",
-        "file": "bingo-control.html",
-        "headerColor": "#b92b36",
-        "width": 2
-      },
-      {
-        "name": "bingomode-control",
-        "title": "Bingo Mode Control",
-        "file": "bingomode-control.html",
-        "headerColor": "#b92b36",
-        "width": 2
-      },
-      {
-        "name": "camnames-control",
-        "title": "Cam Names Control",
-        "file": "camnames-control.html",
-        "headerColor": "#b92b36",
-        "width": 2,
-        "workspace": "Misc"
-      },
-      {
-        "name": "layout-control",
-        "title": "Layout Control",
-        "file": "layout-control.html",
-        "headerColor": "#b92b36",
-        "width": 2
-      },
-      {
-        "name": "twitch-control",
-        "title": "Twitch Control",
-        "file": "twitch-control.html",
-        "headerColor": "#b92b36",
-        "width": 2
-      },
-      {
-        "name": "obs-control",
-        "title": "OBS Control",
-        "file": "obs-control.html",
-        "headerColor": "#b92b36",
-        "width": 2
-      },
-      {
-        "name": "checklist",
-        "title": "Checklist",
-        "file": "checklist.html",
-        "headerColor": "#b92b36",
-        "width": 4
-      },
-      {
-        "name": "twitch-resizer-dashboard",
-        "title": "Twitch Resizer",
-        "fullbleed": "true",
-        "file": "crop-control.html",
-        "headerColor": "#008BB9"
-      },
-      {
-        "name": "chat-bot-control",
-        "title": "Twitch Chat Bot Control",
-        "file": "chat-bot-control.html",
-        "headerColor": "#b92b36",
-        "width": 2,
-        "workspace": "Misc"
-      },
-      {
-        "name": "omnibarMessage-control",
-        "title": "Omnibar Message Control",
-        "file": "omnibarMessage-control.html",
-        "headerColor": "#b92b36",
-        "width": 4,
-        "workspace": "Misc"
-      },
-      {
-        "name": "tracker-control",
-        "title": "Tracker Control",
-        "file": "tracker-control.html",
-        "headerColor": "#b92b36",
-        "width": 2,
-        "workspace": "Misc"
-      },
-      {
-        "name": "bestOfX-control",
-        "title": "Best Of X Control",
-        "file": "bestOfX-control.html",
-        "headerColor": "#b92b36",
-        "width": 2,
-        "workspace": "Misc"
-      },
-      {
         "name": "Score Control",
         "title": "Score Control",
         "file": "score-control.html",
@@ -145,51 +56,6 @@
       }
     ],
     "graphics": [
-      {
-        "file": "game-layout.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
-        "file": "intermission.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
-        "file": "host-dashboard.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
-        "file": "exploration-bingo.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
-        "file": "interview.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
-        "file": "charity-interview.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
-        "file": "cam-names.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
-        "file": "video-player.html",
-        "width": 1920,
-        "height": 1080
-      },
-      {
-        "file": "twitch-players.html",
-        "width": 1920,
-        "height": 1080
-      },
       {
         "file": "5p-focus.html",
         "width": 1920,
@@ -204,53 +70,12 @@
         "file": "discussion.html",
         "width": 1920,
         "height": 1080
-      },
-      {
-        "file": "omnibar.html",
-        "width": 1920,
-        "height": 80
       }
     ],
     "mount": [
       {
         "directory": "static",
         "endpoint": "static"
-      }
-    ],
-    "assetCategories": [
-      {
-        "name": "intermissionVideos",
-        "title": "Intermission Videos",
-        "allowedTypes": [
-          "mp4"
-        ]
-      },
-      {
-        "name": "wideLargeLogos",
-        "title": "Wide Large Logos",
-        "allowedTypes": [
-          "png",
-          "jpg",
-          "jpeg"
-        ]
-      },
-      {
-        "name": "wideSmallLogos",
-        "title": "Wide Small Logos",
-        "allowedTypes": [
-          "png",
-          "jpg",
-          "jpeg"
-        ]
-      },
-      {
-        "name": "squareLogos",
-        "title": "Square Logos",
-        "allowedTypes": [
-          "png",
-          "jpg",
-          "jpeg"
-        ]
       }
     ]
   },

@@ -19,7 +19,7 @@
 <script lang="ts">
     import { Component, Vue, Watch } from 'vue-property-decorator';
     import { getReplicant, store } from '../../browser-util/state';
-    import { ScorePlayers, TrackerData } from '../../../schemas';
+    import { ScorePlayers } from '../../../schemas';
 
     @Component({})
     export default class ScoreControl extends Vue {

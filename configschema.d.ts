@@ -6,10 +6,6 @@
  */
 
 export interface Configschema {
-  twitch: {
-    enable: boolean;
-    chatBot: boolean;
-  };
   discord: {
     test: boolean;
     token: string;
@@ -18,51 +14,13 @@ export interface Configschema {
     voiceChannelID: string;
     ignoredUsers?: string[];
   };
-  discordSunshine: {
-    test: boolean;
-    token: string;
-    serverID: string;
-    commandChannelID: string;
-    voiceChannelID: string;
-    ignoredUsers?: string[];
-  };
-  donationtracker: {
-    enable: boolean;
-    url: string;
-    eventSlug: string;
-    test?: boolean;
-  };
-  obs: {
-    enable: boolean;
-    address: string;
-    password: string;
-    discordAudio: string;
-    mpdAudio: string;
-    streamsAudio: string;
-    gameScene: string;
-    /**
-     * Full local path on the stream PC, includes the final slash: '/home/test/whatever/'
-     */
-    intermissionVideoDirectory?: string;
-  };
-  mpd?: {
-    enable: boolean;
-    address: string;
-    port: number;
-  };
-  firebaseConfig: {
-    enable?: boolean;
-    apiKey: string;
-    authDomain: string;
-    databaseURL: string;
-    projectId: string;
-    storageBucket: string;
-    messagingSenderId: string;
-    appId: string;
-    measurementId: string;
-  };
-  twitchStreams?: {
-    type?: "obsTwitchPlayer" | "nodecgGraphic";
-  };
+  scorePlayers: {
+    displayName: string;
+    pronouns: string;
+    twitch: string;
+    country: string;
+    discord: string;
+    discordProfileUrl: string;
+  }[];
   [k: string]: unknown;
 }

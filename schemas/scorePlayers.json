@@ -21,6 +21,9 @@
         "discordProfileUrl": {
           "type": "string"
         },
+        "country": {
+          "type": "string"
+        },
         "score": {
           "type": "number",
           "default": 0

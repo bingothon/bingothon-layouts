@@ -13,16 +13,13 @@ alias.addAlias(
 
 import type NodeCG from '@nodecg/types'; // eslint-disable-line
 import * as nodecgApiContext from './util/nodecg-api-context';
-import { ScorePlayers, SongData, VoiceActivity } from '@/schemas';
+import { VoiceActivity } from '@/schemas';
 import { Configschema } from '@/configschema';
 
 export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
     nodecgApiContext.set(nodecg);
     nodecg.log.info('Extension code working!');
-    require('./bingosync');
-    require('./bingoColors');
-    require('./externalBingoboards');
-    require('./explorationBingo');
+    require('./scorePlayers');
     if (nodecg.bundleConfig.discord) {
         if (!nodecg.bundleConfig.discord.test) {
             require('./discord');
@@ -130,20 +127,4 @@ export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
             };
         }
     }
-    require('./twitch-chat-bot');
-    require('./gdq-donationtracker');
-    require('./streams');
-    require('./util/obs');
-    require('./obsremotecontrol');
-    require('./layoutlogic');
-    if (nodecg.bundleConfig.mpd && nodecg.bundleConfig.mpd.enable) {
-        require('./music');
-    } else {
-        nodecg.log.warn('MPD integration is disabled, no music!');
-        nodecg.Replicant<SongData>('songData', {
-            persistent: false,
-            defaultValue: { playing: false, title: 'No Track Playing' }
-        });
-    }
-    nodecg.Replicant<ScorePlayers>("scorePlayers", {defaultValue: []});
 };
