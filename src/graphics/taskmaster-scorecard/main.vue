@@ -2,7 +2,7 @@
     <div class="scorecard-bg">
       <div class="central">
           <div :key="index" v-for="(player, index) in playersWithOffset" :style="{ left: `${player.xOffset}px`}" class="player">
-              <div class="player-img-frame" :style="{ animationDelay: `${index * -1.25}s` }">
+              <div class="player-img-frame">
                   <img class="player-img" :src="player.discordProfileUrl"/>
                   <img class="frame" src="./taskmaster-frame-sq.png" />
               </div>
@@ -106,20 +106,8 @@ body {
     background: rgba(255, 255, 255, 0.95);
 }
 
-@keyframes rotate {
-	0% {
-		transform: rotate(-4deg);
-	}
-
-	100% {
-		transform: rotate(4deg);
-	}
-}
-
 .player-img-frame {
     height: var(--frame-size);
-    transform-origin: center;
-    animation: rotate 3s ease-in-out alternate infinite;
 }
 
 </style>
