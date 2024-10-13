@@ -46,8 +46,10 @@
     #background {
         width: 1920px;
         height: 1080px;
-        background: url(../middle-info-background.png);
         background-size: cover;
+        background-repeat: no-repeat;
+        background-image: linear-gradient(grey, #554d4d);
+        filter: sepia(100%) saturate(360%) brightness(40%) hue-rotate(298deg) blur(3px);
     }
     #player-info-container {
         position: absolute;
