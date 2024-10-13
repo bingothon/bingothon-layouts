@@ -18,7 +18,7 @@
             </transition>
         </div>
         <div v-if="showSound" class="Sound">
-            <img :src="'/bundles/bingothon-layouts/static/music-note.png'" />
+            <img :src="'/bundles/score-layouts/static/music-note.png'" />
         </div>
         <div v-if="!!player.discordProfileUrl" class="DiscordIcon FlexContainer">
             <transition name="fade">
@@ -137,7 +137,7 @@ import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
         }
 
         getPlayerFlag(rawFlag: string | undefined): string {
-            return `/bundles/bingothon-layouts/static/flags/${rawFlag}.png`;
+            return `/bundles/score-layouts/static/flags/${rawFlag}.png`;
         }
 
         get micIcon() {
