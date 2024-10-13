@@ -1,0 +1,16 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["showTimer","eliminatedPlayers"],
+    "properties": {
+        "showTimer": {"type":"boolean","default":false},
+        "eliminatedPlayers": {
+            "type":"array",
+            "default":[],
+            "items": {
+                "type": "number"
+            }
+        }
+    }
+}

@@ -20,6 +20,7 @@ export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
     nodecgApiContext.set(nodecg);
     nodecg.log.info('Extension code working!');
     require('./scorePlayers');
+    require('./countdownTimer');
     if (nodecg.bundleConfig.discord) {
         if (!nodecg.bundleConfig.discord.test) {
             require('./discord');

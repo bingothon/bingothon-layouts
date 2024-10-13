@@ -1,5 +1,6 @@
 import type NodeCGTypes from '@nodecg/types';
 import {
+    LayoutMeta,
     ScorePlayers,
     VoiceActivity
 } from 'schemas';
@@ -19,4 +20,4 @@ export const voiceActivityRep = nodecg().Replicant<VoiceActivity>('voiceActivity
 });
 export const scorePlayers = nodecg().Replicant<ScorePlayers>("scorePlayers", {defaultValue: []});
 
-console.log(JSON.stringify(scorePlayers.value))
+export const layoutMeta = nodecg().Replicant<LayoutMeta>("layoutMeta");

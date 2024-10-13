@@ -2,31 +2,34 @@ import clone from 'clone';
 import Vue, { set } from 'vue';
 import Vuex, { Store } from 'vuex';
 import {
+    CountdownTimer,
+    LayoutMeta,
+    LayoutTimer,
     ScorePlayers,
     SoundOnTwitchStream,
     VoiceActivity
 } from '../../schemas';
-import { RunDataActiveRun, RunDataArray, Timer, TwitchCommercialTimer } from '../../speedcontrol-types';
-// import { Scene } from "../extension/util/obs" TODO: set types for sccenes
-import { Games } from '../../types';
 import type NodeCGTypes from '@nodecg/types';
 
 Vue.use(Vuex);
 
 const replicantNames = [
+    'countdownTimer',
+    'layoutMeta',
+    'layoutTimer',
     'soundOnTwitchStream',
     'voiceActivity',
     'scorePlayers',
 ];
-const nodecgSpeedcontrolReplicantNames = ['runDataActiveRun', 'runDataArray', 'timer', 'twitchCommercialTimer'];
-
-const assetNames = ['assets:intermissionVideos', 'assets:wideLargeLogos', 'assets:wideSmallLogos', 'assets:squareLogos'];
 const replicants: Map<string, NodeCGTypes.ClientReplicant<any>> = new Map();
 
 let playerAlternateInterval: NodeJS.Timeout | null = null;
 
 interface StoreTypes {
     // bingothon
+    countdownTimer: CountdownTimer,
+    layoutMeta: LayoutMeta,
+    layoutTimer: LayoutTimer,
     soundOnTwitchStream: SoundOnTwitchStream;
     voiceActivity: VoiceActivity;
     scorePlayers: ScorePlayers;
@@ -37,6 +40,9 @@ interface StoreTypes {
 export const store = new Store<StoreTypes>({
     state: {
         // bingothon
+        countdownTimer: {} as CountdownTimer,
+        layoutMeta: {} as LayoutMeta,
+        layoutTimer: {} as LayoutTimer,
         soundOnTwitchStream: 0 as SoundOnTwitchStream,
         voiceActivity: {} as VoiceActivity,
         scorePlayers: [] as ScorePlayers,
