@@ -3,6 +3,7 @@ import * as Voice from '@discordjs/voice';
 import { getVoiceConnection, VoiceConnection } from '@discordjs/voice';
 import * as nodecgApiContext from './util/nodecg-api-context';
 import { voiceActivityRep } from '@/util/replicants';
+import { VoiceActivity } from 'schemas/voiceActivity';
 
 const nodecg = nodecgApiContext.get();
 
@@ -78,13 +79,8 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
                 voiceActivityRep.value.members = [];
                 return;
             }
-
-            const newVoiceArray: {
-                id: string;
-                name: string;
-                avatar: string;
-                isSpeaking: boolean;
-            }[] = [];
+            
+            const newVoiceArray: VoiceActivity["members"] = [];
 
             memberCollection.forEach((voiceMember): void => {
                 // Hide our bot and muted members cause that is the restreamer
@@ -107,6 +103,8 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
                     newVoiceArray.push({
                         id: voiceMember.id,
                         name: voiceMember.displayName,
+                        nickname: voiceMember.nickname,
+                        username: voiceMember.user.username,
                         avatar: userAvatar,
                         isSpeaking: speakStatus
                     });

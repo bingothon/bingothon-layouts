@@ -142,7 +142,7 @@ import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
         }
 
         get discordIsSpeaking(): boolean {
-            return !!store.state.voiceActivity.members.find(member => member.name == this.player.discord)?.isSpeaking;
+            return !!store.state.voiceActivity.members.find(member => member.username == this.player.discord)?.isSpeaking;
         }
     }
 </script>

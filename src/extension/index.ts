@@ -31,99 +31,16 @@ export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
                 persistent: true
             });
             const defaultAvatar = 'https://cdn.discordapp.com/avatars/264490864582197258/54bda67ab5b6f09deb757db4984920b3.webp';
+            const names = ['abc', 'testlongname', 'anotherone', 'POGGERS', 'asdfasdf', 'someone', 'idk this is a lot', 'not creative', ...new Array(8).fill('nr8')];
             voiceActivity.value = {
-                members: [
-                    {
-                        id: '0',
-                        name: 'abc',
-                        avatar: defaultAvatar,
-                        isSpeaking: false
-                    },
-                    {
-                        id: '1',
-                        name: 'testlongname',
-                        avatar: defaultAvatar,
-                        isSpeaking: true
-                    },
-                    {
-                        id: '2',
-                        name: 'anotherone',
-                        avatar: defaultAvatar,
-                        isSpeaking: true
-                    },
-                    {
-                        id: '3',
-                        name: 'POGGERS',
-                        avatar: defaultAvatar,
-                        isSpeaking: false
-                    },
-                    {
-                        id: '4',
-                        name: 'asdfasdf',
-                        avatar: defaultAvatar,
-                        isSpeaking: false
-                    },
-                    {
-                        id: '5',
-                        name: 'someone',
-                        avatar: defaultAvatar,
-                        isSpeaking: false
-                    },
-                    {
-                        id: '6',
-                        name: 'idk this is a lot',
-                        avatar: defaultAvatar,
-                        isSpeaking: true
-                    },
-                    {
-                        id: '7',
-                        name: 'not creative',
-                        avatar: defaultAvatar,
-                        isSpeaking: true
-                    },
-                    {
-                        id: '8',
-                        name: 'nr8',
-                        avatar: defaultAvatar,
-                        isSpeaking: false
-                    },
-                    {
-                        id: '9',
-                        name: 'nr8',
-                        avatar: defaultAvatar,
-                        isSpeaking: false
-                    },
-                    {
-                        id: '10',
-                        name: 'nr8',
-                        avatar: defaultAvatar,
-                        isSpeaking: false
-                    },
-                    {
-                        id: '11',
-                        name: 'nr8',
-                        avatar: defaultAvatar,
-                        isSpeaking: false
-                    },
-                    {
-                        id: '12',
-                        name: 'nr8',
-                        avatar: defaultAvatar,
-                        isSpeaking: false
-                    },
-                    {
-                        id: '13',
-                        name: 'nr8',
-                        avatar: defaultAvatar,
-                        isSpeaking: false
-                    },
-                    {
-                        id: '14',
-                        name: 'nr8',
-                        avatar: defaultAvatar,
-                        isSpeaking: false
-                    }
-                ]
+                members: names.map((name, index) => ({
+                    id: `${index}`,
+                    avatar: defaultAvatar,
+                    isSpeaking: Math.random() > 0.5,
+                    name: name,
+                    nickname: null,
+                    username: name,
+                }))
             };
         }
     }

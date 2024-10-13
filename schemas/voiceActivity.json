@@ -8,7 +8,7 @@
             "type": "array",
 			"items": {
 				"type": "object",
-                "required": ["id","name","avatar","isSpeaking"],
+                "required": ["id","name","nickname","username","avatar","isSpeaking"],
 				"additionalProperties": false,
                 "properties": {
                     "id": {
@@ -16,6 +16,14 @@
                         "default": ""
                     },
                     "name": {
+                        "type":"string",
+                        "default":""
+                    },
+                    "nickname": {
+                        "type":["string", "null"],
+                        "default": null
+                    },
+                    "username": {
                         "type":"string",
                         "default":""
                     },

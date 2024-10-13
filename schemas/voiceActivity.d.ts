@@ -9,6 +9,8 @@ export interface VoiceActivity {
   members: {
     id: string;
     name: string;
+    nickname: string | null;
+    username: string;
     avatar: string;
     isSpeaking: boolean;
   }[];
