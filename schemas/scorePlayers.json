@@ -4,7 +4,7 @@
     "items": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["displayName", "pronouns", "twitch", "discord", "score"],
+      "required": ["displayName", "twitch", "discord", "discordProfileUrl", "score"],
       "properties": {
         "displayName": {
           "type": "string"

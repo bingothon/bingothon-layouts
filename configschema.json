@@ -52,7 +52,7 @@
 			"items": {
 				"type": "object",
 				"additionalProperties": false,
-				"required": ["displayName", "pronouns", "twitch", "country", "discord", "discordProfileUrl"],
+				"required": ["displayName", "twitch", "discord", "discordProfileUrl"],
 				"properties": {
 				  "displayName": {
 					"type": "string"

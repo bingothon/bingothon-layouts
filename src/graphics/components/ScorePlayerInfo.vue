@@ -91,8 +91,8 @@ import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
             return store.state.scorePlayers[this.playerIndex];
         }
 
-        get playerCountry(): string {
-            return "de"; // TODO
+        get playerCountry(): string | undefined {
+            return this.player.country; // TODO
         }
 
         get show(): boolean {

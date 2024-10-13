@@ -7,10 +7,10 @@
 
 export type ScorePlayers = {
   displayName: string;
-  pronouns: string;
+  pronouns?: string;
   twitch: string;
   discord: string;
-  discordProfileUrl?: string;
+  discordProfileUrl: string;
   country?: string;
   score: number;
 }[];

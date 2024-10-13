@@ -63,9 +63,9 @@ import DiscordVoiceDisplay from '../components/discordVoiceDisplay.vue';
     width: 1920px;
     height: 1080px;
     background-size: cover;
-        background-repeat: no-repeat;
-        background-image: linear-gradient(grey, #554d4d);
-        filter: sepia(100%) saturate(360%) brightness(40%) hue-rotate(298deg) blur(3px);
+    background-repeat: no-repeat;
+    background-image: linear-gradient(grey, #554d4d);
+    filter: sepia(100%) saturate(360%) brightness(40%) hue-rotate(298deg) blur(3px);
   }
   .stream-placeholder {
     position: absolute;

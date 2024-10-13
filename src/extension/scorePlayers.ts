@@ -9,6 +9,7 @@ scorePlayers.value = nodecg.bundleConfig.scorePlayers.map((player, index) => ({
     discordProfileUrl: player.discordProfileUrl,
     displayName: player.displayName,
     pronouns: player.pronouns,
+    country: player.country,
     twitch: player.twitch,
     score: scorePlayers.value.at(index)?.score ?? 0,
 }));

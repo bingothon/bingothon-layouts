@@ -16,9 +16,9 @@ export interface Configschema {
   };
   scorePlayers: {
     displayName: string;
-    pronouns: string;
+    pronouns?: string;
     twitch: string;
-    country: string;
+    country?: string;
     discord: string;
     discordProfileUrl: string;
   }[];

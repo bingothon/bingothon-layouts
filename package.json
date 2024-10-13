@@ -42,9 +42,6 @@
   },
   "nodecg": {
     "compatibleRange": "^2.1.0",
-    "bundleDependencies": {
-      "nodecg-speedcontrol": "^2.0.0"
-    },
     "dashboardPanels": [
       {
         "name": "Score Control",
@@ -68,6 +65,16 @@
       },
       {
         "file": "discussion.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "pictures.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "taskmaster-scorecard.html",
         "width": 1920,
         "height": 1080
       }
