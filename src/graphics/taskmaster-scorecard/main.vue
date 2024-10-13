@@ -1,12 +1,11 @@
 <template>
     <div class="scorecard-bg">
       <div class="central">
-          <div v-for="(player, index) in players" class="player">
-              <div class="player-img-frame">
+          <div :key="index" v-for="(player, index) in playersWithOffset" :style="{ left: `${player.xOffset}px`}" class="player">
+              <div class="player-img-frame" :style="{ animationDelay: `${index * -1.25}s` }">
                   <img class="player-img" :src="player.discordProfileUrl"/>
                   <img class="frame" src="./taskmaster-frame-sq.png" />
               </div>
-              <span class="player-name">{{ player.displayName }}</span>
               <div class="score">
                   <span class="score-number">
                       {{ player.score }}
@@ -22,6 +21,13 @@ import { store } from '@/browser-util/state';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 
+const xOffsets = new Array(5).fill(0).map((_, index) => index * 300 + (index + 1) * 70);
+
+interface PlayerWithOffset {
+    score: number,
+    discordProfileUrl: string,
+    xOffset: number,
+}
 
 @Component({
     components: {
@@ -30,6 +36,14 @@ import Component from 'vue-class-component';
 export default class TaskmasterScorecard extends Vue {
     get players() {
         return store.state.scorePlayers;
+    }
+    get playersWithOffset(): PlayerWithOffset[] {
+        const scoreToIndex = this.players.map((player, index) => ({score: player.score, index})).sort((a, b) => a.score - b.score);
+        return this.players.map((player, index) => ({
+            score: player.score,
+            discordProfileUrl: player.discordProfileUrl,
+            xOffset: xOffsets[scoreToIndex.findIndex(sToI => sToI.index == index)],
+        }))
     }
 }
 </script>
@@ -43,6 +57,7 @@ body {
     background-image: url("./taskmaster-background.jpg");
     width: 1920px;
     height: 1080px;
+    --frame-size: 300px;
 }
 
 .central {
@@ -50,14 +65,16 @@ body {
 }
 
 .player {
-    height: 200px;
-    width: 200px;
-    margin-left: 55px;
+    height: var(--frame-size);
+    width: var(--frame-size);
+    position: absolute;
+    top: 400px;
+    transition: left 2s;
 }
 
 .score {
-    height: 90px;
-    width: 90px;
+    height: calc(var(--frame-size) * 0.45 );
+    width: calc(var(--frame-size) * 0.45 );
     background: center / contain no-repeat url("./taskmaster-seal.png");
     position: relative;
     left: 55px;
@@ -71,24 +88,38 @@ body {
     position: relative;
     font-size: 44px;
     color: white;
+    top: calc((100% - 1em) / 2);
 }
 
 .frame {
     position: absolute;
-    height: 200px;
-    width: 200px;
+    height: var(--frame-size);
+    width: var(--frame-size);
 }
 
 .player-img {
     position: absolute;
-    height: 180px;
-    width: 180px;
-    margin-left: 10px;
-    margin-top: 10px;
+    height: calc(var(--frame-size) * 0.9 );
+    width: calc(var(--frame-size) * 0.9 );
+    margin-left: calc(var(--frame-size) * 0.05 );
+    margin-top: calc(var(--frame-size) * 0.05 );
+    background: rgba(255, 255, 255, 0.95);
+}
+
+@keyframes rotate {
+	0% {
+		transform: rotate(-4deg);
+	}
+
+	100% {
+		transform: rotate(4deg);
+	}
 }
 
 .player-img-frame {
-    height: 200px;
+    height: var(--frame-size);
+    transform-origin: center;
+    animation: rotate 3s ease-in-out alternate infinite;
 }
 
 </style>

@@ -39,9 +39,6 @@
                 />
             </transition>
         </div>
-        <div class="FlexContainer PlayerScore">
-            {{ player.score }}
-        </div>
     </div>
 </template>
 
