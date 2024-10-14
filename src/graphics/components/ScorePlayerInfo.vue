@@ -3,7 +3,7 @@
 <!-- It is initialised with most info, it only listens to nodecg-speedcontrol for finish times. -->
 
 <template>
-    <div class="FlexContainer PlayerInfoBox" :class="{ ReverseOrder: reverseOrder }" :style="{ height: height, '--container-height': height }">
+    <div class="FlexContainer PlayerInfoBox" :class="{ ReverseOrder: reverseOrder, isEliminated }" :style="{ height: height, '--container-height': height }">
         <div class="CurrentIcon FlexContainer">
             <transition name="fade">
                 <div class="PronounsContainer" v-if="show && pronouns" key="pronuns">
@@ -137,6 +137,10 @@ import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
             return `/bundles/score-layouts/static/flags/${rawFlag}.png`;
         }
 
+        get isEliminated(): boolean {
+            return !!store.state.layoutMeta.eliminatedPlayers[this.playerIndex];
+        }
+
         get micIcon() {
             return faMicrophone;
         }
@@ -196,6 +200,10 @@ import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
         margin-right: 10px;
         justify-content: flex-start;
         position: relative;
+    }
+
+    .PlayerInfoBox.isEliminated > .PlayerName div {
+        text-decoration: line-through calc(var(--container-height) * 0.08);
     }
 
     /*.PlayerInfoBox > .PlayerName > div > .FinishTime {

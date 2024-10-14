@@ -6,10 +6,10 @@
     "properties": {
         "showTimer": {"type":"boolean","default":false},
         "eliminatedPlayers": {
-            "type":"array",
-            "default":[],
-            "items": {
-                "type": "number"
+            "type":"object",
+            "default":{},
+            "additionalProperties": {
+                "type": "boolean"
             }
         }
     }

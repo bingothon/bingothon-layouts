@@ -7,5 +7,7 @@
 
 export interface LayoutMeta {
   showTimer: boolean;
-  eliminatedPlayers: number[];
+  eliminatedPlayers: {
+    [k: string]: boolean;
+  };
 }
