@@ -77,7 +77,7 @@ body {
     width: calc(var(--frame-size) * 0.45 );
     background: center / contain no-repeat url("./taskmaster-seal.png");
     position: relative;
-    left: 55px;
+    left: calc(var(--frame-size) * 0.275 );
 }
 
 .score-number {
