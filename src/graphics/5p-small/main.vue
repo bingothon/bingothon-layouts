@@ -13,32 +13,41 @@
         <score-player-info class="info-common" id="info4" height="80px" :playerIndex="4"></score-player-info>
         <discord-voice-display
             id="discord-voice"
+            :class="{ hasTimer }"
             iconHeight="40px"
             nameWidth="125px"
             maxUserCount="12"
             :removePlayers="true"
         ></discord-voice-display>
+        <div v-if="hasTimer" id="timer-box">
+          <layout-timer v-if="hasTimer" fontSize="150px" id="timer"></layout-timer>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
     import { store } from '@/browser-util/state';
-    import { RunData } from '../../../speedcontrol-types';
     import TextFit from '../helpers/text-fit.vue';
     import ScorePlayerInfo from '../components/ScorePlayerInfo.vue';
 import DiscordVoiceDisplay from '../components/discordVoiceDisplay.vue';
+import LayoutTimer from '../components/layoutTimer.vue';
 
     @Component({
         components: {
             TextFit,
             ScorePlayerInfo,
-            DiscordVoiceDisplay
+            DiscordVoiceDisplay,
+            LayoutTimer,
         }
     })
     export default class FivePlayerFocus extends Vue {
         get focusPlayer(): number {
             return parseInt(new URLSearchParams(window.location.search).get("focus") ?? "0")
+        }
+
+        get hasTimer(): boolean {
+          return store.state.layoutMeta.showTimer;
         }
 
         playerForSlot(slot: number): number {
@@ -121,5 +130,22 @@ import DiscordVoiceDisplay from '../components/discordVoiceDisplay.vue';
     left: 1283px;
     width: 630px;
     height: 408px;
+  }
+  #discord-voice.hasTimer {
+    top: 692px;
+    left: 1283px;
+    width: 630px;
+    height: 204px;
+  }
+  #timer-box {
+    position: absolute;
+    top: 478px;
+    left: 1280px;
+    width: 638px;
+    height: 204px;
+    border: 2px solid white;
+    display: flex;
+    justify-content: center;
+    align-content: center;
   }
 </style>

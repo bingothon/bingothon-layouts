@@ -14,11 +14,15 @@
         <score-player-info class="small-info-common" id="info4" height="32px" :playerIndex="playerForSlot(3)"></score-player-info>
         <discord-voice-display
             id="discord-voice"
+            :class="{ hasTimer }"
             iconHeight="40px"
-            nameWidth="125px"
-            maxUserCount="12"
+            nameWidth="140px"
+            maxUserCount="8"
             :removePlayers="true"
         ></discord-voice-display>
+        <div v-if="hasTimer" id="timer-box">
+          <layout-timer v-if="hasTimer" fontSize="150px" id="timer"></layout-timer>
+        </div>
     </div>
 </template>
 
@@ -29,17 +33,23 @@
     import TextFit from '../helpers/text-fit.vue';
     import ScorePlayerInfo from '../components/ScorePlayerInfo.vue';
 import DiscordVoiceDisplay from '../components/discordVoiceDisplay.vue';
+import LayoutTimer from '../components/layoutTimer.vue';
 
     @Component({
         components: {
             TextFit,
             ScorePlayerInfo,
-            DiscordVoiceDisplay
+            DiscordVoiceDisplay,
+            LayoutTimer,
         }
     })
     export default class FivePlayerFocus extends Vue {
         get focusPlayer(): number {
             return parseInt(new URLSearchParams(window.location.search).get("focus") ?? "0")
+        }
+
+        get hasTimer(): boolean {
+          return store.state.layoutMeta.showTimer;
         }
 
         playerForSlot(slot: number): number {
@@ -124,5 +134,22 @@ import DiscordVoiceDisplay from '../components/discordVoiceDisplay.vue';
     left: 815px;
     width: 715px;
     height: 216px;
+  }
+  #discord-voice.hasTimer {
+    top: 958px;
+    left: 0px;
+    width: 813px;
+    height: 117px;
+  }
+  #timer-box {
+    position: absolute;
+    top: 862px;
+    left: 816px;
+    width: 710px;
+    height: 214px;
+    border: 2px solid white;
+    display: flex;
+    justify-content: center;
+    align-content: center;
   }
 </style>
