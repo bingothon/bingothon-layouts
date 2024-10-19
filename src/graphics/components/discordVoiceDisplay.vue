@@ -57,7 +57,7 @@
 
         get voiceActivityMembers(): VoiceActivityMember[] {
             const membersToExclude = this.removePlayers ? store.state.scorePlayers.map(player => player.discord) : [];
-            const members = store.state.voiceActivity.members.filter(member => !membersToExclude.includes(member.name));
+            const members = store.state.voiceActivity.members.filter(member => !membersToExclude.includes(member.username));
             if (members.length > this.maxUserCount) {
                 console.log(
                     `start ${this.startingMember} length: ${this.maxUserCount}, total: ${
