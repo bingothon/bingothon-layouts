@@ -22,5 +22,10 @@ export interface Configschema {
     discord: string;
     discordProfileUrl: string;
   }[];
+  mpd: {
+    enable: boolean;
+    address: string;
+    port: number;
+  };
   [k: string]: unknown;
 }

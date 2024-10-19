@@ -6,6 +6,7 @@ import {
     LayoutMeta,
     LayoutTimer,
     ScorePlayers,
+    SongData,
     SoundOnTwitchStream,
     VoiceActivity
 } from '../../schemas';
@@ -19,6 +20,7 @@ const replicantNames = [
     'layoutTimer',
     'soundOnTwitchStream',
     'voiceActivity',
+    'songData',
     'scorePlayers',
 ];
 const replicants: Map<string, NodeCGTypes.ClientReplicant<any>> = new Map();
@@ -32,6 +34,7 @@ interface StoreTypes {
     layoutTimer: LayoutTimer,
     soundOnTwitchStream: SoundOnTwitchStream;
     voiceActivity: VoiceActivity;
+    songData: SongData;
     scorePlayers: ScorePlayers;
     // timer
     playerAlternate: true;
@@ -45,6 +48,7 @@ export const store = new Store<StoreTypes>({
         layoutTimer: {} as LayoutTimer,
         soundOnTwitchStream: 0 as SoundOnTwitchStream,
         voiceActivity: {} as VoiceActivity,
+        songData: {} as SongData,
         scorePlayers: [] as ScorePlayers,
         // timer
         playerAlternate: true,

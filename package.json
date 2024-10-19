@@ -85,6 +85,11 @@
         "height": 1080
       },
       {
+        "file": "discussion-discord-only.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
         "file": "pictures.html",
         "width": 1920,
         "height": 1080
@@ -123,6 +128,7 @@
     "discord.js": "^13.16.0",
     "gsap": "^3.12.2",
     "module-alias": "^2.2.3",
+    "mpc-js": "^1.2.1",
     "request-promise": "^4.2.4",
     "sass": "~1.32",
     "sass-loader": "^13.0.0",
