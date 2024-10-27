@@ -219,7 +219,7 @@
             const bingoboard = store.state[store.state.currentMainBingoboard.boardReplicant];
             if (!store.state.bingoboardMeta.manualScoreOverride) {
                 return <number>(
-                    bingoboard.colorCounts[store.state.bingoboardMeta.playerColors[this.playerIndex] || 'red']
+                    (bingoboard.colorCounts[store.state.bingoboardMeta.playerColors[this.playerIndex] || 'red'] ?? 0)
                 );
             } else {
                 return store.state.bingoboardMeta.manualScores[this.playerIndex];

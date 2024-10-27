@@ -193,7 +193,6 @@
         }
 
         onBingoBoardUpdate(newGoals: Bingoboard, oldGoals?: Bingoboard | undefined) {
-            console.log(newGoals);
             if (!newGoals) return;
             let idx = 0;
             this.bingoCells.forEach((row, rowIndex) => {
@@ -207,7 +206,6 @@
                     if (!oldGoals || !oldGoals.cells.length || !equals(newCell.colors, oldGoals.cells[idx].colors)) {
                         if (newCell.colors.length !== 0) {
                             const colors = sortColors(newCell.colors);
-                            console.log(colors);
                             var newColors = [];
                             newColors.push({ color: colors[0], style: '' });
                             var translations = translatePercent[colors.length];

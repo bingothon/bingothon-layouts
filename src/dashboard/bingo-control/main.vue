@@ -57,6 +57,12 @@
         Select Board:
         <v-select v-model="currentBoardRep" :items="allBingoReps"></v-select>
         <!-- Normal Bingosync Stuff -->
+        <div v-if="showBoardSourceOptions">
+            <v-radio-group v-model="boardSource">
+                <v-radio value="bingosync" label="Bingosync" />
+                <v-radio value="playBingo" label="PlayBingo" />
+            </v-radio-group>
+        </div>
         <div v-if="showExtraBingosyncOptions">
             <div>
                 Room Code or URL:
@@ -190,12 +196,18 @@
     import { BingoboardMeta, CurrentMainBingoboard, ExternalBingoboardMeta } from '../../../schemas';
     import { getReplicant, store } from '../../browser-util/state';
 
-    type BingoRepEnum = 'bingoboard' | 'externalBingoboard' | 'explorationBingoboard' | 'playBingo';
+    type BingoRepEnum = 'bingoboard' | 'externalBingoboard' | 'explorationBingoboard';
+    type BoardSource = 'bingosync' | 'playBingo';
 
-    const BOARD_TO_SOCKET_REP = {
-        bingoboard: 'bingosyncSocket',
-        hostingBingoboard: 'hostingBingosocket',
-        playBingo: 'playBingoSocket'
+    const getSocketRepFromBoard = (board: BingoRepEnum, source?: BoardSource) => {
+        if (board === 'bingoboard') {
+            switch (source) {
+                case 'bingosync':
+                    return 'bingosyncSocket';
+                case 'playBingo':
+                    return 'playBingoSocket';
+            }
+        }
     };
 
     @Component({})
@@ -205,6 +217,8 @@
         passphrase: string = '';
 
         currentBoardRep: BingoRepEnum = 'bingoboard';
+
+        boardSource: BoardSource = 'bingosync';
 
         externalBingoboardMeta: ExternalBingoboardMeta = { game: 'none' };
 
@@ -225,7 +239,7 @@
             'purple'
         ]);
 
-        allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard', 'playBingo']); //add back when need  'explorationBingoboard'
+        allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard']); //add back when need  'explorationBingoboard'
 
         mounted() {
             store.watch(
@@ -243,10 +257,10 @@
         }
 
         /**
-         COMPUTED PROPERTIES
-         **/
+           COMPUTED PROPERTIES
+           **/
         get connectActionText(): string {
-            const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
+            const socketRepName = getSocketRepFromBoard(this.currentBoardRep, this.boardSource);
             if (!socketRepName) {
                 return 'invalid';
             }
@@ -300,7 +314,7 @@
         }
 
         get canDoConnectAction(): boolean {
-            const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
+            const socketRepName = getSocketRepFromBoard(this.currentBoardRep, this.boardSource);
             if (!socketRepName) {
                 return false;
             }
@@ -320,12 +334,18 @@
             return true;
         }
 
+        get showBoardSourceOptions(): boolean {
+            return this.currentBoardRep === 'bingoboard';
+        }
+
         get showExtraBingosyncOptions(): boolean {
-            return ['bingoboard', 'hostingBingoboard'].includes(this.currentBoardRep);
+            return (
+                ['bingoboard', 'hostingBingoboard'].includes(this.currentBoardRep) && this.boardSource === 'bingosync'
+            );
         }
 
         get showPlayBingoOptions(): boolean {
-            return this.currentBoardRep === 'playBingo';
+            return this.boardSource === 'playBingo';
         }
 
         get showExtraExternBoardOptions(): boolean {
@@ -354,8 +374,8 @@
         }
 
         /**
-         HANDLERS
-         **/
+           HANDLERS
+           **/
 
         updateManualScore() {
             this.manualScore.forEach((score: string, idx: number) => {
@@ -367,7 +387,7 @@
             // only expanded options for the bingosync connection,
             // otherwise something else is there to handle the board
             if (this.showExtraBingosyncOptions) {
-                const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
+                const socketRepName = getSocketRepFromBoard(this.currentBoardRep, this.boardSource);
                 if (!socketRepName) {
                     throw new Error('unreachable');
                 }
@@ -402,13 +422,13 @@
 
         connectPlayBingo() {
             if (this.showPlayBingoOptions) {
-                const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
+                const socketRepName = getSocketRepFromBoard(this.currentBoardRep, this.boardSource);
                 if (!socketRepName) {
                     throw new Error('unreachable');
                 }
                 switch (store.state[socketRepName].status) {
                     case 'connected':
-                        nodecg.sendMessage('playBingo:disconnect', { name: this.currentBoardRep }).catch((error) => {
+                        nodecg.sendMessage('playBingo:disconnect').catch((error) => {
                             nodecg.log.error(error);
                             this.errorMessage = error.message;
                         });

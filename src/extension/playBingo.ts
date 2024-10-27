@@ -3,7 +3,7 @@ import { Bingoboard } from 'schemas/bingoboard';
 import WebSocket from 'ws';
 import * as nodecgApiContext from './util/nodecg-api-context';
 import { BingoboardCell } from 'types';
-import { boardRep, playBingoSocketRep, socketRep } from './util/replicants';
+import { boardRep, playBingoSocketRep } from './util/replicants';
 
 const nodecg = nodecgApiContext.get();
 
@@ -34,7 +34,7 @@ const parseBoard = (board: Board): Bingoboard => {
 };
 
 nodecg.listenFor('playBingo:connect', async (data, callback) => {
-    socketRep.value.status = 'connecting';
+    playBingoSocketRep.value.status = 'connecting';
     const { slug, passphrase } = data;
     log.info(`Connecting to PlayBingo room ${data.slug}:${data.passphrase}`);
     try {
@@ -45,7 +45,7 @@ nodecg.listenFor('playBingo:connect', async (data, callback) => {
         });
 
         if (!res.ok) {
-            socketRep.value.status = 'error';
+            playBingoSocketRep.value.status = 'error';
             if (res.status < 500) {
                 log.error(`Failed to join room ${slug} - ${res.status} ${await res.text()}`);
                 if (callback && !callback.handled) {
@@ -99,7 +99,6 @@ nodecg.listenFor('playBingo:connect', async (data, callback) => {
                 default:
                     break;
             }
-            console.log(boardRep.value);
         });
 
         webSocket.on('close', () => {

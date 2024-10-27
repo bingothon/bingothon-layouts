@@ -143,7 +143,7 @@ interface StoreTypes {
     obsSceneList: ObsSceneList;
     obsStreamMode: ObsStreamMode;
     omnibarMessages: OmnibarMessages;
-    playbingoSocket: PlayBingoSocket;
+    playBingoSocket: PlayBingoSocket;
     externalBingoboard: ExternalBingoboard;
     showPictureDuringIntermission: ShowPictureDuringIntermission;
     soundOnTwitchStream: SoundOnTwitchStream;
@@ -210,7 +210,7 @@ export const store = new Store<StoreTypes>({
         obsSceneList: [] as ObsSceneList,
         obsStreamMode: '' as ObsStreamMode,
         omnibarMessages: [] as OmnibarMessages,
-        playbingoSocket: {} as PlayBingoSocket,
+        playBingoSocket: {} as PlayBingoSocket,
         externalBingoboard: {} as ExternalBingoboard,
         showPictureDuringIntermission: {} as ShowPictureDuringIntermission,
         soundOnTwitchStream: 0 as SoundOnTwitchStream,
