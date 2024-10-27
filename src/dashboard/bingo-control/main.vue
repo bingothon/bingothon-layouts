@@ -15,7 +15,7 @@
         </div>
         <div v-for="(color, i) in playerColors" :key="i">
             {{ playerNames[i] || `P${i}` }}:
-            <v-row v-if="!showBingoggOptions">
+            <v-row v-if="!showPlayBingoOptions">
                 <v-col>
                     <v-select :value="color" @input="updatePlayerColor(i, $event)" :items="allColors"></v-select>
                 </v-col>
@@ -31,7 +31,7 @@
                     />
                 </v-col>
             </v-row>
-            <v-row v-if="showBingoggOptions">
+            <v-row v-if="showPlayBingoOptions">
                 <v-col>
                     <v-text-field
                         @input="updatePlayerColor(i, $event)"
@@ -79,8 +79,8 @@
                 </v-btn>
             </div>
         </div>
-        <!-- bingogg Stuff -->
-        <div v-if="showBingoggOptions">
+        <!-- PlayBingo Stuff -->
+        <div v-if="showPlayBingoOptions">
             <div>
                 Room:
                 <v-text-field v-model="roomCode" background-color="#455A64" clearable solo dark />
@@ -91,11 +91,11 @@
             </div>
             <div class="d-flex justify-center line-buttons">
                 <v-btn
-                    :disabled="!canConnectBingogg"
+                    :disabled="!canConnectPlayBingo"
                     class="button"
                     dark
                     small
-                    @click="connectBingogg"
+                    @click="connectPlayBingo"
                     :style="`width: 100%`"
                 >
                     {{ connectActionText }}
@@ -190,12 +190,12 @@
     import { BingoboardMeta, CurrentMainBingoboard, ExternalBingoboardMeta } from '../../../schemas';
     import { getReplicant, store } from '../../browser-util/state';
 
-    type BingoRepEnum = 'bingoboard' | 'externalBingoboard' | 'explorationBingoboard' | 'bingogg';
+    type BingoRepEnum = 'bingoboard' | 'externalBingoboard' | 'explorationBingoboard' | 'playBingo';
 
     const BOARD_TO_SOCKET_REP = {
         bingoboard: 'bingosyncSocket',
         hostingBingoboard: 'hostingBingosocket',
-        bingogg: 'bingoggSocket'
+        playBingo: 'playBingoSocket'
     };
 
     @Component({})
@@ -225,7 +225,7 @@
             'purple'
         ]);
 
-        allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard', 'bingogg']); //add back when need  'explorationBingoboard'
+        allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard', 'playBingo']); //add back when need  'explorationBingoboard'
 
         mounted() {
             store.watch(
@@ -316,7 +316,7 @@
             }
         }
 
-        get canConnectBingogg(): boolean {
+        get canConnectPlayBingo(): boolean {
             return true;
         }
 
@@ -324,8 +324,8 @@
             return ['bingoboard', 'hostingBingoboard'].includes(this.currentBoardRep);
         }
 
-        get showBingoggOptions(): boolean {
-            return this.currentBoardRep === 'bingogg';
+        get showPlayBingoOptions(): boolean {
+            return this.currentBoardRep === 'playBingo';
         }
 
         get showExtraExternBoardOptions(): boolean {
@@ -400,15 +400,15 @@
             }
         }
 
-        connectBingogg() {
-            if (this.showBingoggOptions) {
+        connectPlayBingo() {
+            if (this.showPlayBingoOptions) {
                 const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
                 if (!socketRepName) {
                     throw new Error('unreachable');
                 }
                 switch (store.state[socketRepName].status) {
                     case 'connected':
-                        nodecg.sendMessage('bingogg:disconnect', { name: this.currentBoardRep }).catch((error) => {
+                        nodecg.sendMessage('playBingo:disconnect', { name: this.currentBoardRep }).catch((error) => {
                             nodecg.log.error(error);
                             this.errorMessage = error.message;
                         });
@@ -419,7 +419,7 @@
                         getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this
                             .currentBoardRep as BingoRepEnum;
                         nodecg
-                            .sendMessage('bingogg:connect', {
+                            .sendMessage('playBingo:connect', {
                                 slug: this.roomCode,
                                 passphrase: this.passphrase
                             })

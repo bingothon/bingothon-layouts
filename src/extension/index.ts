@@ -20,7 +20,7 @@ export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
     nodecgApiContext.set(nodecg);
     nodecg.log.info('Extension code working!');
     require('./bingosync');
-    require('./bingogg');
+    require('./playBingo');
     require('./bingoColors');
     require('./externalBingoboards');
     require('./explorationBingo');

@@ -3,18 +3,18 @@ import { Bingoboard } from 'schemas/bingoboard';
 import WebSocket from 'ws';
 import * as nodecgApiContext from './util/nodecg-api-context';
 import { BingoboardCell } from 'types';
-import { boardRep, bingoggSocketRep, socketRep } from './util/replicants';
+import { boardRep, playBingoSocketRep, socketRep } from './util/replicants';
 
 const nodecg = nodecgApiContext.get();
 
-const log = new nodecg.Logger(`${nodecg.bundleName}:bingogg`);
+const log = new nodecg.Logger(`${nodecg.bundleName}:playbingo`);
 
-const bingoggHost = 'https://bingogg.bingothon.com';
-const socketHost = bingoggHost.replace('http', 'ws');
+const playBingoHost = 'https://playbingo.gg';
+const socketHost = playBingoHost.replace('http', 'ws');
 
-bingoggSocketRep.value.status = 'disconnected';
+playBingoSocketRep.value.status = 'disconnected';
 
-log.info('setting up bingogg integration');
+log.info('Setting up PlayBingo integration');
 
 let webSocket: WebSocket;
 
@@ -33,12 +33,12 @@ const parseBoard = (board: Board): Bingoboard => {
     };
 };
 
-nodecg.listenFor('bingogg:connect', async (data, callback) => {
+nodecg.listenFor('playBingo:connect', async (data, callback) => {
     socketRep.value.status = 'connecting';
     const { slug, passphrase } = data;
-    log.info(`connecting to bingogg room ${data.slug}:${data.passphrase}`);
+    log.info(`Connecting to PlayBingo room ${data.slug}:${data.passphrase}`);
     try {
-        const res = await fetch(`${bingoggHost}/api/rooms/${slug}/authorize`, {
+        const res = await fetch(`${playBingoHost}/api/rooms/${slug}/authorize`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ password: passphrase })
@@ -54,13 +54,13 @@ nodecg.listenFor('bingogg:connect', async (data, callback) => {
             } else {
                 log.error(`Encountered a server error while joining room ${slug}`);
                 if (callback && !callback.handled) {
-                    callback(new Error('Unable to connect to bingo.gg'));
+                    callback(new Error('Unable to connect to PlayBingo'));
                 }
             }
             return;
         }
 
-        log.info(`Authorized to connect to bingo.gg room ${slug}`);
+        log.info(`Authorized to connect to PlayBingo room ${slug}`);
         const { authToken } = await res.json();
 
         if (webSocket) {
@@ -83,7 +83,7 @@ nodecg.listenFor('bingogg:connect', async (data, callback) => {
             switch (data.action) {
                 case 'connected':
                     log.info('Successfully connected to room');
-                    bingoggSocketRep.value.status = 'connected';
+                    playBingoSocketRep.value.status = 'connected';
                 case 'syncBoard':
                     boardRep.value = parseBoard(data.board);
                     data.players?.forEach((player) => {
@@ -103,7 +103,7 @@ nodecg.listenFor('bingogg:connect', async (data, callback) => {
         });
 
         webSocket.on('close', () => {
-            bingoggSocketRep.value.status = 'disconnected';
+            playBingoSocketRep.value.status = 'disconnected';
         });
     } catch (e) {
         console.log(e);
@@ -114,8 +114,8 @@ nodecg.listenFor('bingogg:connect', async (data, callback) => {
     }
 });
 
-nodecg.listenFor('bingogg:disconnect', (callback) => {
-    log.info('Closing bingogg connection');
+nodecg.listenFor('playBingo:disconnect', (callback) => {
+    log.info('Closing PlayBingo connection');
     webSocket.close();
 
     if (callback && !callback.handled) {

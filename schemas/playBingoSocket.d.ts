@@ -5,7 +5,7 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface BingoggSocket {
+export interface PlayBingoSocket {
   status: "connected" | "connecting" | "disconnected" | "error";
   playerName?: string;
   roomCode?: string;

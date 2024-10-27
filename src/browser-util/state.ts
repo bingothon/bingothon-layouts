@@ -12,7 +12,6 @@ import {
     Bingoboard,
     BingoboardMeta,
     BingoboardMode,
-    BingoggSocket,
     BingosyncSocket,
     CapturePositions,
     CurrentCamNames,
@@ -37,6 +36,7 @@ import {
     ObsSceneList,
     ObsStreamMode,
     OmnibarMessages,
+    PlayBingoSocket,
     ShowPictureDuringIntermission,
     SongData,
     SoundOnTwitchStream,
@@ -63,7 +63,6 @@ const replicantNames = [
     'bingoboard',
     'bingoboardMeta',
     'bingoboardMode',
-    'bingoggSocket',
     'bingosyncSocket',
     'capturePositions',
     'currentGameLayout',
@@ -90,6 +89,7 @@ const replicantNames = [
     'obsStreamMode',
     'externalBingoboard',
     'omnibarMessages',
+    'playBingoSocket',
     'showPictureDuringIntermission',
     'soundOnTwitchStream',
     'trackerData',
@@ -118,7 +118,6 @@ interface StoreTypes {
     bingoboard: Bingoboard;
     bingoboardMeta: BingoboardMeta;
     bingoboardMode: BingoboardMode;
-    bingoggSocket: BingoggSocket;
     bingosyncSocket: BingosyncSocket;
     capturePositions: CapturePositions;
     currentGameLayout: CurrentGameLayout;
@@ -144,6 +143,7 @@ interface StoreTypes {
     obsSceneList: ObsSceneList;
     obsStreamMode: ObsStreamMode;
     omnibarMessages: OmnibarMessages;
+    playbingoSocket: PlayBingoSocket;
     externalBingoboard: ExternalBingoboard;
     showPictureDuringIntermission: ShowPictureDuringIntermission;
     soundOnTwitchStream: SoundOnTwitchStream;
@@ -185,7 +185,6 @@ export const store = new Store<StoreTypes>({
         bingoboard: {} as Bingoboard,
         bingoboardMeta: {} as BingoboardMeta,
         bingoboardMode: {} as BingoboardMode,
-        bingoggSocket: {} as BingoggSocket,
         bingosyncSocket: {} as BingosyncSocket,
         capturePositions: {} as CapturePositions,
         currentGameLayout: {} as CurrentGameLayout,
@@ -211,6 +210,7 @@ export const store = new Store<StoreTypes>({
         obsSceneList: [] as ObsSceneList,
         obsStreamMode: '' as ObsStreamMode,
         omnibarMessages: [] as OmnibarMessages,
+        playbingoSocket: {} as PlayBingoSocket,
         externalBingoboard: {} as ExternalBingoboard,
         showPictureDuringIntermission: {} as ShowPictureDuringIntermission,
         soundOnTwitchStream: 0 as SoundOnTwitchStream,
