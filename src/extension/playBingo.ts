@@ -101,8 +101,9 @@ nodecg.listenFor('playBingo:connect', async (data, callback) => {
             }
         });
 
-        webSocket.on('close', () => {
+        webSocket.on('close', (code, reason) => {
             playBingoSocketRep.value.status = 'disconnected';
+            log.info(`PlayBingo socket connection closed ${code}: ${reason.toString()}`);
         });
     } catch (e) {
         console.log(e);

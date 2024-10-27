@@ -403,6 +403,10 @@
                         this.errorMessage = '';
                         getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this
                             .currentBoardRep as BingoRepEnum;
+                        nodecg.sendMessage('playBingo:disconnect').catch((error) => {
+                            nodecg.log.error(error);
+                            this.errorMessage = error.message;
+                        });
                         nodecg
                             .sendMessage('bingosync:joinRoom', {
                                 roomCode: this.roomCode,
@@ -438,6 +442,10 @@
                         this.errorMessage = '';
                         getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this
                             .currentBoardRep as BingoRepEnum;
+                        nodecg.sendMessage('bingosync:leaveRoom', { name: this.currentBoardRep }).catch((error) => {
+                            nodecg.log.error(error);
+                            this.errorMessage = error.message;
+                        });
                         nodecg
                             .sendMessage('playBingo:connect', {
                                 slug: this.roomCode,
