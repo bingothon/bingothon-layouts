@@ -11,7 +11,9 @@
             <!-- Game Cover Section -->
 
             <div class="GameCover">
-                <img v-if="gameCover" :src="gameCover" />
+                <!--GameCover itself can't be undefined, but it can have the text undefined...-->
+                <!--Don't kill the messenger, I'm only telling you--->
+                <img v-if="gameCover && gameCover !== 'undefined' && gameCover !== 'null'" :src="gameCover" />
             </div>
 
             <!-- Game And Players Section-->
