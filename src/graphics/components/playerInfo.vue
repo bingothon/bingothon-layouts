@@ -288,7 +288,7 @@
 
     .PlayerInfoBox {
         /*Summer background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));*/
-        background-image: linear-gradient(var(--alternative-main-color), var(--darker-main-color));
+        background-image: linear-gradient(#6d001d, #280000);
         color: var(--font-color);
         padding: 7px;
         font-weight: 500;
