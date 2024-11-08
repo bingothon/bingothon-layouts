@@ -29,7 +29,7 @@
         }
 
         get totalString(): string {
-            return `$${this.tweenedTotal.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+            return `${this.tweenedTotal.toLocaleString('en-US', { maximumFractionDigits: 0 })}€`;
         }
 
         mounted() {
