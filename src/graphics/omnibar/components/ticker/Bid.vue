@@ -37,6 +37,7 @@
     import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
     import { store } from '../../../../browser-util/state';
     import { TrackerOpenBid } from '../../../../../types';
+    import { formatAmount } from '../../../_misc/formatAmount';
 
     gsap.registerPlugin(ScrollToPlugin);
 
@@ -85,7 +86,7 @@
         }
 
         formatUSD(amount) {
-            return `$${amount.toFixed(2)}`;
+            return formatAmount(amount);
         }
 
         getRandomBid(): TrackerOpenBid {

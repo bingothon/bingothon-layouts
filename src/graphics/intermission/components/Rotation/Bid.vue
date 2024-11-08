@@ -46,6 +46,7 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { store } from '../../../../browser-util/state';
     import * as d3 from 'd3';
+    import { formatAmount } from '../../../_misc/formatAmount';
 
     @Component({})
     export default class Bid extends Vue {
@@ -70,7 +71,7 @@
         }
 
         formatUSD(amount) {
-            return `$${amount.toFixed(2)}`;
+            return formatAmount(amount);
         }
 
         percentRaised(bid: TrackerOpenBid) {

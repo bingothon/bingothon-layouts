@@ -15,6 +15,7 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { store } from '../../../browser-util/state';
     import { TrackerDonation } from '../../../../types';
+    import { formatAmount } from '../../_misc/formatAmount';
     import GenericMessage from './ticker/GenericMessage.vue';
     import DynamicMessage from './ticker/DynamicMessage.vue';
     import UpcomingRun from './ticker/UpcomingRun.vue';
@@ -168,7 +169,7 @@
         }
 
         formatUSD(amount: number): string {
-            return `${amount.toFixed(2)}€`;
+            return formatAmount(amount);
         }
     }
 </script>
