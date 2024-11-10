@@ -58,7 +58,7 @@
                 <img :style="{ width: '100%' }" v-if="obsPreviewImgData" :src="obsPreviewImgData" />
             </div>
             <v-select v-model="previewScene" :items="sceneNameList" label="Preview Scene"></v-select>
-            <v-btn @click="doTransition" :disabled="disableTransition()">
+            <v-btn @click="doTransition">
                 {{ transitionText }}
             </v-btn>
         </div>
