@@ -14,7 +14,7 @@
                             :key="color.color"
                             v-for="color in cell.colors"
                             :class="'bg-color ' + color.color + 'square'"
-                            :style="color.style"
+                            :style="`background-color: ${color.color}; ${color.style}`"
                         />
                         <div class="shadow" />
                         <div :class="getMarkerClasses(marker, k)" :key="k" v-for="(marker, k) in cell.markers" />
@@ -90,6 +90,11 @@
                 orderedColors.push(ORDERED_COLORS[i]);
             }
         }
+        colors.forEach((color) => {
+            if (!orderedColors.includes(color)) {
+                orderedColors.push(color);
+            }
+        });
         return orderedColors;
     }
 
@@ -201,7 +206,6 @@
                     if (!oldGoals || !oldGoals.cells.length || !equals(newCell.colors, oldGoals.cells[idx].colors)) {
                         if (newCell.colors.length !== 0) {
                             const colors = sortColors(newCell.colors);
-                            console.log(colors);
                             var newColors = [];
                             newColors.push({ color: colors[0], style: '' });
                             var translations = translatePercent[colors.length];

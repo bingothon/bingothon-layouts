@@ -5,11 +5,9 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface BingoboardMeta {
-  boardHidden: boolean;
-  playerColors: string[];
-  colorShown: boolean;
-  countShown?: boolean;
-  manualScoreOverride: boolean;
-  manualScores: number[];
+export interface PlayBingoSocket {
+  status: "connected" | "connecting" | "disconnected" | "error";
+  playerName?: string;
+  roomCode?: string;
+  passphrase?: string;
 }

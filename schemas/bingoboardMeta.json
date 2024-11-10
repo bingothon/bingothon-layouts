@@ -13,8 +13,7 @@
             "type":"array",
             "default":[],
             "items": {
-                "type":"string",
-                "enum": ["pink", "red", "orange", "brown", "yellow", "green", "teal", "blue", "navy", "purple"]
+                "type":"string"
             }
         },
         "colorShown": {

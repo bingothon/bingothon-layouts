@@ -31,6 +31,7 @@ export * from './obsPreviewImg';
 export * from './obsSceneList';
 export * from './obsStreamMode';
 export * from './omnibarMessages';
+export * from './playBingoSocket';
 export * from './showPictureDuringIntermission';
 export * from './songData';
 export * from './soundOnTwitchStream';

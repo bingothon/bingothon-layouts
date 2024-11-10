@@ -15,9 +15,31 @@
         </div>
         <div v-for="(color, i) in playerColors" :key="i">
             {{ playerNames[i] || `P${i}` }}:
-            <v-row>
+            <v-row v-if="!showPlayBingoOptions">
                 <v-col>
                     <v-select :value="color" @input="updatePlayerColor(i, $event)" :items="allColors"></v-select>
+                </v-col>
+                <v-col v-show="isManualScoreOverride">
+                    <v-text-field
+                        v-model="manualScore[i]"
+                        background-color="#455A64"
+                        class="manual-score"
+                        dark
+                        solo
+                        type="number"
+                        @change="updateManualScore"
+                    />
+                </v-col>
+            </v-row>
+            <v-row v-if="showPlayBingoOptions">
+                <v-col>
+                    <v-text-field
+                        @input="updatePlayerColor(i, $event)"
+                        background-color="#455A64"
+                        clearable
+                        solo
+                        dark
+                    />
                 </v-col>
                 <v-col v-show="isManualScoreOverride">
                     <v-text-field
@@ -35,6 +57,12 @@
         Select Board:
         <v-select v-model="currentBoardRep" :items="allBingoReps"></v-select>
         <!-- Normal Bingosync Stuff -->
+        <div v-if="showBoardSourceOptions">
+            <v-radio-group v-model="boardSource">
+                <v-radio value="bingosync" label="Bingosync" />
+                <v-radio value="playBingo" label="PlayBingo" />
+            </v-radio-group>
+        </div>
         <div v-if="showExtraBingosyncOptions">
             <div>
                 Room Code or URL:
@@ -57,14 +85,33 @@
                 </v-btn>
             </div>
         </div>
+        <!-- PlayBingo Stuff -->
+        <div v-if="showPlayBingoOptions">
+            <div>
+                Room:
+                <v-text-field v-model="roomCode" background-color="#455A64" clearable solo dark />
+            </div>
+            <div>
+                Passphrase:
+                <v-text-field v-model="passphrase" background-color="#455A64" clearable solo dark />
+            </div>
+            <div class="d-flex justify-center line-buttons">
+                <v-btn
+                    :disabled="!canConnectPlayBingo"
+                    class="button"
+                    dark
+                    small
+                    @click="connectPlayBingo"
+                    :style="`width: 100%`"
+                >
+                    {{ connectActionText }}
+                </v-btn>
+            </div>
+        </div>
         <!-- External board -->
         <div v-if="showExtraExternBoardOptions">
             <div>Currently active: {{ storeExternalBingoboardMeta.game }}</div>
-            <v-radio-group
-                v-model="externalBingoboardMeta.game"
-                :value="externalBingoboardMeta.game"
-                @change="updateExternalGame"
-            >
+            <v-radio-group v-model="externalBingoboardMeta.game" @change="updateExternalGame">
                 <v-radio value="none" label="None" />
                 <v-radio value="ori1" label="Ori and the Blind Forest" />
                 <v-radio value="ori2" label="Ori and the Will of the Wisps" />
@@ -149,10 +196,19 @@
     import { BingoboardMeta, CurrentMainBingoboard, ExternalBingoboardMeta } from '../../../schemas';
     import { getReplicant, store } from '../../browser-util/state';
 
-    type ColorEnum = 'pink' | 'red' | 'orange' | 'brown' | 'yellow' | 'green' | 'teal' | 'blue' | 'navy' | 'purple';
     type BingoRepEnum = 'bingoboard' | 'externalBingoboard' | 'explorationBingoboard';
+    type BoardSource = 'bingosync' | 'playBingo';
 
-    const BOARD_TO_SOCKET_REP = { bingoboard: 'bingosyncSocket', hostingBingoboard: 'hostingBingosocket' };
+    const getSocketRepFromBoard = (board: BingoRepEnum, source?: BoardSource) => {
+        if (board === 'bingoboard') {
+            switch (source) {
+                case 'bingosync':
+                    return 'bingosyncSocket';
+                case 'playBingo':
+                    return 'playBingoSocket';
+            }
+        }
+    };
 
     @Component({})
     export default class BingoControl extends Vue {
@@ -161,6 +217,8 @@
         passphrase: string = '';
 
         currentBoardRep: BingoRepEnum = 'bingoboard';
+
+        boardSource: BoardSource = 'bingosync';
 
         externalBingoboardMeta: ExternalBingoboardMeta = { game: 'none' };
 
@@ -199,10 +257,10 @@
         }
 
         /**
-         COMPUTED PROPERTIES
-         **/
+           COMPUTED PROPERTIES
+           **/
         get connectActionText(): string {
-            const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
+            const socketRepName = getSocketRepFromBoard(this.currentBoardRep, this.boardSource);
             if (!socketRepName) {
                 return 'invalid';
             }
@@ -251,12 +309,12 @@
             return store.state.bingoboardMeta.manualScoreOverride;
         }
 
-        get playerColors(): Array<ColorEnum> {
+        get playerColors(): Array<string> {
             return store.state.bingoboardMeta.playerColors;
         }
 
         get canDoConnectAction(): boolean {
-            const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
+            const socketRepName = getSocketRepFromBoard(this.currentBoardRep, this.boardSource);
             if (!socketRepName) {
                 return false;
             }
@@ -272,8 +330,22 @@
             }
         }
 
+        get canConnectPlayBingo(): boolean {
+            return true;
+        }
+
+        get showBoardSourceOptions(): boolean {
+            return this.currentBoardRep === 'bingoboard';
+        }
+
         get showExtraBingosyncOptions(): boolean {
-            return ['bingoboard', 'hostingBingoboard'].includes(this.currentBoardRep);
+            return (
+                ['bingoboard', 'hostingBingoboard'].includes(this.currentBoardRep) && this.boardSource === 'bingosync'
+            );
+        }
+
+        get showPlayBingoOptions(): boolean {
+            return this.boardSource === 'playBingo';
         }
 
         get showExtraExternBoardOptions(): boolean {
@@ -302,8 +374,8 @@
         }
 
         /**
-         HANDLERS
-         **/
+           HANDLERS
+           **/
 
         updateManualScore() {
             this.manualScore.forEach((score: string, idx: number) => {
@@ -315,7 +387,7 @@
             // only expanded options for the bingosync connection,
             // otherwise something else is there to handle the board
             if (this.showExtraBingosyncOptions) {
-                const socketRepName = BOARD_TO_SOCKET_REP[this.currentBoardRep];
+                const socketRepName = getSocketRepFromBoard(this.currentBoardRep, this.boardSource);
                 if (!socketRepName) {
                     throw new Error('unreachable');
                 }
@@ -331,11 +403,53 @@
                         this.errorMessage = '';
                         getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this
                             .currentBoardRep as BingoRepEnum;
+                        nodecg.sendMessage('playBingo:disconnect').catch((error) => {
+                            nodecg.log.error(error);
+                            this.errorMessage = error.message;
+                        });
                         nodecg
                             .sendMessage('bingosync:joinRoom', {
                                 roomCode: this.roomCode,
                                 passphrase: this.passphrase,
                                 name: this.currentBoardRep
+                            })
+                            .catch((error) => {
+                                nodecg.log.error(error);
+                                this.errorMessage = error.message;
+                            });
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        connectPlayBingo() {
+            if (this.showPlayBingoOptions) {
+                const socketRepName = getSocketRepFromBoard(this.currentBoardRep, this.boardSource);
+                if (!socketRepName) {
+                    throw new Error('unreachable');
+                }
+                switch (store.state[socketRepName].status) {
+                    case 'connected':
+                        nodecg.sendMessage('playBingo:disconnect').catch((error) => {
+                            nodecg.log.error(error);
+                            this.errorMessage = error.message;
+                        });
+                        break;
+                    case 'disconnected':
+                    case 'error':
+                        this.errorMessage = '';
+                        getReplicant<CurrentMainBingoboard>('currentMainBingoboard').value.boardReplicant = this
+                            .currentBoardRep as BingoRepEnum;
+                        nodecg.sendMessage('bingosync:leaveRoom', { name: this.currentBoardRep }).catch((error) => {
+                            nodecg.log.error(error);
+                            this.errorMessage = error.message;
+                        });
+                        nodecg
+                            .sendMessage('playBingo:connect', {
+                                slug: this.roomCode,
+                                passphrase: this.passphrase
                             })
                             .catch((error) => {
                                 nodecg.log.error(error);

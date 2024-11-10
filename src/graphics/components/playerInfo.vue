@@ -36,10 +36,11 @@
         <div
             v-if="bingoColorShown === true"
             class="BingoColor FlexContainer"
-            :class="`bingo-${bingoColor}`"
+            :class="``"
             :style="{
                 width: parseFloat(height.replace('px', '')) * 0.75 + 'px',
-                height: parseFloat(height.replace('px', '')) * 0.75 + 'px'
+                height: parseFloat(height.replace('px', '')) * 0.75 + 'px',
+                'background-color': bingoColor
             }"
         >
             <span v-if="bingoCountShown === true">{{ bingoGoalCount }}</span>
@@ -218,7 +219,7 @@
             const bingoboard = store.state[store.state.currentMainBingoboard.boardReplicant];
             if (!store.state.bingoboardMeta.manualScoreOverride) {
                 return <number>(
-                    bingoboard.colorCounts[store.state.bingoboardMeta.playerColors[this.playerIndex] || 'red']
+                    (bingoboard.colorCounts[store.state.bingoboardMeta.playerColors[this.playerIndex] || 'red'] ?? 0)
                 );
             } else {
                 return store.state.bingoboardMeta.manualScores[this.playerIndex];
