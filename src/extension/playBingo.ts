@@ -116,7 +116,7 @@ nodecg.listenFor('playBingo:connect', async (data, callback) => {
 
 nodecg.listenFor('playBingo:disconnect', (callback) => {
     log.info('Closing PlayBingo connection');
-    webSocket.close();
+    webSocket?.close();
 
     if (callback && !callback.handled) {
         callback(null);
