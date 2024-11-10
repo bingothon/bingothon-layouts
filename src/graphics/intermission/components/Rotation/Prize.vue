@@ -18,6 +18,7 @@
     import { TrackerPrize } from '../../../../../types';
     import { store } from '../../../../browser-util/state';
     import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { formatAmount } from '../../../_misc/formatAmount';
 
     @Component({})
     export default class Prize extends Vue {
@@ -48,7 +49,7 @@
         }
 
         formatUSD(amount) {
-            return `$${amount.toFixed(2)}`;
+            return formatAmount(amount);
         }
 
         getPrizeTimeUntilString(prize: TrackerPrize) {

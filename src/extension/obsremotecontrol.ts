@@ -482,7 +482,7 @@ waitTillConnected().then((): void => {
         }
     }
 
-    obs.on('MediaInputPlaybackEnded', ({ inputName, inputUuid: _ }) => {
+    obs.on('MediaInputPlaybackEnded', ({ inputName }) => {
         if (inputName == videoPlayerSourceName) {
             handleNextVideoPlay().catch((e) => nodecg.log.error('handleNextVideoPlay', e));
         }

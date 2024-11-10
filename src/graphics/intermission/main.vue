@@ -1,11 +1,11 @@
 <template>
     <div id="Intermission">
         <div class="ImageOverlay"></div>
-        <!-- <img src="../../../static/bingothonUKRAINELOGO_colours.png" id="logoWinter"> -->
+        <img src="../../../static/bingothon-long-neutral.png" id="logoWinter" />
         <!-- <img src="../../../static/logo-winter-wide.png" id="logoWinter" /> -->
-        <img src="../../../static/logo-summer-wide.png" id="logoSummer" />
-        <div id="host-bingo-text">Host Blackout Bingo</div>
-        <!--        <div id="host-bingo-text">Raising Money for</div>-->
+        <!-- <img src="../../../static/logo-summer-wide.png" id="logoSummer" /> -->
+        <!-- <div id="host-bingo-text">Host Blackout Bingo</div> -->
+        <div id="host-bingo-text">Raising Money for</div>
         <run-upcoming v-if="nextRun" id="ComingUpNext" :data="nextRun"></run-upcoming>
         <rotation></rotation>
         <info-storage-box id="ReaderAndMusic">
@@ -20,8 +20,8 @@
         </info-storage-box>
 
         <div class="HostingBingo">
-            <HostBingo class="BingoBoard" id="Bingo-board" fontSize="20px"></HostBingo>
-            <!--            <img id="PHLogo" src="../../../static/ProjectHope_Hands_ICON_RGB_KO.png">-->
+            <!-- <HostBingo class="BingoBoard" id="Bingo-board" fontSize="20px"></HostBingo> -->
+            <img id="PHLogo" src="../../../static/ProjectHope_Hands_ICON_RGB_KO.png" />
         </div>
         <div :class="'ImageView ' + (showIntermissionImage ? 'PictureShown' : '')">
             <img v-if="showIntermissionImage" :src="intermissionImageUrl" />

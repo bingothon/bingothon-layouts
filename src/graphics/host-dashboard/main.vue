@@ -312,7 +312,7 @@
         // Formats dollar amounts to the correct string.
         formatDollarAmount(amount: number): string {
             // We drop the cents and add a comma over $1000.
-            return '$' + amount.toFixed(2);
+            return amount.toFixed(2) + '€';
         }
 
         updateCharityIndex() {

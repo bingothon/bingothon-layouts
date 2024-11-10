@@ -8,6 +8,7 @@
     import { Component, Vue, Watch } from 'vue-property-decorator';
     import { TweenLite } from 'gsap';
     import { store } from '../../../browser-util/state';
+    import { formatAmount } from '../../_misc/formatAmount';
 
     @Component({})
     export default class DonationTotal extends Vue {
@@ -29,7 +30,7 @@
         }
 
         get totalString(): string {
-            return `$${this.tweenedTotal.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+            return formatAmount(this.tweenedTotal, false);
         }
 
         mounted() {

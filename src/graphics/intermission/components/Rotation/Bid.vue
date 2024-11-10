@@ -5,7 +5,7 @@
             <span v-else> Upcoming Bid War </span>
         </div>
         <div class="incentive-container">
-            <div class="RunName">{{ bid.game }} - {{ bid.category }}</div>
+            <div class="RunName">{{ bid.game }}</div>
             <div class="BidName">
                 {{ bid.bid }}
             </div>
@@ -46,12 +46,11 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { store } from '../../../../browser-util/state';
     import * as d3 from 'd3';
+    import { formatAmount } from '../../../_misc/formatAmount';
 
     @Component({})
     export default class Bid extends Vue {
         bid: TrackerOpenBid = null;
-        //d3 types are dumb and inconsistent
-        d3any: any = d3;
 
         mounted() {
             const chosenBid = this.getRandomBid();
@@ -70,7 +69,7 @@
         }
 
         formatUSD(amount) {
-            return `$${amount.toFixed(2)}`;
+            return formatAmount(amount);
         }
 
         percentRaised(bid: TrackerOpenBid) {
@@ -102,18 +101,12 @@
         }
 
         makeBars(bid: TrackerOpenBid) {
-            let options = bid.options;
-            let data = [];
-
-            options.forEach((option) => {
-                data.push({ name: option.name, value: option.amount_raised });
-            });
-
-            data = data.sort(function (a, b) {
-                return d3.ascending(a.value, b.value);
-            });
-
-            data = data.slice(0, 5);
+            const data = bid.options
+                .map((option) => ({ name: option.name, value: option.amount_raised }))
+                .sort(function (a, b) {
+                    return d3.ascending(a.value, b.value);
+                })
+                .slice(0, 5);
 
             //set up svg using margin conventions - we'll need plenty of room on the left for labels
             var margin = {
@@ -123,7 +116,7 @@
                 left: 350
             };
 
-            var color = this.d3any.scale.ordinal().range(['#3f84e5', '#faa300', '#f63e02', '#a41623', '#2f4858']);
+            var color = d3.scaleOrdinal(['#3f84e5', '#faa300', '#f63e02', '#a41623', '#2f4858']);
 
             var width = 1100 - margin.left - margin.right,
                 height = 400 - margin.top - margin.bottom;
@@ -136,63 +129,47 @@
                 .append('g')
                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-            var x = this.d3any.scale
-                .linear()
-                .range([0, width])
-                .domain([
-                    0,
-                    d3.max(data, function (d) {
-                        return d.value;
-                    })
-                ]);
+            var x = d3.scaleLinear([0, width]).domain([
+                0,
+                d3.max(data, function (d) {
+                    return d.value;
+                })
+            ]);
 
-            var y = this.d3any.scale
-                .ordinal()
-                .rangeRoundBands([height, 0], 0.1)
-                .domain(
-                    data.map(function (d) {
-                        return d.name;
-                    })
-                );
+            var y = d3
+                .scaleBand()
+                .range([height, 0])
+                .padding(0.1)
+                .domain(data.map((d) => d.name));
 
-            // make y-axis to show bar names
-            this.d3any.svg
-                .axis()
-                .scale(y)
-                //no tick marks
-                .tickSize(0)
-                .orient('left');
+            svg.append('g').call(d3.axisLeft(y).tickSize(0).tickPadding(10));
 
             var bars = svg.selectAll('.bar').data(data).enter().append('g');
 
             //append rects
             bars.append('rect')
                 .attr('class', 'bar')
-                .attr('y', function (d) {
-                    return y(d.name);
-                })
+                .attr('y', (d) => y(d.name))
                 .style('fill', function (d, i) {
-                    return color(i);
+                    return color(`${i}`);
                 })
-                .attr('height', y.rangeBand())
+                .attr('height', y.bandwidth())
                 .attr('x', 0)
-                .attr('width', function (d) {
-                    return x(d.value);
-                });
+                .attr('width', (d) => x(d.value));
 
             //add a value label to the right of each bar
             bars.append('text')
                 .attr('class', 'label')
                 //y position of the label is halfway down the bar
                 .attr('y', function (d) {
-                    return y(d.name) + y.rangeBand() / 2 + 10;
+                    return y(d.name) + y.bandwidth() / 2 + 10;
                 })
                 //x position is 6 pixels to the right of the bar
                 .attr('x', function (d) {
                     return x(d.value) + 6;
                 })
                 .text(function (d) {
-                    return `$${d.value.toFixed(2)}`;
+                    return formatAmount(d.value);
                 });
         }
     }
@@ -284,20 +261,15 @@
         text-anchor: middle;
     }
 
-    .axis {
-        font-size: 25px;
-        fill: #fff;
-    }
-
-    .axis path,
-    .axis line {
-        fill: none;
-        display: none;
-    }
-
+    g.tick,
     .label {
         font-size: 25px;
         fill: #fff;
+    }
+
+    path.domain {
+        fill: none;
+        display: none;
     }
 
     .bid-graphics {

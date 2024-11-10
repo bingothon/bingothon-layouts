@@ -15,6 +15,7 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { store } from '../../../browser-util/state';
     import { TrackerDonation } from '../../../../types';
+    import { formatAmount } from '../../_misc/formatAmount';
     import GenericMessage from './ticker/GenericMessage.vue';
     import DynamicMessage from './ticker/DynamicMessage.vue';
     import UpcomingRun from './ticker/UpcomingRun.vue';
@@ -48,8 +49,8 @@
 
         mounted() {
             this.staticMessages = [
-                this.genericMessage('This is Bingothon Summer 2024, enjoy your stay!'),
-                this.genericMessage('#Bingothon Summer 2024 benefits Doctors Without Borders!'),
+                this.genericMessage('You are watching Marathon Alliance, enjoy your stay!'),
+                this.genericMessage('#MarathonAlliance benefits Project Hope!'),
                 this.genericMessage('Donate @ donate.bingothon.com'),
                 this.genericMessage(
                     "Can't get enough of Bingothon? Join the Bingothon Discord at discord.bingothon.com"
@@ -168,7 +169,7 @@
         }
 
         formatUSD(amount: number): string {
-            return `$${amount.toFixed(2)}`;
+            return formatAmount(amount);
         }
     }
 </script>

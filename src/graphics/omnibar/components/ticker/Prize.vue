@@ -2,7 +2,7 @@
     <div v-if="prize" id="Prize" class="FlexContainer">
         <div class="Line1">Prize Available: {{ prize.name }}</div>
         <div class="Line2">
-            Provided by {{ prize.provider }}, minimum donation amount: ${{ prize.minDonation.toFixed(2) }}
+            Provided by {{ prize.provider }}, minimum donation amount: {{ formatUSD(prize.minDonation) }}
             {{ getPrizeTimeUntilString(prize) }}
         </div>
     </div>
@@ -14,6 +14,7 @@
     import { TrackerPrize } from '../../../../../types';
     import clone from 'clone';
     import moment from 'moment';
+    import { formatAmount } from '../../../_misc/formatAmount';
 
     @Component({})
     export default class Prize extends Vue {
@@ -27,14 +28,10 @@
             const prizes = store.state.trackerPrizes.filter((prize) => {
                 const now = moment();
                 // filter out prizes that are already expired, no endtime means no expire
-                if (
+                return (
                     (!prize.endtime || moment(prize.endtime).isAfter(now)) &&
                     (!prize.starttime || moment(prize.starttime).isBefore(now))
-                ) {
-                    return true;
-                } else {
-                    return false;
-                }
+                );
             });
             if (!prizes.length) {
                 this.$emit('end');
@@ -44,6 +41,10 @@
                 clearTimeout(fallback);
                 setTimeout(() => this.$emit('end'), 25 * 1000);
             }
+        }
+
+        formatUSD(amount) {
+            return formatAmount(amount);
         }
 
         getPrizeTimeUntilString(prize: TrackerPrize) {
@@ -67,9 +68,11 @@
         flex-direction: column;
         align-items: flex-start;
     }
+
     .Line1 {
         font-size: 26px;
     }
+
     .Line2 {
         font-size: 20px;
     }
