@@ -111,7 +111,7 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
                 }
             });
 
-            voiceActivityRep.value.members = newVoiceArray;
+            voiceActivityRep.value.members = newVoiceArray.sort((a,b) => a.name.localeCompare(b.name));
         }
     }
 
