@@ -220,7 +220,7 @@
         top: 466px;
         left: 0px;
         width: 677px;
-        background-image: linear-gradient(#6d001d, #280000);
+        background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
         border: 2px var(--container-border-color) solid;
     }
 
@@ -229,7 +229,7 @@
         top: 466px;
         left: 1224px;
         width: 677px;
-        background-image: linear-gradient(#6d001d, #280000);
+        background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
         border: 2px var(--container-border-color) solid;
     }
 

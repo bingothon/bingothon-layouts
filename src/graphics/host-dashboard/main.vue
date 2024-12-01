@@ -25,17 +25,17 @@
                         {{ bid.game }} - {{ bid.bid }}
                         <div v-if="bid.goal">
                             <div class="bidRaised">
-                                {{ formatDollarAmount(bid.amount_raised) }} /
-                                {{ formatDollarAmount(bid.goal) }}
+                                {{ formatAmount(bid.amount_raised) }} /
+                                {{ formatAmount(bid.goal) }}
                             </div>
                             <div class="bidLeft">
-                                {{ formatDollarAmount(bid.goal - bid.amount_raised) }} left to go!
+                                {{ formatAmount(bid.goal - bid.amount_raised) }} left to go!
                             </div>
                         </div>
                         <div v-else>
                             <div v-if="bid.options.length">
                                 <div v-for="(option, j) in bid.options" :key="i + ' ' + j" class="bidOption">
-                                    {{ option.name }} - {{ formatDollarAmount(option.amount_raised) }}
+                                    {{ option.name }} - {{ formatAmount(option.amount_raised) }}
                                 </div>
                                 <div v-if="bid.allow_custom_options" class="customOptions">
                                     Users can submit their own options
@@ -110,7 +110,7 @@
                             {{ prize.name }}
                         </div>
                         <div class="prizeInfo">Provided by {{ prize.provider }}</div>
-                        <div class="prizeInfo">Minimum Donation: {{ formatDollarAmount(prize.minDonation) }}</div>
+                        <div class="prizeInfo">Minimum Donation: {{ formatAmount(prize.minDonation) }}</div>
                         <div class="prizeInfo">
                             {{ getPrizeTimeUntilString(prize) }}
                         </div>
@@ -160,6 +160,7 @@
     import { RunData } from '../../../speedcontrol-types';
     import HostBingo from '../components/hostBingo.vue';
     import { HostsSpeakingDuringIntermission, ShowPictureDuringIntermission } from '@/schemas';
+    import { formatAmount } from '../_misc/formatAmount';
 
     @Component({
         components: {
@@ -179,7 +180,7 @@
         }
 
         get donationTotal() {
-            return this.formatDollarAmount(store.state.donationTotal);
+            return formatAmount(store.state.donationTotal);
         }
 
         get prizes(): TrackerPrize[] {
@@ -309,10 +310,8 @@
             return res;
         }
 
-        // Formats dollar amounts to the correct string.
-        formatDollarAmount(amount: number): string {
-            // We drop the cents and add a comma over $1000.
-            return amount.toFixed(2) + '€';
+        formatAmount(amount: number) {
+            return formatAmount(amount);
         }
 
         updateCharityIndex() {
