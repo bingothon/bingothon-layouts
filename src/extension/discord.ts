@@ -132,7 +132,6 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
                 adapterCreator: guild.voiceAdapterCreator
             };
 
-            // @ts-expect-error Currently voice is built in mind with API v10 whereas discord.js v13 uses API v9. adapters are incompatible
             Voice.joinVoiceChannel(joinConfig);
 
             voiceStatus = 'connected';
@@ -156,7 +155,6 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
             let connection = voiceConnection;
 
             if (!connection) {
-                // @ts-expect-error Currently voice is built in mind with API v10 whereas discord.js v13 uses API v9.
                 connection = Voice.joinVoiceChannel(joinConfig);
             }
             const receiver = connection.receiver;
