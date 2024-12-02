@@ -344,7 +344,7 @@
     }
 
     .PlayerPlaceHolder {
-        background-image: url('../../../../static/sun.png');
+        background-image: url('../../../../static/snowflake.png');
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;

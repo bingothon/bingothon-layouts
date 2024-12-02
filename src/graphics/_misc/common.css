@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:600&subset=cyrillic,cyrillic-ext,latin-ext,vietnamese');
 
 :root {
-    --container-background-color: rgba(206, 13, 0, 0.6);
-    --container-border-color: black;
+    --container-background-color: #3b5d7e;
+    --container-border-color: #5c88bc;
     --font-color: #fff;
-    --darker-main-color: #e94e1b;
-    --lighter-main-color: #f39200;
-    --alternative-main-color: #d32f3e;
-    --gradient-light: #ffa600;
-    --gradient-dark: #ff1125be;
+    --darker-main-color: #315091;
+    --lighter-main-color: #5c88bc;
+    --alternative-main-color: #310088;
+    --gradient-light: #627fbe;
+    --gradient-dark: #050a1b;
 }
 
 /*Bingo Colors*/

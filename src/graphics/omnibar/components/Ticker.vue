@@ -49,8 +49,8 @@
 
         mounted() {
             this.staticMessages = [
-                this.genericMessage('This is Bingothon Summer 2024, enjoy your stay!'),
-                this.genericMessage('#Bingothon Summer 2024 benefits Doctors Without Borders!'),
+                this.genericMessage('This is Bingothon Winter 2024, enjoy your stay!'),
+                this.genericMessage('#Bingothon Winter 2024 benefits Fred Hutch!'),
                 this.genericMessage('Donate @ donate.bingothon.com'),
                 this.genericMessage(
                     "Can't get enough of Bingothon? Join the Bingothon Discord at discord.bingothon.com"
