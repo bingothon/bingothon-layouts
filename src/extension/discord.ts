@@ -10,7 +10,7 @@ const nodecg = nodecgApiContext.get();
 const log = new nodecg.Logger(`${nodecg.bundleName}:discord`);
 
 // Discord API
-const bot = new Discord.Client({ intents: 32767 }); // all intents cause I'm too lazy to figure out which are the correct ones
+const bot = new Discord.Client({ intents: 32767 | Discord.IntentsBitField.Flags.MessageContent }); // all intents cause I'm too lazy to figure out which are the correct ones
 
 const config = nodecg.bundleConfig;
 const botToken = config.discord?.token || '';
