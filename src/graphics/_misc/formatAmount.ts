@@ -1,8 +1,8 @@
-const CURRENCY_SYMBOL = '€';
+const CURRENCY_SYMBOL = '$';
 export function formatAmount(amount: number, showCents = true) {
     if (showCents) {
-        return `${amount.toFixed(2)}${CURRENCY_SYMBOL}`;
+        return `${CURRENCY_SYMBOL} ${amount.toFixed(2)}`;
     } else {
-        return `${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}${CURRENCY_SYMBOL}`;
+        return `${CURRENCY_SYMBOL} ${amount.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
     }
 }
