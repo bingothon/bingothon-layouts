@@ -13,9 +13,9 @@
             <div v-if="bid.goal != null" class="BidAmount">
                 <div id="progressbar">
                     <div id="progress" :style="{ width: percentRaised(bid) + '%' }">
-                        <div id="amount" :style="{ width: percentRaised(bid) + '%' }">
-                            {{ formatUSD(bid.amount_raised) }}/{{ formatUSD(bid.goal) }}
-                        </div>
+                    </div>
+                    <div id="amount">
+                        {{ formatUSD(bid.amount_raised) }}/{{ formatUSD(bid.goal) }}
                     </div>
                 </div>
             </div>
@@ -178,6 +178,7 @@
 <style>
     #progressbar {
         position: absolute;
+        display: flex;
         top: 300px;
         left: 133px;
         width: 900px;
@@ -188,15 +189,14 @@
     }
     #amount {
         position: absolute;
+        display: flex;
         height: 100px;
         left: 0px;
         z-index: 6;
-        top: 20px;
         align-content: center;
         align-self: center;
         align-items: center;
         justify-content: center;
-        justify-items: center;
     }
     #progress {
         top: 0px;
