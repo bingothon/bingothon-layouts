@@ -399,6 +399,10 @@
         background-color: black;
     }
 
+    a {
+        color: lightblue;
+    }
+
     #HostDashboard {
         color: white;
         background-color: black;
@@ -523,6 +527,7 @@
 
     #HostingBingo {
         width: 100%;
+        margin-bottom: 10px;
     }
 
     #HostingBingo > .BingoBoard {

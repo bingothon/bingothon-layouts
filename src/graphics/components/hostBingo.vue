@@ -19,7 +19,11 @@
                 </tr>
             </tbody>
         </table>
-        <button v-if="dashboard" id="btn" v-on:click="resetBoard()">Reset</button>
+        <div v-if="dashboard" id="btn">
+
+            <button v-on:click="resetBoard()">Reset</button>
+            <a href="https://docs.google.com/document/d/1URlVy_HINEquMDdMUfXe5JLoLa1YrKHUXjpyYxWfBdA/edit?tab=t.0" target="_blank">Host Goals doc</a>
+        </div>
     </div>
 </template>
 
@@ -200,6 +204,6 @@
 
     #btn {
         position: absolute;
-        top: 500px;
+        top: 100%;
     }
 </style>
