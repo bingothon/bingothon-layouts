@@ -1,8 +1,11 @@
 <template>
     <div id="HostDashboard">
-        <div v-if="adTimer > 0" id="intermission-ad-warning">Currently playing ads for {{ adTimer }} more seconds</div>
-        <div v-if="hostsSpeakingDuringIntermission" id="intermission-live-warning">
+        <div v-if="adTimer > 0" id="intermission-ad-warning" class="intermission-warning">Currently playing ads for {{ adTimer }} more seconds</div>
+        <div v-if="hostsSpeakingDuringIntermission" id="intermission-live-warning" class="intermission-warning">
             You are currently live on stream
+        </div>
+        <div v-if="!!vdoUrl" class="intermission-warning">
+            The VDO overlay is currently shown on the intermission layout!
         </div>
         <button id="Go-Live-Button" :disabled="!hostsCanGoLive" @click="toggleHostsSpeakingDuringIntermission">
             {{ hostsSpeakingToggleButtonText }}
@@ -137,6 +140,12 @@
                     <button @click="startTwitchClip">Play</button>
                     <button @click="stopTwitchClip">Stop</button>
                 </div>
+                <div>
+                    <h3>Paste a <a href="https://vdo.ninja">VDO ninja</a> Room during intermission</h3>
+                    Paste the entire Url of the group scene here (looks like <code>https://vdo.ninja/?scene=0&room=test&password=test</code>):
+                    <input v-model="vdoUrl" />
+                    <button @click="clearVdo">Clear VDO</button>
+                </div>
             </div>
         </div>
     </div>
@@ -159,7 +168,7 @@
     import moment from 'moment';
     import { RunData } from '../../../speedcontrol-types';
     import HostBingo from '../components/hostBingo.vue';
-    import { HostsSpeakingDuringIntermission, ShowPictureDuringIntermission } from '@/schemas';
+    import { HostsSpeakingDuringIntermission, ShowThingsDuringIntermission } from '@/schemas';
     import { formatAmount } from '../_misc/formatAmount';
 
     @Component({
@@ -238,7 +247,7 @@
         }
 
         get pictureDuringIntermissionUrl(): string {
-            return store.state.showPictureDuringIntermission.imageUrl;
+            return store.state.showThingsDuringIntermission.imageUrl;
         }
 
         get twitchClipSlug(): string {
@@ -254,7 +263,19 @@
         }
 
         set pictureDuringIntermissionUrl(url: string) {
-            getReplicant<ShowPictureDuringIntermission>('showPictureDuringIntermission').value.imageUrl = url;
+            getReplicant<ShowThingsDuringIntermission>('showThingsDuringIntermission').value.imageUrl = url;
+        }
+
+        get vdoUrl(): string {
+            return store.state.showThingsDuringIntermission.vdoUrl;
+        }
+
+        set vdoUrl(url: string | null) {
+            getReplicant<ShowThingsDuringIntermission>('showThingsDuringIntermission').value.vdoUrl = url;
+        }
+
+        clearVdo() {
+            this.vdoUrl = null;
         }
 
         mounted() {
@@ -488,18 +509,14 @@
         content: 'FINAL TIME: ';
     }
 
-    #intermission-live-warning {
+    #intermission-ad-warning {
+        background-color: darkred;
+    }
+
+    .intermission-warning {
         width: 100%;
         height: 50px;
         background-color: red;
-        text-align: center;
-        font-size: 40px;
-    }
-
-    #intermission-ad-warning {
-        width: 100%;
-        height: 50px;
-        background-color: darkred;
         text-align: center;
         font-size: 40px;
     }

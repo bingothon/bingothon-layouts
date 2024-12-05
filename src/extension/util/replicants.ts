@@ -22,7 +22,7 @@ import {
     ObsSceneList,
     ObsStreamMode,
     PlayBingoSocket,
-    ShowPictureDuringIntermission,
+    ShowThingsDuringIntermission,
     SongData,
     TrackerDonations,
     TrackerOpenBids,
@@ -118,6 +118,6 @@ export const voiceActivityRep = nodecg().Replicant<VoiceActivity>('voiceActivity
     persistent: true
 }) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<VoiceActivity>;
 // These aren't used anywhere in the extension code, just gotta makre sure to declare them
-nodecg().Replicant<ShowPictureDuringIntermission>('showPictureDuringIntermission');
+nodecg().Replicant<ShowThingsDuringIntermission>('showThingsDuringIntermission');
 nodecg().Replicant<CapturePositions>('capturePositions');
 nodecg().Replicant<NodeCGTypes.AssetFile[]>('assets:intermissionVideos', { defaultValue: [] });

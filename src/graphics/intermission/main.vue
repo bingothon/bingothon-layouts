@@ -27,6 +27,7 @@
             <img v-if="showIntermissionImage" :src="intermissionImageUrl" />
         </div>
         <TwitchClipPlayer />
+        <iframe v-if="!!intermissionVdoUrl" id="vdoPlayer" :src="intermissionVdoUrl"></iframe>
     </div>
 </template>
 
@@ -94,11 +95,15 @@
         }
 
         get showIntermissionImage(): boolean {
-            return !!store.state.showPictureDuringIntermission.imageUrl;
+            return !!store.state.showThingsDuringIntermission.imageUrl;
         }
 
         get intermissionImageUrl(): string {
-            return store.state.showPictureDuringIntermission.imageUrl;
+            return store.state.showThingsDuringIntermission.imageUrl;
+        }
+
+        get intermissionVdoUrl(): string | null {
+            return store.state.showThingsDuringIntermission.vdoUrl;
         }
 
         findRunIndex(run: RunData): number {
@@ -268,5 +273,14 @@
         top: 240px;
         width: 1172px;
         height: 660px;
+    }
+
+    #vdoPlayer {
+        position: absolute;
+        left: 718px;
+        top: 240px;
+        width: 1172px;
+        height: 660px;
+        z-index: 100;
     }
 </style>

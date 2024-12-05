@@ -37,7 +37,7 @@ import {
     ObsStreamMode,
     OmnibarMessages,
     PlayBingoSocket,
-    ShowPictureDuringIntermission,
+    ShowThingsDuringIntermission,
     SongData,
     SoundOnTwitchStream,
     TrackerData,
@@ -90,7 +90,7 @@ const replicantNames = [
     'externalBingoboard',
     'omnibarMessages',
     'playBingoSocket',
-    'showPictureDuringIntermission',
+    'showThingsDuringIntermission',
     'soundOnTwitchStream',
     'trackerData',
     'trackerDonations',
@@ -145,7 +145,7 @@ interface StoreTypes {
     omnibarMessages: OmnibarMessages;
     playBingoSocket: PlayBingoSocket;
     externalBingoboard: ExternalBingoboard;
-    showPictureDuringIntermission: ShowPictureDuringIntermission;
+    showThingsDuringIntermission: ShowThingsDuringIntermission;
     soundOnTwitchStream: SoundOnTwitchStream;
     trackerData: TrackerData;
     trackerDonations: TrackerDonations;
@@ -212,7 +212,7 @@ export const store = new Store<StoreTypes>({
         omnibarMessages: [] as OmnibarMessages,
         playBingoSocket: {} as PlayBingoSocket,
         externalBingoboard: {} as ExternalBingoboard,
-        showPictureDuringIntermission: {} as ShowPictureDuringIntermission,
+        showThingsDuringIntermission: {} as ShowThingsDuringIntermission,
         soundOnTwitchStream: 0 as SoundOnTwitchStream,
         trackerData: [] as TrackerData,
         trackerDonations: [] as TrackerDonations,
