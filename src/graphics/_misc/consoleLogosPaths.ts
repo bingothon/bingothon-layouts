@@ -1,12 +1,15 @@
-const pathsAndText: { [key: string]: { textNeeded: boolean; logoPath: string } } = {
+export const pathsAndText: { [key: string]: { textNeeded: boolean; logoPath: string } } = {
     atari2600: { logoPath: 'images/atari2600.png', textNeeded: true },
     atari7800: { logoPath: 'images/atari7800.png', textNeeded: true },
     ds: { logoPath: 'images/ds.png', textNeeded: true },
+    'nintendo ds': { logoPath: 'images/ds.png', textNeeded: true },
     gba: { logoPath: 'images/gbadvance.png', textNeeded: true },
-    gb: { logoPath: 'images/gbclassic.png', textNeeded: true },
+    gb: { logoPath: 'images/gbclassic.png', textNeeded: false },
+    'game boy': { logoPath: 'images/gbclassic.png', textNeeded: false },
     gbc: { logoPath: 'images/gbcolor.png', textNeeded: true },
     gcn: { logoPath: 'images/gcn.png', textNeeded: true },
     n64: { logoPath: 'images/n64.png', textNeeded: true },
+    'nintendo 64': { logoPath: 'images/n64.png', textNeeded: true },
     nes: { logoPath: 'images/nes.png', textNeeded: true },
     pc: { logoPath: 'images/pc.svg', textNeeded: true },
     pcengine: { logoPath: 'images/pcengine.png', textNeeded: true },
@@ -28,8 +31,7 @@ const pathsAndText: { [key: string]: { textNeeded: boolean; logoPath: string } }
     'wii u': { logoPath: 'images/wiiu.png', textNeeded: false },
     xbox360: { logoPath: 'images/xbox360.png', textNeeded: true },
     xbox: { logoPath: 'images/xboxclassic.png', textNeeded: true },
-    xboxone: { logoPath: 'images/xboxone.png', textNeeded: true },
+    xboxone: { logoPath: 'images/xboxone.png', textNeeded: false },
+    'xbox one': { logoPath: 'images/xboxone.png', textNeeded: false },
     zxspectrum: { logoPath: 'images/zxspectrum.png', textNeeded: true }
 };
-
-exports = pathsAndText;

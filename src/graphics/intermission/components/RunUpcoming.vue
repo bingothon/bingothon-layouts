@@ -146,6 +146,7 @@
     import InlineSvg from '../../components/InlineSvg.vue';
     import TextFitRelative from '../../helpers/text-fit-relative.vue';
     import ScrollText from './Title/ScrollText.vue';
+    import { pathsAndText } from '@/graphics/_misc/consoleLogosPaths';
 
     @Component({
         components: { InlineSvg, TextFitRelative, ScrollText, GameSystem }
@@ -158,9 +159,11 @@
         @Prop({ default: '22px' })
         localfontSize: string;
 
-        pathsAndLogos: {
+        get pathsAndLogos(): {
             [key: string]: { textNeeded: boolean; logoPath: string };
-        } = require('../../_misc/consoleLogosPaths');
+        } {
+            return pathsAndText;
+        }
 
         get isSinglePlayer() {
             return this.players.length === 1 && !this.isTeamGame;
