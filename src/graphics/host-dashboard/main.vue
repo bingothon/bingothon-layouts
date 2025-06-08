@@ -22,6 +22,9 @@
                         {{ charityTexts[charityIndex] }}
                     </div>
                 </div>
+                <div>
+                    Use <a href="https://drive.google.com/file/d/1hxlEp5tpdPfZ921Lfm36GlkLhBnu14ej/view?usp=sharing">this document</a> to find more information about how contributions are being used, to be used as talking points
+                </div>
                 <div id="bidsHeader">Upcoming Goals/Bidwars:</div>
                 <div id="bidsContainer">
                     <div v-for="(bid, i) in openBids" :key="i" class="bid">
@@ -94,13 +97,15 @@
                         {{ bingothonTexts[bingothonIndex] }}
                     </div>
                 </div>
-                <div class="factHeader">Sponsor Texts {{ sponsorIndex + 1 }}/{{ sponsorTexts.length }}</div>
-                <button v-on:click="updateSponsorIndex()">Update Text</button>
-                <div id="SponsorTexts">
-                    <div class="fact">
-                        {{ sponsorTexts[sponsorIndex] }}
+                <template v-if="sponsorTexts.length">
+                    <div class="factHeader">Sponsor Texts {{ sponsorIndex + 1 }}/{{ sponsorTexts.length }}</div>
+                    <button v-on:click="updateSponsorIndex()">Update Text</button>
+                    <div id="SponsorTexts">
+                        <div class="fact">
+                            {{ sponsorTexts[sponsorIndex] }}
+                        </div>
                     </div>
-                </div>
+                </template>
             </div>
             <div id="column3" class="column">
                 <div id="donationTotalHeader">Donation Total:</div>
