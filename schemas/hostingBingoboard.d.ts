@@ -10,5 +10,6 @@ export type HostingBingoboard = HostBingoCell[][];
 export interface HostBingoCell {
   goal: string;
   description: string;
-  marked?: boolean;
+  marked: boolean;
+  markedRestream: boolean;
 }

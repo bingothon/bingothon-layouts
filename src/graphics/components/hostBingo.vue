@@ -8,9 +8,12 @@
                         :key="i + '' + j"
                         v-for="(cell, j) in column"
                         v-on:click="updateCell(cell, i, j)"
+                        v-on:contextmenu.prevent="updateCellRestream(cell, i, j)"
                         :title="cell.description"
                     >
-                        <div v-if="cell.marked" class="bg-color marked" />
+                        <div v-for="color in calculateBgColorStyles(cell)"
+                            :class="'bg-color ' + color.color + 'square'"
+                            :style="color.style" />
                         <div class="shadow" />
                         <div class="CellTextFitContainer">
                             <CellTextFit :text="cell.goal" :fontSize="fontSize"></CellTextFit>
@@ -22,6 +25,8 @@
         <div v-if="dashboard" id="btn">
 
             <button v-on:click="resetBoard()">Reset</button>
+            <div>Red = Left Click = Bingothon</div>
+            <div>Blue = Right Click = Nitro (Restream)</div>
             <a href="https://docs.google.com/document/d/1URlVy_HINEquMDdMUfXe5JLoLa1YrKHUXjpyYxWfBdA/edit?tab=t.0" target="_blank">Host Goals doc</a>
         </div>
     </div>
@@ -36,19 +41,32 @@
     const goals = require('../../../static/hostBingo.json');
 
     function toColumns(goals: HostBingoCell[]): HostBingoCell[][] {
-        console.log(goals);
+        // console.log(goals);
         let result = [];
         for (let i = 0; i < 5; i++) {
             let cur: HostBingoCell[] = [];
             for (let j = 0; j < 5; j++) {
                 let goal = goals[i * 5 + j];
-                cur.push({ ...goal, marked: false });
+                cur.push({ ...goal, marked: false, markedRestream: false });
             }
             result.push(cur);
         }
-        console.log(result);
+        // console.log(result);
         return result;
     }
+
+    // used from bingosync
+    const translatePercent = {
+        2: ['0', '0'],
+        3: ['0', '36', '-34'],
+        4: ['0', '46', '0', '-48'],
+        5: ['0', '56', '18', '-18', '-56'],
+        6: ['0', '60', '30', '0', '-30', '-60'],
+        7: ['0', '64', '38', '13', '-13', '-38', '-64'],
+        8: ['0', '64', '41', '20', '0', '-21', '-41', '-64'],
+        9: ['0', '66', '45', '27', '9', '-9', '-27', '-45', '-66'],
+        10: ['0', '68', '51', '34', '17', '0', '-17', '-34', '-51', '-68']
+    };
 
     @Component({
         components: {
@@ -85,10 +103,40 @@
 
         updateCell(cell: HostBingoCell, col: number, row: number) {
             getReplicant<HostBingoCell[][]>('hostingBingoboard').value[col][row] = {
-                goal: cell.goal,
-                description: cell.description,
-                marked: !cell.marked
+                ...cell,
+                marked: !cell.marked,
             };
+        }
+
+        updateCellRestream(cell: HostBingoCell, col: number, row: number) {
+            getReplicant<HostBingoCell[][]>('hostingBingoboard').value[col][row] = {
+                ...cell,
+                markedRestream: !cell.markedRestream,
+            };
+            return false;
+        }
+
+        calculateBgColorStyles(cell: HostBingoCell): {color: string, style: string}[] {
+            const colors = [];
+            if (cell.marked) {
+                colors.push("red");
+            }
+            if (cell.markedRestream) {
+                colors.push("blue");
+            }
+            const newColors = [];
+            if (colors.length > 0) {
+                newColors.push({color: colors[0], style: ""});
+            }
+            const translations = translatePercent[colors.length];
+            for (let i = 1; i < colors.length; i++) {
+                // how bingosync handles the backgrounds, set style here to simply bind it to html later
+                newColors.push({
+                    color: colors[i],
+                    style: `transform: skew(-${this.skewAngle}rad) translateX(${translations[i]}%); border-right: solid 1.5px #444444`
+                });
+            }
+            return newColors;
         }
     }
 </script>

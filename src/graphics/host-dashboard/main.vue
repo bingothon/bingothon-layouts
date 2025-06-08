@@ -129,9 +129,6 @@
                 <div id="HostingBingo">
                     <HostBingo dashboard="true" fontSize="25px"></HostBingo>
                 </div>
-                <br />
-                <br />
-                <br />
                 <div>
                     <h3>Show an image on stream</h3>
                     Paste the entire image Url here:
@@ -533,6 +530,7 @@
     #HostingBingo {
         width: 100%;
         margin-bottom: 10px;
+        padding-bottom: 80px;
     }
 
     #HostingBingo > .BingoBoard {

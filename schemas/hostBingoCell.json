@@ -14,11 +14,17 @@
         "marked": {
             "type": "boolean",
             "default": false
+        },
+        "markedRestream": {
+            "type": "boolean",
+            "default": false
         }
     },
     "required": [
         "goal",
-        "description"
+        "description",
+        "marked",
+        "markedRestream"
     ],
     "additionalProperties": false
 }
