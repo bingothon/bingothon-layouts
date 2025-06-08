@@ -9,11 +9,11 @@
         <run-upcoming v-if="nextRun" id="ComingUpNext" :data="nextRun"></run-upcoming>
         <rotation></rotation>
         <info-storage-box id="ReaderAndMusic">
-            <div v-show="hostsSpeakingDuringIntermission" class="Mic">
+            <div v-if="hostsSpeakingDuringIntermission" class="Mic">
                 <img src="../../../static/Mic.png" />
             </div>
             <DiscordVoiceDisplay
-                v-show="hostsSpeakingDuringIntermission"
+                v-if="hostsSpeakingDuringIntermission"
                 voiceHighlightColor="var(--darker-main-color)"
             ></DiscordVoiceDisplay>
             <Music :useSmallVariant="hostsSpeakingDuringIntermission"></Music>
