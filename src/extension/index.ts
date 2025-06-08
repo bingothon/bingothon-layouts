@@ -141,9 +141,13 @@ export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
         require('./music');
     } else {
         nodecg.log.warn('MPD integration is disabled, no music!');
-        nodecg.Replicant<SongData>('songData', {
+        const songDataRep = nodecg.Replicant<SongData>('songData', {
             persistent: false,
-            defaultValue: { playing: false, title: 'No Track Playing' }
+            defaultValue: { playing: true, title: 'No Track Playing' }
         });
+        songDataRep.value.playing = true;
+        setInterval(() => {
+            songDataRep.value.title = `Cool Song 123 - Cool Band ${(Math.random() * 10).toFixed(0)}`
+        }, 10_000);
     }
 };
