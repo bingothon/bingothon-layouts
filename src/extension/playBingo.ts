@@ -1,4 +1,4 @@
-import { Board, Cell, ServerMessage } from '@bingogg/types';
+import { Board, Cell, RoomAction, ServerMessage } from '@playbingo/types';
 import { Bingoboard } from 'schemas/bingoboard';
 import WebSocket from 'ws';
 import * as nodecgApiContext from './util/nodecg-api-context';
@@ -19,7 +19,7 @@ log.info('Setting up PlayBingo integration');
 let webSocket: WebSocket;
 
 const parseCell = (cell: Cell, row: number, col: number): BingoboardCell => ({
-    name: cell.goal,
+    name: cell.goal.goal,
     slot: `${row * 5 + col}`,
     colors: cell.colors,
     rawColors: cell.colors.join(' '),
@@ -27,6 +27,9 @@ const parseCell = (cell: Cell, row: number, col: number): BingoboardCell => ({
 });
 
 const parseBoard = (board: Board): Bingoboard => {
+    if (board.hidden) {
+        return { colorCounts: {}, cells: [] };
+    }
     return {
         colorCounts: {},
         cells: board.board.flatMap((row, rowIndex) => row.map((cell, index) => parseCell(cell, rowIndex, index)))
@@ -84,6 +87,7 @@ nodecg.listenFor('playBingo:connect', async (data, callback) => {
                 case 'connected':
                     log.info('Successfully connected to room');
                     playBingoSocketRep.value.status = 'connected';
+                    webSocket.send(JSON.stringify({ action: 'revealCard', authToken } as RoomAction));
                 case 'syncBoard':
                     boardRep.value = parseBoard(data.board);
                     data.players?.forEach((player) => {
