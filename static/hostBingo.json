@@ -1,102 +1,102 @@
 [
     {
-        "goal": "Secret Word",
-        "description": "Get a runner/commentator who is NOT a host/volunteer/staff to say a secret word [the secret word is Kayak]. The host can not say the word themselves, and the person saying the secret word can not know they are being tricked into saying a secret word (You cant tell them - I need you to guess what word I am thinking of/I need you to say the secret word). It should be as smooth and casual as possible."
+        "goal": "Train",
+        "description": ""
     },
     {
-        "goal": "Train hunt",
-        "description": "Hosts use geoguessr and try to find either a train or train tracks or something that they can convince chat is a train. Link to geoguessr is here, works best if one of the hosts pays for an account. YOU MUST DISCUSS WITH TECH BEFOREHAND https://www.geoguessr.com/"
+        "goal": "Secret",
+        "description": ""
     },
     {
-        "goal": "Impressionist period",
-        "description": "you and your co-host have to impersonate each other for an entire intermission. Works best if you’ve got people with wildly different accents AND if cohosts are familiar with each other (and ok with maybe being made fun of a little, in a joking fun way)"
+        "goal": "Summer",
+        "description": ""
     },
     {
-        "goal": "Twitchionary",
-        "description": "Hosts play a game of Pictionary with chat during an intermission.  YOU MUST DISCUSS WITH TECH BEFOREHAND. Just use a basic paint app."
+        "goal": "Charity",
+        "description": ""
     },
     {
-        "goal": "Sports Play By-play",
-        "description": "Do sports commentary talking about how the previous run went. Even better if we have quick highlights to show and can pull up runner stats ahead of time."
+        "goal": "Cancer",
+        "description": ""
     },
     {
-        "goal": "Rhyme time",
-        "description": "Hosts must alternate with each other, making sure to rhyme the last word of their sentences."
+        "goal": "Mario",
+        "description": ""
     },
     {
-        "goal": "Crazy Covers",
-        "description": "Cover a song from either the previous game or from the next game by using weird instruments/beatboxing/whatever the hosts want. As long as the song is semi-recognizable, it's good. Chat should be able to identify the song."
+        "goal": "France",
+        "description": ""
     },
     {
-        "goal": "Poetry Slam",
-        "description": "Hosts must only speak in Haiku for an intermission."
+        "goal": "Knight",
+        "description": ""
     },
     {
-        "goal": "Guess the Effect",
-        "description": "One or both cohosts use a voice mod and does the intermission with it. Chat guesses the voice over effect. Multiple rounds can be done, but only one is needed."
+        "goal": "Galaxy",
+        "description": ""
     },
     {
-        "goal": "Alphabits",
-        "description": "Hosts must start each sentence with the next letter of the alphabet, in order."
+        "goal": "Archipelago",
+        "description": ""
     },
     {
-        "goal": "What is this joke?",
-        "description": " hosts can only talk by asking questions"
+        "goal": "Horror",
+        "description": ""
     },
     {
-        "goal": "Sound off",
-        "description": "Hosts can only communicate using soundboards. They must somehow do this to introduce the run and runner as well."
+        "goal": "Mask",
+        "description": ""
     },
     {
-        "goal": "Phantoms of the Opera",
-        "description": "Hosts must act as though they’re singing an opera for the entire intermission."
+        "goal": "Bingo",
+        "description": ""
     },
     {
-        "goal": "Floof Time",
-        "description": "Hosts and chat share pictures of pets. All pets are accepted, not just flooffy ones."
+        "goal": "Random",
+        "description": ""
     },
     {
-        "goal": "Pardon my language",
-        "description": "Do an entire intermission by speaking different languages, then pretending you made a mistake and say it again in english. Works best if you are either semi-fluent or not fluent at all, and are just using google translate."
+        "goal": "Blackout",
+        "description": ""
     },
     {
-        "goal": "Hosting in the future",
-        "description": "Speak like a robot the entire time"
+        "goal": "Tasmanian Tiger",
+        "description": ""
     },
     {
-        "goal": "Riddle me this!",
-        "description": "Hosts try to solve a few riddles (see host goals doc)"
+        "goal": "Wisp",
+        "description": ""
     },
     {
-        "goal": "Guess the T.V. Show!",
-        "description": "hosts describe a tv show badly, then chat guesses what it is"
+        "goal": "Bunker",
+        "description": ""
     },
     {
-        "goal": "Caroling",
-        "description": "Hosts sing christmas/holiday carols with chat!"
+        "goal": "Prince",
+        "description": ""
     },
     {
-        "goal": "The quiet hour",
-        "description": "hosts talk quietly, in an ASMR kind of way"
+        "goal": "Automata",
+        "description": ""
     },
     {
-        "goal": "Wise Words of Wisdom",
-        "description": "hosts secretly use proverbs while talking as though it is normal. https://en.wikipedia.org/wiki/List_of_proverbial_phrases"
+        "goal": "Lego",
+        "description": ""
     },
     {
-        "goal": "Puzzling!",
-        "description": "hosts solve a sudoku puzzle. YOU MUST DISCUSS WITH TECH BEFOREHAND. https://sudoku.com/"
+        "goal": "Among Us",
+        "description": ""
     },
     {
-        "goal": "Your time starts now",
-        "description": "hosts and chat are tasked with getting “a photo of the best videogame ball” . Everyone has about an hour to submit photos (post them in discord), then hosts judge each photo."
+        "goal": "Rumble",
+        "description": ""
     },
     {
-        "goal": "Trivia Corner",
-        "description": "hosts have fun doing sporcle trivia. I recommend this quiz - https://www.sporcle.com/games/LTH/jet-set - but feel free to use another on sporcle.YOU MUST DISCUSS WITH TECH BEFOREHAND"
+        "goal": "UFO",
+        "description": ""
     },
     {
-        "goal": "Hieroglyphs Only",
-        "description": "Twitch chat is emote only mode and hosts attempt to figure out what chat is trying to say"
+        "goal": "Blind",
+        "description": ""
     }
 ]

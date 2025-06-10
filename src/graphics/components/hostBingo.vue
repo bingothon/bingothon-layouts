@@ -8,7 +8,6 @@
                         :key="i + '' + j"
                         v-for="(cell, j) in column"
                         v-on:click="updateCell(cell, i, j)"
-                        v-on:contextmenu.prevent="updateCellRestream(cell, i, j)"
                         :title="cell.description"
                     >
                         <div v-for="color in calculateBgColorStyles(cell)"
@@ -25,9 +24,8 @@
         <div v-if="dashboard" id="btn">
 
             <button v-on:click="resetBoard()">Reset</button>
-            <div>Red = Left Click = Bingothon</div>
-            <div>Blue = Right Click = Nitro (Restream)</div>
-            <a href="https://docs.google.com/document/d/1URlVy_HINEquMDdMUfXe5JLoLa1YrKHUXjpyYxWfBdA/edit?tab=t.0" target="_blank">Host Goals doc</a>
+            <div>Red = Bingothon</div>
+            <div>Blue = Nitro (Restream)</div>
         </div>
     </div>
 </template>
@@ -80,6 +78,9 @@
         @Prop({ default: false })
         dashboard: boolean;
 
+        @Prop({ default: false})
+        isRestream: boolean;
+
         skewAngle = 1;
 
         resetBoard() {
@@ -102,18 +103,17 @@
         }
 
         updateCell(cell: HostBingoCell, col: number, row: number) {
-            getReplicant<HostBingoCell[][]>('hostingBingoboard').value[col][row] = {
-                ...cell,
-                marked: !cell.marked,
-            };
-        }
-
-        updateCellRestream(cell: HostBingoCell, col: number, row: number) {
-            getReplicant<HostBingoCell[][]>('hostingBingoboard').value[col][row] = {
-                ...cell,
-                markedRestream: !cell.markedRestream,
-            };
-            return false;
+            if (this.isRestream) {
+                getReplicant<HostBingoCell[][]>('hostingBingoboard').value[col][row] = {
+                    ...cell,
+                    markedRestream: !cell.markedRestream,
+                };
+            } else {
+                getReplicant<HostBingoCell[][]>('hostingBingoboard').value[col][row] = {
+                    ...cell,
+                    marked: !cell.marked,
+                };
+            }
         }
 
         calculateBgColorStyles(cell: HostBingoCell): {color: string, style: string}[] {

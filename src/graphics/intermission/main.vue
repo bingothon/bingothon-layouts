@@ -4,7 +4,7 @@
         <!-- <img src="../../../static/bingothonUKRAINELOGO_colours.png" id="logoWinter"> -->
         <!-- <img src="../../../static/logo-winter-wide.png" id="logoWinter" /> -->
         <img src="../../../static/logo-summer-wide.png" id="logoSummer" />
-        <div id="host-bingo-text">Host Blackout Bingo</div>
+        <div id="host-bingo-text">Infinite Craft Bingo</div>
         <!--        <div id="host-bingo-text">Raising Money for</div>-->
         <run-upcoming v-if="nextRun" id="ComingUpNext" :data="nextRun"></run-upcoming>
         <rotation></rotation>
