@@ -27,6 +27,7 @@ export const pathsAndText: { [key: string]: { textNeeded: boolean; logoPath: str
     segasaturn: { logoPath: 'images/segasaturn.png', textNeeded: true },
     snes: { logoPath: 'images/snes.png', textNeeded: true },
     switch: { logoPath: 'images/switch.svg', textNeeded: true },
+    'switch 2': { logoPath: 'images/switch2.svg', textNeeded: true },
     wii: { logoPath: 'images/wii.png', textNeeded: false },
     'wii u': { logoPath: 'images/wiiu.png', textNeeded: false },
     xbox360: { logoPath: 'images/xbox360.png', textNeeded: true },
