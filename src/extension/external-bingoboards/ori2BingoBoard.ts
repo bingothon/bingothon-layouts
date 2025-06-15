@@ -51,7 +51,7 @@ function createEmptyBoard(boardSize = 5) {
             name: '',
             hidden: true,
             hiddenName: '',
-            colors: 'blank',
+            colors: [],
             slot: `slot${i}`
         });
     }
@@ -121,7 +121,7 @@ export class Ori2ExternalBingoboard implements ExternalBingoboardManager {
             const index = (square.position.y - 1) * board.size + square.position.x - 1;
             cells[index].hidden = false;
             cells[index].name = square.visibleFor.length ? square.html : '';
-            cells[index].colors = square.completedBy.map((universeId) => colorByUniverseId[universeId]).join(' ') || 'blank';
+            cells[index].colors = square.completedBy.map((universeId) => colorByUniverseId[universeId]);
         }
 
         this.boardRep.value.cells = cells;

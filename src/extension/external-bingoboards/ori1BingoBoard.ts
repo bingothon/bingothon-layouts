@@ -97,7 +97,7 @@ function toBingosyncBoard(resp: OriApiResponse[], color: string): { cells: Explo
             name: revealed ? processedName : '',
             hidden: !revealed,
             hiddenName: processedName,
-            colors: goalCompleted ? color : 'blank',
+            colors: goalCompleted ? [color] : [],
             slot: `slot${index}`
         };
     });
@@ -224,7 +224,7 @@ export class Ori1ExternalBingoboard implements ExternalBingoboardManager {
                         name: anyRevealed ? processedName : '',
                         hidden: !anyRevealed,
                         hiddenName: processedName,
-                        colors: colors.join(' ') || 'blank',
+                        colors: colors,
                         slot: `slot${i}`
                     });
                 }

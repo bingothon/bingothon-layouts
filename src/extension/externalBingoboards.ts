@@ -17,7 +17,7 @@ export interface ExternalBingoboardManager {
 
 if (externalBoardRep.value.cells.length === 0) {
     for (let i = 0; i < 25; i += 1) {
-        externalBoardRep.value.cells.push({ name: '', hidden: true, hiddenName: '', colors: 'blank', slot: `slot${i}` });
+        externalBoardRep.value.cells.push({ name: '', hidden: true, hiddenName: '', colors: [], slot: `slot${i}` });
     }
 }
 

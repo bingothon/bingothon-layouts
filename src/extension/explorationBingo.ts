@@ -37,7 +37,7 @@ function getNeighbors(idx: number): number[] {
 function updateVisibilities(): void {
     explorationBoardRep.value.cells.forEach((cell, idx, allCells): void => {
         /* eslint-disable no-param-reassign */
-        if (idx === 6 || idx === 18 || getNeighbors(idx).some((i): boolean => allCells[i].colors !== 'blank')) {
+        if (idx === 6 || idx === 18 || getNeighbors(idx).some((i): boolean => !!allCells[i].colors.length)) {
             cell.name = cell.hiddenName;
             cell.hidden = false;
         } else {
@@ -61,7 +61,7 @@ nodecg.listenFor('exploration:newGoals', (goals: string[], callback): void => {
                 hiddenName: g,
                 hidden: true,
                 slot: `slot${idx}`,
-                colors: 'blank'
+                colors: []
             })
         );
         explorationBoardRep.value = { colorCounts: defaultEmptyColorCounts, cells };
@@ -83,7 +83,7 @@ nodecg.listenFor('exploration:resetBoard', (_data, callback): void => {
             cell.name = '';
             cell.hidden = true;
         }
-        cell.colors = 'blank';
+        cell.colors = [];
         /* eslint-enable no-param-reassign */
     });
     if (callback && !callback.handled) {
@@ -107,10 +107,10 @@ nodecg.listenFor('exploration:goalClicked', (goal, callback): void => {
             return;
         }
     }
-    if (explorationBoardRep.value.cells[index].colors === 'blank') {
-        explorationBoardRep.value.cells[index].colors = playerColor || 'red';
+    if (explorationBoardRep.value.cells[index].colors.length) {
+        explorationBoardRep.value.cells[index].colors = [];
     } else {
-        explorationBoardRep.value.cells[index].colors = 'blank';
+        explorationBoardRep.value.cells[index].colors = [playerColor || 'red'];
     }
     updateVisibilities();
     if (callback && !callback.handled) {

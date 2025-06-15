@@ -14,6 +14,6 @@ export interface ExplorationBingoboard {
     hidden: boolean;
     hiddenName: string;
     slot: string;
-    colors: string;
+    colors: string[];
   }[];
 }

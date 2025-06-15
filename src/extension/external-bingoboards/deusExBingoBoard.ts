@@ -70,7 +70,7 @@ export class DeusExternalBingoboard implements ExternalBingoboardManager {
                         hiddenName: cell.name,
                         name: cell.name,
                         slot: `slot${index}`,
-                        colors: cell.completed ? playerColor : cell.possible ? 'blank' : 'red'
+                        colors: cell.completed ? [playerColor] : cell.possible ? [] : ['red']
                     };
                 });
                 this.boardRep.value.cells = cells;

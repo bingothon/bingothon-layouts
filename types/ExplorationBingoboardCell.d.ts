@@ -1,7 +1,3 @@
-export interface ExplorationBingoboardCell {
-    name: string;
-    hiddenName: string;
-    hidden: boolean;
-    slot: string;
-    colors: string;
-}
+import { ExplorationBingoboard } from "../schemas";
+
+export type ExplorationBingoboardCell = ExplorationBingoboard["cells"][number];
