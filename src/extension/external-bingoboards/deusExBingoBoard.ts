@@ -15,9 +15,7 @@ interface DeusExCell {
     possible: boolean;
 }
 
-interface DeusExResponse {
-    bingo: DeusExCell[];
-}
+type DeusExResponse = DeusExCell[];
 
 const nodecg = nodecgApiContext.get();
 const log = new nodecg.Logger(`${nodecg.bundleName}:deusExBingo`);
@@ -63,7 +61,7 @@ export class DeusExternalBingoboard implements ExternalBingoboardManager {
                     navy: 0,
                     purple: 0
                 };
-                const cells = response.bingo.map((cell, index) => {
+                const cells = response.map((cell, index) => {
                     if (cell.completed) {
                         colorCounts[playerColor]++;
                     }

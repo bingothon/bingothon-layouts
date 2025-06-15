@@ -83,18 +83,21 @@
         'purple'
     ].reverse();
 
-    function sortColors(colors: string[]): string[] {
+    function sortColors(colors: string[] | string): string[] {
         var orderedColors = [];
         for (var i = 0; i < ORDERED_COLORS.length; i++) {
             if (colors.indexOf(ORDERED_COLORS[i]) !== -1) {
                 orderedColors.push(ORDERED_COLORS[i]);
             }
         }
-        colors.forEach((color) => {
-            if (!orderedColors.includes(color)) {
-                orderedColors.push(color);
-            }
-        });
+        if (Array.isArray(colors)) {
+
+            colors.forEach((color) => {
+                if (!orderedColors.includes(color)) {
+                    orderedColors.push(color);
+                }
+            });
+        }
         return orderedColors;
     }
 
