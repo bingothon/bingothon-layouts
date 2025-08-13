@@ -1,4 +1,5 @@
 export const pathsAndText: { [key: string]: { textNeeded: boolean; logoPath: string } } = {
+    '3ds': { logoPath: 'images/3ds.png', textNeeded: true },
     atari2600: { logoPath: 'images/atari2600.png', textNeeded: true },
     atari7800: { logoPath: 'images/atari7800.png', textNeeded: true },
     ds: { logoPath: 'images/ds.png', textNeeded: true },
