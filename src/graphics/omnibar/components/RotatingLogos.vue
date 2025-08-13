@@ -1,7 +1,7 @@
 <template>
     <div id="RotatingLogos">
         <div id="LogoWrapper">
-            <transition name="fade">
+            <transition name="fade" mode="out-in">
                 <img :key="logo" :src="logo" />
             </transition>
         </div>
@@ -17,13 +17,29 @@
     @Component({})
     export default class RotatingLogos extends Vue {
         logo: string = wide;
+        private nextLogo: string = fhLogo;
 
         mounted(): void {
+            this.preloadImages();
             this.changeLogo();
         }
 
+        private preloadImages(): void {
+            const img1 = new Image();
+            img1.src = wide;
+            const img2 = new Image();
+            img2.src = fhLogo;
+        }
+
         changeLogo(): void {
-            this.logo = this.logo !== wide ? wide : fhLogo;
+            // Preload the next image before changing
+            this.nextLogo = this.logo !== wide ? wide : fhLogo;
+            const img = new Image();
+            img.onload = () => {
+                this.logo = this.nextLogo;
+            };
+            img.src = this.nextLogo;
+
             const time = this.logo === fhLogo ? 30 : 30;
             setTimeout(this.changeLogo, time * 1000);
         }
@@ -50,11 +66,19 @@
 
     .fade-enter-active,
     .fade-leave-active {
-        transition: opacity 1s;
+        transition: opacity 0.3s ease-in-out;
     }
 
-    .fade-enter,
+    .fade-enter {
+        opacity: 0;
+    }
+
     .fade-leave-to {
         opacity: 0;
+    }
+
+    .fade-enter-to,
+    .fade-leave {
+        opacity: 1;
     }
 </style>
