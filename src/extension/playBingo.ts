@@ -1,4 +1,4 @@
-import { Board, Cell, RoomAction, ServerMessage } from '@playbingo/types';
+import { Board, Cell, Player, RoomAction, ServerMessage } from '@playbingo/types';
 import { Bingoboard } from 'schemas/bingoboard';
 import WebSocket from 'ws';
 import * as nodecgApiContext from './util/nodecg-api-context';
@@ -17,12 +17,13 @@ playBingoSocketRep.value.status = 'disconnected';
 log.info('Setting up PlayBingo integration');
 
 let webSocket: WebSocket;
+let players: Player[] = [];
 
 const parseCell = (cell: Cell, row: number, col: number): BingoboardCell => ({
     name: cell.goal.goal,
     slot: `${row * 5 + col}`,
-    colors: cell.colors,
-    rawColors: cell.colors.join(' '),
+    colors: cell.completedPlayers.map((playerId) => players.find((player) => player.id === playerId)?.color ?? ''),
+    rawColors: cell.completedPlayers.map((playerId) => players.find((player) => player.id === playerId)?.color).join(' '),
     markers: [null, null, null, null]
 });
 
@@ -44,7 +45,7 @@ nodecg.listenFor('playBingo:connect', async (data, callback) => {
         const res = await fetch(`${playBingoHost}/api/rooms/${slug}/authorize`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password: passphrase })
+            body: JSON.stringify({ password: passphrase, spectator: true })
         });
 
         if (!res.ok) {
@@ -83,6 +84,9 @@ nodecg.listenFor('playBingo:connect', async (data, callback) => {
 
         webSocket.on('message', (message) => {
             const data: ServerMessage = JSON.parse(message.toString());
+            if (data.players) {
+                players = data.players;
+            }
             switch (data.action) {
                 case 'connected':
                     log.info('Successfully connected to room');
@@ -91,13 +95,23 @@ nodecg.listenFor('playBingo:connect', async (data, callback) => {
                 case 'syncBoard':
                     boardRep.value = parseBoard(data.board);
                     data.players?.forEach((player) => {
-                        boardRep.value.colorCounts[player.color] = player.goalCount;
+                        // TODO: we should map players in the schedule to
+                        // players in the room to avoid needing this easily
+                        // broken check
+                        if (!player.spectator) {
+                            boardRep.value.colorCounts[player.color] = player.goalCount;
+                        }
                     });
                     break;
                 case 'cellUpdate':
                     boardRep.value.cells[data.row * 5 + data.col] = parseCell(data.cell, data.row, data.col);
                     data.players?.forEach((player) => {
-                        boardRep.value.colorCounts[player.color] = player.goalCount;
+                        // TODO: we should map players in the schedule to
+                        // players in the room to avoid needing this easily
+                        // broken check
+                        if (!player.spectator) {
+                            boardRep.value.colorCounts[player.color] = player.goalCount;
+                        }
                     });
                     break;
                 default:

@@ -245,7 +245,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@fortawesome/vue-fontawesome": "^2.0.10",
     "@mdi/font": "^7.1.96",
-    "@playbingo/types": "^1.0.1",
     "axios": "^1.5.1",
     "cheerio": "^1.0.0-rc.3",
     "chokidar": "^3.5.1",
@@ -276,6 +275,7 @@
   "devDependencies": {
     "@mdi/font": "^5.4.55",
     "@nodecg/types": "^2.1.12",
+    "@playbingo/types": "^1.1.0",
     "@types/cheerio": "^0.22.13",
     "@types/clone": "^2.1.1",
     "@types/d3": "^7.4.0",
