@@ -49,8 +49,8 @@ table {
 
 .square {
     padding: 0;
-    height: 20%;
-    width: 20%;
+    height: calc(100% / var(--row-count));
+    width: calc(100% / var(--column-count));
     border: 2px black solid;
     box-sizing: border-box;
     
@@ -109,7 +109,6 @@ table {
 
 .cube {
     position: absolute;
-    display:none;
     top: 0;
     left: 0;
     width: 50px;

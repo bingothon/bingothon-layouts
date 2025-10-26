@@ -1,5 +1,5 @@
 <template>
-    <div ref="bingoboard" class="BingoBoard">
+    <div ref="bingoboard" class="BingoBoard" :style="`--row-count: ${rowCount}, --column-count: ${columnCount}`">
         <table class="bingo-table">
             <tbody>
                 <tr :key="i" v-for="(column, i) in bingoCells">
@@ -29,13 +29,13 @@
             <p id="soon">Bingo Board will be revealed soon&trade;</p>
         </div>
         <!-- 3D Cube Structure -->
-        <div ref="cube" class="cube" id="cube" :v-show="isCubeVisible">
-            <div :v-show="isCubeVisible" class="face front">B</div>
-            <div :v-show="isCubeVisible" class="face back">O</div>
-            <div :v-show="isCubeVisible" class="face left">N</div>
-            <div :v-show="isCubeVisible" class="face right">G</div>
-            <div :v-show="isCubeVisible" class="face top">I</div>
-            <div :v-show="isCubeVisible" class="face bottom">5</div>
+        <div ref="cube" class="cube" id="cube" :style="`display: ${isCubeVisible ? 'block' : 'none'}`">
+            <div class="face front">B</div>
+            <div class="face back">O</div>
+            <div class="face left">N</div>
+            <div class="face right">G</div>
+            <div class="face top">I</div>
+            <div class="face bottom">5</div>
         </div>
     </div>
 </template>
@@ -126,6 +126,25 @@
         return result;
     }
 
+    function colorsToTransforms(colorsIn: string[]): {color: string, style: string}[] {
+        if (colorsIn.length !== 0) {
+            const colors = sortColors(colorsIn);
+            var newColors = [];
+            newColors.push({ color: colors[0], style: '' });
+            var translations = translatePercent[colors.length];
+            for (var i = 1; i < colors.length; i++) {
+                // how bingosync handles the backgrounds, set style here to simply bind it to html later
+                newColors.push({
+                    color: colors[i],
+                    style: `transform: skew(-${this.skewAngle}rad) translateX(${translations[i]}%); border-right: solid 1.5px #444444`
+                });
+            }
+           return newColors
+        } else {
+            return [];
+        }
+    }
+
     @Component({
         components: {
             CellTextFit
@@ -197,37 +216,14 @@
 
         onBingoBoardUpdate(newGoals: Bingoboard, oldGoals?: Bingoboard | undefined) {
             if (!newGoals) return;
-            this.bingoCells.forEach((row, rowIndex) => {
-                row.forEach((cell, columnIndex) => {
-                    // update cell with goal name, if changed
-                    const newCell = newGoals.cells[rowIndex][columnIndex];
-                    if (!oldGoals || !oldGoals.cells.length || newCell.name != oldGoals.cells[rowIndex][columnIndex].name) {
-                        Vue.set(this.bingoCells[rowIndex][columnIndex], 'name', newCell.name);
-                    }
-                    // update cell with color backgrounds, if changed
-                    if (!oldGoals || !oldGoals.cells.length || !equals(newCell.colors, oldGoals.cells[rowIndex][columnIndex].colors)) {
-                        if (newCell.colors.length !== 0) {
-                            const colors = sortColors(newCell.colors);
-                            var newColors = [];
-                            newColors.push({ color: colors[0], style: '' });
-                            var translations = translatePercent[colors.length];
-                            for (var i = 1; i < colors.length; i++) {
-                                // how bingosync handles the backgrounds, set style here to simply bind it to html later
-                                newColors.push({
-                                    color: colors[i],
-                                    style: `transform: skew(-${this.skewAngle}rad) translateX(${translations[i]}%); border-right: solid 1.5px #444444`
-                                });
-                            }
-                            Vue.set(this.bingoCells[rowIndex][columnIndex], 'colors', newColors);
-                        } else {
-                            Vue.set(this.bingoCells[rowIndex][columnIndex], 'colors', []);
-                        }
-                    }
-                    if (!oldGoals || !oldGoals.cells.length || !equals(newCell.markers, oldGoals.cells[rowIndex][columnIndex].markers)) {
-                        Vue.set(this.bingoCells[rowIndex][columnIndex], 'markers', newCell.markers);
-                    }
-                });
-            });
+            this.bingoCells = newGoals.cells.map(row => row.map(cell => ({
+                name: cell.name,
+                markers: cell.markers,
+                rawColors: cell.rawColors,
+                colors: colorsToTransforms(cell.colors),
+            })));
+            this.rowCount = newGoals.cells.length;
+            this.columnCount = newGoals.cells[0]?.length ?? 5;
         }
 
         getMarkerClasses(marker: string, markerIndex: number): string {
