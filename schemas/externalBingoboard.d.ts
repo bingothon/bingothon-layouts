@@ -15,5 +15,5 @@ export interface ExternalBingoboard {
     hiddenName: string;
     slot: string;
     colors: string[];
-  }[];
+  }[][];
 }

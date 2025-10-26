@@ -13,18 +13,22 @@
             "type": "array",
             "default": [],
             "items": {
-                "type":"object",
-                "required": ["name","slot","colors","hiddenName","hidden"],
-                "additionalProperties": false,
-                "properties": {
-                    "name": {"type":"string"},
-                    "hidden": {"type":"boolean"},
-                    "hiddenName": {"type": "string", "$comment": "For exploration bingo this is the goal name even if it shouldn't be displayed"},
-                    "slot": {"type":"string"},
-                    "colors": {
-                        "type":"array",
-                        "items": {
-                            "type": "string"
+                "type": "array",
+                "default": [],
+                "items": {
+                    "type":"object",
+                    "required": ["name","slot","colors","hiddenName","hidden"],
+                    "additionalProperties": false,
+                    "properties": {
+                        "name": {"type":"string"},
+                        "hidden": {"type":"boolean"},
+                        "hiddenName": {"type": "string", "$comment": "For exploration bingo this is the goal name even if it shouldn't be displayed"},
+                        "slot": {"type":"string"},
+                        "colors": {
+                            "type":"array",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 }

@@ -19,5 +19,5 @@ export interface Bingoboard {
      * @maxItems 4
      */
     markers: [string | null, string | null, string | null, string | null];
-  }[];
+  }[][];
 }

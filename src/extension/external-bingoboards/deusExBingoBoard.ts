@@ -6,6 +6,7 @@ import type NodeCG from '@nodecg/types';
 import { ExternalBingoboard } from 'schemas/externalBingoboard';
 import { ExternalBingoboardMeta } from 'schemas/externalBingoboardMeta';
 import * as nodecgApiContext from '../util/nodecg-api-context';
+import { toNxMArray } from '@/util/bingo';
 
 interface DeusExCell {
     x: number;
@@ -73,7 +74,7 @@ export class DeusExternalBingoboard implements ExternalBingoboardManager {
                         colors: cell.completed ? [playerColor] : cell.possible ? [] : ['red']
                     };
                 });
-                this.boardRep.value.cells = cells;
+                this.boardRep.value.cells = toNxMArray(cells, 5, 5);
                 this.boardRep.value.colorCounts = colorCounts;
             } else {
                 log.error('board rep unexpectedly undefined!');

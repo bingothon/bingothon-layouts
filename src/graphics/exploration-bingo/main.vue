@@ -51,20 +51,18 @@
         }
 
         onBingoBoardUpdate(newGoals: ExplorationBingoboard, oldGoals?: ExplorationBingoboard | undefined) {
-            let idx = 0;
             this.bingoCells.forEach((row, rowIndex) => {
                 row.forEach((cell, columnIndex) => {
                     // update cell with goal name, if changed
-                    const newCell = newGoals.cells[idx];
-                    if (!oldGoals || !oldGoals.cells.length || newCell.name != oldGoals.cells[idx].name) {
+                    const newCell = newGoals.cells[rowIndex][columnIndex];
+                    if (!oldGoals || !oldGoals.cells.length || newCell.name != oldGoals.cells[rowIndex][columnIndex].name) {
                         Vue.set(this.bingoCells[rowIndex][columnIndex], 'name', newCell.name);
                     }
                     // update cell with color background, if changed
-                    if (!oldGoals || !oldGoals.cells.length || newCell.colors != oldGoals.cells[idx].colors) {
+                    if (!oldGoals || !oldGoals.cells.length || newCell.colors != oldGoals.cells[rowIndex][columnIndex].colors) {
                         Vue.set(this.bingoCells[rowIndex][columnIndex], 'colors', newCell.colors);
                     }
                     Vue.set(this.bingoCells[rowIndex][columnIndex], 'hidden', newCell.hidden);
-                    idx++;
                 });
             });
         }

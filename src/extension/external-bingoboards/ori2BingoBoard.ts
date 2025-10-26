@@ -6,6 +6,7 @@ import type NodeCG from '@nodecg/types';
 import { ExternalBingoboard, ExternalBingoboardMeta } from '../../../schemas';
 import { BoardColor, ExplorationBingoboardCell } from '../../../types';
 import * as nodecgApiContext from '../util/nodecg-api-context';
+import { toNxMArray } from '@/util/bingo';
 
 const nodecg = nodecgApiContext.get();
 const log = new nodecg.Logger(`${nodecg.bundleName}:ori2Bingo`);
@@ -124,7 +125,7 @@ export class Ori2ExternalBingoboard implements ExternalBingoboardManager {
             cells[index].colors = square.completedBy.map((universeId) => colorByUniverseId[universeId]);
         }
 
-        this.boardRep.value.cells = cells;
+        this.boardRep.value.cells = toNxMArray(cells, 5, 5);
     }
 
     deactivate(): Promise<void> {

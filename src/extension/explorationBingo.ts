@@ -1,6 +1,7 @@
 import * as nodecgApiContext from './util/nodecg-api-context';
 import { boardMetaRep, explorationBoardRep } from './util/replicants';
 import { ExplorationBingoboardCell } from '../../types';
+import { toNxMArray } from './util/bingo';
 
 const nodecg = nodecgApiContext.get();
 
@@ -17,34 +18,38 @@ const defaultEmptyColorCounts = {
     purple: 0
 };
 
-function getNeighbors(idx: number): number[] {
-    const result = [];
-    if (idx - 5 >= 0) {
-        result.push(idx - 5);
+function getNeighbors(row: number, column: number): [number, number][] {
+    const result: [number, number][] = [];
+    if (row > 0) {
+        result.push([row - 1, column]);
     }
-    if (idx % 5 !== 0 && idx - 1 >= 0) {
-        result.push(idx - 1);
+    if (column > 0) {
+        result.push([row, column - 1]);
     }
-    if (idx + 5 < 25) {
-        result.push(idx + 5);
+    if (row < 4) {
+        result.push([row + 1, column]);
     }
-    if (idx % 5 !== 4 && idx + 1 < 25) {
-        result.push(idx + 1);
+    if (column < 4) {
+        result.push([row, column + 1]);
     }
     return result;
 }
 
 function updateVisibilities(): void {
-    explorationBoardRep.value.cells.forEach((cell, idx, allCells): void => {
-        /* eslint-disable no-param-reassign */
-        if (idx === 6 || idx === 18 || getNeighbors(idx).some((i): boolean => !!allCells[i].colors.length)) {
-            cell.name = cell.hiddenName;
-            cell.hidden = false;
-        } else {
-            cell.name = '';
-            cell.hidden = true;
-        }
-        /* eslint-enable no-param-reassign */
+    explorationBoardRep.value.cells.forEach((row, rowIndex, allCells): void => {
+        row.forEach((cell, columnIndex) => {
+            /* eslint-disable no-param-reassign */
+            if ((rowIndex === 1 && columnIndex === 1)
+                || (rowIndex === 3 && columnIndex === 3)
+                || getNeighbors(rowIndex, columnIndex).some(([r, c]): boolean => !!allCells[r][c].colors.length)) {
+                cell.name = cell.hiddenName;
+                cell.hidden = false;
+            } else {
+                cell.name = '';
+                cell.hidden = true;
+            }
+            /* eslint-enable no-param-reassign */
+        })
     });
 }
 
@@ -64,7 +69,7 @@ nodecg.listenFor('exploration:newGoals', (goals: string[], callback): void => {
                 colors: []
             })
         );
-        explorationBoardRep.value = { colorCounts: defaultEmptyColorCounts, cells };
+        explorationBoardRep.value = { colorCounts: defaultEmptyColorCounts, cells: toNxMArray(cells, 5, 5) };
         updateVisibilities();
         if (callback && !callback.handled) {
             callback(null);
@@ -74,17 +79,20 @@ nodecg.listenFor('exploration:newGoals', (goals: string[], callback): void => {
 
 nodecg.listenFor('exploration:resetBoard', (_data, callback): void => {
     explorationBoardRep.value.colorCounts = defaultEmptyColorCounts;
-    explorationBoardRep.value.cells.forEach((cell, idx): void => {
-        /* eslint-disable no-param-reassign */
-        if (idx === 6 || idx === 18) {
-            cell.name = cell.hiddenName;
-            cell.hidden = false;
-        } else {
-            cell.name = '';
-            cell.hidden = true;
-        }
-        cell.colors = [];
-        /* eslint-enable no-param-reassign */
+    explorationBoardRep.value.cells.forEach((row, rowIndex): void => {
+        row.forEach((cell, columnIndex) => {
+            /* eslint-disable no-param-reassign */
+            if ((rowIndex === 1 && columnIndex === 1)
+                || (rowIndex === 3 && columnIndex === 3)) {
+                cell.name = cell.hiddenName;
+                cell.hidden = false;
+            } else {
+                cell.name = '';
+                cell.hidden = true;
+            }
+            cell.colors = [];
+            /* eslint-enable no-param-reassign */
+        })
     });
     if (callback && !callback.handled) {
         callback(null);
@@ -107,10 +115,12 @@ nodecg.listenFor('exploration:goalClicked', (goal, callback): void => {
             return;
         }
     }
-    if (explorationBoardRep.value.cells[index].colors.length) {
-        explorationBoardRep.value.cells[index].colors = [];
+    const rowIdx = Math.floor(index / 5);
+    const colIdx = index % 5;
+    if (explorationBoardRep.value.cells[rowIdx][colIdx].colors.length) {
+        explorationBoardRep.value.cells[rowIdx][colIdx].colors = [];
     } else {
-        explorationBoardRep.value.cells[index].colors = [playerColor || 'red'];
+        explorationBoardRep.value.cells[rowIdx][colIdx].colors = [playerColor || 'red'];
     }
     updateVisibilities();
     if (callback && !callback.handled) {

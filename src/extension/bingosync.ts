@@ -13,6 +13,7 @@ import equal from 'deep-equal';
 import { RunDataActiveRun, RunDataPlayer, RunDataTeam } from '../../speedcontrol-types';
 import { BingoboardCell, BingosyncCell, BoardColor } from '../../types';
 import { InvasionContext } from './util/invasion';
+import { toNxMArray } from './util/bingo';
 
 const nodecg = nodecgApiContext.get();
 const log = new nodecg.Logger(`${nodecg.bundleName}:bingosync`);
@@ -37,6 +38,8 @@ const SOCKET_URLS: Record<string, string> = Object.freeze({
     'https://bingosync.com': 'wss://sockets.bingosync.com',
     'https://bingosync.bingothon.com': 'wss://bingosock.bingothon.com'
 });
+
+
 
 class BingosyncManager {
     private request = RequestPromise.defaults({ jar: true });
@@ -215,7 +218,7 @@ class BingosyncManager {
             purple: 0
         };
 
-        const newBoardState = bingosyncBoard.map((cell): BingoboardCell => {
+        const newBoardState = toNxMArray(bingosyncBoard.map((cell): BingoboardCell => {
             // remove blank cause that's not a color
             // count all the color occurences
             const newCell: BingoboardCell = {
@@ -232,7 +235,7 @@ class BingosyncManager {
             });
             this.processCellForMarkers(newCell);
             return newCell;
-        });
+        }), 5, 5);
 
         if (this.invasionCtx !== null) {
             this.invasionCtx.updateSides(newBoardState);
@@ -263,10 +266,10 @@ class BingosyncManager {
 
     private fullUpdateMarkers(): void {
         const clonedCells = clone(boardRep.value.cells);
-        clonedCells.forEach((cell: BingoboardCell): void => {
+        clonedCells.forEach(column => column.forEach((cell: BingoboardCell): void => {
             cell.markers = [null, null, null, null];
             this.processCellForMarkers(cell);
-        });
+        }));
 
         if (this.invasionCtx !== null) {
             this.invasionCtx.updateSides(clonedCells);
@@ -361,7 +364,7 @@ class BingosyncManager {
                         rawColors: json.square.colors
                     };
                     this.processCellForMarkers(cell);
-                    boardRep.value.cells[index] = cell;
+                    boardRep.value.cells[Math.floor(index / 5)][index % 5] = cell;
                     // update goal count
                     this.countScore(json);
                     //Check if conditions for lockout win are fulfilled and stop timer
@@ -439,13 +442,13 @@ class BingosyncManager {
         });
     }
 
-    private updateRowControlScore(cells: BingoboardCell[], color: BoardColor) {
+    private updateRowControlScore(cells: BingoboardCell[][], color: BoardColor) {
         //count rows
         let rowCounter = 0;
         for (let row = 0; row < 5; row++) {
             let goalsInRow = 0;
             for (let column = 0; column < 5; column++) {
-                if (cells[row * 5 + column].colors.includes(color)) {
+                if (cells[row][column].colors.includes(color)) {
                     goalsInRow++;
                 }
             }
@@ -456,58 +459,58 @@ class BingosyncManager {
         boardRep.value.colorCounts[color] = rowCounter;
     }
 
-    private updateJsrfLockoutScore(cells: BingoboardCell[], color: BoardColor) {
+    private updateJsrfLockoutScore(cells: BingoboardCell[][], color: BoardColor) {
         let score = 0;
         const BINGOSCORE = 3;
         const GRAFFITISCORE = 3;
         const SQUARESCORE = 1;
-        for (let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
-            if (cells[cellIndex].colors.includes(color)) {
-                if (cells[cellIndex].name.toLowerCase().includes('graffiti')) {
+        cells.forEach(columns => columns.forEach(cell => {
+            if (cell.colors.includes(color)) {
+                if (cell.name.toLowerCase().includes('graffiti')) {
                     score += GRAFFITISCORE;
                 } else {
                     score += SQUARESCORE;
                 }
             }
-        }
+        }))
         for (let rowCol = 0; rowCol < 5; rowCol++) {
             // Row Bingo Checks
             if (
-                cells[rowCol * 5].colors.includes(color) &&
-                cells[rowCol * 5 + 1].colors.includes(color) &&
-                cells[rowCol * 5 + 2].colors.includes(color) &&
-                cells[rowCol * 5 + 3].colors.includes(color) &&
-                cells[rowCol * 5 + 4].colors.includes(color)
+                cells[rowCol][0].colors.includes(color) &&
+                cells[rowCol][1].colors.includes(color) &&
+                cells[rowCol][2].colors.includes(color) &&
+                cells[rowCol][3].colors.includes(color) &&
+                cells[rowCol][4].colors.includes(color)
             ) {
                 score += BINGOSCORE;
             }
             // Col Bingo Checks
             if (
-                cells[rowCol].colors.includes(color) &&
-                cells[5 + rowCol].colors.includes(color) &&
-                cells[10 + rowCol].colors.includes(color) &&
-                cells[15 + rowCol].colors.includes(color) &&
-                cells[20 + rowCol].colors.includes(color)
+                cells[0][rowCol].colors.includes(color) &&
+                cells[1][rowCol].colors.includes(color) &&
+                cells[2][rowCol].colors.includes(color) &&
+                cells[3][rowCol].colors.includes(color) &&
+                cells[4][rowCol].colors.includes(color)
             ) {
                 score += BINGOSCORE;
             }
         }
         //Diagonal Checks done by direct index reference
         if (
-            cells[0].colors.includes(color) &&
-            cells[6].colors.includes(color) &&
-            cells[12].colors.includes(color) &&
-            cells[18].colors.includes(color) &&
-            cells[24].colors.includes(color)
+            cells[0][0].colors.includes(color) &&
+            cells[1][1].colors.includes(color) &&
+            cells[2][2].colors.includes(color) &&
+            cells[3][3].colors.includes(color) &&
+            cells[4][4].colors.includes(color)
         ) {
             score += BINGOSCORE;
         }
         if (
-            cells[4].colors.includes(color) &&
-            cells[8].colors.includes(color) &&
-            cells[12].colors.includes(color) &&
-            cells[16].colors.includes(color) &&
-            cells[20].colors.includes(color)
+            cells[0][4].colors.includes(color) &&
+            cells[1][3].colors.includes(color) &&
+            cells[2][2].colors.includes(color) &&
+            cells[3][1].colors.includes(color) &&
+            cells[4][0].colors.includes(color)
         ) {
             score += BINGOSCORE;
         }

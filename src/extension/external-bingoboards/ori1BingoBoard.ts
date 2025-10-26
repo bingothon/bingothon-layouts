@@ -7,6 +7,7 @@ import { ExternalBingoboard, ExternalBingoboardMeta } from '../../../schemas';
 import { ExplorationBingoboardCell } from '../../../types';
 import { ExternalBingoboardManager } from '../externalBingoboards';
 import * as nodecgApiContext from '../util/nodecg-api-context';
+import { toNxMArray } from '@/util/bingo';
 
 const nodecg = nodecgApiContext.get();
 const log = new nodecg.Logger(`${nodecg.bundleName}:oriBingo`);
@@ -182,7 +183,7 @@ export class Ori1ExternalBingoboard implements ExternalBingoboardManager {
                 const playerColor = boardMetaRep.value.playerColors[0] || 'red';
                 const { cells, count } = toBingosyncBoard(responses, playerColor);
                 if (this.boardRep.value) {
-                    this.boardRep.value.cells = cells;
+                    this.boardRep.value.cells = toNxMArray(cells, 5, 5);
                     this.boardRep.value.colorCounts[playerColor] = count;
                 } else {
                     log.error('ori1 board rep unexpectedly undefined!');
@@ -229,7 +230,7 @@ export class Ori1ExternalBingoboard implements ExternalBingoboardManager {
                     });
                 }
                 if (this.boardRep.value) {
-                    this.boardRep.value.cells = cells;
+                    this.boardRep.value.cells = toNxMArray(cells, 5, 5);
                     this.boardRep.value.colorCounts = colorCounts;
                 } else {
                     log.error('ori1 board rep unexpectedly undefined!');

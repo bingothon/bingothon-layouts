@@ -33,7 +33,7 @@ const parseBoard = (board: Board): Bingoboard => {
     }
     return {
         colorCounts: {},
-        cells: board.board.flatMap((row, rowIndex) => row.map((cell, index) => parseCell(cell, rowIndex, index)))
+        cells: board.board.map((row, rowIndex) => row.map((cell, index) => parseCell(cell, rowIndex, index)))
     };
 };
 
@@ -104,7 +104,7 @@ nodecg.listenFor('playBingo:connect', async (data, callback) => {
                     });
                     break;
                 case 'cellUpdate':
-                    boardRep.value.cells[data.row * 5 + data.col] = parseCell(data.cell, data.row, data.col);
+                    boardRep.value.cells[data.row][data.col] = parseCell(data.cell, data.row, data.col);
                     data.players?.forEach((player) => {
                         // TODO: we should map players in the schedule to
                         // players in the room to avoid needing this easily

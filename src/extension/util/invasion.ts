@@ -28,7 +28,7 @@ export class InvasionContext {
         this.playerColor2 = color;
     }
 
-    public initSides(cells: BingoboardCell[]) {
+    public initSides(cells: BingoboardCell[][]) {
         if (isEmpty(cells)) return;
         // check for corner starts
         for (const side of CORNER_STARTS) {
@@ -46,7 +46,7 @@ export class InvasionContext {
         }
     }
 
-    public updateSides(cells: BingoboardCell[]) {
+    public updateSides(cells: BingoboardCell[][]) {
         if (isEmpty(cells)) {
             this.player1start = null;
             return;
@@ -58,13 +58,15 @@ export class InvasionContext {
         }
     }
 
-    public setMarkers(cells: BingoboardCell[]) {
+    public setMarkers(cells: BingoboardCell[][]) {
         // clear all markers
         // TODO: reduce replicant updates
-        for (const cell of cells) {
-            cell.markers[0] = null;
-            cell.markers[1] = null;
-        }
+        cells.forEach(row => {
+            row.forEach(cell => {
+                cell.markers[0] = null;
+                cell.markers[1] = null;
+            })
+        })
         if (this.player1start === null) {
             // if no goal has been clicked, all goals on edges should be marked
             for (const side of SIDE_STARTS) {
@@ -90,7 +92,7 @@ export class InvasionContext {
         }
     }
 
-    private setMarkersI(cells: BingoboardCell[], playerIdx: number, playerColor: string, side: InvasionStart): void {
+    private setMarkersI(cells: BingoboardCell[][], playerIdx: number, playerColor: string, side: InvasionStart): void {
         let maxGoalCount = 5;
         // similar to isValid, check if at least one goal can still be clicked on this line
         for (let i = 0; i < 5; i++) {
@@ -103,7 +105,8 @@ export class InvasionContext {
             // strictly lower, so another goal can be clicked here
             if (lineGoalCount < maxGoalCount) {
                 for (let j = 0; j < 5; j++) {
-                    const cell = cells[getRotatedIndex(side, i, j)];
+                    const [row, column] = getRotatedIndex(side, i, j)
+                    const cell = cells[row][column];
                     if (cell.rawColors === 'blank') {
                         // set markers only if cell is empty
                         cell.markers[playerIdx] = playerColor;
@@ -115,11 +118,11 @@ export class InvasionContext {
     }
 }
 
-function isEmpty(cells: BingoboardCell[]): boolean {
-    return cells.every((cell) => cell.rawColors === 'blank');
+function isEmpty(cells: BingoboardCell[][]): boolean {
+    return cells.every(row => row.every((cell) => cell.rawColors === 'blank'));
 }
 
-function sideValid(cells: BingoboardCell[], side: InvasionStart, color: string): boolean {
+function sideValid(cells: BingoboardCell[][], side: InvasionStart, color: string): boolean {
     // TOP_LEFT etc. need both TOP and LEFT
     if (side % 2 === 1) {
         return sideValid(cells, side - 1, color) && sideValid(cells, (side + 1) % 8, color);
@@ -148,20 +151,21 @@ function sideValid(cells: BingoboardCell[], side: InvasionStart, color: string):
  * @param x lines away from the starting side (0 indexed)
  * @param y 0 to 5 (exclusive) to get all squares in that line, makes no guarantees otherwise
  */
-function getColor(cells: BingoboardCell[], side: InvasionStart, x: number, y: number): string {
-    return cells[getRotatedIndex(side, x, y)].rawColors;
+function getColor(cells: BingoboardCell[][], side: InvasionStart, x: number, y: number): string {
+    const [row, column] = getRotatedIndex(side, x, y);
+    return cells[row][column].rawColors;
 }
 
-function getRotatedIndex(side: InvasionStart, x: number, y: number): number {
+function getRotatedIndex(side: InvasionStart, x: number, y: number): [number, number] {
     switch (side) {
         case InvasionStart.LEFT:
-            return x + 5 * y;
+            return [y, x];
         case InvasionStart.TOP:
-            return 5 * x + y;
+            return [x, y];
         case InvasionStart.RIGHT:
-            return 4 - x + 5 * y;
+            return [y, 4 - x];
         case InvasionStart.BOTTOM:
-            return 5 * (4 - x) + y;
+            return [(4 - x), y];
         default:
             // all other sides are invalid here
             throw new Error('Invalid side for getRotatedIndex');

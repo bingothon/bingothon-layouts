@@ -197,16 +197,15 @@
 
         onBingoBoardUpdate(newGoals: Bingoboard, oldGoals?: Bingoboard | undefined) {
             if (!newGoals) return;
-            let idx = 0;
             this.bingoCells.forEach((row, rowIndex) => {
                 row.forEach((cell, columnIndex) => {
                     // update cell with goal name, if changed
-                    const newCell = newGoals.cells[idx];
-                    if (!oldGoals || !oldGoals.cells.length || newCell.name != oldGoals.cells[idx].name) {
+                    const newCell = newGoals.cells[rowIndex][columnIndex];
+                    if (!oldGoals || !oldGoals.cells.length || newCell.name != oldGoals.cells[rowIndex][columnIndex].name) {
                         Vue.set(this.bingoCells[rowIndex][columnIndex], 'name', newCell.name);
                     }
                     // update cell with color backgrounds, if changed
-                    if (!oldGoals || !oldGoals.cells.length || !equals(newCell.colors, oldGoals.cells[idx].colors)) {
+                    if (!oldGoals || !oldGoals.cells.length || !equals(newCell.colors, oldGoals.cells[rowIndex][columnIndex].colors)) {
                         if (newCell.colors.length !== 0) {
                             const colors = sortColors(newCell.colors);
                             var newColors = [];
@@ -224,10 +223,9 @@
                             Vue.set(this.bingoCells[rowIndex][columnIndex], 'colors', []);
                         }
                     }
-                    if (!oldGoals || !oldGoals.cells.length || !equals(newCell.markers, oldGoals.cells[idx].markers)) {
+                    if (!oldGoals || !oldGoals.cells.length || !equals(newCell.markers, oldGoals.cells[rowIndex][columnIndex].markers)) {
                         Vue.set(this.bingoCells[rowIndex][columnIndex], 'markers', newCell.markers);
                     }
-                    idx++;
                 });
             });
         }
