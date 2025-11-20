@@ -275,7 +275,7 @@
   "devDependencies": {
     "@mdi/font": "^5.4.55",
     "@nodecg/types": "^2.1.12",
-    "@playbingo/types": "^1.1.0",
+    "@playbingo/types": "^1.2.0",
     "@types/cheerio": "^0.22.13",
     "@types/clone": "^2.1.1",
     "@types/d3": "^7.4.0",

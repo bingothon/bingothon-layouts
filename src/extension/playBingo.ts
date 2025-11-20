@@ -20,7 +20,7 @@ let webSocket: WebSocket;
 let players: Player[] = [];
 
 const parseCell = (cell: Cell, row: number, col: number): BingoboardCell => ({
-    name: cell.goal.goal,
+    name: cell.revealed ? cell.goal.goal : '',
     slot: `${row * 5 + col}`,
     colors: cell.completedPlayers.map((playerId) => players.find((player) => player.id === playerId)?.color ?? ''),
     rawColors: cell.completedPlayers.map((playerId) => players.find((player) => player.id === playerId)?.color).join(' '),
