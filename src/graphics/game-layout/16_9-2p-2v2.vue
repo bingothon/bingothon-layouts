@@ -147,8 +147,9 @@
         left: 0px;
         width: 640px;
         top: 540px;
-        height: 125px;
-				box-sizing: border-box;
+        height: 122px;
+        box-sizing: border-box;
+        z-index: 100;
     }
 
     #ti1 {
@@ -156,7 +157,7 @@
         top: 0px;
         left: 0px;
         background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
-        width: 618px;
+        width: 616px;
     }
 
     #pi1 {
@@ -170,16 +171,17 @@
         position: absolute;
         top: 59px;
         left: 315px;
-        width: 302px;
+        width: 301px;
     }
 
     #team2 {
         position: absolute;
         left: 1280px;
-				width: 640px;
-				top: 540px;
-				height: 125px;
-				box-sizing: border-box;
+        width: 640px;
+        top: 540px;
+        height: 122px;
+        box-sizing: border-box;
+        z-index: 1;
     }
 
     #ti2 {
@@ -187,21 +189,21 @@
         top: 0px;
         left: 0px;
         background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
-        width: 622px;
+        width: 616px;
     }
 
     #pi3 {
         position: absolute;
         top: 59px;
         left: 0px;
-        width: 304px;
+        width: 301px;
     }
 
     #pi4 {
         position: absolute;
         top: 59px;
-        left: 318px;
-        width: 304px;
+        left: 315px;
+        width: 301px;
     }
 
     #Bingo-board {
