@@ -4,7 +4,7 @@
         <twitch-player id="stream1" streamIndex="0"></twitch-player>
         <twitch-player id="stream3" streamIndex="2"></twitch-player>
         <div id="fillbar" class="flexContainer"></div>
-        <div id="team1" :style="{ border: '5px var(--border-color-' + teamColor1 + ') solid' }">
+        <div id="team1" :style="{ border: `5px ${teamColor1} solid` }">
             <team-info team-index="0" height="45px" id="ti1"></team-info>
             <player-info
                 id="pi1"
@@ -21,13 +21,13 @@
                 height="40px"
             ></player-info>
         </div>
-        <div id="team2" :style="{ border: '5px var(--border-color-' + teamColor2 + ') solid' }">
+        <div id="team2" :style="{ border: `5px ${teamColor2} solid` }">
             <team-info team-index="1" height="45px" id="ti2"></team-info>
             <player-info
                 id="pi3"
-                playerIndex="2"
-                hide-finish-time="true"
-                show-color="false"
+                playerIndex=2
+                hide-finish-time=true
+                show-color=false
                 height="40px"
             ></player-info>
             <player-info
@@ -145,9 +145,10 @@
     #team1 {
         position: absolute;
         left: 0px;
-        width: 630px;
+        width: 640px;
         top: 540px;
-        height: 112px;
+        height: 125px;
+				box-sizing: border-box;
     }
 
     #ti1 {
@@ -155,7 +156,7 @@
         top: 0px;
         left: 0px;
         background-image: linear-gradient(var(--lighter-main-color), var(--darker-main-color));
-        width: 617px;
+        width: 618px;
     }
 
     #pi1 {
@@ -175,9 +176,10 @@
     #team2 {
         position: absolute;
         left: 1280px;
-        width: 634px;
-        top: 540px;
-        height: 112px;
+				width: 640px;
+				top: 540px;
+				height: 125px;
+				box-sizing: border-box;
     }
 
     #ti2 {

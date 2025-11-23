@@ -359,7 +359,7 @@
     .PlayerInfoBox > .BingoColor {
         justify-content: center;
         margin-left: 14px;
-        font-size: 40px;
+        font-size: 30px;
         border-radius: 10%;
         border: 1px white solid;
         box-sizing: content-box;
