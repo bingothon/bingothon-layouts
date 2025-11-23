@@ -18,6 +18,7 @@ export const pathsAndText: { [key: string]: { textNeeded: boolean; logoPath: str
     'playstation 2': { logoPath: 'images/ps2.png', textNeeded: true },
     'playstation 3': { logoPath: 'images/ps3.svg', textNeeded: true },
     'playstation 4': { logoPath: 'images/ps4.png', textNeeded: true },
+    'playstation 5': { logoPath: 'images/ps5.png', textNeeded: true },
     psp: { logoPath: 'images/psp.png', textNeeded: true },
     psvita: { logoPath: 'images/psvita.png', textNeeded: true },
     segadreamcast: { logoPath: 'images/segadreamcast.png', textNeeded: true },
