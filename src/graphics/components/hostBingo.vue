@@ -10,9 +10,11 @@
                         v-on:click="updateCell(cell, i, j)"
                         :title="cell.description"
                     >
-                        <div v-for="color in calculateBgColorStyles(cell)"
+                        <div
+                            v-for="color in calculateBgColorStyles(cell)"
                             :class="'bg-color ' + color.color + 'square'"
-                            :style="color.style" />
+                            :style="color.style"
+                        />
                         <div class="shadow" />
                         <div class="CellTextFitContainer">
                             <CellTextFit :text="cell.goal" :fontSize="fontSize"></CellTextFit>
@@ -22,7 +24,6 @@
             </tbody>
         </table>
         <div v-if="dashboard" id="btn">
-
             <button v-on:click="resetBoard()">Reset</button>
             <div>Red = Bingothon</div>
             <div>Blue = Nitro (Restream)</div>
@@ -78,7 +79,7 @@
         @Prop({ default: false })
         dashboard: boolean;
 
-        @Prop({ default: false})
+        @Prop({ default: false })
         isRestream: boolean;
 
         skewAngle = 1;
@@ -106,27 +107,27 @@
             if (this.isRestream) {
                 getReplicant<HostBingoCell[][]>('hostingBingoboard').value[col][row] = {
                     ...cell,
-                    markedRestream: !cell.markedRestream,
+                    markedRestream: !cell.markedRestream
                 };
             } else {
                 getReplicant<HostBingoCell[][]>('hostingBingoboard').value[col][row] = {
                     ...cell,
-                    marked: !cell.marked,
+                    marked: !cell.marked
                 };
             }
         }
 
-        calculateBgColorStyles(cell: HostBingoCell): {color: string, style: string}[] {
+        calculateBgColorStyles(cell: HostBingoCell): { color: string; style: string }[] {
             const colors = [];
             if (cell.marked) {
-                colors.push("red");
+                colors.push('red');
             }
             if (cell.markedRestream) {
-                colors.push("blue");
+                colors.push('blue');
             }
             const newColors = [];
             if (colors.length > 0) {
-                newColors.push({color: colors[0], style: ""});
+                newColors.push({ color: colors[0], style: '' });
             }
             const translations = translatePercent[colors.length];
             for (let i = 1; i < colors.length; i++) {

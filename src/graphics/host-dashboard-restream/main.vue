@@ -11,9 +11,7 @@
                                 {{ formatAmount(bid.amount_raised) }} /
                                 {{ formatAmount(bid.goal) }}
                             </div>
-                            <div class="bidLeft">
-                                {{ formatAmount(bid.goal - bid.amount_raised) }} left to go!
-                            </div>
+                            <div class="bidLeft">{{ formatAmount(bid.goal - bid.amount_raised) }} left to go!</div>
                         </div>
                         <div v-else>
                             <div v-if="bid.options.length">
@@ -97,12 +95,11 @@
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import { getReplicant, store } from '../../browser-util/state';
+    import { store } from '../../browser-util/state';
     import { TrackerOpenBid, TrackerPrize } from '../../../types';
     import moment from 'moment';
     import { RunData } from '../../../speedcontrol-types';
     import HostBingo from '../components/hostBingo.vue';
-    import { HostsSpeakingDuringIntermission, ShowThingsDuringIntermission } from '@/schemas';
     import { formatAmount } from '../_misc/formatAmount';
 
     @Component({
