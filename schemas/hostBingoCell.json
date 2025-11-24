@@ -15,16 +15,21 @@
             "type": "boolean",
             "default": false
         },
-        "markedRestream": {
+        "markedRestream1": {
             "type": "boolean",
             "default": false
-        }
+        },
+		"markedRestream2": {
+			"type": "boolean",
+			"default": false
+		}
     },
     "required": [
         "goal",
         "description",
         "marked",
-        "markedRestream"
+        "markedRestream1",
+		"markedRestream2"
     ],
     "additionalProperties": false
 }

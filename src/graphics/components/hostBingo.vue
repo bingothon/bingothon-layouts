@@ -5,9 +5,15 @@
                 <tr :key="i" v-for="(column, i) in bingoCells">
                     <td
                         class="square"
-                        :key="i + '' + j"
+                        :key="`${i} ${j}`"
                         v-for="(cell, j) in column"
-                        v-on:click="updateCell(cell, i, j)"
+                        v-on:click="updateCell(cell, i, j, true)"
+                        v-on:contextmenu="
+                            (e) => {
+                                e.preventDefault();
+                                updateCell(cell, i, j);
+                            }
+                        "
                         :title="cell.description"
                     >
                         <div
@@ -26,7 +32,8 @@
         <div v-if="dashboard" id="btn">
             <button v-on:click="resetBoard()">Reset</button>
             <div>Red = Bingothon</div>
-            <div>Blue = Nitro (Restream)</div>
+            <div>Blue = Nitro (Restream, left click)</div>
+            <div>Green = SRDE (Restream, right click)</div>
         </div>
     </div>
 </template>
@@ -46,7 +53,7 @@
             let cur: HostBingoCell[] = [];
             for (let j = 0; j < 5; j++) {
                 let goal = goals[i * 5 + j];
-                cur.push({ ...goal, marked: false, markedRestream: false });
+                cur.push({ ...goal, marked: false, markedRestream1: false, markedRestream2: false });
             }
             result.push(cur);
         }
@@ -103,12 +110,19 @@
             });
         }
 
-        updateCell(cell: HostBingoCell, col: number, row: number) {
+        updateCell(cell: HostBingoCell, col: number, row: number, primaryClick?: boolean) {
             if (this.isRestream) {
-                getReplicant<HostBingoCell[][]>('hostingBingoboard').value[col][row] = {
-                    ...cell,
-                    markedRestream: !cell.markedRestream
-                };
+                if (primaryClick) {
+                    getReplicant<HostBingoCell[][]>('hostingBingoboard').value[col][row] = {
+                        ...cell,
+                        markedRestream1: !cell.markedRestream1
+                    };
+                } else {
+                    getReplicant<HostBingoCell[][]>('hostingBingoboard').value[col][row] = {
+                        ...cell,
+                        markedRestream2: !cell.markedRestream2
+                    };
+                }
             } else {
                 getReplicant<HostBingoCell[][]>('hostingBingoboard').value[col][row] = {
                     ...cell,
@@ -122,8 +136,11 @@
             if (cell.marked) {
                 colors.push('red');
             }
-            if (cell.markedRestream) {
+            if (cell.markedRestream1) {
                 colors.push('blue');
+            }
+            if (cell.markedRestream2) {
+                colors.push('green');
             }
             const newColors = [];
             if (colors.length > 0) {

@@ -9,5 +9,6 @@ export interface HostBingoCell {
   goal: string;
   description: string;
   marked: boolean;
-  markedRestream: boolean;
+  markedRestream1: boolean;
+  markedRestream2: boolean;
 }
