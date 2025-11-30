@@ -18,7 +18,7 @@ const defaultEmptyColorCounts = {
     purple: 0
 };
 
-function getNeighbors(row: number, column: number): [number, number][] {
+function getNeighbors(row: number, column: number, rowCount: number, columnCount: number): [number, number][] {
     const result: [number, number][] = [];
     if (row > 0) {
         result.push([row - 1, column]);
@@ -26,22 +26,24 @@ function getNeighbors(row: number, column: number): [number, number][] {
     if (column > 0) {
         result.push([row, column - 1]);
     }
-    if (row < 4) {
+    if (row < (rowCount - 1)) {
         result.push([row + 1, column]);
     }
-    if (column < 4) {
+    if (column < (columnCount - 1)) {
         result.push([row, column + 1]);
     }
     return result;
 }
 
 function updateVisibilities(): void {
+    const rowCount = explorationBoardRep.value.cells.length;
+    const columnCount = explorationBoardRep.value.cells.at(0)?.length ?? 5;
+    const revealed = explorationBoardRep.value.revealed ?? [];
     explorationBoardRep.value.cells.forEach((row, rowIndex, allCells): void => {
         row.forEach((cell, columnIndex) => {
             /* eslint-disable no-param-reassign */
-            if ((rowIndex === 1 && columnIndex === 1)
-                || (rowIndex === 3 && columnIndex === 3)
-                || getNeighbors(rowIndex, columnIndex).some(([r, c]): boolean => !!allCells[r][c].colors.length)) {
+            if (revealed.some(r => (r.column === columnIndex && r.row === rowIndex))
+                || getNeighbors(rowIndex, columnIndex, rowCount, columnCount).some(([r, c]): boolean => !!allCells[r][c].colors.length)) {
                 cell.name = cell.hiddenName;
                 cell.hidden = false;
             } else {
@@ -53,10 +55,10 @@ function updateVisibilities(): void {
     });
 }
 
-nodecg.listenFor('exploration:newGoals', (goals: string[], callback): void => {
-    if (goals.length !== 25) {
+nodecg.listenFor('exploration:newGoals', ({rows, columns, goals, revealed}: {rows: number, columns: number, goals: string[], revealed: {row: number, column: number}[]}, callback): void => {
+    if (goals.length !== rows * columns) {
         if (callback && !callback.handled) {
-            callback(new Error('There have to be exactly 25 goals!'));
+            callback(new Error("Length doesn't match dimensions!"));
         }
     } else {
         // reset counts and colors
@@ -69,7 +71,7 @@ nodecg.listenFor('exploration:newGoals', (goals: string[], callback): void => {
                 colors: []
             })
         );
-        explorationBoardRep.value = { colorCounts: defaultEmptyColorCounts, cells: toNxMArray(cells, 5, 5) };
+        explorationBoardRep.value = { colorCounts: defaultEmptyColorCounts, cells: toNxMArray(cells, columns, rows), revealed };
         updateVisibilities();
         if (callback && !callback.handled) {
             callback(null);
@@ -82,45 +84,31 @@ nodecg.listenFor('exploration:resetBoard', (_data, callback): void => {
     explorationBoardRep.value.cells.forEach((row, rowIndex): void => {
         row.forEach((cell, columnIndex) => {
             /* eslint-disable no-param-reassign */
-            if ((rowIndex === 1 && columnIndex === 1)
-                || (rowIndex === 3 && columnIndex === 3)) {
-                cell.name = cell.hiddenName;
-                cell.hidden = false;
-            } else {
-                cell.name = '';
-                cell.hidden = true;
-            }
+            cell.name = '';
+            cell.hidden = true;
             cell.colors = [];
             /* eslint-enable no-param-reassign */
         })
     });
+    updateVisibilities();
     if (callback && !callback.handled) {
         callback(null);
     }
 });
 
-nodecg.listenFor('exploration:goalClicked', (goal, callback): void => {
-    if (!goal || typeof goal.index !== 'number') {
+nodecg.listenFor('exploration:goalClicked', ({row, column}: {row: number, column: number}, callback): void => {
+    if (typeof row !== 'number' || typeof column !== 'number') {
         if (callback && !callback.handled) {
-            callback(new Error('index of the goal has to be a number!'));
+            callback(new Error('row and column of the goal has to be a number!'));
             return;
         }
     }
     // only allow one color
     const playerColor = boardMetaRep.value.playerColors[0];
-    const { index } = goal;
-    if (index < 0 || index >= 25) {
-        if (callback && !callback.handled) {
-            callback(new Error('index has to be between 0 (inclusive) and 25 (exclusive)'));
-            return;
-        }
-    }
-    const rowIdx = Math.floor(index / 5);
-    const colIdx = index % 5;
-    if (explorationBoardRep.value.cells[rowIdx][colIdx].colors.length) {
-        explorationBoardRep.value.cells[rowIdx][colIdx].colors = [];
+    if (explorationBoardRep.value.cells[row][column].colors.length) {
+        explorationBoardRep.value.cells[row][column].colors = [];
     } else {
-        explorationBoardRep.value.cells[rowIdx][colIdx].colors = [playerColor || 'red'];
+        explorationBoardRep.value.cells[row][column].colors = [playerColor || 'red'];
     }
     updateVisibilities();
     if (callback && !callback.handled) {

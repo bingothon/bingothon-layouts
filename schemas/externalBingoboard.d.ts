@@ -9,6 +9,10 @@ export interface ExternalBingoboard {
   colorCounts: {
     [k: string]: unknown;
   };
+  revealed?: {
+    row: number;
+    column: number;
+  }[];
   cells: {
     name: string;
     hidden: boolean;

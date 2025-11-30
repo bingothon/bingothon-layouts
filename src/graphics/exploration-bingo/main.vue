@@ -1,5 +1,5 @@
 <template>
-    <div id="ExplorationBingo">
+    <div id="ExplorationBingo" :style="`--row-count: ${rowCount}; --column-count: ${columnCount}`">
         <table id="Board">
             <tr :key="i" v-for="(column, i) in bingoCells">
                 <td
@@ -45,26 +45,25 @@
     export default class ExplorationBingo extends Vue {
         bingoCells: BingoCell[][] = defaultBingoBoard();
 
+        columnCount: number = 5;
+        rowCount: number = 5;
+
         mounted() {
             console.log(this.bingoCells);
             store.watch((state) => state.explorationBingoboard, this.onBingoBoardUpdate, { immediate: true });
         }
 
         onBingoBoardUpdate(newGoals: ExplorationBingoboard, oldGoals?: ExplorationBingoboard | undefined) {
-            this.bingoCells.forEach((row, rowIndex) => {
-                row.forEach((cell, columnIndex) => {
-                    // update cell with goal name, if changed
-                    const newCell = newGoals.cells[rowIndex][columnIndex];
-                    if (!oldGoals || !oldGoals.cells.length || newCell.name != oldGoals.cells[rowIndex][columnIndex].name) {
-                        Vue.set(this.bingoCells[rowIndex][columnIndex], 'name', newCell.name);
-                    }
-                    // update cell with color background, if changed
-                    if (!oldGoals || !oldGoals.cells.length || newCell.colors != oldGoals.cells[rowIndex][columnIndex].colors) {
-                        Vue.set(this.bingoCells[rowIndex][columnIndex], 'colors', newCell.colors);
-                    }
-                    Vue.set(this.bingoCells[rowIndex][columnIndex], 'hidden', newCell.hidden);
-                });
-            });
+            if (!newGoals) return;
+            this.bingoCells = newGoals.cells.map((row, rowindex) => row.map((cell, columnindex) => ({
+                name: cell.name,
+                hidden: cell.hidden,
+                colors: cell.colors.at(0) ?? 'blank',
+                row: rowindex,
+                column: columnindex,
+            })));
+            this.rowCount = newGoals.cells.length;
+            this.columnCount = newGoals.cells[0]?.length ?? 5;
         }
 
         generateCellClasses(color: string, hidden: boolean): string {
@@ -79,7 +78,8 @@
             if (!cell.hidden) {
                 nodecg
                     .sendMessageToBundle('exploration:goalClicked', 'bingothon-layouts', {
-                        index: cell.row * 5 + cell.column
+                        row: cell.row,
+                        column: cell.column
                     })
                     .catch((e) => {
                         console.error(e);
@@ -104,8 +104,8 @@
 
     .square {
         padding: 0;
-        height: 20%;
-        width: 20%;
+        height: calc(100% / var(--row-count));
+        width: calc(100% / var(--column-count));
         border: 2px black solid;
     }
 
