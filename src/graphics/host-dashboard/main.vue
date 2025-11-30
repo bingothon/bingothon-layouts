@@ -23,7 +23,11 @@
                     </div>
                 </div>
                 <div>
-                    Use <a href="https://drive.google.com/file/d/1hxlEp5tpdPfZ921Lfm36GlkLhBnu14ej/view?usp=sharing">this document</a> to find more information about how contributions are being used, to be used as talking points
+                    Use
+                    <a href="https://drive.google.com/file/d/10UBTHBgjFKF5cW-YMndskU28ajz8jfGG/view"
+                        >this document</a
+                    >
+                    to find more information about how contributions are being used, to be used as talking points
                 </div>
                 <div id="bidsHeader">Upcoming Goals/Bidwars:</div>
                 <div id="bidsContainer">
