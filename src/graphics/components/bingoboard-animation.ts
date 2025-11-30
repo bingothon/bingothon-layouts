@@ -12,6 +12,7 @@ type Tile = {
 @Component
 export class BingoBoardAnimation extends Vue {
     tiles: Tile[][] = [];
+    cells: HTMLElement[] = [];
     currentX: number = 0;
     currentY: number = 0;
     col: number = 2;
@@ -24,6 +25,7 @@ export class BingoBoardAnimation extends Vue {
     @Watch('boardHidden')
     onBoardHiddenChanged(newVal: boolean, oldVal: boolean) {
         if (!newVal && oldVal) {
+            this.setupCells();
             this.generateTilePositions();
             this.setupSequence();
             this.setupCubeDimensions();
@@ -65,6 +67,11 @@ export class BingoBoardAnimation extends Vue {
         this.sequence = seq.reverse();
     }
 
+    setupCells() {
+        // we can't use this.$refs.cells, because it can get shuffled around by vue
+        this.cells = Array.from((this.$refs.tableBody as HTMLElement).getElementsByClassName("square")) as HTMLElement[];
+    }
+
     setupCubeDimensions() {
         const tileSize = this.tiles[0][0];
         const cube = this.$refs.cube as HTMLElement;
@@ -104,7 +111,7 @@ export class BingoBoardAnimation extends Vue {
                     this.currentX += 90;
                 }
 
-                const currentTile = this.$refs.cells[this.row * this.columnCount + this.col] as HTMLElement;
+                const currentTile = this.cells[this.row * this.columnCount + this.col] as HTMLElement;
                 currentTile.style.visibility = 'visible';
 
                 this.col = col;
@@ -128,11 +135,10 @@ export class BingoBoardAnimation extends Vue {
 
     generateTilePositions() {
         const bingoBoardRect = this.$el.getBoundingClientRect();
-        const cells = this.$refs.cells as HTMLElement[];
 
         this.tiles = Array(this.rowCount).fill(null).map((_, row) =>
             Array(this.columnCount).fill(null).map((_, col) => {
-                const cell = cells[row * this.columnCount + col];
+                const cell = this.cells[row * this.columnCount + col];
                 const rect = cell.getBoundingClientRect();
                 return {
                     row: row,
@@ -147,16 +153,14 @@ export class BingoBoardAnimation extends Vue {
     }
 
     hideTiles() {
-        const tiles = this.$refs.cells as HTMLElement[];
-        tiles.forEach((tile) => {
+        this.cells.forEach((tile) => {
             tile.style.visibility = 'hidden';
             tile.style.border = '2px solid transparent';
         });
     }
 
     showTilesBorder() {
-        const tiles = this.$refs.cells as HTMLElement[];
-        tiles.forEach((tile) => {
+        this.cells.forEach((tile) => {
             tile.style.transition = 'border-color 0.5s ease-in-out';
             tile.style.border = '2px solid transparent';
             setTimeout(() => {
@@ -185,7 +189,7 @@ export class BingoBoardAnimation extends Vue {
         const { col, row } = this.sequence[0];
         this.col = col;
         this.row = row;
-        // const firstTile = this.$refs.cells[col * this.rowCount + row] as HTMLElement;
+        // const firstTile = this.cells[col * this.rowCount + row] as HTMLElement;
         // firstTile.style.visibility = 'visible';
     }
 
@@ -194,6 +198,6 @@ export class BingoBoardAnimation extends Vue {
         const cube = this.$refs.cube as HTMLElement;
 
         // Reveal all tiles
-        (this.$refs.cells as HTMLElement[]).forEach(cell => cell.style.visibility = 'visible');
+        this.cells.forEach(cell => cell.style.visibility = 'visible');
     }
 }

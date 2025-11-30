@@ -1,5 +1,5 @@
 <template>
-    <div id="ExplorationBingo" :style="`--row-count: ${rowCount}; --column-count: ${columnCount}`">
+    <div id="ExplorationBingo" :style="`--row-count: ${rowCount}; --column-count: ${columnCount};`">
         <table id="Board">
             <tr :key="i" v-for="(column, i) in bingoCells">
                 <td
