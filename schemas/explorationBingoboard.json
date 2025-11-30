@@ -9,6 +9,23 @@
             "$comment": "How many fields of each color are  marked on the board",
             "type":"object"
         },
+        "revealed": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["row", "column"],
+                "properties": {
+                    "row": {
+                        "type": "number"
+                    },
+                    "column": {
+                        "type": "number"
+                    }
+                }
+            }
+        },
         "cells": {
             "type": "array",
             "default": [],

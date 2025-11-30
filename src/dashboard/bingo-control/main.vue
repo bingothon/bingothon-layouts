@@ -222,8 +222,6 @@
 
         externalBingoboardMeta: ExternalBingoboardMeta = { game: 'none' };
 
-        explorationCustomBoard: string = '';
-
         errorMessage: string = '';
 
         allColors = Object.freeze([
@@ -239,7 +237,7 @@
             'purple'
         ]);
 
-        allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard']); //add back when need  'explorationBingoboard'
+        allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard', 'explorationBingoboard']);
 
         mounted() {
             store.watch(
@@ -459,19 +457,6 @@
                     default:
                         break;
                 }
-            }
-        }
-
-        updateExploration() {
-            try {
-                const goals = JSON.parse(this.explorationCustomBoard);
-                const onlyNames = goals.map((g) => g.name);
-                nodecg.sendMessageToBundle('exploration:newGoals', 'bingothon-layouts', onlyNames).catch((e) => {
-                    this.errorMessage = e.message;
-                    nodecg.log.error(e);
-                });
-            } catch (e) {
-                this.errorMessage = "Couldn't parse the board";
             }
         }
 

@@ -1,14 +1,13 @@
 <template>
-    <div ref="bingoboard" class="BingoBoard" :style="`--row-count: ${rowCount}, --column-count: ${columnCount}`">
-        <table class="bingo-table">
-            <tbody>
+    <div ref="bingoboard" class="BingoBoard">
+        <table class="bingo-table" :style="`--row-count: ${rowCount}; --column-count: ${columnCount};`">
+            <tbody ref="tableBody">
                 <tr :key="i" v-for="(column, i) in bingoCells">
                     <td
                         class="square"
                         :id="'tile-' + i + '-' + j"
                         :key="i + '' + j"
                         v-for="(cell, j) in column"
-                        ref="cells"
                     >
                         <div
                             :key="color.color"
