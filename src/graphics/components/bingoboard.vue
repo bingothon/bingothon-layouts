@@ -1,5 +1,5 @@
 <template>
-    <div ref="bingoboard" class="BingoBoard" :style="{"--row-count": rowCount, "--column-count": columnCount}">
+    <div ref="bingoboard" class="BingoBoard" :style="`--row-count: ${rowCount}; --column-count: ${columnCount}`">
         <table class="bingo-table">
             <tbody>
                 <tr :key="i" v-for="(column, i) in bingoCells">
