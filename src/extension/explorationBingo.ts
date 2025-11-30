@@ -55,6 +55,9 @@ function updateVisibilities(): void {
     });
 }
 
+// usage on the source side: JSON.stringify({columns: 7, rows: 7, revealed: new Array(7).fill(0).map((_, i) => ({row: 6, column: i})), goals: new Array(...document.getElementsByClassName("game-outer-cell")).map(c=>c.getElementsByClassName("dynamic-text").item(0).textContent)})
+// usage on the nodecg side: NodeCG.sendMessageToBundle("exploration:newGoals","bingothon-layouts", JSON.parse("""message from source"""))
+
 nodecg.listenFor('exploration:newGoals', ({rows, columns, goals, revealed}: {rows: number, columns: number, goals: string[], revealed: {row: number, column: number}[]}, callback): void => {
     if (goals.length !== rows * columns) {
         if (callback && !callback.handled) {

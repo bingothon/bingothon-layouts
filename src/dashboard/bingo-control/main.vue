@@ -237,7 +237,7 @@
             'purple'
         ]);
 
-        allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard']); //add back when need  'explorationBingoboard'
+        allBingoReps: readonly BingoRepEnum[] = Object.freeze(['bingoboard', 'externalBingoboard', 'explorationBingoboard']);
 
         mounted() {
             store.watch(
