@@ -1,102 +1,102 @@
 [
-    {
-        "goal": "Train",
-        "description": ""
-    },
-    {
-        "goal": "Secret",
-        "description": ""
-    },
-    {
-        "goal": "Summer",
-        "description": ""
-    },
-    {
-        "goal": "Charity",
-        "description": ""
-    },
-    {
-        "goal": "Doctor",
-        "description": ""
-    },
-    {
-        "goal": "Mario",
-        "description": ""
-    },
-    {
-        "goal": "France",
-        "description": ""
-    },
-    {
-        "goal": "Knight",
-        "description": ""
-    },
-    {
-        "goal": "Galaxy",
-        "description": ""
-    },
-    {
-        "goal": "Archipelago",
-        "description": ""
-    },
-    {
-        "goal": "Horror",
-        "description": ""
-    },
-    {
-        "goal": "Mask",
-        "description": ""
-    },
-    {
-        "goal": "Bingo",
-        "description": ""
-    },
-    {
-        "goal": "Random",
-        "description": ""
-    },
-    {
-        "goal": "Blackout",
-        "description": ""
-    },
-    {
-        "goal": "Tasmanian Tiger",
-        "description": ""
-    },
-    {
-        "goal": "Wisp",
-        "description": ""
-    },
-    {
-        "goal": "Bunker",
-        "description": ""
-    },
-    {
-        "goal": "Prince",
-        "description": ""
-    },
-    {
-        "goal": "Automata",
-        "description": ""
-    },
-    {
-        "goal": "Lego",
-        "description": ""
-    },
-    {
-        "goal": "Among Us",
-        "description": ""
-    },
-    {
-        "goal": "Rumble",
-        "description": ""
-    },
-    {
-        "goal": "UFO",
-        "description": ""
-    },
-    {
-        "goal": "Blind",
-        "description": ""
-    }
+  {
+    "goal": "Get a guess within 10 km (6.2 miles) in France",
+    "description": ""
+  },
+  {
+    "goal": "Get a guess within 10 km (6.2 miles) in Germany",
+    "description": ""
+  },
+  {
+    "goal": "Get a guess within 10 km (6.2 miles) in Norway",
+    "description": ""
+  },
+  {
+    "goal": "Get a guess within 10 km (6.2 miles) in the USA",
+    "description": ""
+  },
+  {
+    "goal": "Get a guess within 10 km (6.2 miles) in Japan",
+    "description": ""
+  },
+  {
+    "goal": "Find something video game related",
+    "description": ""
+  },
+  {
+    "goal": "Find a train",
+    "description": ""
+  },
+  {
+    "goal": "Find a balloon",
+    "description": ""
+  },
+  {
+    "goal": "Find a cow",
+    "description": ""
+  },
+  {
+    "goal": "Correctly guess a famous location",
+    "description": ""
+  },
+  {
+    "goal": "Correctly guess a capital city",
+    "description": ""
+  },
+  {
+    "goal": "Find a castle",
+    "description": ""
+  },
+  {
+    "goal": "Get a 5k guess on standard map",
+    "description": ""
+  },
+  {
+    "goal": "Find a banana",
+    "description": ""
+  },
+  {
+    "goal": "Find a surfboard or snowboard",
+    "description": ""
+  },
+  {
+    "goal": "Find the border of two countries",
+    "description": ""
+  },
+  {
+    "goal": "Go on a trail in a forest",
+    "description": ""
+  },
+  {
+    "goal": "Find someone playing a wind instrument",
+    "description": ""
+  },
+  {
+    "goal": "Find a McDonalds",
+    "description": ""
+  },
+  {
+    "goal": "Find a hospital/medical place",
+    "description": ""
+  },
+  {
+    "goal": "Find a crane",
+    "description": ""
+  },
+  {
+    "goal": "Find a mini-golf course",
+    "description": ""
+  },
+  {
+    "goal": "Find a race track (for motor vehicle racing)",
+    "description": ""
+  },
+  {
+    "goal": "Find someone wearing a green hat",
+    "description": ""
+  },
+  {
+    "goal": "Find a cruise ship",
+    "description": ""
+  }
 ]
