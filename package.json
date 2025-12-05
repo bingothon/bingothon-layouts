@@ -148,6 +148,11 @@
         "height": 1080
       },
       {
+        "file": "host-bingo.html",
+        "width": 1000,
+        "height": 1000
+      },
+      {
         "file": "host-dashboard.html",
         "width": 1920,
         "height": 1080
