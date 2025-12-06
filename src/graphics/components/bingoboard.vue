@@ -169,8 +169,7 @@
         mounted() {
             const height = this.$el.scrollHeight;
             const width = this.$el.scrollWidth;
-            console.log("height:", height, width);
-            this.skewAngle = Math.atan((width / height) || 1);
+            this.skewAngle = Math.atan(width / height);
             // no specific bingoboardRep means use the replicant
             if (this.bingoboardRep == null) {
                 store.watch(
