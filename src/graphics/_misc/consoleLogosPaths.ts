@@ -4,7 +4,7 @@ export const pathsAndText: { [key: string]: { textNeeded: boolean; logoPath: str
     atari7800: { logoPath: 'images/atari7800.png', textNeeded: true },
     ds: { logoPath: 'images/ds.png', textNeeded: true },
     'nintendo ds': { logoPath: 'images/ds.png', textNeeded: true },
-    gba: { logoPath: 'images/gbadvance.png', textNeeded: true },
+    'game boy advance': { logoPath: 'images/gbadvance.png', textNeeded: true },
     gb: { logoPath: 'images/gbclassic.png', textNeeded: false },
     'game boy': { logoPath: 'images/gbclassic.png', textNeeded: false },
     gbc: { logoPath: 'images/gbcolor.png', textNeeded: true },
