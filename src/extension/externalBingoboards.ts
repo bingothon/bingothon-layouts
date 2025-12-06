@@ -16,9 +16,11 @@ export interface ExternalBingoboardManager {
 }
 
 if (externalBoardRep.value.cells.length === 0) {
-    externalBoardRep.value.cells = new Array(5).fill(0).map((_, rowIndex) => 
-        new Array(5).fill(0).map((_, columnIndex) => ({ name: '', hidden: true, hiddenName: '', colors: [], slot: `slot${rowIndex * 5 + columnIndex}` }))
-    )
+    externalBoardRep.value.cells = new Array(5)
+        .fill(0)
+        .map((_, rowIndex) =>
+            new Array(5).fill(0).map((_, columnIndex) => ({ name: '', hidden: true, hiddenName: '', colors: [], slot: `slot${rowIndex * 5 + columnIndex}` }))
+        );
 }
 
 const externalBingoboards: { [key: string]: ExternalBingoboardManager } = {

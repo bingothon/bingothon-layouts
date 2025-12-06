@@ -1,6 +1,8 @@
 <template>
     <div id="HostDashboard">
-        <div v-if="adTimer > 0" id="intermission-ad-warning" class="intermission-warning">Currently playing ads for {{ adTimer }} more seconds</div>
+        <div v-if="adTimer > 0" id="intermission-ad-warning" class="intermission-warning">
+            Currently playing ads for {{ adTimer }} more seconds
+        </div>
         <div v-if="hostsSpeakingDuringIntermission" id="intermission-live-warning" class="intermission-warning">
             You are currently live on stream
         </div>
@@ -24,9 +26,7 @@
                 </div>
                 <div>
                     Use
-                    <a href="https://drive.google.com/file/d/10UBTHBgjFKF5cW-YMndskU28ajz8jfGG/view"
-                        >this document</a
-                    >
+                    <a href="https://drive.google.com/file/d/10UBTHBgjFKF5cW-YMndskU28ajz8jfGG/view">this document</a>
                     to find more information about how contributions are being used, to be used as talking points
                 </div>
                 <div id="bidsHeader">Upcoming Goals/Bidwars:</div>
@@ -38,9 +38,7 @@
                                 {{ formatAmount(bid.amount_raised) }} /
                                 {{ formatAmount(bid.goal) }}
                             </div>
-                            <div class="bidLeft">
-                                {{ formatAmount(bid.goal - bid.amount_raised) }} left to go!
-                            </div>
+                            <div class="bidLeft">{{ formatAmount(bid.goal - bid.amount_raised) }} left to go!</div>
                         </div>
                         <div v-else>
                             <div v-if="bid.options.length">
@@ -148,7 +146,8 @@
                 </div>
                 <div>
                     <h3>Paste a <a href="https://vdo.ninja">VDO ninja</a> Room during intermission</h3>
-                    Paste the entire Url of the group scene here (looks like <code>https://vdo.ninja/?scene=0&room=test&password=test</code>):
+                    Paste the entire Url of the group scene here (looks like
+                    <code>https://vdo.ninja/?scene=0&room=test&password=test</code>):
                     <input v-model="vdoUrl" />
                     <button @click="clearVdo">Clear VDO</button>
                 </div>

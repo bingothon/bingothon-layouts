@@ -18,6 +18,7 @@
                     >
                         <div
                             v-for="color in calculateBgColorStyles(cell)"
+                            :key="`${color}`"
                             :class="'bg-color ' + color.color + 'square'"
                             :style="color.style"
                         />

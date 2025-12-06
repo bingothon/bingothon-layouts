@@ -23,31 +23,42 @@ export class BingoBoardAnimation extends Vue {
     rowCount: number = 5;
 
     @Watch('boardHidden')
-    onBoardHiddenChanged(newVal: boolean, oldVal: boolean) {
+    async onBoardHiddenChanged(newVal: boolean, oldVal: boolean) {
         if (!newVal && oldVal) {
             this.setupCells();
             this.generateTilePositions();
             this.setupSequence();
             this.setupCubeDimensions();
-            this.startAnimation();
+            await this.startAnimation();
         }
     }
 
     // Define the sequence of movements for the cube
-    sequence: {row: number, col: number, direction: number }[] = [];
+    sequence: { row: number; col: number; direction: number }[] = [];
 
     setupSequence() {
         // we start in the bottom right corner, go up and then always follow the wall until we visited every tile
         function move(col: number, row: number, direction: number): [number, number] {
-            switch(direction) {
-                case 0: return [col, row - 1];
-                case 1: return [col - 1, row];
-                case 2: return [col, row + 1];
-                default: return [col + 1, row];
+            switch (direction) {
+                case 0:
+                    return [col, row - 1];
+                case 1:
+                    return [col - 1, row];
+                case 2:
+                    return [col, row + 1];
+                default:
+                    return [col + 1, row];
             }
         }
-        const pool = new Set(Array(this.rowCount).fill(null).flatMap((_, row) =>
-            Array(this.columnCount).fill(null).map((_, col) => `${row}-${col}`)));
+        const pool = new Set(
+            Array(this.rowCount)
+                .fill(null)
+                .flatMap((_, row) =>
+                    Array(this.columnCount)
+                        .fill(null)
+                        .map((_, col) => `${row}-${col}`)
+                )
+        );
         let currentRow = this.rowCount;
         let currentCol = this.columnCount - 1;
         let direction = 0;
@@ -61,7 +72,7 @@ export class BingoBoardAnimation extends Vue {
             }
             currentRow = nextRow;
             currentCol = nextCol;
-            seq.push({row: currentRow, col: currentCol, direction, });
+            seq.push({ row: currentRow, col: currentCol, direction });
             pool.delete(`${currentRow}-${currentCol}`);
         }
         this.sequence = seq.reverse();
@@ -69,7 +80,7 @@ export class BingoBoardAnimation extends Vue {
 
     setupCells() {
         // we can't use this.$refs.cells, because it can get shuffled around by vue
-        this.cells = Array.from((this.$refs.tableBody as HTMLElement).getElementsByClassName("square")) as HTMLElement[];
+        this.cells = Array.from((this.$refs.tableBody as HTMLElement).getElementsByClassName('square')) as HTMLElement[];
     }
 
     setupCubeDimensions() {
@@ -95,7 +106,7 @@ export class BingoBoardAnimation extends Vue {
 
     async doRolling() {
         try {
-            for(let i = 0; i < this.sequence.length; i++) {
+            for (let i = 0; i < this.sequence.length; i++) {
                 const { col, row } = this.sequence[i];
                 const tile = this.tiles[row][col];
                 if (!tile) return;
@@ -136,20 +147,24 @@ export class BingoBoardAnimation extends Vue {
     generateTilePositions() {
         const bingoBoardRect = this.$el.getBoundingClientRect();
 
-        this.tiles = Array(this.rowCount).fill(null).map((_, row) =>
-            Array(this.columnCount).fill(null).map((_, col) => {
-                const cell = this.cells[row * this.columnCount + col];
-                const rect = cell.getBoundingClientRect();
-                return {
-                    row: row,
-                    col: col,
-                    width: rect.width,
-                    height: rect.height,
-                    left: rect.left - bingoBoardRect.left,
-                    top: rect.top - bingoBoardRect.top
-                };
-            })
-        )
+        this.tiles = Array(this.rowCount)
+            .fill(null)
+            .map((_, row) =>
+                Array(this.columnCount)
+                    .fill(null)
+                    .map((_, col) => {
+                        const cell = this.cells[row * this.columnCount + col];
+                        const rect = cell.getBoundingClientRect();
+                        return {
+                            row: row,
+                            col: col,
+                            width: rect.width,
+                            height: rect.height,
+                            left: rect.left - bingoBoardRect.left,
+                            top: rect.top - bingoBoardRect.top
+                        };
+                    })
+            );
     }
 
     hideTiles() {
@@ -169,14 +184,14 @@ export class BingoBoardAnimation extends Vue {
         });
     }
 
-    delay(ms: number): Promise<void> {
+    async delay(ms: number): Promise<void> {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
     async startAnimation() {
         this.hideTiles();
         await this.delay(1000);
-        this.showTilesBorder()
+        this.showTilesBorder();
         await this.delay(10);
         this.isCubeVisible = true;
         this.initializeAnimationState();
@@ -195,9 +210,8 @@ export class BingoBoardAnimation extends Vue {
 
     stopAnimation() {
         this.isCubeVisible = false;
-        const cube = this.$refs.cube as HTMLElement;
 
         // Reveal all tiles
-        this.cells.forEach(cell => cell.style.visibility = 'visible');
+        this.cells.forEach((cell) => (cell.style.visibility = 'visible'));
     }
 }

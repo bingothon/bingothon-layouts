@@ -39,8 +39,6 @@ const SOCKET_URLS: Record<string, string> = Object.freeze({
     'https://bingosync.bingothon.com': 'wss://bingosock.bingothon.com'
 });
 
-
-
 class BingosyncManager {
     private request = RequestPromise.defaults({ jar: true });
 
@@ -218,24 +216,28 @@ class BingosyncManager {
             purple: 0
         };
 
-        const newBoardState = toNxMArray(bingosyncBoard.map((cell): BingoboardCell => {
-            // remove blank cause that's not a color
-            // count all the color occurences
-            const newCell: BingoboardCell = {
-                name: cell.name,
-                slot: cell.slot,
-                colors: [],
-                markers: [null, null, null, null],
-                rawColors: cell.colors
-            };
-            newCell.rawColors.split(' ').forEach((color): void => {
-                if (color !== 'blank') {
-                    goalCounts[color] += 1;
-                }
-            });
-            this.processCellForMarkers(newCell);
-            return newCell;
-        }), 5, 5);
+        const newBoardState = toNxMArray(
+            bingosyncBoard.map((cell): BingoboardCell => {
+                // remove blank cause that's not a color
+                // count all the color occurences
+                const newCell: BingoboardCell = {
+                    name: cell.name,
+                    slot: cell.slot,
+                    colors: [],
+                    markers: [null, null, null, null],
+                    rawColors: cell.colors
+                };
+                newCell.rawColors.split(' ').forEach((color): void => {
+                    if (color !== 'blank') {
+                        goalCounts[color] += 1;
+                    }
+                });
+                this.processCellForMarkers(newCell);
+                return newCell;
+            }),
+            5,
+            5
+        );
 
         if (this.invasionCtx !== null) {
             this.invasionCtx.updateSides(newBoardState);
@@ -266,10 +268,12 @@ class BingosyncManager {
 
     private fullUpdateMarkers(): void {
         const clonedCells = clone(boardRep.value.cells);
-        clonedCells.forEach(column => column.forEach((cell: BingoboardCell): void => {
-            cell.markers = [null, null, null, null];
-            this.processCellForMarkers(cell);
-        }));
+        clonedCells.forEach((column) =>
+            column.forEach((cell: BingoboardCell): void => {
+                cell.markers = [null, null, null, null];
+                this.processCellForMarkers(cell);
+            })
+        );
 
         if (this.invasionCtx !== null) {
             this.invasionCtx.updateSides(clonedCells);
@@ -464,15 +468,17 @@ class BingosyncManager {
         const BINGOSCORE = 3;
         const GRAFFITISCORE = 3;
         const SQUARESCORE = 1;
-        cells.forEach(columns => columns.forEach(cell => {
-            if (cell.colors.includes(color)) {
-                if (cell.name.toLowerCase().includes('graffiti')) {
-                    score += GRAFFITISCORE;
-                } else {
-                    score += SQUARESCORE;
+        cells.forEach((columns) =>
+            columns.forEach((cell) => {
+                if (cell.colors.includes(color)) {
+                    if (cell.name.toLowerCase().includes('graffiti')) {
+                        score += GRAFFITISCORE;
+                    } else {
+                        score += SQUARESCORE;
+                    }
                 }
-            }
-        }))
+            })
+        );
         for (let rowCol = 0; rowCol < 5; rowCol++) {
             // Row Bingo Checks
             if (

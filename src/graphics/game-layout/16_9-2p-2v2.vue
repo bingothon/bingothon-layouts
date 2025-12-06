@@ -25,9 +25,9 @@
             <team-info team-index="1" height="45px" id="ti2"></team-info>
             <player-info
                 id="pi3"
-                playerIndex=2
-                hide-finish-time=true
-                show-color=false
+                playerIndex="2"
+                hide-finish-time="true"
+                show-color="false"
                 height="40px"
             ></player-info>
             <player-info

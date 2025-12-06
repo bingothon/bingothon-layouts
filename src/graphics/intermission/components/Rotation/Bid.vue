@@ -12,11 +12,8 @@
 
             <div v-if="bid.goal != null" class="BidAmount">
                 <div id="progressbar">
-                    <div id="progress" :style="{ width: percentRaised(bid) + '%' }">
-                    </div>
-                    <div id="amount">
-                        {{ formatUSD(bid.amount_raised) }}/{{ formatUSD(bid.goal) }}
-                    </div>
+                    <div id="progress" :style="{ width: percentRaised(bid) + '%' }"></div>
+                    <div id="amount">{{ formatUSD(bid.amount_raised) }}/{{ formatUSD(bid.goal) }}</div>
                 </div>
             </div>
             <div v-else-if="Object.keys(bid.options).length === 0" class="BidAmount">

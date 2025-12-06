@@ -147,7 +147,7 @@ export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
         });
         songDataRep.value.playing = true;
         setInterval(() => {
-            songDataRep.value.title = `Cool Song 123 - Cool Band ${(Math.random() * 10).toFixed(0)}`
+            songDataRep.value.title = `Cool Song 123 - Cool Band ${(Math.random() * 10).toFixed(0)}`;
         }, 10_000);
     }
 };

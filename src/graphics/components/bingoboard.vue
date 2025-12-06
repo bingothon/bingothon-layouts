@@ -3,12 +3,7 @@
         <table class="bingo-table" :style="`--row-count: ${rowCount}; --column-count: ${columnCount};`">
             <tbody ref="tableBody">
                 <tr :key="i" v-for="(column, i) in bingoCells">
-                    <td
-                        class="square"
-                        :id="'tile-' + i + '-' + j"
-                        :key="i + '' + j"
-                        v-for="(cell, j) in column"
-                    >
+                    <td class="square" :id="'tile-' + i + '-' + j" :key="i + '' + j" v-for="(cell, j) in column">
                         <div
                             :key="color.color"
                             v-for="color in cell.colors"
@@ -40,10 +35,9 @@
 </template>
 
 <script lang="ts">
-    import { Prop, Vue, Component } from 'vue-property-decorator';
+    import { Prop, Component } from 'vue-property-decorator';
     import { BingoBoardAnimation } from './bingoboard-animation';
     import { Bingoboard } from '../../../schemas';
-    import equals from 'deep-equal';
     import { store } from '../../browser-util/state';
     import CellTextFit from '../helpers/cell-text-fit.vue';
 
@@ -90,7 +84,6 @@
             }
         }
         if (Array.isArray(colors)) {
-
             colors.forEach((color) => {
                 if (!orderedColors.includes(color)) {
                     orderedColors.push(color);
@@ -125,7 +118,7 @@
         return result;
     }
 
-    function colorsToTransforms(colorsIn: string[]): {color: string, style: string}[] {
+    function colorsToTransforms(colorsIn: string[]): { color: string; style: string }[] {
         if (colorsIn.length !== 0) {
             const colors = sortColors(colorsIn);
             var newColors = [];
@@ -138,7 +131,7 @@
                     style: `transform: skew(-${this.skewAngle}rad) translateX(${translations[i]}%); border-right: solid 1.5px #444444`
                 });
             }
-           return newColors
+            return newColors;
         } else {
             return [];
         }
@@ -213,14 +206,16 @@
             return store.state.bingoboardMeta.boardHidden && !this.alwaysShown;
         }
 
-        onBingoBoardUpdate(newGoals: Bingoboard, oldGoals?: Bingoboard | undefined) {
+        onBingoBoardUpdate(newGoals: Bingoboard) {
             if (!newGoals) return;
-            this.bingoCells = newGoals.cells.map(row => row.map(cell => ({
-                name: cell.name,
-                markers: cell.markers,
-                rawColors: cell.rawColors,
-                colors: colorsToTransforms(cell.colors),
-            })));
+            this.bingoCells = newGoals.cells.map((row) =>
+                row.map((cell) => ({
+                    name: cell.name,
+                    markers: cell.markers,
+                    rawColors: cell.rawColors,
+                    colors: colorsToTransforms(cell.colors)
+                }))
+            );
             this.rowCount = newGoals.cells.length;
             this.columnCount = newGoals.cells[0]?.length ?? 5;
         }

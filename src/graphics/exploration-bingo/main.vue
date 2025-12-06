@@ -53,15 +53,17 @@
             store.watch((state) => state.explorationBingoboard, this.onBingoBoardUpdate, { immediate: true });
         }
 
-        onBingoBoardUpdate(newGoals: ExplorationBingoboard, oldGoals?: ExplorationBingoboard | undefined) {
+        onBingoBoardUpdate(newGoals: ExplorationBingoboard) {
             if (!newGoals) return;
-            this.bingoCells = newGoals.cells.map((row, rowindex) => row.map((cell, columnindex) => ({
-                name: cell.name,
-                hidden: cell.hidden,
-                colors: cell.colors.at(0) ?? 'blank',
-                row: rowindex,
-                column: columnindex,
-            })));
+            this.bingoCells = newGoals.cells.map((row, rowindex) =>
+                row.map((cell, columnindex) => ({
+                    name: cell.name,
+                    hidden: cell.hidden,
+                    colors: cell.colors.at(0) ?? 'blank',
+                    row: rowindex,
+                    column: columnindex
+                }))
+            );
             this.rowCount = newGoals.cells.length;
             this.columnCount = newGoals.cells[0]?.length ?? 5;
         }

@@ -1,17 +1,17 @@
 <template>
     <div class="FlexContainer TeamInfoBox" :style="{ height: height }" :class="{ ReverseOrder: reverseOrder }">
-			<div
-					v-if="bingoColorShown === true"
-					class="BingoColor FlexContainer"
-					:class="``"
-					:style="{
+        <div
+            v-if="bingoColorShown === true"
+            class="BingoColor FlexContainer"
+            :class="``"
+            :style="{
                 width: parseFloat(height.replace('px', '')) * 0.75 + 'px',
                 height: parseFloat(height.replace('px', '')) * 0.75 + 'px',
                 'background-color': bingoColor
             }"
-			>
-				<span v-if="bingoCountShown === true">{{ bingoGoalCount }}</span>
-			</div>
+        >
+            <span v-if="bingoCountShown === true">{{ bingoGoalCount }}</span>
+        </div>
         <div>
             <BestOfX v-if="boXEnabled" :player-index="teamIndex" id="boX" :height="height"></BestOfX>
         </div>

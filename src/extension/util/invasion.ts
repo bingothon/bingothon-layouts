@@ -61,12 +61,12 @@ export class InvasionContext {
     public setMarkers(cells: BingoboardCell[][]) {
         // clear all markers
         // TODO: reduce replicant updates
-        cells.forEach(row => {
-            row.forEach(cell => {
+        cells.forEach((row) => {
+            row.forEach((cell) => {
                 cell.markers[0] = null;
                 cell.markers[1] = null;
-            })
-        })
+            });
+        });
         if (this.player1start === null) {
             // if no goal has been clicked, all goals on edges should be marked
             for (const side of SIDE_STARTS) {
@@ -105,7 +105,7 @@ export class InvasionContext {
             // strictly lower, so another goal can be clicked here
             if (lineGoalCount < maxGoalCount) {
                 for (let j = 0; j < 5; j++) {
-                    const [row, column] = getRotatedIndex(side, i, j)
+                    const [row, column] = getRotatedIndex(side, i, j);
                     const cell = cells[row][column];
                     if (cell.rawColors === 'blank') {
                         // set markers only if cell is empty
@@ -119,7 +119,7 @@ export class InvasionContext {
 }
 
 function isEmpty(cells: BingoboardCell[][]): boolean {
-    return cells.every(row => row.every((cell) => cell.rawColors === 'blank'));
+    return cells.every((row) => row.every((cell) => cell.rawColors === 'blank'));
 }
 
 function sideValid(cells: BingoboardCell[][], side: InvasionStart, color: string): boolean {
@@ -165,7 +165,7 @@ function getRotatedIndex(side: InvasionStart, x: number, y: number): [number, nu
         case InvasionStart.RIGHT:
             return [y, 4 - x];
         case InvasionStart.BOTTOM:
-            return [(4 - x), y];
+            return [4 - x, y];
         default:
             // all other sides are invalid here
             throw new Error('Invalid side for getRotatedIndex');
