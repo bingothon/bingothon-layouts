@@ -173,7 +173,7 @@ class BingosyncManager {
         this.tempFullUpdateInterval = thisInterval;
 
         await this.fullUpdate(siteUrl, roomCode);
-        await this.createWebsocket(socketUrl, socketKey);
+        await this.createWebsocket(socketUrl, socketKey, siteUrl, roomCode);
     }
 
     public async leaveRoom(): Promise<void> {
@@ -310,7 +310,7 @@ class BingosyncManager {
         cell.markers = markers;
     }
 
-    public async createWebsocket(socketUrl: string, socketKey: string): Promise<void> {
+    public async createWebsocket(socketUrl: string, socketKey: string, siteUrl: string, roomCode: string): Promise<void> {
         return new Promise((resolve, reject): void => {
             let settled = false;
 
@@ -428,13 +428,17 @@ class BingosyncManager {
                         nodecg.sendMessageToBundle('timerPause', 'nodecg-speedcontrol');
                     }
                 }
+
+                if (json.type === 'new-card') {
+                    this.fullUpdate(siteUrl, roomCode);
+                }
             };
 
             this.websocket.onclose = (event: { wasClean: boolean; code: number; reason: string; target: WebSocket }): void => {
                 socketRep.value.status = 'disconnected';
                 log.info(`Socket closed (code: ${event.code}, reason: ${event.reason})`);
                 this.destroyWebsocket();
-                this.createWebsocket(socketUrl, socketKey).catch((): void => {
+                this.createWebsocket(socketUrl, socketKey, siteUrl, roomCode).catch((): void => {
                     // Intentionally discard errors raised here.
                     // They will have already been logged in the onmessage handler.
                 });
