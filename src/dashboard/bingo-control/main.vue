@@ -27,7 +27,7 @@
                         dark
                         solo
                         type="number"
-                        @change="updateManualScore"
+                        @input="updateManualScore"
                     />
                 </v-col>
             </v-row>
@@ -49,7 +49,7 @@
                         dark
                         solo
                         type="number"
-                        @change="updateManualScore"
+                        @input="updateManualScore"
                     />
                 </v-col>
             </v-row>

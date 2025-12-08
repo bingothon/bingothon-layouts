@@ -24,9 +24,9 @@
         }
 
         get gameSystemImage(): string | undefined {
-            const imagePath = this.pathsAndLogos[this.gameSystem.toLocaleLowerCase()].logoPath;
+            const imagePath = this.pathsAndLogos[this.gameSystem?.toLocaleLowerCase()]?.logoPath;
             if (imagePath) {
-                return require('../../../static/game-systems/' + imagePath);
+                return `/bundles/bingothon-layouts/static/game-systems/${imagePath}`;
             }
             return;
         }
