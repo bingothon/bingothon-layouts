@@ -67,7 +67,7 @@
         position: absolute;
         top: 0px;
         left: 500px;
-        width: 1500px;
+        width: 1420px;
         height: 1000px;
         border: 2px var(--container-border-color) solid;
         background-color: aqua;
