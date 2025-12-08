@@ -118,7 +118,7 @@
         return result;
     }
 
-    function colorsToTransforms(colorsIn: string[], skewAngle: number): {color: string, style: string}[] {
+    function colorsToTransforms(colorsIn: string[], skewAngle: number): { color: string; style: string }[] {
         if (colorsIn.length !== 0) {
             const colors = sortColors(colorsIn);
             var newColors = [];
@@ -208,12 +208,14 @@
 
         onBingoBoardUpdate(newGoals: Bingoboard) {
             if (!newGoals) return;
-            this.bingoCells = newGoals.cells.map(row => row.map(cell => ({
-                name: cell.name,
-                markers: cell.markers,
-                rawColors: cell.rawColors,
-                colors: colorsToTransforms(cell.colors, this.skewAngle),
-            })));
+            this.bingoCells = newGoals.cells.map((row) =>
+                row.map((cell) => ({
+                    name: cell.name,
+                    markers: cell.markers,
+                    rawColors: cell.rawColors,
+                    colors: colorsToTransforms(cell.colors, this.skewAngle)
+                }))
+            );
             this.rowCount = newGoals.cells.length;
             this.columnCount = newGoals.cells[0]?.length ?? 5;
         }
