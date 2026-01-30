@@ -1,16 +1,32 @@
-import * as Discord from 'discord.js';
+/* eslint-disable @typescript-eslint/no-use-before-define, no-inner-declarations */
 import * as Voice from '@discordjs/voice';
 import { getVoiceConnection, VoiceConnection } from '@discordjs/voice';
+import { ChannelType, Client, GatewayIntentBits, Message, VoiceBasedChannel } from 'discord.js';
+import { VoiceActivity } from '@/schemas';
 import * as nodecgApiContext from './util/nodecg-api-context';
 import { voiceActivityRep, voiceDelayRep } from '@/util/replicants';
+
+type VoiceActivityMember = VoiceActivity['members'][0];
 
 const nodecg = nodecgApiContext.get();
 
 // NodeCG
 const log = new nodecg.Logger(`${nodecg.bundleName}:discord`);
 
+if (!voiceDelayRep.value) {
+    voiceDelayRep.value = 0;
+}
+
 // Discord API
-const bot = new Discord.Client({ intents: 32767 | Discord.IntentsBitField.Flags.MessageContent }); // all intents cause I'm too lazy to figure out which are the correct ones
+const bot = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.MessageContent
+    ]
+});
 
 const config = nodecg.bundleConfig;
 const botToken = config.discord?.token || '';
@@ -27,7 +43,7 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
     let voiceConnection: VoiceConnection | undefined;
 
     // Connection
-    bot.on('ready', (): void => {
+    bot.on('clientReady', (): void => {
         if (!bot.user) {
             log.error('bot user not set!!');
             return;
@@ -37,23 +53,27 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
         log.info('Command Channel ID: ', botCommandChannelID);
         log.info('Voice Channel ID: ', botVoiceCommentaryChannelID);
     });
-    bot.on('error', (): void => {
+    bot.on('error', async (): Promise<void> => {
         log.error('The bot encountered a connection error!!');
 
         voiceStatus = 'error';
 
-        setTimeout((): void => {
-            bot.login(botToken);
+        setTimeout(async (): Promise<void> => {
+            await bot.login(botToken);
         }, 10000);
     });
 
-    bot.on('disconnect', (): void => {
+    bot.on('disconnect', async (): Promise<void> => {
         log.error('The bot disconnected!!');
 
-        voiceStatus = 'disconnected';
+        // if disconnected on purpose, don't reconnect'
+        if (voiceStatus === 'disconnected') {
+            return;
+        }
 
-        setTimeout((): void => {
-            bot.login(botToken);
+        // if the bot got kicked, try to reconnect
+        setTimeout(async (): Promise<void> => {
+            await bot.login(botToken);
         }, 10000);
     });
 
@@ -79,41 +99,35 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
                 return;
             }
 
-            const newVoiceArray: {
-                id: string;
-                name: string;
-                avatar: string;
-                isSpeaking: boolean;
-            }[] = [];
-
-            memberCollection.forEach((voiceMember): void => {
+            // flatMap is used to filter out members that are muted or ignored
+            voiceActivityRep.value.members = Array.from(memberCollection.values()).flatMap((voiceMember): VoiceActivityMember[] => {
                 // Hide our bot and muted members cause that is the restreamer
                 if (config.discord?.ignoredUsers && config.discord.ignoredUsers.includes(voiceMember.user.tag)) {
-                    return;
+                    return [];
                 }
                 if (!voiceMember.voice.mute) {
-                    let userAvatar = voiceMember.displayAvatarURL();
-
-                    if (!userAvatar) {
-                        userAvatar = 'https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png';
-                    } // Default avatar
+                    const userAvatar =
+                        voiceMember.displayAvatarURL() ??
+                        // Default avatar
+                        'https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png';
 
                     let speakStatus = getVoiceConnection(botServerID)?.receiver.speaking.users.has(voiceMember.id);
 
                     if (!speakStatus) {
                         speakStatus = false;
                     }
-                    log.info(`${voiceMember.displayName} has changed their speaking status: ${speakStatus}`);
-                    newVoiceArray.push({
-                        id: voiceMember.id,
-                        name: voiceMember.displayName,
-                        avatar: userAvatar,
-                        isSpeaking: speakStatus
-                    });
-                }
-            });
 
-            voiceActivityRep.value.members = newVoiceArray;
+                    return [
+                        {
+                            id: voiceMember.id,
+                            name: voiceMember.displayName,
+                            avatar: userAvatar,
+                            isSpeaking: speakStatus
+                        }
+                    ];
+                }
+                return [];
+            });
         }
     }
 
@@ -128,7 +142,6 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
                 channelId: botVoiceCommentaryChannelID,
                 selfMute: false,
                 selfDeaf: false,
-                group: '',
                 adapterCreator: guild.voiceAdapterCreator
             };
 
@@ -187,7 +200,7 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
     }
 
     // Commands
-    function commandChannel(message: Discord.Message): void {
+    function commandChannel(message: Message): void {
         // ADMIN COMMANDS
         const command = message.content.toLowerCase();
         switch (command) {
@@ -218,7 +231,7 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
     }
 
     // Message Handling
-    bot.on('messageCreate', (message: Discord.Message): void => {
+    bot.on('messageCreate', (message: Message): void => {
         if (message.channelId === botCommandChannelID) {
             if (message.content.toLowerCase() === '!status') {
                 switch (voiceStatus) {
@@ -240,7 +253,7 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
     });
 
     // helper
-    function getVoiceChannelSafe(serverID: string, voiceChannelID: string): Discord.VoiceChannel {
+    function getVoiceChannelSafe(serverID: string, voiceChannelID: string): VoiceBasedChannel {
         const guild = bot.guilds.cache.get(serverID);
         if (guild === undefined) {
             throw new Error('Discord Guild-ID is invalid! Was ' + serverID);
@@ -249,9 +262,9 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
         if (channel === undefined) {
             throw new Error('Discord Voice channel ID is invalid!');
         }
-        if (!(channel instanceof Discord.VoiceChannel)) {
+        if (channel.type !== ChannelType.GuildVoice && channel.type !== ChannelType.GuildStageVoice) {
             throw new Error('Discord Channel is not a voice channel!');
         }
-        return channel as Discord.VoiceChannel;
+        return channel as VoiceBasedChannel;
     }
 }
