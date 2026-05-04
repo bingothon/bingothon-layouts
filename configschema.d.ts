@@ -63,6 +63,8 @@ export interface Configschema {
   };
   twitchStreams?: {
     type?: "obsTwitchPlayer" | "nodecgGraphic";
+    streamlinkCommand?: string;
+    proxyUrl?: string;
   };
   [k: string]: unknown;
 }

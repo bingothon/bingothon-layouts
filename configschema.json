@@ -265,6 +265,14 @@
 			"properties": {
 				"type": {
 					"enum": ["obsTwitchPlayer", "nodecgGraphic"]
+				},
+				"streamlinkCommand": {
+					"type": "string",
+					"examples": ["streamlink", "uvx streamlink", "/path/to/streamlink"]
+				},
+				"proxyUrl": {
+					"type": "string",
+					"examples": ["http://localhost:8081/m3u8-proxy"]
 				}
 			}
 		}

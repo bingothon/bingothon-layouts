@@ -1,4 +1,5 @@
 import { exec } from 'child_process';
+import { get as nodecg } from './nodecg-api-context';
 
 export interface StreamlinkStream {
     quality: string; // TODO: can be made an enum?
@@ -15,7 +16,7 @@ interface RawStreamlinkEntry {
 
 export function getStreamsForChannel(channel: string): Promise<StreamlinkStream[]> {
     return new Promise((resolve, reject) => {
-        exec(`streamlink --json twitch.tv/${channel}`, (error, stdout) => {
+        exec(`${nodecg().bundleConfig.twitchStreams?.streamlinkCommand ?? 'streamlink'} --json twitch.tv/${channel}`, (error, stdout) => {
             if (error && error.code !== 1) {
                 // error code 1 means channel not found
                 reject(error);

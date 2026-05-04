@@ -2,6 +2,7 @@ import * as nodecgApiContext from './util/nodecg-api-context';
 import { TwitchStream } from '../../schemas';
 import { currentGameLayoutRep, soundOnTwitchStream, streamsReplicant } from './util/replicants';
 import { runDataActiveRunRep } from './util/speedControlReplicants';
+import { getStreamsForChannel } from './util/streamlink';
 
 const nodecg = nodecgApiContext.get();
 
@@ -197,4 +198,22 @@ nodecg.listenFor('streams:getOriginalCropping', (_, callback): void => {
             callback(undefined);
         }
     }
+});
+
+nodecg.listenFor('streams:getUrlForStream', (data: {stream: string}, callback) => {
+    getStreamsForChannel(data.stream).then(links => {
+        // get best stream
+        const result = links.find(l => l.quality == "best")?.streamUrl ?? links[0].streamUrl;
+        let url = new URL(nodecg.bundleConfig.twitchStreams?.proxyUrl ?? 'http://localhost:8081/m3u8-proxy');
+        url.searchParams.set('url', result);
+        var videoSrc = url.toString();
+        if (callback && !callback.handled) {
+            callback(videoSrc);
+        }
+    }).catch(err => {
+        nodecg.log.error(`could not get stream for ${data.stream}:`, err);
+        if (callback && !callback.handled) {
+            callback(undefined);
+        }
+    })
 });
