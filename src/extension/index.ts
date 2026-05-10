@@ -141,9 +141,9 @@ export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
                 }
                 if (Math.random() < 0.2) {
                     const idx2 = Math.floor(Math.random() * voiceActivity.value.members.length);
-                    voiceActivity.value.members[idx].name = getRandomString(Math.floor(Math.random() * 15) + 5)
+                    voiceActivity.value.members[idx2].name = getRandomString(Math.floor(Math.random() * 15) + 5);
                 }
-            }, 500)
+            }, 500);
         }
     }
     require('./twitch-chat-bot');

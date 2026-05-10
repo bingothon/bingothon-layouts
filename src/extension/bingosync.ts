@@ -38,7 +38,7 @@ const BINGOSYNC_SLUG_RE = /^[0-9a-zA-Z_-]+$/;
 const SOCKET_URLS: Record<string, string> = Object.freeze({
     'https://bingosync.com': 'wss://sockets.bingosync.com',
     'https://bingosync.bingothon.com': 'wss://bingosock.bingothon.com',
-    'https://celestebingo.rhelmot.io': 'wss://sockets-celestebingo.rhelmot.io',
+    'https://celestebingo.rhelmot.io': 'wss://sockets-celestebingo.rhelmot.io'
 });
 
 class BingosyncManager {
@@ -55,8 +55,8 @@ class BingosyncManager {
     private websocket: WebSocket | null = null;
 
     private invasionCtx: InvasionContext | null = null;
-    
-    private isFogOfWar: boolean = false;
+
+    private isFogOfWar = false;
 
     public constructor(public name: string) {
         bingoboardModeRep.on('change', (newVal) => {
@@ -202,7 +202,7 @@ class BingosyncManager {
         });
 
         // for the celeste bingosync fork
-        const bingosyncSettings: {settings: {fog_of_war?: boolean}} = await this.request.get({
+        const bingosyncSettings: { settings: { fog_of_war?: boolean } } = await this.request.get({
             uri: `${siteUrl}/room/${roomCode}/room-settings`,
             json: true
         });
