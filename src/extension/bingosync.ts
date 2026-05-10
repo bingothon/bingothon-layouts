@@ -31,12 +31,14 @@ const ALL_COLORS: readonly BoardColor[] = Object.freeze(['pink', 'red', 'orange'
 //  log.error(`Failed to recover connection to room ${socketRep.value.roomCode}:`, error);
 // });
 
-const BINGOSYNC_ROOM_URL_RE = /^(.+)\/room\/([0-9a-zA-Z_-]+)$/;
+// allow ?password=test supported by the celeste bingosync fork
+const BINGOSYNC_ROOM_URL_RE = /^(.+)\/room\/([0-9a-zA-Z_-]+)([?].*)?$/;
 const BINGOSYNC_SLUG_RE = /^[0-9a-zA-Z_-]+$/;
 
 const SOCKET_URLS: Record<string, string> = Object.freeze({
     'https://bingosync.com': 'wss://sockets.bingosync.com',
-    'https://bingosync.bingothon.com': 'wss://bingosock.bingothon.com'
+    'https://bingosync.bingothon.com': 'wss://bingosock.bingothon.com',
+    'https://celestebingo.rhelmot.io': 'wss://sockets-celestebingo.rhelmot.io',
 });
 
 class BingosyncManager {
@@ -53,6 +55,8 @@ class BingosyncManager {
     private websocket: WebSocket | null = null;
 
     private invasionCtx: InvasionContext | null = null;
+    
+    private isFogOfWar: boolean = false;
 
     public constructor(public name: string) {
         bingoboardModeRep.on('change', (newVal) => {
@@ -197,6 +201,16 @@ class BingosyncManager {
             json: true
         });
 
+        // for the celeste bingosync fork
+        const bingosyncSettings: {settings: {fog_of_war?: boolean}} = await this.request.get({
+            uri: `${siteUrl}/room/${roomCode}/room-settings`,
+            json: true
+        });
+
+        this.isFogOfWar = bingosyncSettings.settings.fog_of_war ?? false;
+
+        console.log(`fog of war: ${this.isFogOfWar}`);
+
         // Bail if the room changed while this request was in-flight.
         if (this.fullUpdateInterval !== this.tempFullUpdateInterval) {
             return;
@@ -215,6 +229,8 @@ class BingosyncManager {
             navy: 0,
             purple: 0
         };
+
+        const boardsize = Math.round(Math.sqrt(bingosyncBoard.length));
 
         const newBoardState = toNxMArray(
             bingosyncBoard.map((cell): BingoboardCell => {
@@ -235,8 +251,8 @@ class BingosyncManager {
                 this.processCellForMarkers(newCell);
                 return newCell;
             }),
-            5,
-            5
+            boardsize,
+            boardsize
         );
 
         if (this.invasionCtx !== null) {
@@ -368,7 +384,8 @@ class BingosyncManager {
                         rawColors: json.square.colors
                     };
                     this.processCellForMarkers(cell);
-                    boardRep.value.cells[Math.floor(index / 5)][index % 5] = cell;
+                    const rows = boardRep.value.cells[0].length;
+                    boardRep.value.cells[Math.floor(index / rows)][index % rows] = cell;
                     // update goal count
                     this.countScore(json);
                     //Check if conditions for lockout win are fulfilled and stop timer
