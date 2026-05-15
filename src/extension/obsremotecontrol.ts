@@ -1,7 +1,7 @@
 'use-strict';
 
 import { Configschema } from '../../configschema';
-import { DiscordDelayInfo, ObsConnection, ObsStreamMode } from '../../schemas';
+import { ObsConnection, ObsStreamMode } from '../../schemas';
 import { TwitchCommercialTimer } from '../../speedcontrol-types';
 import * as nodecgApiContext from './util/nodecg-api-context';
 import obs from './util/obs';
@@ -16,8 +16,6 @@ import {
     obsPreviewImgRep,
     obsPreviewScene,
     obsStreamModeRep,
-    soundOnTwitchStream,
-    streamsReplicant,
     voiceDelayRep
 } from './util/replicants';
 import { runDataActiveRunRep } from './util/speedControlReplicants';
@@ -230,51 +228,16 @@ waitTillConnected().then((): void => {
 
     /* eslint-disable max-len */
 
-    // update discord display and audio delays to the stream leader delay for the specified delay info
-    function updateDiscordDelays(streamLeaderDelayMs: number | null, discordDelayInfo: DiscordDelayInfo): void {
-        if (discordDelayInfo.discordAudioDelaySyncStreamLeader && streamLeaderDelayMs !== null) {
-            if (Math.abs(obsAudioSourcesRep.value[bundleConfig.obs.discordAudio].delay - streamLeaderDelayMs) > 1000) {
-                obsAudioSourcesRep.value[bundleConfig.obs.discordAudio].delay = streamLeaderDelayMs;
-                if (discordDelayInfo.discordDisplayDelaySyncStreamLeader) {
-                    voiceDelayRep.value = streamLeaderDelayMs;
-                }
-            }
-        } else {
-            obsAudioSourcesRep.value[bundleConfig.obs.discordAudio].delay = discordDelayInfo.discordAudioDelayMs;
-        }
-        // already handled
-        if (discordDelayInfo.discordDisplayDelaySyncStreamLeader && !discordDelayInfo.discordAudioDelaySyncStreamLeader && streamLeaderDelayMs !== null) {
-            voiceDelayRep.value = streamLeaderDelayMs;
-        } else {
-            voiceDelayRep.value = discordDelayInfo.discordDisplayDelayMs;
-        }
-    }
-
     discordDelayInfoRep.on('change', (newVal): void => {
-        let streamLeaderDelayMs = null;
-        if (soundOnTwitchStream.value !== -1) {
-            streamLeaderDelayMs = (streamsReplicant.value[soundOnTwitchStream.value] || {}).delay || null;
+        if (newVal.discordAudioDelaySyncStreamLeader) {
+            obsAudioSourcesRep.value[bundleConfig.obs.discordAudio].delay = newVal.streamDelayMs;
+        } else {
+            obsAudioSourcesRep.value[bundleConfig.obs.discordAudio].delay = 0;
         }
-        updateDiscordDelays(streamLeaderDelayMs, newVal);
-    });
-
-    soundOnTwitchStream.on('change', (newVal): void => {
-        if (newVal === -1) {
-            return;
-        }
-        const stream = streamsReplicant.value[newVal];
-        if (stream !== undefined) {
-            updateDiscordDelays(stream.delay, discordDelayInfoRep.value);
-        }
-    });
-
-    streamsReplicant.on('change', (newVal): void => {
-        if (soundOnTwitchStream.value === -1) {
-            return;
-        }
-        const stream = newVal[soundOnTwitchStream.value];
-        if (stream !== undefined) {
-            updateDiscordDelays(stream.delay, discordDelayInfoRep.value);
+        if (newVal.discordDisplayDelaySyncStreamLeader) {
+            voiceDelayRep.value = newVal.streamDelayMs;
+        } else {
+            voiceDelayRep.value = 0;
         }
     });
 
@@ -316,13 +279,13 @@ waitTillConnected().then((): void => {
         if (streamMode === 'external-commentary' || streamMode === 'runner-commentary') {
             // no discord delay in intermission
             // if commentary is external no delay is necessary
-            // if (nextSceneName.includes('intermission') || streamMode === 'external-commentary') {
-            //   discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false;
-            //   discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false;
-            // } else {
-            //   discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false; // there is no stream leader delay anymore
-            //   discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false;
-            // }
+            if (nextSceneName.includes('intermission') || streamMode === 'external-commentary') {
+                discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false;
+                discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false;
+            } else {
+                discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = true;
+                discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = true;
+            }
             // if the next scene isn't intermission unmute discord, also don't fade out if hosts are speaking
             if (isIntermissionLikeScene(nextSceneName) && !hostsSpeaking) {
                 nodecg.sendMessage(
@@ -367,13 +330,13 @@ waitTillConnected().then((): void => {
                 } */
                 );
             }
-            // if (nextSceneName === 'intermission') {
-            //   discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false;
-            //   discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false;
-            // } else {
-            //   discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false; // not used anymore, so just use false
-            //   discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false;
-            // }
+            if (nextSceneName === 'intermission') {
+                discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = false;
+                discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false;
+            } else {
+                discordDelayInfoRep.value.discordDisplayDelaySyncStreamLeader = true;
+                discordDelayInfoRep.value.discordAudioDelaySyncStreamLeader = false;
+            }
         } else {
             logger.error(`Unknown stream configuration: ${streamMode}`);
         }

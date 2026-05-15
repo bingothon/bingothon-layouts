@@ -62,9 +62,10 @@ export interface Configschema {
     measurementId: string;
   };
   twitchStreams?: {
-    type?: "obsTwitchPlayer" | "nodecgGraphic";
+    type?: "obsTwitchPlayer" | "nodecgGraphic" | "hls";
     streamlinkCommand?: string;
     proxyUrl?: string;
+    playerGraphic?: string;
   };
   [k: string]: unknown;
 }
