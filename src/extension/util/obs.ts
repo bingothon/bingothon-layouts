@@ -28,6 +28,7 @@ const logger = new nodecg.Logger(`${nodecg.bundleName}:obs`);
 const bundleConfig = nodecg.bundleConfig as Configschema;
 
 const useObsTwitchPlayer = bundleConfig.twitchStreams?.type === 'obsTwitchPlayer';
+const useHlsPlayer = bundleConfig.twitchStreams?.type === 'hls';
 
 interface OBSTransformParams {
     x?: number;
@@ -373,7 +374,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                     obs.setDefaultBrowserSettings(getStreamSrcName(i));
                 }
 
-                if (useObsTwitchPlayer || true) {
+                if (useObsTwitchPlayer || useHlsPlayer) {
                     // TODO check if the comment is still needed
                     // TODO repair in the future
                     twitchStreamsRep.on('change', (newValue, old) => {
@@ -400,15 +401,25 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                                 streamsToHide.delete(idx);
                                 // check if the streamurl changed or the visible status changed
                                 if (stream.channel !== oldStream.channel || stream.visible !== oldStream.visible) {
-                                    // fire and forget
-                                    obs.setBrowserSourceUrl(
-                                        getStreamSrcName(idx),
-                                        `https://player.twitch.tv/?channel=${stream.channel}&enableExtensions=true&muted=false&parent=twitch.tv&player=popout&volume=1`
-                                    );
+                                    if (useObsTwitchPlayer) {
+                                        // fire and forget
+                                        obs.setBrowserSourceUrl(
+                                            getStreamSrcName(idx),
+                                            `https://player.twitch.tv/?channel=${stream.channel}&enableExtensions=true&muted=false&parent=twitch.tv&player=popout&volume=1`
+                                        );
+                                    } else {
+                                        const streamGraphicUrl = bundleConfig.twitchStreams?.playerGraphic;
+                                        if (streamGraphicUrl) {
+                                            const url = new URL(streamGraphicUrl);
+                                            url.searchParams.set('stream', `${i}`);
+                                            obs.setBrowserSourceUrl(getStreamSrcName(idx), url.toString());
+                                        }
+                                        // TODO: either we never overwrite this, the source should stay the same, or I need to figure out where to get the key from
+                                        // const browserSource = `${nodecgApiContext.get().config.baseURL}bundles/bingothon-layouts-vue-3/graphics/hls-player/main.html?stream=${idx}`
+                                    }
                                 }
                                 handleStreamPosChange(obs, stream, idx, currentLayoutRep.value, positionsRep.value);
                                 handleSoundChange(obs, soundOnTwitchStreamRep.value, idx, stream, oldStream);
-                                //TODO: use this when switching to streamlink method, obs.setMediasourcePlayPause(getStreamSrcName(i), stream.paused)
                             }
                             idx++;
                             i++;
@@ -592,7 +603,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
             if (!oldSound || oldSound.delay !== sound.delay) {
                 obs.call('SetInputAudioSyncOffset', {
                     inputName: source,
-                    inputAudioSyncOffset: sound.delay * 1000000
+                    inputAudioSyncOffset: sound.delay
                 }).catch((e): void => {
                     logger.warn(`Error setting audio delay for [${source}] to ${sound.delay}ms: ${e}`);
                 });

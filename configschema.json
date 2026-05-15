@@ -264,7 +264,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"type": {
-					"enum": ["obsTwitchPlayer", "nodecgGraphic"]
+					"enum": ["obsTwitchPlayer", "nodecgGraphic", "hls"]
 				},
 				"streamlinkCommand": {
 					"type": "string",
@@ -273,8 +273,13 @@
 				"proxyUrl": {
 					"type": "string",
 					"examples": ["http://localhost:8081/m3u8-proxy"]
+				},
+				"playerGraphic": {
+					"type": "string",
+					"examples": ["http://localhost:9090/bundles/bingothon-layouts-vue-3/graphics/example/main.html"]
 				}
 			}
+			
 		}
 	}
 }

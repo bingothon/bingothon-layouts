@@ -130,8 +130,12 @@
             // return ['external-commentary', 'runner-commentary', 'racer-audio-only'];
             return [
                 {
-                    label: 'Capture Discord via Stream PC',
+                    label: 'Capture Discord via Stream PC (external commentary, no delay)',
                     mode: 'external-commentary'
+                },
+                {
+                    label: 'Capture Discord via Stream PC (runner commentary, twitch delay)',
+                    mode: 'runner-commentary'
                 },
                 { label: "Capture Discord via runner's stream", mode: 'racer-audio-only' }
             ];
@@ -195,11 +199,11 @@
         // }
 
         get discordDisplayDelay(): string {
-            return `${store.state.discordDelayInfo.discordDisplayDelayMs}`;
+            return `${store.state.discordDelayInfo.streamDelayMs}`;
         }
 
         set discordDisplayDelay(delay: string) {
-            getReplicant<DiscordDelayInfo>('discordDelayInfo').value.discordDisplayDelayMs = parseInt(delay, 10);
+            getReplicant<DiscordDelayInfo>('discordDelayInfo').value.streamDelayMs = parseInt(delay, 10);
         }
 
         // get discordDisplayDelaySync(): boolean {
