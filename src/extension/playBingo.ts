@@ -124,7 +124,7 @@ nodecg.listenFor('playBingo:connect', async (data, callback) => {
             log.info(`PlayBingo socket connection closed ${code}: ${reason.toString()}`);
         });
     } catch (e) {
-        console.log(e);
+        log.error('playBingo:connect error', e);
     }
 
     if (callback && !callback.handled) {

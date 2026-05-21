@@ -164,7 +164,7 @@ class OBSUtility extends OBSWebSocket {
 
     public async refreshMediasource(source: string): Promise<void> {
         // TODO: remove this garbage once obs-websocket-js updates to proper bindings
-        console.log(`triggered refresh for source ${source}`);
+        logger.info(`triggered refresh for source ${source}`);
         try {
             await this.call('TriggerMediaInputAction', {
                 inputName: source,

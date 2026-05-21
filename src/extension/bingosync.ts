@@ -209,8 +209,6 @@ class BingosyncManager {
 
         this.isFogOfWar = bingosyncSettings.settings.fog_of_war ?? false;
 
-        console.log(`fog of war: ${this.isFogOfWar}`);
-
         // Bail if the room changed while this request was in-flight.
         if (this.fullUpdateInterval !== this.tempFullUpdateInterval) {
             return;
@@ -395,7 +393,7 @@ class BingosyncManager {
                             (runData.value.customData.Bingotype === 'rowcontrol' && boardRep.value.colorCounts[json.color] == 3))
                     ) {
                         //for rowcontrol, this can probably be simplified somehow
-                        console.log('lockout AND 13 goals');
+                        log.info('lockout AND 13 goals');
                         const colorTo13 = json.color;
                         const playerIndex = boardMetaRep.value.playerColors.findIndex((color) => color == colorTo13);
                         let i = 0;
@@ -551,7 +549,7 @@ class BingosyncManager {
         } else if (runData.value?.customData.Bingotype === 'jsrflockout') {
             this.updateJsrfLockoutScore(boardRep.value.cells, json.color);
         } else {
-            console.log('normal count :(');
+            log.debug('normal count :(');
             //normal count
             if (json.remove) {
                 boardRep.value.colorCounts[json.color] -= 1;

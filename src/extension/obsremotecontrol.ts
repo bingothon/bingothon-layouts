@@ -414,9 +414,9 @@ waitTillConnected().then((): void => {
         const settings = await obs.call('GetInputSettings', {
             inputName: videoPlayerSourceName
         });
-        console.log(JSON.stringify(settings));
+        logger.debug(JSON.stringify(settings));
         if (!bundleConfig.obs.intermissionVideoDirectory) {
-            console.error('Intermission video directory not set!');
+            logger.error('Intermission video directory not set!');
             return;
         }
         const nextVideoName = intermissionVideosToPlay.pop();
