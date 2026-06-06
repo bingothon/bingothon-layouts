@@ -97,13 +97,6 @@
         "width": 4
       },
       {
-        "name": "twitch-resizer-dashboard",
-        "title": "Twitch Resizer",
-        "fullbleed": "true",
-        "file": "crop-control.html",
-        "headerColor": "#008BB9"
-      },
-      {
         "name": "chat-bot-control",
         "title": "Twitch Chat Bot Control",
         "file": "chat-bot-control.html",
