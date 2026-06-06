@@ -7,7 +7,9 @@
         <div v-if="obsConnectionStatus === 'disabled'">OBS is disabled, nothing to see here</div>
         <div v-if="obsConnectionStatus === 'connected'">
             Current Scene: {{ currentScene }}
-            <v-btn :disabled="disableTransition()" @click="quickTransition">{{ quickTransitionButtonText }}</v-btn>
+            <v-btn :loading="isTransitioning" :disabled="disableTransition()" @click="quickTransition">{{
+                quickTransitionButtonText
+            }}</v-btn>
             <div>
                 Audio Preset:
                 <v-row>
@@ -79,6 +81,7 @@
     export default class OBSControl extends Vue {
         timeSinceLastIntermission: string = '';
         lastIntermissionInterval: NodeJS.Timeout | null = null;
+        isTransitioning: boolean = false;
 
         mounted() {
             this.lastIntermissionInterval = setInterval(() => {
@@ -101,10 +104,13 @@
         }
 
         disableTransition(): boolean {
-            return this.adTimer > 0;
+            return this.adTimer > 0 || this.isTransitioning;
         }
 
         get quickTransitionButtonText(): string {
+            if (this.isTransitioning) {
+                return 'Transitioning...';
+            }
             if (this.transitionText != 'Transition') {
                 return this.transitionText;
             }
@@ -255,12 +261,16 @@
         }
 
         quickTransition() {
+            this.isTransitioning = true;
             const nextScene = this.isIntermissionLikeScene(this.currentScene) ? gameScene : intermissionStartScene;
             console.log(`Next Scene: ${nextScene}`);
-            Vue.nextTick(() => {
-                console.log('Next tick');
-                this.doSceneTransition(nextScene);
-            });
+            setTimeout(() => {
+                Vue.nextTick(() => {
+                    console.log('Next tick');
+                    this.doSceneTransition(nextScene);
+                    this.isTransitioning = false;
+                });
+            }, parseInt(this.discordDisplayDelay, 10));
         }
 
         toggleAudioFade(source: string) {
