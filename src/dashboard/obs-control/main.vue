@@ -263,14 +263,21 @@
         quickTransition() {
             this.isTransitioning = true;
             const nextScene = this.isIntermissionLikeScene(this.currentScene) ? gameScene : intermissionStartScene;
-            console.log(`Next Scene: ${nextScene}`);
-            setTimeout(() => {
-                Vue.nextTick(() => {
-                    console.log('Next tick');
-                    this.doSceneTransition(nextScene);
-                    this.isTransitioning = false;
-                });
-            }, parseInt(this.discordDisplayDelay, 10));
+            if (!(this.obsStreamMode === 'external-commentary')) {
+                setTimeout(() => {
+                    this.doQickTransition(nextScene);
+                }, parseInt(this.discordDisplayDelay, 10));
+            } else {
+                this.doQickTransition(nextScene);
+            }
+        }
+
+        doQickTransition(nextScene: string) {
+            Vue.nextTick(() => {
+                console.log('Next tick');
+                this.doSceneTransition(nextScene);
+                this.isTransitioning = false;
+            });
         }
 
         toggleAudioFade(source: string) {
