@@ -53,7 +53,7 @@ function handleStreamPosChange(
     currentGameLayout: CurrentGameLayout,
     capturePositions: CapturePositions
 ) {
-    const layoutName = currentGameLayout.path.slice(1); // leading slash we don't want
+    const layoutName = currentGameLayout.name;
     const captureLayout = capturePositions[layoutName];
     if (captureLayout === undefined) {
         logger.error(`capture layout ${layoutName} not found!`);
