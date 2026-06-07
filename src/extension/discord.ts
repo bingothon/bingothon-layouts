@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define, no-inner-declarations */
 import * as Voice from '@discordjs/voice';
-import { getVoiceConnection, VoiceConnection } from '@discordjs/voice';
+import { getVoiceConnection } from '@discordjs/voice';
 import { ChannelType, Client, GatewayIntentBits, Message, VoiceBasedChannel } from 'discord.js';
 import { VoiceActivity } from '@/schemas';
 import * as nodecgApiContext from './util/nodecg-api-context';
@@ -39,8 +39,6 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
 } else {
     // Variables
     let voiceStatus: 'disconnected' | 'connecting' | 'connected' | 'error' = 'disconnected';
-
-    let voiceConnection: VoiceConnection | undefined;
 
     // Connection
     bot.on('clientReady', (): void => {
@@ -94,7 +92,7 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
         if (bot.isReady()) {
             const memberCollection = getVoiceChannelSafe(botServerID, botVoiceCommentaryChannelID).members;
 
-            let newMembers: VoiceActivityMember[] = []
+            let newMembers: VoiceActivityMember[] = [];
 
             if (!memberCollection || memberCollection.size < 1) {
                 newMembers = [];

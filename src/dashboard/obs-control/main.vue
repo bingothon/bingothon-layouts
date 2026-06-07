@@ -64,7 +64,8 @@
                 {{ transitionText }}
             </v-btn>
         </div>
-        <v-text-field v-model="discordDisplayDelay" type="number" label="Discord Display Delay (ms)"></v-text-field>
+        <v-text-field v-model="twitchStreamDelay" type="number" label="Stream Delay (ms)"></v-text-field>
+        <v-text-field v-model="additionalAudioDelay" type="number" label="Additional Audio Delay (ms)"></v-text-field>
     </v-app>
 </template>
 
@@ -204,12 +205,20 @@
         //     getReplicant<DiscordDelayInfo>('discordDelayInfo').value.discordAudioDelaySyncStreamLeader = sync;
         // }
 
-        get discordDisplayDelay(): string {
+        get twitchStreamDelay(): string {
             return `${store.state.discordDelayInfo.streamDelayMs}`;
         }
 
-        set discordDisplayDelay(delay: string) {
+        set twitchStreamDelay(delay: string) {
             getReplicant<DiscordDelayInfo>('discordDelayInfo').value.streamDelayMs = parseInt(delay, 10);
+        }
+
+        get additionalAudioDelay(): string {
+            return `${store.state.discordDelayInfo.additionalAudioDelayMs}`;
+        }
+
+        set additionalAudioDelay(delay: string) {
+            getReplicant<DiscordDelayInfo>('discordDelayInfo').value.additionalAudioDelayMs = parseInt(delay, 10);
         }
 
         // get discordDisplayDelaySync(): boolean {
@@ -266,7 +275,7 @@
             if (!(this.obsStreamMode === 'external-commentary')) {
                 setTimeout(() => {
                     this.doQickTransition(nextScene);
-                }, parseInt(this.discordDisplayDelay, 10));
+                }, parseInt(this.twitchStreamDelay, 10) + parseInt(this.additionalAudioDelay, 10));
             } else {
                 this.doQickTransition(nextScene);
             }
