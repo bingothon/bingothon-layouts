@@ -94,40 +94,44 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
         if (bot.isReady()) {
             const memberCollection = getVoiceChannelSafe(botServerID, botVoiceCommentaryChannelID).members;
 
+            let newMembers: VoiceActivityMember[] = []
+
             if (!memberCollection || memberCollection.size < 1) {
-                voiceActivityRep.value.members = [];
-                return;
-            }
-
-            // flatMap is used to filter out members that are muted or ignored
-            voiceActivityRep.value.members = Array.from(memberCollection.values()).flatMap((voiceMember): VoiceActivityMember[] => {
-                // Hide our bot and muted members cause that is the restreamer
-                if (config.discord?.ignoredUsers && config.discord.ignoredUsers.includes(voiceMember.user.tag)) {
-                    return [];
-                }
-                if (!voiceMember.voice.mute) {
-                    const userAvatar =
-                        voiceMember.displayAvatarURL() ??
-                        // Default avatar
-                        'https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png';
-
-                    let speakStatus = getVoiceConnection(botServerID)?.receiver.speaking.users.has(voiceMember.id);
-
-                    if (!speakStatus) {
-                        speakStatus = false;
+                newMembers = [];
+            } else {
+                // flatMap is used to filter out members that are muted or ignored
+                newMembers = Array.from(memberCollection.values()).flatMap((voiceMember): VoiceActivityMember[] => {
+                    // Hide our bot and muted members cause that is the restreamer
+                    if (config.discord?.ignoredUsers && config.discord.ignoredUsers.includes(voiceMember.user.tag)) {
+                        return [];
                     }
+                    if (!voiceMember.voice.mute) {
+                        const userAvatar =
+                            voiceMember.displayAvatarURL() ??
+                            // Default avatar
+                            'https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png';
 
-                    return [
-                        {
-                            id: voiceMember.id,
-                            name: voiceMember.displayName,
-                            avatar: userAvatar,
-                            isSpeaking: speakStatus
+                        let speakStatus = getVoiceConnection(botServerID)?.receiver.speaking.users.has(voiceMember.id);
+
+                        if (!speakStatus) {
+                            speakStatus = false;
                         }
-                    ];
-                }
-                return [];
-            });
+
+                        return [
+                            {
+                                id: voiceMember.id,
+                                name: voiceMember.displayName,
+                                avatar: userAvatar,
+                                isSpeaking: speakStatus
+                            }
+                        ];
+                    }
+                    return [];
+                });
+            }
+            setTimeout(() => {
+                voiceActivityRep.value.members = newMembers;
+            }, voiceDelayRep.value);
         }
     }
 
@@ -145,36 +149,14 @@ if (!(botToken && botServerID && botCommandChannelID && botVoiceCommentaryChanne
                 adapterCreator: guild.voiceAdapterCreator
             };
 
-            Voice.joinVoiceChannel(joinConfig);
+            const voiceConnection = Voice.joinVoiceChannel(joinConfig);
 
             voiceStatus = 'connected';
-            voiceConnection = getVoiceConnection(botServerID);
-
-            if (voiceConnection) {
-                voiceConnection.receiver.speaking.on('start', () => {
-                    nodecg.log.info('User started speaking');
-                    updateCommentaryChannelMembers();
-                });
-
-                voiceConnection.receiver.speaking.on('end', () => {
-                    nodecg.log.info('User stopped speaking');
-                    updateCommentaryChannelMembers();
-                });
-            }
 
             updateCommentaryChannelMembers();
             nodecg.log.info('joined voice channel!');
-
-            let connection = voiceConnection;
-
-            if (!connection) {
-                connection = Voice.joinVoiceChannel(joinConfig);
-            }
-            const receiver = connection.receiver;
+            const receiver = voiceConnection.receiver;
             receiver.speaking.on('start', (userID) => {
-                if (!voiceActivityRep.value.members || voiceActivityRep.value.members.length < 1) {
-                    return;
-                }
                 setTimeout((): void => {
                     const member = voiceActivityRep.value.members.find((voiceMember) => {
                         return voiceMember.id == userID;
