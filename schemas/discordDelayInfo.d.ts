@@ -7,6 +7,7 @@
 
 export interface DiscordDelayInfo {
   streamDelayMs: number;
+  additionalAudioDelayMs: number;
   discordAudioDelaySyncStreamLeader: boolean;
   discordDisplayDelaySyncStreamLeader: boolean;
 }

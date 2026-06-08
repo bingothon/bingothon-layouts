@@ -230,12 +230,12 @@ waitTillConnected().then((): void => {
 
     discordDelayInfoRep.on('change', (newVal): void => {
         if (newVal.discordAudioDelaySyncStreamLeader) {
-            obsAudioSourcesRep.value[bundleConfig.obs.discordAudio].delay = newVal.streamDelayMs;
+            obsAudioSourcesRep.value[bundleConfig.obs.discordAudio].delay = newVal.streamDelayMs + newVal.additionalAudioDelayMs;
         } else {
             obsAudioSourcesRep.value[bundleConfig.obs.discordAudio].delay = 0;
         }
         if (newVal.discordDisplayDelaySyncStreamLeader) {
-            voiceDelayRep.value = newVal.streamDelayMs;
+            voiceDelayRep.value = newVal.streamDelayMs + newVal.additionalAudioDelayMs;
         } else {
             voiceDelayRep.value = 0;
         }
