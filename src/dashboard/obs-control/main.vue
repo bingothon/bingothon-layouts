@@ -273,6 +273,7 @@
             this.isTransitioning = true;
             const nextScene = this.isIntermissionLikeScene(this.currentScene) ? gameScene : intermissionStartScene;
             if (!(this.obsStreamMode === 'external-commentary')) {
+                nodecg.sendMessageToBundle('obsRemotecontrol:forceSetObsVoiceDelay', bundleName);
                 setTimeout(() => {
                     this.doQickTransition(nextScene);
                 }, parseInt(this.twitchStreamDelay, 10) + parseInt(this.additionalAudioDelay, 10));
