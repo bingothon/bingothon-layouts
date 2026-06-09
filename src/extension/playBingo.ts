@@ -37,9 +37,29 @@ const parseBoard = (board: Board): Bingoboard => {
     };
 };
 
+function handlePlayerListUpdate(players: Player[] | undefined) {
+    if (!players) return;
+    players.forEach((player) => {
+        // TODO: we should map players in the schedule to
+        // players in the room to avoid needing this easily
+        // broken check
+        if (!player.spectator) {
+            boardRep.value.colorCounts[player.color] = player.goalCount;
+        }
+    });
+    playBingoSocketRep.value.playerColors = players.map((player) => ({ name: player.nickname, color: player.color }));
+}
+
+const PLAYBINGO_ROOM_RE = /.*playbingo\.gg\/rooms\/([^\/]+)\/?/;
+
 nodecg.listenFor('playBingo:connect', async (data, callback) => {
     playBingoSocketRep.value.status = 'connecting';
-    const { slug, passphrase } = data;
+    let { slug }: { slug: string } = data;
+    const { passphrase }: { passphrase: string } = data;
+    const match = slug.match(PLAYBINGO_ROOM_RE);
+    if (match?.[1]) {
+        slug = match[1];
+    }
     log.info(`Connecting to PlayBingo room ${data.slug}:${data.passphrase}`);
     try {
         const res = await fetch(`${playBingoHost}/api/rooms/${slug}/authorize`, {
@@ -94,26 +114,15 @@ nodecg.listenFor('playBingo:connect', async (data, callback) => {
                     webSocket.send(JSON.stringify({ action: 'revealCard', authToken } as RoomAction));
                 case 'syncBoard':
                     boardRep.value = parseBoard(data.board);
-                    data.players?.forEach((player) => {
-                        // TODO: we should map players in the schedule to
-                        // players in the room to avoid needing this easily
-                        // broken check
-                        if (!player.spectator) {
-                            boardRep.value.colorCounts[player.color] = player.goalCount;
-                        }
-                    });
+                    handlePlayerListUpdate(data.players);
                     break;
                 case 'cellUpdate':
                     boardRep.value.cells[data.row][data.col] = parseCell(data.cell, data.row, data.col);
-                    data.players?.forEach((player) => {
-                        // TODO: we should map players in the schedule to
-                        // players in the room to avoid needing this easily
-                        // broken check
-                        if (!player.spectator) {
-                            boardRep.value.colorCounts[player.color] = player.goalCount;
-                        }
-                    });
+                    handlePlayerListUpdate(data.players);
                     break;
+                case 'chat':
+                case 'updateRoomData':
+                    handlePlayerListUpdate(data.players);
                 default:
                     break;
             }
