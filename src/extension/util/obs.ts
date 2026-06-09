@@ -601,12 +601,19 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                 });
             }
             if (!oldSound || oldSound.delay !== sound.delay) {
-                obs.call('SetInputAudioSyncOffset', {
-                    inputName: source,
-                    inputAudioSyncOffset: sound.delay
-                }).catch((e): void => {
-                    logger.warn(`Error setting audio delay for [${source}] to ${sound.delay}ms: ${e}`);
-                });
+                function reallySettingDelay(delay: number) {
+                    obs.call('SetInputAudioSyncOffset', {
+                        inputName: source,
+                        inputAudioSyncOffset: delay
+                    }).catch((e): void => {
+                        logger.warn(`Error setting audio delay for [${source}] to ${delay}ms: ${e}`);
+                    });
+                }
+                // OBS is stupid
+                // otherwise setting the delay to something like 7 seconds doesn't work
+                reallySettingDelay(sound.delay);
+                setTimeout(() => reallySettingDelay(sound.delay + 1), 300);
+                setTimeout(() => reallySettingDelay(sound.delay), 600);
             }
         });
     });

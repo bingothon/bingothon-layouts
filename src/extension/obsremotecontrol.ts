@@ -226,6 +226,15 @@ waitTillConnected().then((): void => {
         setTimeout(doFadeIn, 100);
     });
 
+    nodecg.listenFor('obsRemotecontrol:forceSetObsVoiceDelay', (_data, callback): void => {
+        obsAudioSourcesRep.value[bundleConfig.obs.discordAudio].delay =
+            discordDelayInfoRep.value.streamDelayMs + discordDelayInfoRep.value.additionalAudioDelayMs;
+        if (callback && !callback.handled) {
+            callback();
+            return;
+        }
+    });
+
     /* eslint-disable max-len */
 
     discordDelayInfoRep.on('change', (newVal): void => {
