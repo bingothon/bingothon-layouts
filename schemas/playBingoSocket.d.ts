@@ -10,4 +10,8 @@ export interface PlayBingoSocket {
   playerName?: string;
   roomCode?: string;
   passphrase?: string;
+  playerColors?: {
+    name: string;
+    color: string;
+  }[];
 }

@@ -17,7 +17,12 @@
             {{ playerNames[i] || `P${i}` }}:
             <v-row v-if="!showPlayBingoOptions">
                 <v-col>
-                    <v-select :value="color" @input="updatePlayerColor(i, $event)" :items="allColors"></v-select>
+                    <v-select
+                        :value="color"
+                        @input="updatePlayerColor(i, $event)"
+                        label="Color"
+                        :items="allColors"
+                    ></v-select>
                 </v-col>
                 <v-col v-show="isManualScoreOverride">
                     <v-text-field
@@ -33,13 +38,12 @@
             </v-row>
             <v-row v-if="showPlayBingoOptions">
                 <v-col>
-                    <v-text-field
+                    <v-select
+                        :value="color"
                         @input="updatePlayerColor(i, $event)"
-                        background-color="#455A64"
-                        clearable
-                        solo
-                        dark
-                    />
+                        label="Color"
+                        :items="allPlaybingoColors"
+                    ></v-select>
                 </v-col>
                 <v-col v-show="isManualScoreOverride">
                     <v-text-field
@@ -88,7 +92,7 @@
         <!-- PlayBingo Stuff -->
         <div v-if="showPlayBingoOptions">
             <div>
-                Room:
+                Room Code or URL:
                 <v-text-field v-model="roomCode" background-color="#455A64" clearable solo dark />
             </div>
             <div>
@@ -373,6 +377,10 @@
         get playerNames(): string[] {
             const teams = store.state.runDataActiveRun.teams;
             return teams.flatMap((team) => team.players.map((player) => player.name));
+        }
+
+        get allPlaybingoColors(): string[] {
+            return [...new Set(store.state.playBingoSocket.playerColors?.map((player) => player.color) ?? [])].sort();
         }
 
         /**

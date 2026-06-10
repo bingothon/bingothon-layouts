@@ -18,6 +18,18 @@
 		},
 		"passphrase": {
 			"type": "string"
+		},
+		"playerColors": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": ["name", "color"],
+				"properties": {
+					"name": {"type": "string"},
+					"color": {"type": "string"}
+				}
+			}
 		}
 	},
 	"required": ["status"]
