@@ -28,7 +28,6 @@ runDataActiveRunRep.on('change', (newValue, old): void => {
             break;
         default:
             let playerCount = 0;
-            let coOp = false;
             for (let i = 0; i < newValue.teams.length; i += 1) {
                 const team = newValue.teams[i];
                 // eslint-disable-next-line no-loop-func
@@ -36,10 +35,7 @@ runDataActiveRunRep.on('change', (newValue, old): void => {
                     playerCount += 1;
                 });
             }
-            if (playerCount === 4 && newValue.teams.length === 2) {
-                coOp = true;
-            }
-            layoutstring = `${playerCount}p ${newValue.customData.Layout} ${coOp ? 'co-op ' : ''}Layout`;
+            layoutstring = `${playerCount}p ${newValue.customData.Layout?.replace(':', 'x')}`;
     }
     const foundLayout = allGameLayoutsRep.value?.find((l) => l.name == layoutstring);
     foundLayout ? (currentGameLayoutRep.value = clone(foundLayout)) : logger.error('did not find game layout ' + layoutstring);
