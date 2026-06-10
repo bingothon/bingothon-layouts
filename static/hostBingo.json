@@ -1,102 +1,102 @@
 [
-  {
-    "goal": "Get a guess within 10 km (6.2 miles) in France",
-    "description": ""
-  },
-  {
-    "goal": "Get a guess within 10 km (6.2 miles) in Germany",
-    "description": ""
-  },
-  {
-    "goal": "Get a guess within 10 km (6.2 miles) in Norway",
-    "description": ""
-  },
-  {
-    "goal": "Get a guess within 10 km (6.2 miles) in the USA",
-    "description": ""
-  },
-  {
-    "goal": "Get a guess within 10 km (6.2 miles) in Japan",
-    "description": ""
-  },
-  {
-    "goal": "Find something video game related",
-    "description": ""
-  },
-  {
-    "goal": "Find a train",
-    "description": ""
-  },
-  {
-    "goal": "Find a balloon",
-    "description": ""
-  },
-  {
-    "goal": "Find a cow",
-    "description": ""
-  },
-  {
-    "goal": "Correctly guess a famous location",
-    "description": ""
-  },
-  {
-    "goal": "Correctly guess a capital city",
-    "description": ""
-  },
-  {
-    "goal": "Find a castle",
-    "description": ""
-  },
-  {
-    "goal": "Get a 5k guess on standard map",
-    "description": ""
-  },
-  {
-    "goal": "Find a banana",
-    "description": ""
-  },
-  {
-    "goal": "Find a surfboard or snowboard",
-    "description": ""
-  },
-  {
-    "goal": "Find the border of two countries",
-    "description": ""
-  },
-  {
-    "goal": "Go on a trail in a forest",
-    "description": ""
-  },
-  {
-    "goal": "Find someone playing a wind instrument",
-    "description": ""
-  },
-  {
-    "goal": "Find a McDonalds",
-    "description": ""
-  },
-  {
-    "goal": "Find a hospital/medical place",
-    "description": ""
-  },
-  {
-    "goal": "Find a crane",
-    "description": ""
-  },
-  {
-    "goal": "Find a mini-golf course",
-    "description": ""
-  },
-  {
-    "goal": "Find a race track (for motor vehicle racing)",
-    "description": ""
-  },
-  {
-    "goal": "Find someone wearing a green hat",
-    "description": ""
-  },
-  {
-    "goal": "Find a cruise ship",
-    "description": ""
-  }
+    {
+        "goal": "Bridges: 15x15",
+        "description": "Medium"
+    },
+    {
+        "goal": "Dominosa: Order 5",
+        "description": "Trivial"
+    },
+    {
+        "goal": "Fifteen:",
+        "description": "4x4"
+    },
+    {
+        "goal": "Filling:",
+        "description": "13x9"
+    },
+    {
+        "goal": "Flip 5x5:",
+        "description": "Crosses"
+    },
+    {
+        "goal": "Flood: 12x12",
+        "description": "Medium"
+    },
+    {
+        "goal": "Guess:",
+        "description": "Super"
+    },
+    {
+        "goal": "Inertia:",
+        "description": "20x16"
+    },
+    {
+        "goal": "Keen: 6x6",
+        "description": "Normal"
+    },
+    {
+        "goal": "Light Up: 10x10",
+        "description": "Tricky"
+    },
+    {
+        "goal": "Loopy: 7x7",
+        "description": "Easy"
+    },
+    {
+        "goal": "Map: 30x25, 75 Regions,",
+        "description": "Normal"
+    },
+    {
+        "goal": "Mines: 30x16, 99",
+        "description": "Mines"
+    },
+    {
+        "goal": "Net:",
+        "description": "11x11"
+    },
+    {
+        "goal": "Netslide: 4x4",
+        "description": "Easy"
+    },
+    {
+        "goal": "Palisade: 8x6 regions of",
+        "description": "6"
+    },
+    {
+        "goal": "Pattern:",
+        "description": "15x15"
+    },
+    {
+        "goal": "Rectangles:",
+        "description": "11x11"
+    },
+    {
+        "goal": "Signpost:",
+        "description": "4x4"
+    },
+    {
+        "goal": "Singles: 8x8",
+        "description": "Easy"
+    },
+    {
+        "goal": "Sixteen:",
+        "description": "4x4"
+    },
+    {
+        "goal": "Slant: 8x8",
+        "description": "Easy"
+    },
+    {
+        "goal": "Solo: 3x3",
+        "description": "Trivial"
+    },
+    {
+        "goal": "Tracks: 8x8",
+        "description": "Tricky"
+    },
+    {
+        "goal": "Unruly: 8x8",
+        "description": "Trivial"
+    }
 ]
