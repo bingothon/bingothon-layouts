@@ -420,10 +420,6 @@ waitTillConnected().then((): void => {
     let intermissionVideosToPlay: string[] = [];
 
     async function handleNextVideoPlay() {
-        const settings = await obs.call('GetInputSettings', {
-            inputName: videoPlayerSourceName
-        });
-        logger.debug(JSON.stringify(settings));
         if (!bundleConfig.obs.intermissionVideoDirectory) {
             logger.error('Intermission video directory not set!');
             return;
@@ -442,9 +438,9 @@ waitTillConnected().then((): void => {
                 },
                 // TODO: is this a good idea? This resets the settings to default and then applies the new config
                 overlay: false
-            });
+            }).catch(e => nodecg.log.error(`could not set input settings for ${videoPlayerSourceName}`, e));
         } else {
-            await obs.changeScene('intermission');
+            await obs.changeScene('intermission').catch(e => nodecg.log.error('changing to scene "intermission" failed!', e));
             nodecg.sendMessage(
                 'obsRemotecontrol:fadeInAudio',
                 { source: bundleConfig.obs.mpdAudio } /* (err): void => {
@@ -470,7 +466,7 @@ waitTillConnected().then((): void => {
             // reverse, so we can use "pop" later
             intermissionVideosToPlay = videos.reverse();
 
-            obs.changeScene('videoPlayer');
+            obs.changeScene('videoPlayer').catch(e => nodecg.log.error('changing to scene "videoPlayer" failed!', e));
             nodecg.sendMessage(
                 'obsRemotecontrol:fadeOutAudio',
                 { source: bundleConfig.obs.mpdAudio } /*  (err): void => {
