@@ -346,12 +346,12 @@
 
         get showExtraBingosyncOptions(): boolean {
             return (
-                ['bingoboard', 'hostingBingoboard'].includes(this.currentBoardRep) && this.boardSource === 'bingosync'
+                'bingoboard' === this.currentBoardRep && this.boardSource === 'bingosync'
             );
         }
 
         get showPlayBingoOptions(): boolean {
-            return this.boardSource === 'playBingo';
+            return 'bingoboard' === this.currentBoardRep && this.boardSource === 'playBingo';
         }
 
         get showExtraExternBoardOptions(): boolean {
