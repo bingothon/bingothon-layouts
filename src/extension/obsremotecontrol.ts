@@ -1,8 +1,7 @@
 'use-strict';
 
 import { Configschema } from '../../configschema';
-import { ObsConnection, ObsStreamMode } from '../../schemas';
-import { TwitchCommercialTimer } from '../../speedcontrol-types';
+import { ObsStreamMode } from '../../schemas';
 import * as nodecgApiContext from './util/nodecg-api-context';
 import obs from './util/obs';
 import {
@@ -10,7 +9,6 @@ import {
     hostDiscordDuringIntermissionRep,
     lastIntermissionTimestampRep,
     obsAudioSourcesRep,
-    obsConnectionRep,
     obsCurrentSceneRep,
     obsDashboardAudioSourcesRep,
     obsPreviewImgRep,

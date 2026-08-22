@@ -142,8 +142,6 @@
 			"required": [
 				"discordAudio",
 				"mpdAudio",
-				"address",
-				"password",
 				"enable",
 				"gameScene"
 			],
@@ -153,13 +151,17 @@
 					"type": "boolean",
 					"default": false
 				},
-				"address": {
-					"type": "string",
-					"default": "localhost:4444"
-				},
-				"password": {
-					"type": "string",
-					"default": ""
+				"presets": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"additionalProperties": false,
+						"required": ["url", "password"],
+						"properties": {
+							"url": {"type":"string"},
+							"password": {"type": "string"}
+						}
+					}
 				},
 				"discordAudio": {
 					"type": "string",

@@ -95,14 +95,19 @@ function handleSoundChange(obs: OBSUtility, soundOnTwitchStream: SoundOnTwitchSt
 // Extending the OBS library with some of our own functions.
 class OBSUtility extends OBSWebSocket {
     public async doConnectAndInit(settings: {url: string, password: string}) {
+        obsConnectionRep.value.status = 'connecting';
         try {
             await obs.connect(settings.url, settings.password, {
                 eventSubscriptions: EventSubscription.All | EventSubscription.InputVolumeMeters,
                 rpcVersion: 1
             });
-            logger.info('OBS connection successful.');
-            obsConnectionRep.value.status = 'connected';
-
+        } catch(e) {
+            obsConnectionRep.value.status = 'error';
+            throw e;
+        }
+        logger.info('OBS connection successful.');
+        obsConnectionRep.value.status = 'connected';
+        try {
             // we need studio mode
             await obs.call('SetStudioModeEnabled', { studioModeEnabled: true });
 
@@ -122,7 +127,7 @@ class OBSUtility extends OBSWebSocket {
             }
             logger.info('OBS init successful.');
         } catch(e) {
-            logger.error("could not connect", e);
+            logger.error("could not do initial setup", e);
         }
     }
     /**
@@ -327,13 +332,83 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     const soundOnTwitchStreamRep = soundOnTwitchStream;
     const twitchStreamsRep = streamsReplicant;
     const audioLevelsRep = obsAudioLevels;
-    // load the intermission audio source
+    
+    // recover after a restart
+    obsConnectionRep.once("change", async (newVal) => {
+        logger.info("old connection:", newVal);
+        if (newVal.url && newVal.password) {
+            obs.doConnectAndInit({
+                url: newVal.url,
+                password: newVal.password,
+            }).catch(e => logger.error(`could not recover connection to obs at ${newVal.url}`, e));
+        }
+    });
 
-    const settings = {
-        url: bundleConfig.obs.address,
-        password: bundleConfig.obs.password
-    };
-    logger.info('Setting up OBS connection.');
+    nodecg.listenFor('obs:connect', async (data, cb) => {
+        let err = null;
+        if (typeof data.url === 'string' && typeof data.password === 'string') {
+            try {
+                obsConnectionRep.value.url = data.url;
+                obsConnectionRep.value.password = data.password;
+                obsConnectionRep.value.preset = undefined;
+                await obs.doConnectAndInit({
+                    url: data.url,
+                    password: data.password,
+                });
+            } catch (e) {
+                logger.error(`could not connect to obs at ${data.url}`, e);
+                err = e;
+            }
+        } else {
+            err = new Error("url and password are required!");
+        }
+        if (cb && !cb.handled) {
+            cb(err);
+        }
+    });
+
+    nodecg.listenFor('obs:connectPreset', async (data, cb) => {
+        let err = null;
+        if (typeof data.preset === 'string') {
+            const settings = bundleConfig.obs.presets?.[data.preset];
+            if (!settings) {
+                err = new Error(`preset ${data.preset} doesn't exist`);
+            } else {
+                try {
+                    obsConnectionRep.value.url = settings.url;
+                    obsConnectionRep.value.password = settings.password;
+                    obsConnectionRep.value.preset = data.preset;
+                    await obs.doConnectAndInit({
+                        url: settings.url,
+                        password: settings.password,
+                    });
+                } catch (e) {
+                    logger.error(`could not connect to obs at ${data.url}`, e);
+                    err = e;
+                }
+            }
+        } else {
+            err = new Error("preset is required!");
+        }
+        if (cb && !cb.handled) {
+            cb(err);
+        }
+    });
+
+    nodecg.listenFor('obs:disconnect', async (_data, cb) => {
+        let err = null;
+        obsConnectionRep.value.status = 'disconnected';
+        try {
+            await obs.disconnect();
+        } catch(e) {
+            logger.warn("error disconnecting from obs", e);
+            err = e;
+        }
+        if (cb && !cb.handled) {
+            cb(err);
+        }
+    });
+
     obsConnectionRep.value.status = 'disconnected';
 
     // default if they somehow not exist
@@ -450,11 +525,20 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         });
     }
 
-    obs.doConnectAndInit(settings);
     obs.on('ConnectionClosed', (): void => {
-        logger.warn('OBS connection lost, retrying in 5 seconds.');
-        obsConnectionRep.value.status = 'error';
-        setTimeout(() => obs.doConnectAndInit(settings), 5000);
+        if (obsConnectionRep.value.status != 'disconnected') {
+            logger.warn('OBS connection lost, retrying in 5 seconds.');
+            obsConnectionRep.value.status = 'error';
+            setTimeout(() => {
+                if (obsConnectionRep.value.status === 'error') {
+                    const url = obsConnectionRep.value.url;
+                    const password = obsConnectionRep.value.password;
+                    if (url && password) {
+                        obs.doConnectAndInit({url, password}).catch(e => logger.error(`could not recover connection to obs at ${url}`, e));
+                    }
+                }
+            }, 5000);
+        }
     });
 
     obs.on('ConnectionError', (err): void => {

@@ -6,5 +6,8 @@
  */
 
 export interface ObsConnection {
-  status: "disabled" | "connected" | "error" | "disconnected";
+  status: "disabled" | "connected" | "connecting" | "error" | "disconnected";
+  url?: string;
+  password?: string;
+  preset?: string;
 }

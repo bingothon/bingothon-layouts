@@ -34,8 +34,12 @@ export interface Configschema {
   };
   obs: {
     enable: boolean;
-    address: string;
-    password: string;
+    presets?: {
+      [k: string]: {
+        url: string;
+        password: string;
+      };
+    };
     discordAudio: string;
     mpdAudio: string;
     streamsAudio?: string;
