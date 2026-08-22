@@ -141,7 +141,6 @@
 			"type": "object",
 			"required": [
 				"discordAudio",
-				"streamsAudio",
 				"mpdAudio",
 				"address",
 				"password",
@@ -172,7 +171,8 @@
 				},
 				"streamsAudio": {
 					"type": "string",
-					"default": "Desktop-Audio"
+					"default": "Desktop-Audio",
+					"$comment": "not used anymore, should be removed"
 				},
 				"gameScene": {
 					"type": "string",

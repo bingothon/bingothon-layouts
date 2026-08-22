@@ -18,7 +18,7 @@ import {
     obsStreamModeRep,
     voiceDelayRep
 } from './util/replicants';
-import { runDataActiveRunRep } from './util/speedControlReplicants';
+import { runDataActiveRunRep, twitchCommercialTimer } from './util/speedControlReplicants';
 
 // this handles dashboard utilities, all around automating the run setup process
 // and setting everything in OBS properly on transitions
@@ -39,25 +39,8 @@ function isIntermissionLikeScene(name: string): boolean {
     return name.toLowerCase().includes('intermission') || name.toLowerCase() == 'videoplayer';
 }
 
-// make sure we are connected to OBS before loading any of the functions that depend on OBS
-function waitTillConnected(): Promise<void> {
-    return new Promise((resolve): void => {
-        function conWait(val: ObsConnection): void {
-            if (val.status === 'connected') {
-                obsConnectionRep.removeListener('change', conWait);
-                resolve();
-            }
-        }
-
-        obsConnectionRep.on('change', conWait);
-    });
-}
-
-waitTillConnected().then((): void => {
-    logger.info('connected to OBS, setting up remote control utils...');
-
     // default if they somehow not exist
-    [bundleConfig.obs.discordAudio, bundleConfig.obs.mpdAudio, bundleConfig.obs.streamsAudio].forEach((audioSource): void => {
+    [bundleConfig.obs.discordAudio, bundleConfig.obs.mpdAudio].forEach((audioSource): void => {
         if (!Object.getOwnPropertyNames(obsDashboardAudioSourcesRep.value).includes(audioSource)) {
             obsDashboardAudioSourcesRep.value[audioSource] = { baseVolume: 0.5, fading: 'unmuted' };
         }
@@ -134,6 +117,7 @@ waitTillConnected().then((): void => {
 
     async function doTakeSourceScreenshot() {
         if (!obsPreviewImgRep.value.active) return;
+        if (!obs.isConnected()) return;
         try {
             const imgData = await obs.takeSourceScreenshot(obsPreviewScene.value || 'game');
             obsPreviewImgRep.value.screenshot = imgData;
@@ -147,6 +131,7 @@ waitTillConnected().then((): void => {
             // clear even before activating, just to be sure
             if (screenshotTimer) {
                 clearInterval(screenshotTimer);
+                screenshotTimer = undefined;
             }
             if (newVal.active) {
                 screenshotTimer = setInterval(doTakeSourceScreenshot, 1000);
@@ -275,15 +260,6 @@ waitTillConnected().then((): void => {
             );
         }
         // streams audio handled via individual sources
-        // if (nextSceneName === 'game') {
-        //   nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.streamsAudio }, (err): void => {
-        //     logger.warn(`Problem fading in streams during transition: ${err.error}`);
-        //   });
-        // } else {
-        //   nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.streamsAudio }, (err): void => {
-        //     logger.warn(`Problem fading out streams during transition: ${err.error}`);
-        //   });
-        // }
         // depending on the next scene and which mode is used set some stuff automagically
         if (streamMode === 'external-commentary' || streamMode === 'runner-commentary') {
             // no discord delay in intermission
@@ -314,15 +290,6 @@ waitTillConnected().then((): void => {
         } else if (streamMode === 'racer-audio-only') {
             // use player audio
             // streams audio handled via individual sources
-            // if (nextSceneName === 'game') {
-            //   nodecg.sendMessage('obsRemotecontrol:fadeInAudio', { source: bundleConfig.obs.streamsAudio }, (err): void => {
-            //     logger.warn(`Problem fading in streams during transition: ${err.error}`);
-            //   });
-            // } else {
-            //   nodecg.sendMessage('obsRemotecontrol:fadeOutAudio', { source: bundleConfig.obs.streamsAudio }, (err): void => {
-            //     logger.warn(`Problem fading out streams during transition: ${err.error}`);
-            //   });
-            // }
             // discord muted except for interview
             if (nextSceneName === 'interview' || (nextSceneName.includes('intermission') && hostsSpeaking)) {
                 nodecg.sendMessage(
@@ -407,9 +374,8 @@ waitTillConnected().then((): void => {
         }
     });
     //triggers ads when switching to Ad scene
-    const adsTimerReplicant = nodecg.Replicant<TwitchCommercialTimer>('twitchCommercialTimer', 'nodecg-speedcontrol');
     obs.on('CurrentProgramSceneChanged', async ({ sceneName }) => {
-        if (sceneName.startsWith('(ads) intermission') && adsTimerReplicant.value && adsTimerReplicant.value.secondsRemaining <= 0) {
+        if (sceneName.startsWith('(ads) intermission') && twitchCommercialTimer.value && twitchCommercialTimer.value.secondsRemaining <= 0) {
             //play ads
             nodecg.sendMessageToBundle('twitchStartCommercial', 'nodecg-speedcontrol', { duration: 180 });
             nodecg.log.info('Playing 3 minute Twitch Ad');
@@ -430,17 +396,9 @@ waitTillConnected().then((): void => {
             if (!videoPath.endsWith('.mp4')) {
                 videoPath += '.mp4';
             }
-            await obs.call('SetInputSettings', {
-                inputName: videoPlayerSourceName,
-                inputSettings: {
-                    is_local_file: true,
-                    local_file: videoPath
-                },
-                // TODO: is this a good idea? This resets the settings to default and then applies the new config
-                overlay: false
-            }).catch(e => nodecg.log.error(`could not set input settings for ${videoPlayerSourceName}`, e));
+            await obs.setMediasourceLocalFile(videoPlayerSourceName, videoPath);
         } else {
-            await obs.changeScene('intermission').catch(e => nodecg.log.error('changing to scene "intermission" failed!', e));
+            await obs.changeProgramScene('intermission');
             nodecg.sendMessage(
                 'obsRemotecontrol:fadeInAudio',
                 { source: bundleConfig.obs.mpdAudio } /* (err): void => {
@@ -466,7 +424,7 @@ waitTillConnected().then((): void => {
             // reverse, so we can use "pop" later
             intermissionVideosToPlay = videos.reverse();
 
-            obs.changeScene('videoPlayer').catch(e => nodecg.log.error('changing to scene "videoPlayer" failed!', e));
+            obs.changeProgramScene('videoPlayer');
             nodecg.sendMessage(
                 'obsRemotecontrol:fadeOutAudio',
                 { source: bundleConfig.obs.mpdAudio } /*  (err): void => {
@@ -479,7 +437,7 @@ waitTillConnected().then((): void => {
         }
     }
 
-    adsTimerReplicant.on('change', (newVal): void => {
+    twitchCommercialTimer.on('change', (newVal): void => {
         if (newVal && newVal.secondsRemaining <= 0 && obsCurrentSceneRep.value === '(ads) intermission') {
             doStartIntermissionVideos();
         }
@@ -492,7 +450,7 @@ waitTillConnected().then((): void => {
 
     nodecg.listenFor('videoPlayerFinished', (): void => {
         if (obsCurrentSceneRep.value?.toLowerCase() === 'videoplayer') {
-            obs.changeScene('intermission');
+            obs.changeProgramScene('intermission');
             nodecg.sendMessage(
                 'obsRemotecontrol:fadeInAudio',
                 { source: bundleConfig.obs.mpdAudio } /* (err): void => {
@@ -501,4 +459,3 @@ waitTillConnected().then((): void => {
             );
         }
     });
-});
