@@ -168,6 +168,15 @@ class OBSUtility extends OBSWebSocket {
         );
     }
 
+    public async setAudioSyncOffset(source: string, offsetMs: number): Promise<void> {
+        obs.call('SetInputAudioSyncOffset', {
+            inputName: source,
+            inputAudioSyncOffset: offsetMs
+        }).catch((e): void => {
+            logger.error(`Error setting audio delay for [${source}] to ${offsetMs}ms`, e);
+        });
+    }
+
     /**
      * Update the played input from a media source
      * @param source name of the media source
@@ -596,21 +605,14 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         Object.entries(newVal).forEach(([source, sound]): void => {
             const oldSound = old[source];
             if (!oldSound || oldSound.volume !== sound.volume) {
-                obs.setAudioVolume(source, sound.volume).catch((e): void => {
-                    logger.warn(`Error setting Volume for [${source}] to ${sound.volume}: ${e}`);
-                });
+                obs.setAudioVolume(source, sound.volume);
             }
             if (!oldSound || oldSound.muted !== sound.muted) {
                 obs.setAudioMute(source, sound.muted);
             }
             if (!oldSound || oldSound.delay !== sound.delay) {
                 function reallySettingDelay(delay: number) {
-                    obs.call('SetInputAudioSyncOffset', {
-                        inputName: source,
-                        inputAudioSyncOffset: delay
-                    }).catch((e): void => {
-                        logger.warn(`Error setting audio delay for [${source}] to ${delay}ms: ${e}`);
-                    });
+                    obs.setAudioSyncOffset(source, delay);
                 }
                 // OBS is stupid
                 // otherwise setting the delay to something like 7 seconds doesn't work

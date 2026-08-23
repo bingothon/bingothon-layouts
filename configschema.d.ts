@@ -42,7 +42,6 @@ export interface Configschema {
     };
     discordAudio: string;
     mpdAudio: string;
-    streamsAudio?: string;
     gameScene: string;
     /**
      * Full local path on the stream PC, includes the final slash: '/home/test/whatever/'

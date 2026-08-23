@@ -171,11 +171,6 @@
 					"type": "string",
 					"default": "MPD-Audio"
 				},
-				"streamsAudio": {
-					"type": "string",
-					"default": "Desktop-Audio",
-					"$comment": "not used anymore, should be removed"
-				},
 				"gameScene": {
 					"type": "string",
 					"default": "game"
