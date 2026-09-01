@@ -17,6 +17,7 @@ import {
     ObsAudioLevels,
     ObsAudioSources,
     ObsConnection,
+    ObsConnectionPresets,
     ObsDashboardAudioSources,
     ObsPreviewImg,
     ObsSceneList,
@@ -81,6 +82,9 @@ export const obsAudioSourcesRep = nodecg().Replicant<ObsAudioSources>(
     'obsAudioSources'
 ) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<ObsAudioSources>;
 export const obsConnectionRep = nodecg().Replicant<ObsConnection>('obsConnection') as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<ObsConnection>;
+export const obsConnectionPresetsRep = nodecg().Replicant<ObsConnectionPresets>(
+    'obsConnectionPresets'
+) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<ObsConnectionPresets>;
 export const obsStreamModeRep = nodecg().Replicant<ObsStreamMode>('obsStreamMode') as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<ObsStreamMode>;
 export const discordDelayInfoRep = nodecg().Replicant<DiscordDelayInfo>(
     'discordDelayInfo'

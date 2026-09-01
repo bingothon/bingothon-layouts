@@ -26,6 +26,7 @@ export * from './lastIntermissionTimestamp';
 export * from './obsAudioLevels';
 export * from './obsAudioSources';
 export * from './obsConnection';
+export * from './obsConnectionPresets';
 export * from './obsDashboardAudioSources';
 export * from './obsPreviewImg';
 export * from './obsSceneList';

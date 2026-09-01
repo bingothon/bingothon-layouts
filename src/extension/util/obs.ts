@@ -9,6 +9,7 @@ import {
     currentGameLayoutRep,
     obsAudioLevels,
     obsAudioSourcesRep,
+    obsConnectionPresetsRep,
     obsConnectionRep,
     obsCurrentSceneRep,
     obsPreviewScene,
@@ -327,9 +328,11 @@ class OBSUtility extends OBSWebSocket {
 const obs = new OBSUtility();
 
 if (bundleConfig.obs && bundleConfig.obs.enable) {
+    // temporary hack to make these values accessible to the new layouts
+    obsConnectionPresetsRep.value = Object.keys(bundleConfig.obs.presets ?? {});
     // recover after a restart
     obsConnectionRep.once('change', async (newVal) => {
-        logger.info('old connection:', newVal);
+        logger.info('old connection:', newVal.url);
         if (newVal.url && newVal.password) {
             obs.doConnectAndInit({
                 url: newVal.url,
