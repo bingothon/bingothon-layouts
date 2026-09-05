@@ -67,5 +67,8 @@ export interface Configschema {
   twitchStreams?: {
     streamlinkCommand?: string;
   };
+  srt?: {
+    baseUrl?: string;
+  };
   [k: string]: unknown;
 }

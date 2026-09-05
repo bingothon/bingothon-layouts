@@ -147,7 +147,7 @@ setInterval(async () => {
             const obsSource = `media-stream-${i}`;
             const startedAt = obsMediaSourceStartedAtRep.value[obsSource];
             if (stream.visible && startedAt?.timestamp) {
-            // TODO: use getSrcName
+                // TODO: use getSrcName
                 const cursor = await obs.getMediasourceCursor(obsSource);
                 if (cursor) {
                     stream.delay = (Date.now() - (cursor + startedAt.timestamp)) / 1000;

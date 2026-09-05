@@ -4,6 +4,7 @@
     "additionalProperties": false,
     "required": [
         "channel",
+        "srtChannel",
         "widthPercent",
         "heightPercent",
         "topPercent",
@@ -19,6 +20,10 @@
         "channel": {
             "type": "string",
             "default": "esamarathon"
+        },
+        "srtChannel": {
+            "type": "string",
+            "default": "stream0"
         },
         "widthPercent": {
             "type": "number",

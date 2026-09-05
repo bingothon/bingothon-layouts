@@ -47,7 +47,7 @@ export function getStreamsForChannel(channel: string): Promise<StreamlinkStream[
                         quality: quality,
                         streamUrl: streamLinkStream.url,
                         type: streamLinkStream.type,
-                        streamStart,
+                        streamStart
                     };
                 });
                 resolve(streams);

@@ -48,14 +48,13 @@ function getStreamSrcName(idx: number, streamSourceType: ObsStreamSourceType): s
     return streamSourceType === 'obsTwitchPlayer' ? `twitch-stream-${idx}` : `media-stream-${idx}`;
 }
 
-// TODO:
 function handleStreamPosChange(
     obs: OBSUtility,
     stream: TwitchStream,
     streamIdx: number,
     currentGameLayout: CurrentGameLayout,
     capturePositions: CapturePositions,
-    streamSourceType: ObsStreamSourceType,
+    streamSourceType: ObsStreamSourceType
 ) {
     const layoutName = currentGameLayout.name;
     const captureLayout = capturePositions[layoutName];
@@ -88,7 +87,14 @@ function handleStreamPosChange(
     });
 }
 
-function handleSoundChange(obs: OBSUtility, soundOnTwitchStream: SoundOnTwitchStream, streamIdx: number, newStream: TwitchStream, oldStream: TwitchStream, streamSourceType: ObsStreamSourceType) {
+function handleSoundChange(
+    obs: OBSUtility,
+    soundOnTwitchStream: SoundOnTwitchStream,
+    streamIdx: number,
+    newStream: TwitchStream,
+    oldStream: TwitchStream,
+    streamSourceType: ObsStreamSourceType
+) {
     obs.setAudioMute(getStreamSrcName(streamIdx, streamSourceType), soundOnTwitchStream !== streamIdx);
 
     if (newStream.volume !== oldStream.volume) {
@@ -242,9 +248,13 @@ class OBSUtility extends OBSWebSocket {
 
     public async getMediasourceCursor(source: string): Promise<number | undefined> {
         if (this.isDisabled()) return;
-        return await this.call('GetMediaInputStatus', {
-            inputName: source,
-        }).then(inputStatus => inputStatus.mediaCursor).catch((e) => logger.error(`could not get input status of ${source}`, e)) ?? undefined;
+        return (
+            (await this.call('GetMediaInputStatus', {
+                inputName: source
+            })
+                .then((inputStatus) => inputStatus.mediaCursor)
+                .catch((e) => logger.error(`could not get input status of ${source}`, e))) ?? undefined
+        );
     }
 
     public async setSourceBoundsAndCrop(source: string, params: OBSTransformParams): Promise<void> {
@@ -433,23 +443,29 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         }
     });
 
-    // TODO: move all of this to obsremotecontrol
     function handleStreamlinkMediasource(channel: string, source: string) {
         // TODO: should we set available qualities here?
-        getStreamsForChannel(channel).then(links => {
-            const bestStream = links.find((l) => l.quality == 'best') ?? links[0];
-            obs.setMediasourceUrl(source, bestStream.streamUrl);
-            const startedAt = bestStream.streamStart;
-            if (startedAt) {
-                obsMediaSourceStartedAtRep.value[source] = {
-                    datetime: startedAt,
-                    timestamp: new Date(startedAt).valueOf(),
-                };
-            }
-        }).catch(e => logger.warn(`could not get streams for ${channel}`, e));
+        getStreamsForChannel(channel)
+            .then((links) => {
+                const bestStream = links.find((l) => l.quality == 'best') ?? links[0];
+                obs.setMediasourceUrl(source, bestStream.streamUrl);
+                const startedAt = bestStream.streamStart;
+                if (startedAt) {
+                    obsMediaSourceStartedAtRep.value[source] = {
+                        datetime: startedAt,
+                        timestamp: new Date(startedAt).valueOf()
+                    };
+                }
+            })
+            .catch((e) => logger.warn(`could not get streams for ${channel}`, e));
     }
 
-    function handleStreamOrTypeChange(newStreams: TwitchStream[], oldStreams: TwitchStream[], newStreamType: ObsStreamSourceType, oldStreamType: ObsStreamSourceType) {
+    function handleStreamOrTypeChange(
+        newStreams: TwitchStream[],
+        oldStreams: TwitchStream[],
+        newStreamType: ObsStreamSourceType,
+        oldStreamType: ObsStreamSourceType
+    ) {
         if (newStreamType !== oldStreamType) {
             // hide other sources
             const hideProps: OBSTransformParams = {
@@ -464,7 +480,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                 }
             }
         }
-        const streamsToHide = new Set([0, 1, 2, 3, 4, 5]);
+        const streamsToHide = new Set(new Array(MAX_STREAM_SOURCES).fill(0).map((_, idx) => idx));
         let idx = 0; //stream index
         let i = 0; //array index
         while (idx < MAX_STREAM_SOURCES && i < newStreams.length) {
@@ -485,7 +501,9 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
             } else {
                 streamsToHide.delete(idx);
                 // check if the streamurl changed, the visible status changed or the stream type changed
-                if (stream.channel !== oldStream.channel || stream.visible !== oldStream.visible || newStreamType !== oldStreamType) {
+                const channelChanged =
+                    newStreamType === 'obsSrtMediasource' ? stream.srtChannel !== oldStream.srtChannel : stream.channel !== oldStream.channel;
+                if (channelChanged || stream.visible !== oldStream.visible || newStreamType !== oldStreamType) {
                     switch (newStreamType) {
                         case 'obsTwitchPlayer': {
                             // fire and forget
@@ -497,6 +515,17 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                         }
                         case 'obsStreamlinkMediasource': {
                             handleStreamlinkMediasource(stream.channel, getStreamSrcName(idx, newStreamType));
+                            break;
+                        }
+                        case 'obsSrtMediasource': {
+                            const srtBaseUrl = bundleConfig.srt?.baseUrl;
+                            if (!srtBaseUrl) {
+                                logger.error('srt base url is not set!');
+                            } else {
+                                const url = new URL(srtBaseUrl);
+                                url.searchParams.set('streamid', stream.srtChannel);
+                                obs.setMediasourceUrl(getStreamSrcName(idx, newStreamType), url.toString());
+                            }
                             break;
                         }
                     }
@@ -528,7 +557,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         obsStreamSourceTypeRep.on('change', (newValue, old) => {
             if (!old) return;
             handleStreamOrTypeChange(streamsReplicant.value, streamsReplicant.value, newValue, old);
-        })
+        });
 
         capturePositionsRep.on('change', (newVal, old) => {
             if (!old) return;
@@ -578,6 +607,10 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                         // or does setting the url always trigger a refresh?
                         handleStreamlinkMediasource(channel, getStreamSrcName(index, streamSourceType));
                     }
+                    break;
+                }
+                case 'obsSrtMediasource': {
+                    obs.refreshMediasource(getStreamSrcName(index, streamSourceType));
                     break;
                 }
             }

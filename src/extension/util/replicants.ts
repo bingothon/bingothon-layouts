@@ -88,8 +88,12 @@ export const obsConnectionPresetsRep = nodecg().Replicant<ObsConnectionPresets>(
     'obsConnectionPresets'
 ) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<ObsConnectionPresets>;
 export const obsStreamModeRep = nodecg().Replicant<ObsStreamMode>('obsStreamMode') as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<ObsStreamMode>;
-export const obsStreamSourceTypeRep = nodecg().Replicant<ObsStreamSourceType>('obsStreamSourceType') as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<ObsStreamSourceType>;
-export const obsMediaSourceStartedAtRep = nodecg().Replicant<ObsMediaSourceStartedAt>('obsMediaSourceStartedAt') as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<ObsMediaSourceStartedAt>;
+export const obsStreamSourceTypeRep = nodecg().Replicant<ObsStreamSourceType>(
+    'obsStreamSourceType'
+) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<ObsStreamSourceType>;
+export const obsMediaSourceStartedAtRep = nodecg().Replicant<ObsMediaSourceStartedAt>(
+    'obsMediaSourceStartedAt'
+) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<ObsMediaSourceStartedAt>;
 export const discordDelayInfoRep = nodecg().Replicant<DiscordDelayInfo>(
     'discordDelayInfo'
 ) as unknown as NodeCGTypes.ServerReplicantWithSchemaDefault<DiscordDelayInfo>;

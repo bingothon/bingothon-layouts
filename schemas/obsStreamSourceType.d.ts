@@ -5,4 +5,4 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type ObsStreamSourceType = "obsTwitchPlayer" | "obsStreamlinkMediasource";
+export type ObsStreamSourceType = "obsTwitchPlayer" | "obsStreamlinkMediasource" | "obsSrtMediasource";
