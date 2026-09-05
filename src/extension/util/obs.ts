@@ -27,6 +27,7 @@ import {
 const nodecg = nodecgApiContext.get();
 const logger = new nodecg.Logger(`${nodecg.bundleName}:obs`);
 const bundleConfig = nodecg.bundleConfig as Configschema;
+const MAX_STREAM_SOURCES = 6;
 
 const useObsTwitchPlayer = bundleConfig.twitchStreams?.type === 'obsTwitchPlayer';
 const useHlsPlayer = bundleConfig.twitchStreams?.type === 'hls';
@@ -123,7 +124,7 @@ class OBSUtility extends OBSWebSocket {
             obsSceneListRep.value = sceneList.map((scene) => ({ sceneIndex: scene.sceneIndex, sceneName: scene.sceneName }));
 
             // obs default browser sources
-            for (let i = 0; i < 6; i++) {
+            for (let i = 0; i < MAX_STREAM_SOURCES; i++) {
                 await obs.setDefaultBrowserSettings(getStreamSrcName(i));
             }
             logger.info('OBS init successful.');
@@ -430,7 +431,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
             const streamsToHide = new Set([0, 1, 2, 3, 4, 5]);
             let idx = 0; //stream index
             let i = 0; //array index
-            while (idx < 6 && i < newValue.length) {
+            while (idx < MAX_STREAM_SOURCES && i < newValue.length) {
                 // appearently this can go out of bonds
                 if (!newValue[i] || !newValue[i].visible) {
                     i++;
