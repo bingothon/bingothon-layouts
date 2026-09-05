@@ -5,9 +5,9 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface ObsConnection {
-  status: "disabled" | "connected" | "connecting" | "error" | "disconnected";
-  url?: string;
-  password?: string;
-  preset?: string;
+export interface ObsMediaSourceStartedAt {
+  [k: string]: {
+    timestamp: number;
+    datetime: string;
+  };
 }

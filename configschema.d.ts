@@ -34,11 +34,14 @@ export interface Configschema {
   };
   obs: {
     enable: boolean;
-    address: string;
-    password: string;
+    presets?: {
+      [k: string]: {
+        url: string;
+        password: string;
+      };
+    };
     discordAudio: string;
     mpdAudio: string;
-    streamsAudio: string;
     gameScene: string;
     /**
      * Full local path on the stream PC, includes the final slash: '/home/test/whatever/'
@@ -62,10 +65,10 @@ export interface Configschema {
     measurementId: string;
   };
   twitchStreams?: {
-    type?: "obsTwitchPlayer" | "nodecgGraphic" | "hls";
     streamlinkCommand?: string;
-    proxyUrl?: string;
-    playerGraphic?: string;
+  };
+  srt?: {
+    baseUrl?: string;
   };
   [k: string]: unknown;
 }

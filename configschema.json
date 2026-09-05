@@ -141,10 +141,7 @@
 			"type": "object",
 			"required": [
 				"discordAudio",
-				"streamsAudio",
 				"mpdAudio",
-				"address",
-				"password",
 				"enable",
 				"gameScene"
 			],
@@ -154,13 +151,17 @@
 					"type": "boolean",
 					"default": false
 				},
-				"address": {
-					"type": "string",
-					"default": "localhost:4444"
-				},
-				"password": {
-					"type": "string",
-					"default": ""
+				"presets": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"additionalProperties": false,
+						"required": ["url", "password"],
+						"properties": {
+							"url": {"type":"string"},
+							"password": {"type": "string"}
+						}
+					}
 				},
 				"discordAudio": {
 					"type": "string",
@@ -169,10 +170,6 @@
 				"mpdAudio": {
 					"type": "string",
 					"default": "MPD-Audio"
-				},
-				"streamsAudio": {
-					"type": "string",
-					"default": "Desktop-Audio"
 				},
 				"gameScene": {
 					"type": "string",
@@ -263,23 +260,21 @@
 			"type": "object",
 			"additionalProperties": false,
 			"properties": {
-				"type": {
-					"enum": ["obsTwitchPlayer", "nodecgGraphic", "hls"]
-				},
 				"streamlinkCommand": {
 					"type": "string",
 					"examples": ["streamlink", "uvx streamlink", "/path/to/streamlink"]
-				},
-				"proxyUrl": {
-					"type": "string",
-					"examples": ["http://localhost:8081/m3u8-proxy"]
-				},
-				"playerGraphic": {
-					"type": "string",
-					"examples": ["http://localhost:9090/bundles/bingothon-layouts-vue-3/graphics/example/main.html"]
 				}
 			}
-			
+		},
+		"srt": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"baseUrl": {
+					"type": "string",
+					"examples": ["srt://srt.example.com:12345"]
+				}
+			}
 		}
 	}
 }

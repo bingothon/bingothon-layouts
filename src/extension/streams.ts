@@ -2,9 +2,10 @@ import * as nodecgApiContext from './util/nodecg-api-context';
 import { TwitchStream } from '../../schemas';
 import { currentGameLayoutRep, soundOnTwitchStream, streamsReplicant } from './util/replicants';
 import { runDataActiveRunRep } from './util/speedControlReplicants';
-import { getStreamsForChannel } from './util/streamlink';
 
 const nodecg = nodecgApiContext.get();
+
+const CHANNEL_OVERRIDE_CUSTOM_KEY = 'channelOverride';
 
 // Twitch aspect ratio 1024x576
 
@@ -98,6 +99,7 @@ runDataActiveRunRep.on('change', (newVal, old): void => {
             // fill everything with defaults
             let current: TwitchStream = {
                 channel: 'esamarathon',
+                srtChannel: `stream${idx}`,
                 quality: 'chunked',
                 widthPercent: 100,
                 heightPercent: 100,
@@ -123,8 +125,12 @@ runDataActiveRunRep.on('change', (newVal, old): void => {
             } else {
                 const oldStream = streamsReplicant.value[idx];
                 // check against old replicant, in case of a stream override
-                if (!oldStream || player.social.twitch !== old.teams[teamIndex]?.players[playerIndex]?.social.twitch) {
-                    current.channel = player.social.twitch;
+                const oldPlayer = old.teams[teamIndex]?.players[playerIndex];
+                const newChannel = player.customData[CHANNEL_OVERRIDE_CUSTOM_KEY] || player.social.twitch;
+                const oldChannel = oldPlayer?.customData[CHANNEL_OVERRIDE_CUSTOM_KEY] || oldPlayer?.social.twitch;
+                if (!oldStream || newChannel !== oldChannel) {
+                    current.channel = newChannel;
+                    current.srtChannel = player.customData[CHANNEL_OVERRIDE_CUSTOM_KEY] || `stream${idx}`;
                 } else {
                     // for relays make sure to check if the player is the active player
                     current = { ...oldStream, visible: current.visible };
@@ -198,24 +204,4 @@ nodecg.listenFor('streams:getOriginalCropping', (_, callback): void => {
             callback(undefined);
         }
     }
-});
-
-nodecg.listenFor('streams:getUrlForStream', (data: { stream: string }, callback) => {
-    getStreamsForChannel(data.stream)
-        .then((links) => {
-            // get best stream
-            const result = links.find((l) => l.quality == 'best')?.streamUrl ?? links[0].streamUrl;
-            const url = new URL(nodecg.bundleConfig.twitchStreams?.proxyUrl ?? 'http://localhost:8081/m3u8-proxy');
-            url.searchParams.set('url', result);
-            const videoSrc = url.toString();
-            if (callback && !callback.handled) {
-                callback(videoSrc);
-            }
-        })
-        .catch((err) => {
-            nodecg.log.error(`could not get stream for ${data.stream}:`, err);
-            if (callback && !callback.handled) {
-                callback(undefined);
-            }
-        });
 });

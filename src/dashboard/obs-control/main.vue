@@ -5,6 +5,7 @@
         <div v-if="obsConnectionStatus === 'disconnected'">Currently disconnected :(</div>
         <div v-if="obsConnectionStatus === 'error'">OBS connection error monkaS</div>
         <div v-if="obsConnectionStatus === 'disabled'">OBS is disabled, nothing to see here</div>
+        <div v-if="obsConnectionStatus === 'connecting'">connecting...</div>
         <div v-if="obsConnectionStatus === 'connected'">
             Current Scene: {{ currentScene }}
             <v-btn :loading="isTransitioning" :disabled="disableTransition()" @click="quickTransition">{{

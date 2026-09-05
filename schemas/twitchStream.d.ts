@@ -7,6 +7,7 @@
 
 export interface TwitchStream {
   channel: string;
+  srtChannel: string;
   widthPercent: number;
   heightPercent: number;
   topPercent: number;
@@ -15,6 +16,7 @@ export interface TwitchStream {
   volume: number;
   paused: boolean;
   delay: number;
+  streamStart?: string;
   availableQualities: {
     name: string;
     group: string;

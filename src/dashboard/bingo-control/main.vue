@@ -345,9 +345,7 @@
         }
 
         get showExtraBingosyncOptions(): boolean {
-            return (
-                'bingoboard' === this.currentBoardRep && this.boardSource === 'bingosync'
-            );
+            return 'bingoboard' === this.currentBoardRep && this.boardSource === 'bingosync';
         }
 
         get showPlayBingoOptions(): boolean {
