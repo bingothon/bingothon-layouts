@@ -52,6 +52,10 @@
             "type": "number",
             "default": 0
         },
+        "streamStart": {
+            "$comment": "TODO: check if this should be a number instead",
+            "type": "string"
+        },
         "availableQualities": {
             "type": "array",
             "default": [],

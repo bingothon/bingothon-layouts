@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { Configschema } from '@/configschema';
-import { CapturePositions, CurrentGameLayout, ObsAudioLevels, ObsSceneList, SoundOnTwitchStream, TwitchStream } from '@/schemas';
+import { CapturePositions, CurrentGameLayout, ObsAudioLevels, ObsSceneList, ObsStreamSourceType, SoundOnTwitchStream, TwitchStream } from '@/schemas';
 import OBSWebSocket, { EventSubscription } from 'obs-websocket-js';
 import * as nodecgApiContext from './nodecg-api-context';
 import {
@@ -12,11 +12,14 @@ import {
     obsConnectionPresetsRep,
     obsConnectionRep,
     obsCurrentSceneRep,
+    obsMediaSourceStartedAtRep,
     obsPreviewScene,
     obsSceneListRep,
+    obsStreamSourceTypeRep,
     soundOnTwitchStream,
     streamsReplicant
 } from './replicants';
+import { getStreamsForChannel } from './streamlink';
 
 // this module is used to communicate directly with OBS
 // and transparently handle:
@@ -28,9 +31,6 @@ const nodecg = nodecgApiContext.get();
 const logger = new nodecg.Logger(`${nodecg.bundleName}:obs`);
 const bundleConfig = nodecg.bundleConfig as Configschema;
 const MAX_STREAM_SOURCES = 6;
-
-const useObsTwitchPlayer = bundleConfig.twitchStreams?.type === 'obsTwitchPlayer';
-const useHlsPlayer = bundleConfig.twitchStreams?.type === 'hls';
 
 interface OBSTransformParams {
     x?: number;
@@ -44,16 +44,18 @@ interface OBSTransformParams {
     visible?: boolean;
 }
 
-function getStreamSrcName(idx: number): string {
-    return `twitch-stream-${idx}`;
+function getStreamSrcName(idx: number, streamSourceType: ObsStreamSourceType): string {
+    return streamSourceType === 'obsTwitchPlayer' ? `twitch-stream-${idx}` : `media-stream-${idx}`;
 }
 
+// TODO:
 function handleStreamPosChange(
     obs: OBSUtility,
     stream: TwitchStream,
     streamIdx: number,
     currentGameLayout: CurrentGameLayout,
-    capturePositions: CapturePositions
+    capturePositions: CapturePositions,
+    streamSourceType: ObsStreamSourceType,
 ) {
     const layoutName = currentGameLayout.name;
     const captureLayout = capturePositions[layoutName];
@@ -63,7 +65,7 @@ function handleStreamPosChange(
     }
     const capturePos = captureLayout[`stream${streamIdx + 1}`];
     if (capturePos === undefined) {
-        obs.setSourceBoundsAndCrop(getStreamSrcName(streamIdx), { visible: false });
+        obs.setSourceBoundsAndCrop(getStreamSrcName(streamIdx, streamSourceType), { visible: false });
         logger.error(`capture pos for index ${streamIdx} not found on ${layoutName}!`);
         return;
     }
@@ -73,7 +75,7 @@ function handleStreamPosChange(
     const cropRight = Math.max(0, 1920 * (1 - 100 / stream.widthPercent) - cropLeft);
     const cropBottom = Math.max(0, 1080 * (1 - 100 / stream.heightPercent) - cropTop);
     // fire and forget
-    obs.setSourceBoundsAndCrop(getStreamSrcName(streamIdx), {
+    obs.setSourceBoundsAndCrop(getStreamSrcName(streamIdx, streamSourceType), {
         cropLeft,
         cropTop,
         cropRight,
@@ -86,11 +88,11 @@ function handleStreamPosChange(
     });
 }
 
-function handleSoundChange(obs: OBSUtility, soundOnTwitchStream: SoundOnTwitchStream, streamIdx: number, newStream: TwitchStream, oldStream: TwitchStream) {
-    obs.setAudioMute(getStreamSrcName(streamIdx), soundOnTwitchStream !== streamIdx);
+function handleSoundChange(obs: OBSUtility, soundOnTwitchStream: SoundOnTwitchStream, streamIdx: number, newStream: TwitchStream, oldStream: TwitchStream, streamSourceType: ObsStreamSourceType) {
+    obs.setAudioMute(getStreamSrcName(streamIdx, streamSourceType), soundOnTwitchStream !== streamIdx);
 
     if (newStream.volume !== oldStream.volume) {
-        obs.setAudioVolume(getStreamSrcName(streamIdx), newStream.volume);
+        obs.setAudioVolume(getStreamSrcName(streamIdx, streamSourceType), newStream.volume);
     }
 }
 
@@ -125,7 +127,8 @@ class OBSUtility extends OBSWebSocket {
 
             // obs default browser sources
             for (let i = 0; i < MAX_STREAM_SOURCES; i++) {
-                await obs.setDefaultBrowserSettings(getStreamSrcName(i));
+                await obs.setDefaultBrowserSettings(getStreamSrcName(i, 'obsTwitchPlayer'));
+                // TODO: defaults for media player?
             }
             logger.info('OBS init successful.');
         } catch (e) {
@@ -235,6 +238,13 @@ class OBSUtility extends OBSWebSocket {
             inputName: source,
             mediaAction: 'OBS_WEBSOCKET_MEDIA_INPUT_ACTION_RESTART' // TODO: deprecated, but no alternative?
         }).catch((e) => logger.error(`could not refresh mediasource ${source}`, e));
+    }
+
+    public async getMediasourceCursor(source: string): Promise<number | undefined> {
+        if (this.isDisabled()) return;
+        return await this.call('GetMediaInputStatus', {
+            inputName: source,
+        }).then(inputStatus => inputStatus.mediaCursor).catch((e) => logger.error(`could not get input status of ${source}`, e)) ?? undefined;
     }
 
     public async setSourceBoundsAndCrop(source: string, params: OBSTransformParams): Promise<void> {
@@ -423,72 +433,109 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         }
     });
 
-    if (useObsTwitchPlayer || useHlsPlayer) {
-        // TODO check if the comment is still needed
-        // TODO repair in the future
-        streamsReplicant.on('change', (newValue, old) => {
-            if (!old) return;
-            const streamsToHide = new Set([0, 1, 2, 3, 4, 5]);
-            let idx = 0; //stream index
-            let i = 0; //array index
-            while (idx < MAX_STREAM_SOURCES && i < newValue.length) {
-                // appearently this can go out of bonds
-                if (!newValue[i] || !newValue[i].visible) {
-                    i++;
-                    continue;
-                }
-                const stream = newValue[i];
-                const oldStream = old[i] || {}; // old stream might be undefined
-                if (stream === undefined) {
-                    // this stream should not be displayed
-                    const transProps: OBSTransformParams = {
-                        visible: false
-                    };
-                    // fire and forget
-                    obs.setSourceBoundsAndCrop(getStreamSrcName(idx), transProps);
-                } else {
-                    streamsToHide.delete(idx);
-                    // check if the streamurl changed or the visible status changed
-                    if (stream.channel !== oldStream.channel || stream.visible !== oldStream.visible) {
-                        if (useObsTwitchPlayer) {
-                            // fire and forget
-                            obs.setBrowserSourceUrl(
-                                getStreamSrcName(idx),
-                                `https://player.twitch.tv/?channel=${stream.channel}&enableExtensions=true&muted=false&parent=twitch.tv&player=popout&volume=1`
-                            );
-                        } else {
-                            const streamGraphicUrl = bundleConfig.twitchStreams?.playerGraphic;
-                            if (streamGraphicUrl) {
-                                const url = new URL(streamGraphicUrl);
-                                url.searchParams.set('stream', `${i}`);
-                                obs.setBrowserSourceUrl(getStreamSrcName(idx), url.toString());
-                            }
-                            // TODO: either we never overwrite this, the source should stay the same, or I need to figure out where to get the key from
-                            // const browserSource = `${nodecgApiContext.get().config.baseURL}bundles/bingothon-layouts-vue-3/graphics/hls-player/main.html?stream=${idx}`
-                        }
-                    }
-                    handleStreamPosChange(obs, stream, idx, currentGameLayoutRep.value, capturePositionsRep.value);
-                    handleSoundChange(obs, soundOnTwitchStream.value, idx, stream, oldStream);
-                }
-                idx++;
-                i++;
+    // TODO: move all of this to obsremotecontrol
+    function handleStreamlinkMediasource(channel: string, source: string) {
+        // TODO: should we set available qualities here?
+        getStreamsForChannel(channel).then(links => {
+            const bestStream = links.find((l) => l.quality == 'best') ?? links[0];
+            obs.setMediasourceUrl(source, bestStream.streamUrl);
+            const startedAt = bestStream.streamStart;
+            if (startedAt) {
+                obsMediaSourceStartedAtRep.value[source] = {
+                    datetime: startedAt,
+                    timestamp: new Date(startedAt).valueOf(),
+                };
             }
-            for (const stream of streamsToHide) {
+        }).catch(e => logger.warn(`could not get streams for ${channel}`, e));
+    }
+
+    function handleStreamOrTypeChange(newStreams: TwitchStream[], oldStreams: TwitchStream[], newStreamType: ObsStreamSourceType, oldStreamType: ObsStreamSourceType) {
+        if (newStreamType !== oldStreamType) {
+            // hide other sources
+            const hideProps: OBSTransformParams = {
+                visible: false
+            };
+            // fire and forget
+            for (let stream = 0; stream < 6; stream++) {
+                if (newStreamType === 'obsTwitchPlayer') {
+                    obs.setSourceBoundsAndCrop(getStreamSrcName(stream, 'obsStreamlinkMediasource'), hideProps);
+                } else {
+                    obs.setSourceBoundsAndCrop(getStreamSrcName(stream, 'obsTwitchPlayer'), hideProps);
+                }
+            }
+        }
+        const streamsToHide = new Set([0, 1, 2, 3, 4, 5]);
+        let idx = 0; //stream index
+        let i = 0; //array index
+        while (idx < MAX_STREAM_SOURCES && i < newStreams.length) {
+            // appearently this can go out of bonds
+            if (!newStreams[i] || !newStreams[i].visible) {
+                i++;
+                continue;
+            }
+            const stream = newStreams[i];
+            const oldStream = oldStreams?.[i] ?? {}; // old stream might be undefined
+            if (stream === undefined) {
                 // this stream should not be displayed
                 const transProps: OBSTransformParams = {
                     visible: false
                 };
                 // fire and forget
-                obs.setSourceBoundsAndCrop(getStreamSrcName(stream), transProps);
+                obs.setSourceBoundsAndCrop(getStreamSrcName(idx, newStreamType), transProps);
+            } else {
+                streamsToHide.delete(idx);
+                // check if the streamurl changed, the visible status changed or the stream type changed
+                if (stream.channel !== oldStream.channel || stream.visible !== oldStream.visible || newStreamType !== oldStreamType) {
+                    switch (newStreamType) {
+                        case 'obsTwitchPlayer': {
+                            // fire and forget
+                            obs.setBrowserSourceUrl(
+                                getStreamSrcName(idx, newStreamType),
+                                `https://player.twitch.tv/?channel=${stream.channel}&enableExtensions=true&muted=false&parent=twitch.tv&player=popout&volume=1`
+                            );
+                            break;
+                        }
+                        case 'obsStreamlinkMediasource': {
+                            handleStreamlinkMediasource(stream.channel, getStreamSrcName(idx, newStreamType));
+                            break;
+                        }
+                    }
+                }
+                handleStreamPosChange(obs, stream, idx, currentGameLayoutRep.value, capturePositionsRep.value, newStreamType);
+                handleSoundChange(obs, soundOnTwitchStream.value, idx, stream, oldStream, newStreamType);
             }
+            idx++;
+            i++;
+        }
+        for (const stream of streamsToHide) {
+            // this stream should not be displayed
+            const transProps: OBSTransformParams = {
+                visible: false
+            };
+            // fire and forget
+            obs.setSourceBoundsAndCrop(getStreamSrcName(stream, newStreamType), transProps);
+        }
+    }
+
+    if (true) {
+        // TODO check if the comment is still needed
+        // TODO repair in the future
+        streamsReplicant.on('change', (newValue, old) => {
+            if (!old) return;
+            handleStreamOrTypeChange(newValue, old, obsStreamSourceTypeRep.value, obsStreamSourceTypeRep.value);
         });
+
+        obsStreamSourceTypeRep.on('change', (newValue, old) => {
+            if (!old) return;
+            handleStreamOrTypeChange(streamsReplicant.value, streamsReplicant.value, newValue, old);
+        })
 
         capturePositionsRep.on('change', (newVal, old) => {
             if (!old) return;
             let actualPosIndex = 0;
             streamsReplicant.value.forEach((stream) => {
                 if (stream.visible) {
-                    handleStreamPosChange(obs, stream, actualPosIndex, currentGameLayoutRep.value, newVal);
+                    handleStreamPosChange(obs, stream, actualPosIndex, currentGameLayoutRep.value, newVal, obsStreamSourceTypeRep.value);
                     actualPosIndex++;
                     return;
                 }
@@ -501,7 +548,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
             let actualPosIndex = 0;
             streamsReplicant.value.forEach((stream) => {
                 if (stream.visible) {
-                    handleStreamPosChange(obs, stream, actualPosIndex, newVal, capturePositionsRep.value);
+                    handleStreamPosChange(obs, stream, actualPosIndex, newVal, capturePositionsRep.value, obsStreamSourceTypeRep.value);
                     actualPosIndex++;
                     return;
                 }
@@ -513,12 +560,27 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
             if (old === undefined) return;
 
             streamsReplicant.value.forEach((stream, i) => {
-                handleSoundChange(obs, newVal, i, stream, stream);
+                handleSoundChange(obs, newVal, i, stream, stream, obsStreamSourceTypeRep.value);
             });
         });
 
         nodecg.listenFor('streams:refreshStream', (index, callback) => {
-            obs.refreshBrowserSource(getStreamSrcName(index));
+            const streamSourceType = obsStreamSourceTypeRep.value;
+            switch (streamSourceType) {
+                case 'obsTwitchPlayer': {
+                    obs.refreshBrowserSource(getStreamSrcName(index, streamSourceType));
+                    break;
+                }
+                case 'obsStreamlinkMediasource': {
+                    const channel = streamsReplicant.value[index]?.channel;
+                    if (channel) {
+                        // TODO: should probably be deduplicated, but do we actually want a refresh here
+                        // or does setting the url always trigger a refresh?
+                        handleStreamlinkMediasource(channel, getStreamSrcName(index, streamSourceType));
+                    }
+                    break;
+                }
+            }
             if (callback && !callback.handled) {
                 callback();
             }

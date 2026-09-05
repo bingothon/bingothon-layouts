@@ -199,23 +199,3 @@ nodecg.listenFor('streams:getOriginalCropping', (_, callback): void => {
         }
     }
 });
-
-nodecg.listenFor('streams:getUrlForStream', (data: { stream: string }, callback) => {
-    getStreamsForChannel(data.stream)
-        .then((links) => {
-            // get best stream
-            const result = links.find((l) => l.quality == 'best')?.streamUrl ?? links[0].streamUrl;
-            const url = new URL(nodecg.bundleConfig.twitchStreams?.proxyUrl ?? 'http://localhost:8081/m3u8-proxy');
-            url.searchParams.set('url', result);
-            const videoSrc = url.toString();
-            if (callback && !callback.handled) {
-                callback(videoSrc);
-            }
-        })
-        .catch((err) => {
-            nodecg.log.error(`could not get stream for ${data.stream}:`, err);
-            if (callback && !callback.handled) {
-                callback(undefined);
-            }
-        });
-});

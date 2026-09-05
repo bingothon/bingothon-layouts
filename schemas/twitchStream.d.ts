@@ -15,6 +15,7 @@ export interface TwitchStream {
   volume: number;
   paused: boolean;
   delay: number;
+  streamStart?: string;
   availableQualities: {
     name: string;
     group: string;

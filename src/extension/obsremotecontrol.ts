@@ -11,9 +11,12 @@ import {
     obsAudioSourcesRep,
     obsCurrentSceneRep,
     obsDashboardAudioSourcesRep,
+    obsMediaSourceStartedAtRep,
     obsPreviewImgRep,
     obsPreviewScene,
     obsStreamModeRep,
+    obsStreamSourceTypeRep,
+    streamsReplicant,
     voiceDelayRep
 } from './util/replicants';
 import { runDataActiveRunRep, twitchCommercialTimer } from './util/speedControlReplicants';
@@ -136,6 +139,24 @@ obsPreviewImgRep.on('change', (newVal, oldVal) => {
         }
     }
 });
+
+setInterval(async () => {
+    if (obsStreamSourceTypeRep.value === 'obsStreamlinkMediasource') {
+        for (let i = 0; i < streamsReplicant.value.length; i++) {
+            const stream = streamsReplicant.value[i];
+            const obsSource = `media-stream-${i}`;
+            const startedAt = obsMediaSourceStartedAtRep.value[obsSource];
+            if (stream.visible && startedAt?.timestamp) {
+            // TODO: use getSrcName
+                const cursor = await obs.getMediasourceCursor(obsSource);
+                if (cursor) {
+                    stream.delay = (Date.now() - (cursor + startedAt.timestamp)) / 1000;
+                    logger.info(`delay of ${stream.channel}: (${Date.now()} - ${cursor} - ${startedAt.timestamp}) ${stream.delay}`);
+                }
+            }
+        }
+    }
+}, 5000);
 
 nodecg.listenFor('obsremotecontrol:setPreviewImgActive', (data, cb) => {
     const { active } = data || {};
