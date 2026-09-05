@@ -472,7 +472,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                 visible: false
             };
             // fire and forget
-            for (let stream = 0; stream < 6; stream++) {
+            for (let stream = 0; stream < MAX_STREAM_SOURCES; stream++) {
                 if (newStreamType === 'obsTwitchPlayer') {
                     obs.setSourceBoundsAndCrop(getStreamSrcName(stream, 'obsStreamlinkMediasource'), hideProps);
                 } else {
@@ -546,79 +546,75 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         }
     }
 
-    if (true) {
-        // TODO check if the comment is still needed
-        // TODO repair in the future
-        streamsReplicant.on('change', (newValue, old) => {
-            if (!old) return;
-            handleStreamOrTypeChange(newValue, old, obsStreamSourceTypeRep.value, obsStreamSourceTypeRep.value);
-        });
+    streamsReplicant.on('change', (newValue, old) => {
+        if (!old) return;
+        handleStreamOrTypeChange(newValue, old, obsStreamSourceTypeRep.value, obsStreamSourceTypeRep.value);
+    });
 
-        obsStreamSourceTypeRep.on('change', (newValue, old) => {
-            if (!old) return;
-            handleStreamOrTypeChange(streamsReplicant.value, streamsReplicant.value, newValue, old);
-        });
+    obsStreamSourceTypeRep.on('change', (newValue, old) => {
+        if (!old) return;
+        handleStreamOrTypeChange(streamsReplicant.value, streamsReplicant.value, newValue, old);
+    });
 
-        capturePositionsRep.on('change', (newVal, old) => {
-            if (!old) return;
-            let actualPosIndex = 0;
-            streamsReplicant.value.forEach((stream) => {
-                if (stream.visible) {
-                    handleStreamPosChange(obs, stream, actualPosIndex, currentGameLayoutRep.value, newVal, obsStreamSourceTypeRep.value);
-                    actualPosIndex++;
-                    return;
-                }
+    capturePositionsRep.on('change', (newVal, old) => {
+        if (!old) return;
+        let actualPosIndex = 0;
+        streamsReplicant.value.forEach((stream) => {
+            if (stream.visible) {
+                handleStreamPosChange(obs, stream, actualPosIndex, currentGameLayoutRep.value, newVal, obsStreamSourceTypeRep.value);
+                actualPosIndex++;
                 return;
-            });
+            }
+            return;
         });
+    });
 
-        currentGameLayoutRep.on('change', (newVal, old) => {
-            if (!old) return;
-            let actualPosIndex = 0;
-            streamsReplicant.value.forEach((stream) => {
-                if (stream.visible) {
-                    handleStreamPosChange(obs, stream, actualPosIndex, newVal, capturePositionsRep.value, obsStreamSourceTypeRep.value);
-                    actualPosIndex++;
-                    return;
-                }
+    currentGameLayoutRep.on('change', (newVal, old) => {
+        if (!old) return;
+        let actualPosIndex = 0;
+        streamsReplicant.value.forEach((stream) => {
+            if (stream.visible) {
+                handleStreamPosChange(obs, stream, actualPosIndex, newVal, capturePositionsRep.value, obsStreamSourceTypeRep.value);
+                actualPosIndex++;
                 return;
-            });
-        });
-
-        soundOnTwitchStream.on('change', (newVal, old) => {
-            if (old === undefined) return;
-
-            streamsReplicant.value.forEach((stream, i) => {
-                handleSoundChange(obs, newVal, i, stream, stream, obsStreamSourceTypeRep.value);
-            });
-        });
-
-        nodecg.listenFor('streams:refreshStream', (index, callback) => {
-            const streamSourceType = obsStreamSourceTypeRep.value;
-            switch (streamSourceType) {
-                case 'obsTwitchPlayer': {
-                    obs.refreshBrowserSource(getStreamSrcName(index, streamSourceType));
-                    break;
-                }
-                case 'obsStreamlinkMediasource': {
-                    const channel = streamsReplicant.value[index]?.channel;
-                    if (channel) {
-                        // TODO: should probably be deduplicated, but do we actually want a refresh here
-                        // or does setting the url always trigger a refresh?
-                        handleStreamlinkMediasource(channel, getStreamSrcName(index, streamSourceType));
-                    }
-                    break;
-                }
-                case 'obsSrtMediasource': {
-                    obs.refreshMediasource(getStreamSrcName(index, streamSourceType));
-                    break;
-                }
             }
-            if (callback && !callback.handled) {
-                callback();
-            }
+            return;
         });
-    }
+    });
+
+    soundOnTwitchStream.on('change', (newVal, old) => {
+        if (old === undefined) return;
+
+        streamsReplicant.value.forEach((stream, i) => {
+            handleSoundChange(obs, newVal, i, stream, stream, obsStreamSourceTypeRep.value);
+        });
+    });
+
+    nodecg.listenFor('streams:refreshStream', (index, callback) => {
+        const streamSourceType = obsStreamSourceTypeRep.value;
+        switch (streamSourceType) {
+            case 'obsTwitchPlayer': {
+                obs.refreshBrowserSource(getStreamSrcName(index, streamSourceType));
+                break;
+            }
+            case 'obsStreamlinkMediasource': {
+                const channel = streamsReplicant.value[index]?.channel;
+                if (channel) {
+                    // TODO: should probably be deduplicated, but do we actually want a refresh here
+                    // or does setting the url always trigger a refresh?
+                    handleStreamlinkMediasource(channel, getStreamSrcName(index, streamSourceType));
+                }
+                break;
+            }
+            case 'obsSrtMediasource': {
+                obs.refreshMediasource(getStreamSrcName(index, streamSourceType));
+                break;
+            }
+        }
+        if (callback && !callback.handled) {
+            callback();
+        }
+    });
 
     obs.on('ConnectionClosed', (): void => {
         if (obsConnectionRep.value.status != 'disconnected') {
