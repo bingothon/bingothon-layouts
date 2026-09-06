@@ -1,5 +1,5 @@
 import { runDataActiveRunRep } from './util/speedControlReplicants';
-import { RunData, RunDataPlayer } from 'nodecg/bundles/bingothon-layouts/speedcontrol-types';
+import { RunData, RunDataPlayer } from '../../speedcontrol-types';
 import { capturePositionsRep, currentGameLayoutRep, playerSlotsRep, soundOnTwitchStream, streamsReplicant } from './util/replicants';
 import { setInterval } from 'node:timers';
 import * as nodecgApiContext from './util/nodecg-api-context';
@@ -11,7 +11,7 @@ let cycleTimer: NodeJS.Timeout | undefined = undefined;
 // flatly maps all players to their id
 function playersMap(runData: RunData): { [id: string]: RunDataPlayer } {
     const playerMap: { [id: string]: RunDataPlayer } = {};
-    runDataActiveRunRep.value?.teams.forEach((team) => team.players.forEach((player) => (playerMap[player.id] = player)), {});
+    runData.teams.forEach((team) => team.players.forEach((player) => (playerMap[player.id] = player)), {});
     return playerMap;
 }
 
