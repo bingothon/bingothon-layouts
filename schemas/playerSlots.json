@@ -1,0 +1,49 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["slots", "pool", "cursor", "source", "autoCycle", "cycleIntervalSeconds"],
+    "properties": {
+        "slots": {
+            "$comment": "index = layout slot (stream1/pi1 = 0, stream2/pi2 = 1, ...)",
+            "type": "array",
+            "default": [],
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["playerId", "pinned"],
+                "properties": {
+                    "playerId": {
+                        "$comment": "RunDataPlayer.id from nodecg-speedcontrol, null = empty slot",
+                        "type": ["string", "null"],
+                        "default": null
+                    },
+                    "pinned": {
+                        "$comment": "excluded from cycling; keeps its occupant",
+                        "type": "boolean",
+                        "default": false
+                    }
+                }
+            }
+        },
+        "pool": {
+            "$comment": "ordered rotation of candidate player ids, rebuilt from the active run",
+            "type": "array",
+            "default": [],
+            "items": { "type": "string" }
+        },
+        "cursor": {
+            "$comment": "index into pool where the current page of slots starts",
+            "type": "number",
+            "default": 0
+        },
+        "source": {
+            "$comment": "run = slots mirror flat run order (legacy); relay = one slot per team via relayPlayerID; race = sliding window over pool",
+            "type": "string",
+            "enum": ["run", "relay", "race"],
+            "default": "run"
+        },
+        "autoCycle": { "type": "boolean", "default": false },
+        "cycleIntervalSeconds": { "type": "number", "default": 60 }
+    }
+}

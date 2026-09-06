@@ -14,7 +14,8 @@
         "paused",
         "delay",
         "availableQualities",
-        "visible"
+        "visible",
+        "playerId"
     ],
     "properties": {
         "channel": {
@@ -84,6 +85,10 @@
         "visible": {
             "type": "boolean",
             "default": true
+        },
+        "playerId": {
+            "type": "string",
+            "default": ""
         }
     }
 }

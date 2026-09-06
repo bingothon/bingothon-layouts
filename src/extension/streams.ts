@@ -1,6 +1,6 @@
 import * as nodecgApiContext from './util/nodecg-api-context';
 import { TwitchStream } from '../../schemas';
-import { currentGameLayoutRep, soundOnTwitchStream, streamsReplicant } from './util/replicants';
+import { currentGameLayoutRep, playerSlotsRep, soundOnTwitchStream, streamsReplicant } from './util/replicants';
 import { runDataActiveRunRep } from './util/speedControlReplicants';
 
 const nodecg = nodecgApiContext.get();
@@ -97,7 +97,7 @@ runDataActiveRunRep.on('change', (newVal, old): void => {
             // nodecg.log.info(`${player.social.twitch} to ${old.teams[teamIndex]?.players[playerIndex]?.social.twitch}`)
             // in case the replicant changed, but this stream wasn't affected, don't reset cropping
             // fill everything with defaults
-            let current: TwitchStream = {
+            const current: TwitchStream = {
                 channel: 'esamarathon',
                 srtChannel: `stream${idx}`,
                 quality: 'chunked',
@@ -109,21 +109,19 @@ runDataActiveRunRep.on('change', (newVal, old): void => {
                 paused: false,
                 delay: -1,
                 availableQualities: [],
-                visible: true
+                visible: true,
+                playerId: ''
             };
-            // if it's a relay, make stream that is not the active relay player invisible
-            if (newVal.relay && player.id !== team.relayPlayerID) {
-                current.visible = false;
-            }
             current.widthPercent = cropping.widthPercent;
             current.heightPercent = cropping.heightPercent;
             current.topPercent = cropping.topPercent;
             current.leftPercent = cropping.leftPercent;
+            current.playerId = player.id;
             if (!player.social || !player.social.twitch) {
                 nodecg.log.error(`Twitch name for player ${player.name} missing!`);
                 current.paused = true;
             } else {
-                const oldStream = streamsReplicant.value[idx];
+                const oldStream = streamsReplicant.value.find((stream) => stream.playerId === player.id);
                 // check against old replicant, in case of a stream override
                 const oldPlayer = old.teams[teamIndex]?.players[playerIndex];
                 const newChannel = player.customData[CHANNEL_OVERRIDE_CUSTOM_KEY] || player.social.twitch;
@@ -131,9 +129,9 @@ runDataActiveRunRep.on('change', (newVal, old): void => {
                 if (!oldStream || newChannel !== oldChannel) {
                     current.channel = newChannel;
                     current.srtChannel = player.customData[CHANNEL_OVERRIDE_CUSTOM_KEY] || `stream${idx}`;
-                } else {
-                    // for relays make sure to check if the player is the active player
-                    current = { ...oldStream, visible: current.visible };
+                }
+                if (!oldStream || player.social.twitch !== old.teams[teamIndex]?.players[playerIndex]?.social.twitch) {
+                    current.channel = player.social.twitch;
                 }
             }
             newStreams.push(current);
@@ -155,8 +153,10 @@ nodecg.listenFor('streams:setSoundOnTwitchStream', (streamNr: number, callback):
 });
 
 nodecg.listenFor('streams:toggleStreamPlayPause', (streamNr: number, callback): void => {
-    if (streamNr >= 0 && streamNr < streamsReplicant.value.length) {
-        streamsReplicant.value[streamNr].paused = !streamsReplicant.value[streamNr].paused;
+    if (streamNr >= 0 && streamNr < playerSlotsRep.value.slots.length) {
+        const playerId = playerSlotsRep.value.slots[streamNr].playerId;
+        const streamIndex = streamsReplicant.value.findIndex((stream) => stream.playerId === playerId);
+        streamsReplicant.value[streamIndex].paused = !streamsReplicant.value[streamIndex].paused;
     }
     if (callback && !callback.handled) {
         callback();
@@ -170,8 +170,10 @@ nodecg.listenFor('streams:setStreamVolume', (data: { id: number; volume: number 
         }
         return;
     }
-    if (data.id >= 0 && data.id < streamsReplicant.value.length) {
-        streamsReplicant.value[data.id].volume = data.volume;
+    if (data.id >= 0 && data.id < playerSlotsRep.value.slots.length) {
+        const playerId = playerSlotsRep.value.slots[data.id].playerId;
+        const streamIndex = streamsReplicant.value.findIndex((stream) => stream.playerId === playerId);
+        streamsReplicant.value[streamIndex].volume = data.volume;
     }
     if (callback && !callback.handled) {
         callback();
@@ -179,8 +181,10 @@ nodecg.listenFor('streams:setStreamVolume', (data: { id: number; volume: number 
 });
 
 nodecg.listenFor('streams:setStreamQuality', (data: { id: number; quality: string }, callback): void => {
-    if (data.id >= 0 && data.id < streamsReplicant.value.length) {
-        streamsReplicant.value[data.id].quality = data.quality;
+    if (data.id >= 0 && data.id < playerSlotsRep.value.slots.length) {
+        const playerId = playerSlotsRep.value.slots[data.id].playerId;
+        const streamIndex = streamsReplicant.value.findIndex((stream) => stream.playerId === playerId);
+        streamsReplicant.value[streamIndex].quality = data.quality;
     }
     if (callback && !callback.handled) {
         callback();

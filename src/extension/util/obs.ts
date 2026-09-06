@@ -16,6 +16,7 @@ import {
     obsPreviewScene,
     obsSceneListRep,
     obsStreamSourceTypeRep,
+    playerSlotsRep,
     soundOnTwitchStream,
     streamsReplicant
 } from './replicants';
@@ -489,8 +490,9 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                 i++;
                 continue;
             }
-            const stream = newStreams[i];
-            const oldStream = oldStreams?.[i] ?? {}; // old stream might be undefined
+            const playerId = playerSlotsRep.value.slots[i].playerId;
+            const stream = newStreams.find((stream) => stream.playerId === playerId);
+            const oldStream: Partial<TwitchStream> = oldStreams?.find((stream) => stream.playerId === playerId) ?? {}; // old stream might be undefined
             if (stream === undefined) {
                 // this stream should not be displayed
                 const transProps: OBSTransformParams = {
@@ -531,7 +533,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                     }
                 }
                 handleStreamPosChange(obs, stream, idx, currentGameLayoutRep.value, capturePositionsRep.value, newStreamType);
-                handleSoundChange(obs, soundOnTwitchStream.value, idx, stream, oldStream, newStreamType);
+                handleSoundChange(obs, soundOnTwitchStream.value, idx, stream, oldStream as TwitchStream, newStreamType);
             }
             idx++;
             i++;
