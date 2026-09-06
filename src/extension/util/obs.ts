@@ -485,23 +485,12 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         let idx = 0; //stream index
         let i = 0; //array index
         while (idx < MAX_STREAM_SOURCES && i < newStreams.length) {
-            if (newStreams[i])
-                console.log(
-                    'New streams: ',
-                    JSON.stringify({
-                        playerId: newStreams[i].playerId,
-                        visible: newStreams[i].visible,
-                        channel: newStreams[i].channel,
-                        srt: newStreams[i].srtChannel
-                    })
-                );
             // apparently this can go out of bonds
             if (!newStreams[i] || !newStreams[i].visible) {
                 i++;
                 continue;
             }
             const playerId = playerSlotsRep.value.slots[idx]?.playerId;
-            console.log(`Handling stream change for stream ${idx}, with playerId ${playerId}`);
             const stream = newStreams.find((stream) => stream.playerId === playerId);
             const oldStream: Partial<TwitchStream> = oldStreams?.find((stream) => stream.playerId === playerId) ?? {}; // old stream might be undefined
             if (stream === undefined) {

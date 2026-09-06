@@ -101,7 +101,6 @@ function applyVisibility(soundSlot: number): void {
 }
 
 function nextCycle(): void {
-    console.log(`Handling next cycle at ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`);
     const playerSlots = playerSlotsRep.value;
     if (playerSlots.source !== 'race') {
         return;
