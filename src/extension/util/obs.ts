@@ -490,7 +490,8 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                 i++;
                 continue;
             }
-            const playerId = playerSlotsRep.value.slots[i].playerId;
+            const playerId = playerSlotsRep.value.slots[i]?.playerId;
+            console.log(`Hanlding stream change for stream ${i}, with playerId ${playerId}`);
             const stream = newStreams.find((stream) => stream.playerId === playerId);
             const oldStream: Partial<TwitchStream> = oldStreams?.find((stream) => stream.playerId === playerId) ?? {}; // old stream might be undefined
             if (stream === undefined) {

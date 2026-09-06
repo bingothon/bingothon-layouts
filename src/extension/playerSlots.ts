@@ -6,9 +6,7 @@ import * as nodecgApiContext from './util/nodecg-api-context';
 
 const nodecg = nodecgApiContext.get();
 const DEFAULT_CYCLE_INTERVAL_S = 60 * 10;
-let cycleTimer = setInterval(() => {
-    nextCycle();
-}, DEFAULT_CYCLE_INTERVAL_S * 1000);
+let cycleTimer: NodeJS.Timeout | undefined = undefined;
 
 // flatly maps all players to their id
 function playersMap(runData: RunData): { [id: string]: RunDataPlayer } {
@@ -165,7 +163,7 @@ nodecg.listenFor('playerSlots:setSlotPlayer', async (data: { slot: number; playe
         if (!run) {
             return;
         }
-        await nodecg.sendMessageToBundle('modifyRelayPlayerID', 'nodecg-speedcontrol', {
+        nodecg.sendMessageToBundle('modifyRelayPlayerID', 'nodecg-speedcontrol', {
             runId: run.id,
             teamIndex: run.teams[data.slot].id,
             playerId: data.playerId
@@ -181,7 +179,9 @@ nodecg.listenFor('playerSlots:setSlotPinned', (data: { slot: number; pinned: boo
 });
 
 nodecg.listenFor('playerSlots:cycleNow', () => {
-    cycleTimer.refresh();
+    if (cycleTimer) {
+        cycleTimer.refresh();
+    }
     nextCycle();
 });
 
@@ -191,7 +191,11 @@ nodecg.listenFor('playerSlots:setAutoCycle', (data: { enabled: boolean; interval
     }
     if (!data.enabled) {
         clearInterval(cycleTimer);
+        cycleTimer = undefined;
     } else {
+        if (cycleTimer) {
+            clearInterval(cycleTimer);
+        }
         cycleTimer = setInterval(
             () => {
                 nextCycle();
