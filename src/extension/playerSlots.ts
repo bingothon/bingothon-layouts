@@ -169,7 +169,7 @@ nodecg.listenFor('playerSlots:setSlotPlayer', async (data: { slot: number; playe
             playerId: data.playerId
         });
     } else {
-        playerSlotsRep.value.slots[data.slot % playerSlotsRep.value.slots.length] = { playerId: data.playerId, pinned: false };
+        playerSlotsRep.value.slots[data.slot % playerSlotsRep.value.slots.length] = { playerId: data.playerId, pinned: true };
     }
     recomputePlayerSlots();
 });
