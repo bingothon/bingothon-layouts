@@ -612,7 +612,9 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                 break;
             }
             case 'obsStreamlinkMediasource': {
-                const channel = streamsReplicant.value[index]?.channel;
+                const playerId = playerSlotsRep.value.slots[index]?.playerId;
+                const stream = streamsReplicant.value.find((stream) => stream.playerId === playerId);
+                const channel = stream?.channel;
                 if (channel) {
                     // TODO: should probably be deduplicated, but do we actually want a refresh here
                     // or does setting the url always trigger a refresh?

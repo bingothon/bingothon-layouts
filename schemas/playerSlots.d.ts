@@ -15,4 +15,5 @@ export interface PlayerSlots {
   source: "run" | "relay" | "race";
   autoCycle: boolean;
   cycleIntervalSeconds: number;
+  lastCycle?: number;
 }

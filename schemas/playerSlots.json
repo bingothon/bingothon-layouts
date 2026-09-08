@@ -44,6 +44,7 @@
             "default": "run"
         },
         "autoCycle": { "type": "boolean", "default": false },
-        "cycleIntervalSeconds": { "type": "number", "default": 60 }
+        "cycleIntervalSeconds": { "type": "number", "default": 60 },
+        "lastCycle": { "type": "number", "default": 0 }
     }
 }

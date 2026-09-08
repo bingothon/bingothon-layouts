@@ -118,6 +118,8 @@ function nextCycle(): void {
 
         recomputePlayerSlots();
     }
+
+    playerSlotsRep.value.lastCycle = Date.now();
 }
 
 runDataActiveRunRep.on('change', (newVal, oldVal) => {
@@ -137,6 +139,21 @@ runDataActiveRunRep.on('change', (newVal, oldVal) => {
     }
 
     recomputePlayerSlots();
+});
+
+// Startup Timer recovery
+playerSlotsRep.once('change', (newVal) => {
+    if (newVal && newVal.autoCycle && newVal.lastCycle) {
+        // remaining time is interval in seconds * 1000 - (current time in ms - last cycle time in ms)
+        const remaining = newVal.cycleIntervalSeconds * 1000 - (Date.now() - newVal.lastCycle);
+        cycleTimer = setTimeout(() => {
+            nextCycle();
+            clearTimeout(cycleTimer);
+            cycleTimer = setInterval(() => {
+                nextCycle();
+            }, newVal.cycleIntervalSeconds * 1000);
+        }, remaining);
+    }
 });
 
 currentGameLayoutRep.on('change', (newVal) => {
