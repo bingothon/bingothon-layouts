@@ -21,6 +21,5 @@ export interface TwitchStream {
     name: string;
     group: string;
   }[];
-  visible: boolean;
   playerId: string;
 }

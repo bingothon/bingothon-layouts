@@ -109,7 +109,6 @@ runDataActiveRunRep.on('change', (newVal, old): void => {
                 paused: false,
                 delay: -1,
                 availableQualities: [],
-                visible: true,
                 playerId: ''
             };
             current.widthPercent = cropping.widthPercent;

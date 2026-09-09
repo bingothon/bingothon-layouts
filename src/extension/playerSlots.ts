@@ -88,16 +88,11 @@ function recomputePlayerSlots(): void {
 
 function applyVisibility(soundSlot: number): void {
     const activePlayers = new Set(playerSlotsRep.value.slots.map((slot) => slot.playerId));
-    const streams = streamsReplicant.value;
-    streams.forEach((stream) => {
-        stream.visible = activePlayers.has(stream.playerId);
-    });
     if (soundSlot >= 0) {
         soundOnTwitchStream.value = streamIndex(playerSlotsRep.value.slots[soundSlot].playerId);
     } else if (soundOnTwitchStream.value >= 0 && !activePlayers.has(streamsReplicant.value[soundOnTwitchStream.value].playerId)) {
         soundOnTwitchStream.value = -1;
     }
-    streamsReplicant.value = streams;
 }
 
 function nextCycle(): void {
