@@ -172,9 +172,8 @@ class OBSUtility extends OBSWebSocket {
      */
     public async setAudioVolume(source: string, volume: number): Promise<void> {
         if (this.isDisabled()) return;
-        await this.call('SetInputVolume', { inputName: source, inputVolumeMul: volume }).catch((e) =>
-            logger.error(`could not set volume of ${source} to ${volume}`, e)
-        );
+        const inputVolumeDb = Math.max(0, -100 * (1 - Math.log(volume * 100) / Math.log(100)));
+        await this.call('SetInputVolume', { inputName: source, inputVolumeDb }).catch((e) => logger.error(`could not set volume of ${source} to ${volume}`, e));
     }
 
     /**
