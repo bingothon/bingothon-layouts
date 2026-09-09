@@ -97,7 +97,7 @@ runDataActiveRunRep.on('change', (newVal, old): void => {
             // nodecg.log.info(`${player.social.twitch} to ${old.teams[teamIndex]?.players[playerIndex]?.social.twitch}`)
             // in case the replicant changed, but this stream wasn't affected, don't reset cropping
             // fill everything with defaults
-            const current: TwitchStream = {
+            let current: TwitchStream = {
                 channel: 'esamarathon',
                 srtChannel: `stream${idx}`,
                 quality: 'chunked',
@@ -129,9 +129,9 @@ runDataActiveRunRep.on('change', (newVal, old): void => {
                 if (!oldStream || newChannel !== oldChannel) {
                     current.channel = newChannel;
                     current.srtChannel = player.customData[CHANNEL_OVERRIDE_CUSTOM_KEY] || `stream${idx}`;
-                }
-                if (!oldStream || player.social.twitch !== old.teams[teamIndex]?.players[playerIndex]?.social.twitch) {
-                    current.channel = player.social.twitch;
+                } else {
+                    // if the replicant was updated but this stream wasn't affected, use the old stream
+                    current = oldStream;
                 }
             }
             newStreams.push(current);
