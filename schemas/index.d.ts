@@ -35,6 +35,7 @@ export * from './obsStreamMode';
 export * from './obsStreamSourceType';
 export * from './omnibarMessages';
 export * from './playBingoSocket';
+export * from './playerSlots';
 export * from './showThingsDuringIntermission';
 export * from './songData';
 export * from './soundOnTwitchStream';

@@ -1,7 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { Configschema } from '@/configschema';
-import { CapturePositions, CurrentGameLayout, ObsAudioLevels, ObsSceneList, ObsStreamSourceType, SoundOnTwitchStream, TwitchStream } from '@/schemas';
+import {
+    CapturePositions,
+    CurrentGameLayout,
+    ObsAudioLevels,
+    ObsSceneList,
+    ObsStreamSourceType,
+    PlayerSlots,
+    SoundOnTwitchStream,
+    TwitchStream
+} from '@/schemas';
 import OBSWebSocket, { EventSubscription } from 'obs-websocket-js';
 import * as nodecgApiContext from './nodecg-api-context';
 import {
@@ -16,6 +25,7 @@ import {
     obsPreviewScene,
     obsSceneListRep,
     obsStreamSourceTypeRep,
+    playerSlotsRep,
     soundOnTwitchStream,
     streamsReplicant
 } from './replicants';
@@ -92,12 +102,12 @@ function handleSoundChange(
     soundOnTwitchStream: SoundOnTwitchStream,
     streamIdx: number,
     newStream: TwitchStream,
-    oldStream: TwitchStream,
+    oldStream: TwitchStream | undefined,
     streamSourceType: ObsStreamSourceType
 ) {
     obs.setAudioMute(getStreamSrcName(streamIdx, streamSourceType), soundOnTwitchStream !== streamIdx);
 
-    if (newStream.volume !== oldStream.volume) {
+    if (newStream.volume !== oldStream?.volume) {
         obs.setAudioVolume(getStreamSrcName(streamIdx, streamSourceType), newStream.volume);
     }
 }
@@ -463,6 +473,8 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
     function handleStreamOrTypeChange(
         newStreams: TwitchStream[],
         oldStreams: TwitchStream[],
+        newPlayerSlots: PlayerSlots,
+        oldPlayerSlots: PlayerSlots,
         newStreamType: ObsStreamSourceType,
         oldStreamType: ObsStreamSourceType
     ) {
@@ -484,13 +496,15 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         let idx = 0; //stream index
         let i = 0; //array index
         while (idx < MAX_STREAM_SOURCES && i < newStreams.length) {
-            // appearently this can go out of bonds
+            // apparently this can go out of bonds
             if (!newStreams[i] || !newStreams[i].visible) {
                 i++;
                 continue;
             }
-            const stream = newStreams[i];
-            const oldStream = oldStreams?.[i] ?? {}; // old stream might be undefined
+            const newPlayerId = newPlayerSlots.slots[idx]?.playerId;
+            const oldPlayerId = oldPlayerSlots.slots[idx]?.playerId;
+            const stream = newStreams.find((stream) => stream.playerId === newPlayerId);
+            const oldStream: TwitchStream | undefined = oldStreams?.find((stream) => stream.playerId === oldPlayerId);
             if (stream === undefined) {
                 // this stream should not be displayed
                 const transProps: OBSTransformParams = {
@@ -502,8 +516,8 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                 streamsToHide.delete(idx);
                 // check if the streamurl changed, the visible status changed or the stream type changed
                 const channelChanged =
-                    newStreamType === 'obsSrtMediasource' ? stream.srtChannel !== oldStream.srtChannel : stream.channel !== oldStream.channel;
-                if (channelChanged || stream.visible !== oldStream.visible || newStreamType !== oldStreamType) {
+                    newStreamType === 'obsSrtMediasource' ? stream.srtChannel !== oldStream?.srtChannel : stream.channel !== oldStream?.channel;
+                if (channelChanged || stream.visible !== oldStream?.visible || newStreamType !== oldStreamType) {
                     switch (newStreamType) {
                         case 'obsTwitchPlayer': {
                             // fire and forget
@@ -548,12 +562,12 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
 
     streamsReplicant.on('change', (newValue, old) => {
         if (!old) return;
-        handleStreamOrTypeChange(newValue, old, obsStreamSourceTypeRep.value, obsStreamSourceTypeRep.value);
+        handleStreamOrTypeChange(newValue, old, playerSlotsRep.value, playerSlotsRep.value, obsStreamSourceTypeRep.value, obsStreamSourceTypeRep.value);
     });
 
     obsStreamSourceTypeRep.on('change', (newValue, old) => {
         if (!old) return;
-        handleStreamOrTypeChange(streamsReplicant.value, streamsReplicant.value, newValue, old);
+        handleStreamOrTypeChange(streamsReplicant.value, streamsReplicant.value, playerSlotsRep.value, playerSlotsRep.value, newValue, old);
     });
 
     capturePositionsRep.on('change', (newVal, old) => {
@@ -598,7 +612,9 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                 break;
             }
             case 'obsStreamlinkMediasource': {
-                const channel = streamsReplicant.value[index]?.channel;
+                const playerId = playerSlotsRep.value.slots[index]?.playerId;
+                const stream = streamsReplicant.value.find((stream) => stream.playerId === playerId);
+                const channel = stream?.channel;
                 if (channel) {
                     // TODO: should probably be deduplicated, but do we actually want a refresh here
                     // or does setting the url always trigger a refresh?

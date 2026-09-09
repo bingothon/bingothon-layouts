@@ -149,6 +149,7 @@ export = (nodecg: NodeCG.ServerAPI<Configschema>): void => {
     require('./twitch-chat-bot');
     require('./gdq-donationtracker');
     require('./streams');
+    require('./playerSlots');
     require('./util/obs');
     require('./obsremotecontrol');
     require('./layoutlogic');
