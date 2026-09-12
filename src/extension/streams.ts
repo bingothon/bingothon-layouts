@@ -99,7 +99,7 @@ runDataActiveRunRep.on('change', (newVal, old): void => {
             // fill everything with defaults
             let current: TwitchStream = {
                 channel: 'esamarathon',
-                srtChannel: `stream${idx}`,
+                srtChannel: `read:stream${idx}`,
                 quality: 'chunked',
                 widthPercent: 100,
                 heightPercent: 100,
@@ -127,7 +127,7 @@ runDataActiveRunRep.on('change', (newVal, old): void => {
                 const oldChannel = oldPlayer?.customData[CHANNEL_OVERRIDE_CUSTOM_KEY] || oldPlayer?.social.twitch;
                 if (!oldStream || newChannel !== oldChannel) {
                     current.channel = newChannel;
-                    current.srtChannel = player.customData[CHANNEL_OVERRIDE_CUSTOM_KEY] || `stream${idx}`;
+                    current.srtChannel = player.customData[CHANNEL_OVERRIDE_CUSTOM_KEY] || `read:stream${idx}`;
                 } else {
                     // if the replicant was updated but this stream wasn't affected, use the old stream
                     current = oldStream;
