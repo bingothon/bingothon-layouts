@@ -268,7 +268,7 @@ class OBSUtility extends OBSWebSocket {
 
     public async setSourceBoundsAndCrop(source: string, params: OBSTransformParams): Promise<void> {
         if (this.isDisabled()) return;
-        logger.info(`updating source ${source}: ` + JSON.stringify(params));
+        logger.debug(`updating source ${source}: ` + JSON.stringify(params));
         try {
             const sceneItem = await this.call('GetSceneItemId', {
                 sceneName: bundleConfig.obs.gameScene || 'game',
@@ -493,13 +493,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         }
         const streamsToHide = new Set(new Array(MAX_STREAM_SOURCES).fill(0).map((_, idx) => idx));
         let idx = 0; //stream index
-        let i = 0; //array index
-        while (idx < MAX_STREAM_SOURCES && i < newStreams.length) {
-            // apparently this can go out of bonds
-            if (!newStreams[i] || !newStreams[i].visible) {
-                i++;
-                continue;
-            }
+        while (idx < MAX_STREAM_SOURCES) {
             const newPlayerId = newPlayerSlots.slots[idx]?.playerId;
             const oldPlayerId = oldPlayerSlots.slots[idx]?.playerId;
             const stream = newStreams.find((stream) => stream.playerId === newPlayerId);
@@ -516,7 +510,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                 // check if the streamurl changed, the visible status changed or the stream type changed
                 const channelChanged =
                     newStreamType === 'obsSrtMediasource' ? stream.srtChannel !== oldStream?.srtChannel : stream.channel !== oldStream?.channel;
-                if (channelChanged || stream.visible !== oldStream?.visible || newStreamType !== oldStreamType) {
+                if (channelChanged || newStreamType !== oldStreamType) {
                     switch (newStreamType) {
                         case 'obsTwitchPlayer': {
                             // fire and forget
@@ -547,7 +541,6 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
                 handleSoundChange(obs, soundOnTwitchStream.value, idx, stream, oldStream, newStreamType);
             }
             idx++;
-            i++;
         }
         for (const stream of streamsToHide) {
             // this stream should not be displayed
@@ -569,11 +562,16 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         handleStreamOrTypeChange(streamsReplicant.value, streamsReplicant.value, playerSlotsRep.value, playerSlotsRep.value, newValue, old);
     });
 
+    playerSlotsRep.on('change', (newValue, old) => {
+        if (!old) return;
+        handleStreamOrTypeChange(streamsReplicant.value, streamsReplicant.value, newValue, old, obsStreamSourceTypeRep.value, obsStreamSourceTypeRep.value);
+    });
+
     capturePositionsRep.on('change', (newVal, old) => {
         if (!old) return;
         let actualPosIndex = 0;
         streamsReplicant.value.forEach((stream) => {
-            if (stream.visible) {
+            if (playerSlotsRep.value.slots.some((s) => s.playerId === stream.playerId)) {
                 handleStreamPosChange(obs, stream, actualPosIndex, currentGameLayoutRep.value, newVal, obsStreamSourceTypeRep.value);
                 actualPosIndex++;
                 return;
@@ -586,7 +584,7 @@ if (bundleConfig.obs && bundleConfig.obs.enable) {
         if (!old) return;
         let actualPosIndex = 0;
         streamsReplicant.value.forEach((stream) => {
-            if (stream.visible) {
+            if (playerSlotsRep.value.slots.some((s) => s.playerId === stream.playerId)) {
                 handleStreamPosChange(obs, stream, actualPosIndex, newVal, capturePositionsRep.value, obsStreamSourceTypeRep.value);
                 actualPosIndex++;
                 return;

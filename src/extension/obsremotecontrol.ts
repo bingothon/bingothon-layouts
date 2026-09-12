@@ -16,6 +16,7 @@ import {
     obsPreviewScene,
     obsStreamModeRep,
     obsStreamSourceTypeRep,
+    playerSlotsRep,
     streamsReplicant,
     voiceDelayRep
 } from './util/replicants';
@@ -146,7 +147,7 @@ setInterval(async () => {
             const stream = streamsReplicant.value[i];
             const obsSource = `media-stream-${i}`;
             const startedAt = obsMediaSourceStartedAtRep.value[obsSource];
-            if (stream.visible && startedAt?.timestamp) {
+            if (playerSlotsRep.value.slots.some((s) => s.playerId === stream.playerId) && startedAt?.timestamp) {
                 // TODO: use getSrcName
                 const cursor = await obs.getMediasourceCursor(obsSource);
                 if (cursor) {
