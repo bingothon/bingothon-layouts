@@ -1,6 +1,6 @@
 import { runDataActiveRunRep } from './util/speedControlReplicants';
 import { RunData, RunDataPlayer } from '../../speedcontrol-types';
-import { capturePositionsRep, currentGameLayoutRep, playerSlotsRep, soundOnTwitchStream, streamsReplicant } from './util/replicants';
+import { capturePositionsRep, currentGameLayoutRep, playerSlotsRep, soundOnTwitchStream } from './util/replicants';
 import { setInterval } from 'node:timers';
 import * as nodecgApiContext from './util/nodecg-api-context';
 
@@ -13,12 +13,6 @@ function playersMap(runData: RunData): { [id: string]: RunDataPlayer } {
     const playerMap: { [id: string]: RunDataPlayer } = {};
     runData.teams.forEach((team) => team.players.forEach((player) => (playerMap[player.id] = player)), {});
     return playerMap;
-}
-
-// gets the index of the stream with the given player id
-function streamIndex(playerId: string | null): number {
-    if (!playerId) return -1;
-    return streamsReplicant.value.findIndex((stream) => stream.playerId === playerId);
 }
 
 function maxStreamsForCurrentLayout(): number {
@@ -46,7 +40,7 @@ function recomputePlayerSlots(): void {
         return;
     }
 
-    const soundSlot = playerSlots.slots.findIndex((slot) => streamIndex(slot.playerId) === soundOnTwitchStream.value);
+    const soundPlayerId = playerSlots.slots[soundOnTwitchStream.value]?.playerId;
     const maxStreams = maxStreamsForCurrentLayout();
 
     while (playerSlots.slots.length < maxStreams) {
@@ -83,15 +77,12 @@ function recomputePlayerSlots(): void {
     }
 
     playerSlotsRep.value = playerSlots;
-    applyVisibility(soundSlot);
-}
-
-function applyVisibility(soundSlot: number): void {
-    const activePlayers = new Set(playerSlotsRep.value.slots.map((slot) => slot.playerId));
-    if (soundSlot >= 0) {
-        soundOnTwitchStream.value = streamIndex(playerSlotsRep.value.slots[soundSlot].playerId);
-    } else if (soundOnTwitchStream.value >= 0 && !activePlayers.has(streamsReplicant.value[soundOnTwitchStream.value].playerId)) {
-        soundOnTwitchStream.value = -1;
+    // if the player that had the sound is still active, switch to them
+    if (soundPlayerId) {
+        const newSoundId = playerSlots.slots.findIndex((s) => s.playerId === soundPlayerId);
+        if (newSoundId !== -1) {
+            soundOnTwitchStream.value = newSoundId;
+        }
     }
 }
 
@@ -154,11 +145,6 @@ playerSlotsRep.once('change', (newVal) => {
 currentGameLayoutRep.on('change', (newVal) => {
     if (!newVal) return;
     recomputePlayerSlots();
-});
-
-streamsReplicant.on('change', (newVal) => {
-    if (!newVal) return;
-    applyVisibility(-1);
 });
 
 nodecg.listenFor('playerSlots:setSource', (source: 'run' | 'relay' | 'race') => {
