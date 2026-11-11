@@ -151,8 +151,9 @@ setInterval(async () => {
                 // TODO: use getSrcName
                 const cursor = await obs.getMediasourceCursor(obsSource);
                 if (cursor) {
-                    stream.delay = (Date.now() - (cursor + startedAt.timestamp)) / 1000;
-                    logger.info(`delay of ${stream.channel}: (${Date.now()} - ${cursor} - ${startedAt.timestamp}) ${stream.delay}`);
+                    // no idea why the calculated value is 60 seconds too low
+                    stream.delay = (Date.now() - (cursor + startedAt.timestamp)) / 1000 + 60;
+                    logger.debug(`delay of ${stream.channel}: (${Date.now()} - ${cursor} - ${startedAt.timestamp}) ${stream.delay}`);
                 }
             }
         }
