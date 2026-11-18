@@ -260,9 +260,18 @@
 			"type": "object",
 			"additionalProperties": false,
 			"properties": {
+				"streamlinkType": {
+					"type": "string",
+					"default": "command",
+					"enum": ["command", "server"]
+				},
 				"streamlinkCommand": {
 					"type": "string",
 					"examples": ["streamlink", "uvx streamlink", "/path/to/streamlink"]
+				},
+				"streamlinkServerUrl": {
+					"type": "string",
+					"examples": ["https://tw.lepelog.de/twitch.tv"]
 				}
 			}
 		},
