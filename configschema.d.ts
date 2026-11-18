@@ -65,7 +65,9 @@ export interface Configschema {
     measurementId: string;
   };
   twitchStreams?: {
+    streamlinkType?: "command" | "server";
     streamlinkCommand?: string;
+    streamlinkServerUrl?: string;
   };
   srt?: {
     baseUrl?: string;
