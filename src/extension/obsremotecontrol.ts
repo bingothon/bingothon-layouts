@@ -17,6 +17,7 @@ import {
     obsStreamModeRep,
     obsStreamSourceTypeRep,
     playerSlotsRep,
+    soundOnTwitchStream,
     streamsReplicant,
     voiceDelayRep
 } from './util/replicants';
@@ -154,6 +155,13 @@ setInterval(async () => {
                     // no idea why the calculated value is 60 seconds too low
                     stream.delay = (Date.now() - (cursor + startedAt.timestamp)) / 1000 + 60;
                     logger.debug(`delay of ${stream.channel}: (${Date.now()} - ${cursor} - ${startedAt.timestamp}) ${stream.delay}`);
+                    if (soundOnTwitchStream.value === i) {
+                        const currentDelay = discordDelayInfoRep.value.streamDelayMs;
+                        // if the delay only changes by less than a second, don't set the delay
+                        if (Math.abs(stream.delay - currentDelay / 1000) > 1) {
+                            discordDelayInfoRep.value.streamDelayMs = Math.floor(stream.delay * 1000);
+                        }
+                    }
                 }
             }
         }
