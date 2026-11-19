@@ -240,6 +240,7 @@
     "@fortawesome/vue-fontawesome": "^2.0.10",
     "@mdi/font": "^7.1.96",
     "@snazzah/davey": "^0.1.9",
+    "archipelago.js": "^2.1.0",
     "axios": "^1.5.1",
     "cheerio": "^1.0.0-rc.3",
     "chokidar": "^3.5.1",

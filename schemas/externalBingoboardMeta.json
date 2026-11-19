@@ -29,6 +29,15 @@
             }
         },
         {
+            "required": ["game", "url", "slot"],
+            "properties": {
+                "game": {"const": "archipelago"},
+                "url": {"type": "string", "examples": ["wss://archipelago.gg:6767"]},
+                "slot": {"type": "string"},
+                "password": {"type": "string"}
+            }
+        },
+        {
             "required": ["game"],
             "properties": {
                 "game": {"const": "none"}
