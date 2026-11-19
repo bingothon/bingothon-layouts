@@ -120,6 +120,7 @@
                 <v-radio value="ori1" label="Ori and the Blind Forest" />
                 <v-radio value="ori2" label="Ori and the Will of the Wisps" />
                 <v-radio value="deus-ex" label="Deus Ex" />
+                <v-radio value="archipelago" label="Archipelago" />
             </v-radio-group>
             <div v-if="externalBingoboardMeta.game == 'ori1'">
                 <div>
@@ -165,6 +166,41 @@
                     Token:
                     <v-text-field
                         v-model="externalBingoboardMeta.token"
+                        background-color="#455A64"
+                        clearable
+                        solo
+                        single-line
+                        dark
+                    />
+                </div>
+            </div>
+            <div v-if="externalBingoboardMeta.game == 'archipelago'">
+                <div>
+                    Url (wss://archipelago.gg:1234):
+                    <v-text-field
+                        v-model="externalBingoboardMeta.url"
+                        background-color="#455A64"
+                        clearable
+                        solo
+                        single-line
+                        dark
+                    />
+                </div>
+                <div>
+                    Slot:
+                    <v-text-field
+                        v-model="externalBingoboardMeta.slot"
+                        background-color="#455A64"
+                        clearable
+                        solo
+                        single-line
+                        dark
+                    />
+                </div>
+                <div>
+                    Password:
+                    <v-text-field
+                        v-model="externalBingoboardMeta.password"
                         background-color="#455A64"
                         clearable
                         solo
@@ -523,6 +559,15 @@
                 case 'deus-ex': {
                     this.externalBingoboardMeta = {
                         game: 'deus-ex'
+                    };
+                    break;
+                }
+                case 'archipelago': {
+                    this.externalBingoboardMeta = {
+                        game: 'archipelago',
+                        slot: '',
+                        url: '',
+                        password: ''
                     };
                     break;
                 }
