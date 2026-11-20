@@ -86,6 +86,27 @@ function recomputePlayerSlots(): void {
     }
 }
 
+function syncPool(run: RunData): void {
+    const { slots: currentSlots, pool: currentPool } = playerSlotsRep.value;
+    const map = playersMap(run);
+    const currentIds = Object.keys(map);
+
+    const remainingPool = currentPool.filter((id) => map[id]);
+    const poolAdditions = currentIds.filter((id) => !currentPool.includes(id));
+    if (poolAdditions.length === 0 && remainingPool.length === currentPool.length) {
+        return;
+    }
+
+    playerSlotsRep.value.pool = [...remainingPool, ...poolAdditions];
+    // If player in slot is no longer part of the run, remove them
+    playerSlotsRep.value.slots = currentSlots.map((slot) => {
+        if (slot.playerId && !map[slot.playerId]) {
+            return { playerId: null, pinned: false };
+        }
+        return slot;
+    });
+}
+
 function nextCycle(): void {
     const playerSlots = playerSlotsRep.value;
     if (playerSlots.source !== 'race') {
@@ -122,6 +143,8 @@ runDataActiveRunRep.on('change', (newVal, oldVal) => {
             autoCycle: false,
             cycleIntervalSeconds: DEFAULT_CYCLE_INTERVAL_S
         };
+    } else {
+        syncPool(newVal);
     }
 
     recomputePlayerSlots();
