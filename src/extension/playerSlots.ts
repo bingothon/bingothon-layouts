@@ -43,10 +43,14 @@ function recomputePlayerSlots(): void {
     const soundPlayerId = playerSlots.slots[soundOnTwitchStream.value]?.playerId;
     const maxStreams = maxStreamsForCurrentLayout();
 
-    while (playerSlots.slots.length < maxStreams) {
-        playerSlots.slots.push({ playerId: null, pinned: false });
+    // Apparently this fixes some duplication bug where the last slots gets duplicated without this
+    const playerSlotSlots = playerSlots.slots.slice();
+
+    while (playerSlotSlots.length < maxStreams) {
+        playerSlotSlots.push({ playerId: null, pinned: false });
     }
-    playerSlots.slots.length = maxStreams;
+    playerSlotSlots.length = maxStreams;
+    playerSlots.slots = playerSlotSlots;
 
     switch (playerSlots.source) {
         case 'run':
@@ -86,6 +90,27 @@ function recomputePlayerSlots(): void {
     }
 }
 
+function syncPool(run: RunData): void {
+    const { slots: currentSlots, pool: currentPool } = playerSlotsRep.value;
+    const map = playersMap(run);
+    const currentIds = Object.keys(map);
+
+    const remainingPool = currentPool.filter((id) => map[id]);
+    const poolAdditions = currentIds.filter((id) => !currentPool.includes(id));
+    if (poolAdditions.length === 0 && remainingPool.length === currentPool.length) {
+        return;
+    }
+
+    playerSlotsRep.value.pool = [...remainingPool, ...poolAdditions];
+    // If player in slot is no longer part of the run, remove them
+    playerSlotsRep.value.slots = currentSlots.map((slot) => {
+        if (slot.playerId && !map[slot.playerId]) {
+            return { playerId: null, pinned: false };
+        }
+        return slot;
+    });
+}
+
 function nextCycle(): void {
     const playerSlots = playerSlotsRep.value;
     if (playerSlots.source !== 'race') {
@@ -122,6 +147,8 @@ runDataActiveRunRep.on('change', (newVal, oldVal) => {
             autoCycle: false,
             cycleIntervalSeconds: DEFAULT_CYCLE_INTERVAL_S
         };
+    } else {
+        syncPool(newVal);
     }
 
     recomputePlayerSlots();
