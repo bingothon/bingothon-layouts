@@ -351,7 +351,7 @@ class OBSUtility extends OBSWebSocket {
     }
 
     public isDisabled(): boolean {
-        return obsConnectionRep.value.status === 'disabled';
+        return obsConnectionRep.value.status === 'disabled' || obsConnectionRep.value.status === 'disconnected';
     }
 }
 
