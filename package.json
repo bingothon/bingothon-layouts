@@ -76,13 +76,6 @@
         "width": 2
       },
       {
-        "name": "twitch-control",
-        "title": "Twitch Control",
-        "file": "twitch-control.html",
-        "headerColor": "#b92b36",
-        "width": 2
-      },
-      {
         "name": "obs-control",
         "title": "OBS Control",
         "file": "obs-control.html",
