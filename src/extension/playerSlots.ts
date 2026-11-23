@@ -43,10 +43,14 @@ function recomputePlayerSlots(): void {
     const soundPlayerId = playerSlots.slots[soundOnTwitchStream.value]?.playerId;
     const maxStreams = maxStreamsForCurrentLayout();
 
-    while (playerSlots.slots.length < maxStreams) {
-        playerSlots.slots.push({ playerId: null, pinned: false });
+    // Apparently this fixes some duplication bug where the last slots gets duplicated without this
+    const playerSlotSlots = playerSlots.slots.slice();
+
+    while (playerSlotSlots.length < maxStreams) {
+        playerSlotSlots.push({ playerId: null, pinned: false });
     }
-    playerSlots.slots.length = maxStreams;
+    playerSlotSlots.length = maxStreams;
+    playerSlots.slots = playerSlotSlots;
 
     switch (playerSlots.source) {
         case 'run':
