@@ -30,6 +30,13 @@ export type ExternalBingoboardMeta =
       [k: string]: unknown;
     }
   | {
+      game: "archipelago";
+      url: string;
+      slot: string;
+      password?: string;
+      [k: string]: unknown;
+    }
+  | {
       game: "none";
       [k: string]: unknown;
     };

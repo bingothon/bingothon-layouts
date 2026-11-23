@@ -2,6 +2,7 @@ import { ExternalBingoboardMeta } from '../../schemas';
 import { DeusExternalBingoboard } from './external-bingoboards/deusExBingoBoard';
 import { Ori1ExternalBingoboard } from './external-bingoboards/ori1BingoBoard';
 import { Ori2ExternalBingoboard } from './external-bingoboards/ori2BingoBoard';
+import { ArchipelagoBingoBoard } from './external-bingoboards/archipelagoBingoBoard';
 
 import { externalBingoboardMetaRep, externalBoardRep } from './util/replicants';
 
@@ -26,7 +27,8 @@ if (externalBoardRep.value.cells.length === 0) {
 const externalBingoboards: { [key: string]: ExternalBingoboardManager } = {
     ori1: new Ori1ExternalBingoboard(externalBoardRep),
     ori2: new Ori2ExternalBingoboard(externalBoardRep),
-    'deus-ex': new DeusExternalBingoboard(externalBoardRep)
+    'deus-ex': new DeusExternalBingoboard(externalBoardRep),
+    archipelago: new ArchipelagoBingoBoard(externalBoardRep)
 };
 
 let activeExternalBingoboard: ExternalBingoboardManager | undefined;
