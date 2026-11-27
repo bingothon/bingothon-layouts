@@ -1,8 +1,8 @@
-import { Board, Cell, Player, RoomAction, ServerMessage } from '@playbingo/types';
+import { Board, Cell, RoomAction, ServerMessage, Team } from '@playbingo/types';
 import { Bingoboard } from 'schemas/bingoboard';
+import { BingoboardCell } from 'types';
 import WebSocket from 'ws';
 import * as nodecgApiContext from './util/nodecg-api-context';
-import { BingoboardCell } from 'types';
 import { boardRep, playBingoSocketRep } from './util/replicants';
 import { waitForReplicants } from './util/waitForReplicants';
 
@@ -16,13 +16,13 @@ const socketHost = playBingoHost.replace('http', 'ws');
 log.info('Setting up PlayBingo integration');
 
 let webSocket: WebSocket;
-let players: Player[] = [];
+let teams: Team[] = [];
 
 const parseCell = (cell: Cell, row: number, col: number): BingoboardCell => ({
     name: cell.revealed ? cell.goal.goal : '',
     slot: `${row * 5 + col}`,
-    colors: cell.completedPlayers.map((playerId) => players.find((player) => player.id === playerId)?.color ?? ''),
-    rawColors: cell.completedPlayers.map((playerId) => players.find((player) => player.id === playerId)?.color).join(' '),
+    colors: cell.completedTeams.map((teamId) => teams.find((player) => player.id === teamId)?.color ?? ''),
+    rawColors: cell.completedTeams.map((teamId) => teams.find((player) => player.id === teamId)?.color).join(' '),
     markers: [null, null, null, null]
 });
 
@@ -36,17 +36,15 @@ const parseBoard = (board: Board): Bingoboard => {
     };
 };
 
-function handlePlayerListUpdate(players: Player[] | undefined) {
-    if (!players) return;
-    players.forEach((player) => {
+function handlePlayerListUpdate(teams: Team[] | undefined) {
+    if (!teams) return;
+    teams.forEach((team) => {
         // TODO: we should map players in the schedule to
         // players in the room to avoid needing this easily
         // broken check
-        if (!player.spectator) {
-            boardRep.value.colorCounts[player.color] = player.goalCount;
-        }
+        boardRep.value.colorCounts[team.color] = team.goalCount;
     });
-    playBingoSocketRep.value.playerColors = players.map((player) => ({ name: player.nickname, color: player.color }));
+    playBingoSocketRep.value.playerColors = teams.flatMap((team) => team.players.map((player) => ({ name: player.nickname, color: team.color })));
 }
 
 const PLAYBINGO_ROOM_RE = /.*playbingo\.gg\/rooms\/([^\/]+)\/?/;
@@ -113,7 +111,8 @@ async function joinPlaybingoRoom(slug: string, passphrase: string) {
         webSocket.on('message', (message) => {
             const data: ServerMessage = JSON.parse(message.toString());
             if (data.players) {
-                players = data.players;
+                teams = data.players.teams;
+                handlePlayerListUpdate(data.players?.teams);
             }
             switch (data.action) {
                 case 'connected':
@@ -122,15 +121,10 @@ async function joinPlaybingoRoom(slug: string, passphrase: string) {
                     webSocket.send(JSON.stringify({ action: 'revealCard', authToken } as RoomAction));
                 case 'syncBoard':
                     boardRep.value = parseBoard(data.board);
-                    handlePlayerListUpdate(data.players);
                     break;
                 case 'cellUpdate':
                     boardRep.value.cells[data.row][data.col] = parseCell(data.cell, data.row, data.col);
-                    handlePlayerListUpdate(data.players);
                     break;
-                case 'chat':
-                case 'updateRoomData':
-                    handlePlayerListUpdate(data.players);
                 default:
                     break;
             }
